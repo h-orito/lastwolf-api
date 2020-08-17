@@ -20,7 +20,7 @@ class SkillAssignDomainService {
         var participants = assignDummy(
             village.participant,
             skillPersonCountMap,
-            village.dummyChara(),
+            village.dummyChara()!!,
             village.setting.rules.availableDummySkill
         )
 

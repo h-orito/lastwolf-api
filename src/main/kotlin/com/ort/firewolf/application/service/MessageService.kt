@@ -4,27 +4,33 @@ import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.ability.AbilityType
 import com.ort.firewolf.domain.model.charachip.Chara
 import com.ort.firewolf.domain.model.charachip.Charas
+import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.message.MessageContent
 import com.ort.firewolf.domain.model.message.MessageQuery
 import com.ort.firewolf.domain.model.message.Messages
+import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.domain.model.skill.Skills
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.service.ability.AbilityDomainService
 import com.ort.firewolf.domain.service.coming_out.ComingOutDomainService
 import com.ort.firewolf.domain.service.commit.CommitDomainService
+import com.ort.firewolf.domain.service.message.MessageDomainService
 import com.ort.firewolf.domain.service.participate.ParticipateDomainService
+import com.ort.firewolf.infrastructure.datasource.firebase.MessageLatestDatetimeDataSource
 import com.ort.firewolf.infrastructure.datasource.message.MessageDataSource
 import org.springframework.stereotype.Service
 
 @Service
 class MessageService(
     private val messageDataSource: MessageDataSource,
+    private val messageLatestDatetimeDataSource: MessageLatestDatetimeDataSource,
     private val abilityDomainService: AbilityDomainService,
     private val participateDomainService: ParticipateDomainService,
     private val commitDomainService: CommitDomainService,
-    private val comingOutDomainService: ComingOutDomainService
+    private val comingOutDomainService: ComingOutDomainService,
+    private val messageDomainService: MessageDomainService
 ) {
     /**
      * 発言取得
@@ -90,27 +96,34 @@ class MessageService(
     /**
      * 発言登録
      *
-     * @param villageId villageId
+     * @param village village
+     * @param players players
      * @param message 発言内容
      */
-    fun registerMessage(villageId: Int, message: Message) = messageDataSource.registerMessage(villageId, message)
+    fun registerMessage(
+        village: Village,
+        players: Players,
+        message: Message
+    ) {
+        val registeredMessage = messageDataSource.registerMessage(village.id, message)
+        messageDomainService.getViewableUserAndMessageLatestTime(village, players, registeredMessage).forEach {
+            messageLatestDatetimeDataSource.register(village.id, it.uid, it.time)
+        }
+    }
 
     /**
      * 村作成時のシステムメッセージ登録
-     * @param village village
      */
-    fun registerInitialMessage(village: Village) = registerMessage(village.id, village.createVillagePrologueMessage())
+    fun registerInitialMessage(village: Village, players: Players) {
+        registerMessage(village, players, village.createVillagePrologueMessage())
+    }
 
     /**
      * 村に参加する際の発言を登録
-     * @param village village
-     * @param participant 参加者
-     * @param chara chara
-     * @param message message text
-     * @param isSpectate 見学か
      */
     fun registerParticipateMessage(
         village: Village,
+        players: Players,
         participant: VillageParticipant,
         chara: Chara,
         message: String,
@@ -128,19 +141,19 @@ class MessageService(
             CDef.FaceType.通常.code()
         )
         registerMessage(
-            village.id,
+            village,
+            players,
             Message.createSayMessage(participant, village.day.prologueDay().id, messageContent)
         )
     }
 
     /**
      * 退村する際のシステムメッセージを登録
-     * @param village village
-     * @param chara chara
      */
-    fun registerLeaveMessage(village: Village, chara: Chara) =
+    fun registerLeaveMessage(village: Village, players: Players, chara: Chara) =
         registerMessage(
-            village.id,
+            village,
+            players,
             participateDomainService.createLeaveMessage(village, chara)
         )
 
@@ -157,12 +170,13 @@ class MessageService(
         participant: VillageParticipant,
         targetId: Int?,
         abilityType: AbilityType,
-        charas: Charas
+        charas: Charas,
+        players: Players
     ) {
         val myChara: Chara = charas.chara(participant.charaId)
         val targetChara: Chara? = if (targetId == null) null else charas.chara(village.participant, targetId)
         val message: Message = abilityDomainService.createAbilitySetMessage(village, myChara, targetChara, abilityType)
-        registerMessage(village.id, message)
+        registerMessage(village, players, message)
     }
 
     /**
@@ -172,27 +186,32 @@ class MessageService(
      * @param chara キャラ
      * @param doCommit コミット/取り消し
      */
-    fun registerCommitMessage(village: Village, chara: Chara, doCommit: Boolean) {
+    fun registerCommitMessage(village: Village, players: Players, chara: Chara, doCommit: Boolean) =
         registerMessage(
-            village.id,
+            village,
+            players,
             commitDomainService.createCommitMessage(chara, doCommit, village.day.latestDay().id)
         )
-    }
 
-    fun registerComingOutMessage(village: Village, chara: Chara, skills: Skills) {
+    fun registerComingOutMessage(village: Village, players: Players, chara: Chara, skills: Skills) =
         registerMessage(
-            village.id,
+            village,
+            players,
             comingOutDomainService.createComingOutMessage(chara, skills, village.day.latestDay().id)
         )
-    }
 
     /**
      * 差分更新
-     * @param villageId villageId
-     * @param before messages
-     * @param after messages
      */
-    fun updateDifference(villageId: Int, before: Messages, after: Messages) {
-        messageDataSource.updateDifference(villageId, before, after)
+    fun updateDifference(before: DayChange, after: DayChange) {
+        val villageId = after.village.id
+        val messages = messageDataSource.updateDifference(villageId, before.messages, after.messages)
+        messageDomainService.getViewableUserAndMessageLatestTime(
+            after.village,
+            after.players,
+            messages
+        ).forEach {
+            messageLatestDatetimeDataSource.register(villageId, it.uid, it.time)
+        }
     }
 }

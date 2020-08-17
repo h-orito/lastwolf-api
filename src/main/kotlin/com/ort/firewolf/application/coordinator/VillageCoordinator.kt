@@ -108,12 +108,12 @@ class VillageCoordinator(
 
     /**
      * 村設定変更確認
-     *
-     * @param village village
-     * @param player player
-     * @param resource resource
      */
-    fun assertModifySetting(village: Village, player: Player, resource: VillageCreateResource) {
+    fun assertModifySetting(
+        village: Village,
+        player: Player,
+        resource: VillageCreateResource
+    ) {
         if (!creatorDomainService.convertToSituation(village, player).isAvailableModifySetting) {
             throw FirewolfBusinessException("設定を変更できません")
         }
@@ -122,17 +122,18 @@ class VillageCoordinator(
 
     /**
      * 村設定変更
-     *
-     * @param village village
-     * @param player player
-     * @param resource resource
      */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
-    fun modifySetting(village: Village, player: Player, resource: VillageCreateResource) {
+    fun modifySetting(
+        village: Village,
+        players: Players,
+        player: Player,
+        resource: VillageCreateResource
+    ) {
         assertModifySetting(village, player, resource)
         // 変更なしの場合もある
         villageSettingDomainService.createModifyMessage(village, resource)?.let { message ->
-            messageService.registerMessage(village.id, message)
+            messageService.registerMessage(village, players, message)
             var changedVillage = Village.createForUpdate(village, resource)
             if (!resource.setting.rule.isAvailableSkillRequest) {
                 changedVillage = changedVillage.changeAllSkillRequestLeftover()
@@ -227,9 +228,11 @@ class VillageCoordinator(
         village = villageService.updateVillageDifference(village, changedVillage)
         val participant: VillageParticipant = village.memberByPlayerId(playerId)
         val chara: Chara = charachipService.findChara(charaId)
+        val players: Players = playerService.findPlayers(villageId)
         // {N}人目、{キャラ名} とユーザー入力の発言
         messageService.registerParticipateMessage(
             village = village,
+            players = players,
             participant = village.findMemberById(participant.id)!!,
             chara = chara,
             message = message,
@@ -267,6 +270,7 @@ class VillageCoordinator(
     fun leave(villageId: Int, user: FirewolfUser) {
         // 退村できない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
+        val players: Players = playerService.findPlayers(villageId)
         val participant: VillageParticipant? = findParticipant(village, user)
         participateDomainService.assertLeave(village, participant)
         // 退村
@@ -276,7 +280,7 @@ class VillageCoordinator(
         )
         // 退村メッセージ
         val chara: Chara = charachipService.findChara(participant.charaId)
-        messageService.registerLeaveMessage(updatedVillage, chara)
+        messageService.registerLeaveMessage(updatedVillage, players, chara)
     }
 
     /**
@@ -310,15 +314,22 @@ class VillageCoordinator(
      * @param faceType 表情種別
      */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
-    fun say(villageId: Int, user: FirewolfUser, messageText: String, messageType: String, faceType: String) {
+    fun say(
+        villageId: Int,
+        user: FirewolfUser,
+        messageText: String,
+        messageType: String,
+        faceType: String
+    ) {
         val messageContent: MessageContent = MessageContent.invoke(messageType, messageText, faceType)
         // 発言できない状況ならエラー
         assertSay(villageId, user, messageContent)
         // 発言
         val village: Village = villageService.findVillage(villageId)
+        val players: Players = playerService.findPlayers(villageId)
         val participant: VillageParticipant = findParticipant(village, user)!!
         val message: Message = Message.createSayMessage(participant, village.day.latestDay().id, messageContent)
-        messageService.registerMessage(villageId, message)
+        messageService.registerMessage(village, players, message)
     }
 
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
@@ -328,7 +339,8 @@ class VillageCoordinator(
         sayDomainService.assertCreatorSay(village, messageContent)
         // 発言
         val message: Message = Message.createCreatorSayMessage(messageText, village.day.latestDay().id)
-        messageService.registerMessage(village.id, message)
+        val players: Players = playerService.findPlayers(village.id)
+        messageService.registerMessage(village, players, message)
     }
 
     /**
@@ -350,7 +362,8 @@ class VillageCoordinator(
         val villageAbility = VillageAbility(village.day.latestDay().id, participant!!.id, targetId, abilityType)
         abilityService.updateAbility(villageAbility)
         val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
-        messageService.registerAbilitySetMessage(village, participant, targetId, abilityType, charas)
+        val players: Players = playerService.findPlayers(villageId)
+        messageService.registerAbilitySetMessage(village, participant, targetId, abilityType, charas, players)
     }
 
     /**
@@ -392,7 +405,8 @@ class VillageCoordinator(
         val commit = Commit(village.day.latestDay().id, participant!!.id, doCommit)
         commitService.updateCommit(commit)
         val chara: Chara = charachipService.findChara(participant.charaId)
-        messageService.registerCommitMessage(village, chara, doCommit)
+        val players: Players = playerService.findPlayers(villageId)
+        messageService.registerCommitMessage(village, players, chara, doCommit)
         // 日付更新
         if (doCommit) dayChangeCoordinator.dayChangeIfNeeded(village)
     }
@@ -418,7 +432,8 @@ class VillageCoordinator(
             skills.list
         )
         val chara: Chara = charachipService.findChara(participant.charaId)
-        messageService.registerComingOutMessage(village, chara, skills)
+        val players: Players = playerService.findPlayers(villageId)
+        messageService.registerComingOutMessage(village, players, chara, skills)
     }
 
     /**
@@ -464,7 +479,8 @@ class VillageCoordinator(
         // 村を登録
         val village: Village = villageService.registerVillage(paramVillage)
         // 村作成時のシステムメッセージを登録
-        messageService.registerInitialMessage(village)
+        val players: Players = playerService.findPlayers(village.id)
+        messageService.registerInitialMessage(village, players)
         // ダミーキャラを参加させる
         val chara: Chara = charachipService.findChara(village.setting.charachip.dummyCharaId)
         participateDummyChara(village.id, village, chara)

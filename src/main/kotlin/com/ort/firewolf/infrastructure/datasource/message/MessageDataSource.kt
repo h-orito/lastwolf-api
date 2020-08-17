@@ -157,7 +157,10 @@ class MessageDataSource(
         return messageList.map { convertMessageToMessage(it) }
     }
 
-    fun registerMessage(villageId: Int, message: com.ort.firewolf.domain.model.message.Message) {
+    fun registerMessage(
+        villageId: Int,
+        message: com.ort.firewolf.domain.model.message.Message
+    ): com.ort.firewolf.domain.model.message.Message {
         val mes = Message()
         val messageTypeCode = message.content.type.code
         mes.villageId = villageId
@@ -171,7 +174,8 @@ class MessageDataSource(
         mes.isConvertDisable = true
         val now = FirewolfDateUtil.currentLocalDateTime()
         mes.messageDatetime = now
-        mes.messageUnixtimestampMilli = now.toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
+        val epocTimeMilli = now.toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
+        mes.messageUnixtimestampMilli = epocTimeMilli
 
         // 何回目の発言か
         if (message.content.type.shouldSetCount()) {
@@ -182,9 +186,10 @@ class MessageDataSource(
         // 発言番号の採番 & insert (3回チャレンジする)
         for (i in 1..3) {
             try {
-                mes.messageNumber = selectNextMessageNumber(villageId, message.content.type.code)
+                val messageNumber = selectNextMessageNumber(villageId, message.content.type.code)
+                mes.messageNumber = messageNumber
                 messageBhv.insert(mes)
-                return
+                return convertMessageToMessage(mes)
             } catch (e: RuntimeException) {
                 logger.error(e.message, e)
             }
@@ -199,11 +204,12 @@ class MessageDataSource(
      * @param before messages
      * @param after messages
      */
-    fun updateDifference(villageId: Int, before: Messages, after: Messages) {
+    fun updateDifference(villageId: Int, before: Messages, after: Messages): Messages {
         // 追加しかないのでbeforeにないindexから追加していく
-        after.list.drop(before.list.size).forEach {
+        val messageList = after.list.drop(before.list.size).map {
             registerMessage(villageId, it)
         }
+        return Messages(list = messageList)
     }
 
     // ===================================================================================

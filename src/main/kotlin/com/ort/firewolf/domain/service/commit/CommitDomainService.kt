@@ -36,7 +36,7 @@ class CommitDomainService {
         if (!village.isAvailableCommit()) return false
         // 参加者として可能か
         participant ?: return false
-        return participant.isAvailableCommit(village.dummyChara().id)
+        return participant.isAvailableCommit(village.dummyChara()!!.id)
     }
 
     /**

@@ -150,14 +150,14 @@ data class Village(
      * @param charas charas
      */
     fun createDummyCharaFirstDayMessage(charas: Charas): Message? {
-        val firstDayMessage = charas.chara(dummyChara().charaId).defaultMessage.firstDayMessage ?: return null
+        val firstDayMessage = charas.chara(dummyChara()!!.charaId).defaultMessage.firstDayMessage ?: return null
         val messageContent = MessageContent.invoke(
             messageType = CDef.MessageType.通常発言.code(),
             text = firstDayMessage,
             faceCode = CDef.FaceType.通常.code()
         )
         return Message.createSayMessage(
-            from = dummyChara(),
+            from = dummyChara()!!,
             villageDayId = day.latestDay().id,
             messageContent = messageContent
         )
@@ -184,7 +184,7 @@ data class Village(
     // ===================================================================================
     //                                                                                read
     //                                                                           =========
-    fun dummyChara(): VillageParticipant = participant.memberList.first { it.charaId == setting.charachip.dummyCharaId }
+    fun dummyChara(): VillageParticipant? = participant.memberList.firstOrNull { it.charaId == setting.charachip.dummyCharaId }
 
     fun notDummyParticipant(): VillageParticipants {
         val notDummyMembers = participant.memberList.filter { it.charaId != setting.charachip.dummyCharaId }

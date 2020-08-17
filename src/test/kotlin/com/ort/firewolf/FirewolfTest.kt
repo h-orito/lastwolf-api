@@ -1,10 +1,12 @@
 package com.ort.firewolf
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import com.ort.firewolf.fw.FirewolfDateUtil
 import com.ort.firewolf.fw.FirewolfUserInfoUtil
 import com.ort.firewolf.fw.config.FirebaseConfig
 import com.ort.firewolf.fw.security.FirewolfUser
+import com.ort.firewolf.infrastructure.datasource.firebase.MessageLatestDatetimeDataSource
 import org.dbflute.hook.AccessContext
 import org.junit.Before
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -14,12 +16,16 @@ open class FirewolfTest {
 
     @MockBean
     lateinit var firebaseConfig: FirebaseConfig
+    @MockBean
+    lateinit var messageLatestDatetimeDataSource: MessageLatestDatetimeDataSource
 
     @Before
     fun setUp() {
         // firebase関連はmockにする
         whenever(firebaseConfig.init()).then { }
         whenever(firebaseConfig.firebaseDatabase()).thenReturn(null)
+        whenever(messageLatestDatetimeDataSource.register(any(), any(), any())).then { }
+
         // set access context
         setAccessContext()
     }

@@ -168,6 +168,7 @@ object DummyDomainModelCreator {
 
     fun createDummyPlayer(): Player = Player(
         id = randomNumber(),
+        uid = randomNumber().toString(),
         nickname = "dummy",
         twitterUserName = "dummy",
         otherSiteName = null,

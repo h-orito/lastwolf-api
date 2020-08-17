@@ -6,6 +6,7 @@ import com.ort.firewolf.fw.security.FirewolfUser
 
 data class Player(
     val id: Int,
+    val uid: String,
     val nickname: String,
     val twitterUserName: String,
     val otherSiteName: String?,
