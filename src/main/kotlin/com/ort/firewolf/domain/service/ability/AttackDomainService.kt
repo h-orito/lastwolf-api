@@ -26,7 +26,7 @@ class AttackDomainService : IAbilityDomainService {
 
         return if (village.day.latestDay().day == 1) {
             // ダミーキャラ固定
-            listOf(village.dummyChara())
+            listOf(village.dummyChara()!!)
         } else {
             // 襲撃対象に選べる & 生存している
             village.participant.filterAlive().memberList.filter {

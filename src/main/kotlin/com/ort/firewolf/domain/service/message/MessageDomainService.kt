@@ -1,7 +1,10 @@
 package com.ort.firewolf.domain.service.message
 
 import com.ort.dbflute.allcommon.CDef
+import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.message.MessageQuery
+import com.ort.firewolf.domain.model.message.Messages
+import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.service.say.GraveSayDomainService
@@ -87,6 +90,7 @@ class MessageDomainService(
         messageType: String,
         day: Int = 1
     ): Boolean {
+        if (village.dummyChara()?.id == participant?.id) return true
         return when (CDef.MessageType.codeOf(messageType) ?: return false) {
             CDef.MessageType.通常発言 -> normalSayDomainService.isViewable(village, participant)
             CDef.MessageType.人狼の囁き -> werewolfSayDomainService.isViewable(village, participant)
@@ -102,6 +106,7 @@ class MessageDomainService(
             CDef.MessageType.共鳴相互確認メッセージ -> sympathizerMessageDomainService.isViewable(village, participant)
             CDef.MessageType.狂信者人狼確認メッセージ -> fanaticMessageDomainService.isViewable(village, participant)
             CDef.MessageType.検死結果 -> autopsyMessageDomainService.isViewable(village, participant)
+            CDef.MessageType.村建て発言 -> true
             else -> return false
         }
     }
@@ -134,6 +139,64 @@ class MessageDomainService(
             includePrivateAbility = isIncludePrivateAbility(participant, requestMessageTypeList)
         )
     }
+
+    fun getViewableUserAndMessageLatestTime(
+        village: Village,
+        players: Players,
+        message: Message
+    ): List<UserViewableMessageLatestTime> {
+        val day = village.day.dayList.first { it.id == message.time.villageDayId }.day
+        val updateParticipantAndTimeList =
+            (village.participant.memberList + village.spectator.memberList).mapNotNull { participant ->
+                val isViewable = isViewableMessage(village, participant, message.content.type.code, day)
+                if (isViewable) UserViewableMessageLatestTime(
+                    uid = players.list.first { it.id == participant.playerId }.uid,
+                    time = message.time.unixTimeMilli
+                ) else null
+            }
+        // 非ログインユーザ
+        return if (isViewableMessage(village, null, message.content.type.code, day)) {
+            updateParticipantAndTimeList + UserViewableMessageLatestTime(null, message.time.unixTimeMilli)
+        } else {
+            updateParticipantAndTimeList
+        }
+    }
+
+    fun getViewableUserAndMessageLatestTime(
+        village: Village,
+        players: Players,
+        messages: Messages
+    ): List<UserViewableMessageLatestTime> {
+        val updateParticipantAndTimeList =
+            (village.participant.memberList + village.spectator.memberList).mapNotNull { participant ->
+                messages.list.filter { message ->
+                    val day = village.day.dayList.first { it.id == message.time.villageDayId }.day
+                    isViewableMessage(village, participant, message.content.type.code, day)
+                }.maxBy { it.time.unixTimeMilli }?.let { message ->
+                    UserViewableMessageLatestTime(
+                        uid = players.list.first { it.id == participant.playerId }.uid,
+                        time = message.time.unixTimeMilli
+                    )
+                }
+            }
+        // 非ログインユーザ
+        val notLoginUser = messages.list.filter { message ->
+            val day = village.day.dayList.first { it.id == message.time.villageDayId }.day
+            isViewableMessage(village, null, message.content.type.code, day)
+        }.maxBy { it.time.unixTimeMilli }?.let { message ->
+            UserViewableMessageLatestTime(
+                uid = null,
+                time = message.time.unixTimeMilli
+            )
+        }
+        return if (notLoginUser == null) {
+            updateParticipantAndTimeList
+        } else {
+            updateParticipantAndTimeList + notLoginUser
+        }
+    }
+
+    data class UserViewableMessageLatestTime(val uid: String?, val time: Long)
 
     private fun isIncludeMonologue(
         participant: VillageParticipant?,

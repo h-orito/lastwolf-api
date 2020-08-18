@@ -53,8 +53,9 @@ class CreatorController(
         if (participant.playerId == 1) return // ダミーはキックできない
         // シスメ
         val chara: Chara = charachipService.findChara(participant.charaId)
+        val players = playerService.findPlayers(villageId)
         val updatedVillage = villageService.updateVillageDifference(village, changedVillage)
-        messageService.registerLeaveMessage(updatedVillage, chara)
+        messageService.registerLeaveMessage(updatedVillage, players, chara)
     }
 
     @PostMapping("/creator/village/{villageId}/cancel")
@@ -71,7 +72,8 @@ class CreatorController(
         val changedVillage = village.changeStatus(CDef.VillageStatus.廃村)
         villageService.updateVillageDifference(village, changedVillage)
         val message = village.createCreatorCancelVillageMessage()
-        messageService.registerMessage(villageId, message)
+        val players = playerService.findPlayers(villageId)
+        messageService.registerMessage(village, players, message)
     }
 
     @PostMapping("/creator/village/{villageId}/say-confirm")

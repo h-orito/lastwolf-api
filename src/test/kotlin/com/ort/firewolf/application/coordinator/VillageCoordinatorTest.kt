@@ -278,7 +278,7 @@ class VillageCoordinatorTest : FirewolfTest() {
                 )
             )
         )
-        val dummy = village.dummyChara()
+        val dummy = village.dummyChara()!!
         val participant = villageCoordinator.findParticipant(village, user)
 
         // ## Act ##
@@ -294,7 +294,7 @@ class VillageCoordinatorTest : FirewolfTest() {
         assertThat(abilities.list.any {
             it.abilityType.toCdef() == CDef.AbilityType.占い
                 && it.myselfId == participant?.id
-                && it.targetId == village.dummyChara().id
+                && it.targetId == village.dummyChara()!!.id
         }).isTrue()
     }
 
@@ -325,7 +325,7 @@ class VillageCoordinatorTest : FirewolfTest() {
                 )
             )
         )
-        val dummy = village.dummyChara()
+        val dummy = village.dummyChara()!!
         val participant = villageCoordinator.findParticipant(village, user)
 
         // ## Act ##
@@ -337,7 +337,7 @@ class VillageCoordinatorTest : FirewolfTest() {
         val votes = voteService.findVillageVotes(village.id)
         assertThat(votes.list.any {
             it.myselfId == participant?.id
-                && it.targetId == village.dummyChara().id
+                && it.targetId == village.dummyChara()!!.id
         }).isTrue()
     }
 
@@ -447,7 +447,7 @@ class VillageCoordinatorTest : FirewolfTest() {
         villageCoordinator.setAbility(
             village.id,
             user,
-            village.dummyChara().id,
+            village.dummyChara()!!.id,
             CDef.AbilityType.占い.code()
         )
 
@@ -456,7 +456,7 @@ class VillageCoordinatorTest : FirewolfTest() {
         villageCoordinator.findActionSituation(village, user, players, charas)
 
         // ## Arrange ##
-        villageCoordinator.setVote(village.id, user, village.dummyChara().id)
+        villageCoordinator.setVote(village.id, user, village.dummyChara()!!.id)
 
         // ## Act ##
         // ## Assert ##

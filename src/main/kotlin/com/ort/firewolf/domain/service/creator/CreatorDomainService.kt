@@ -32,7 +32,7 @@ class CreatorDomainService {
         if (village.status.isFinished()) return false
         // 管理者か村建てならok
         if (village.creatorPlayerId == player.id) return true
-        if (village.dummyChara().playerId == player.id) return true
+        if (village.dummyChara()!!.playerId == player.id) return true
         return false
     }
 

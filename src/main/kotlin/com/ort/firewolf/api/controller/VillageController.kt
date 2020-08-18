@@ -545,13 +545,14 @@ class VillageController(
         @RequestBody @Validated villageRegisterBody: VillageRegisterBody
     ) {
         val village = villageService.findVillage(villageId)
+        val players = playerService.findPlayers(villageId)
         val player = playerService.findPlayer(user)
 
         if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
             throw FirewolfBusinessException("村建てか管理者しか使えません")
 
         val createResource = convertToVillageCreateResource(villageRegisterBody, player)
-        villageCoordinator.modifySetting(village, player, createResource)
+        villageCoordinator.modifySetting(village, players, player, createResource)
     }
 
     // ===================================================================================

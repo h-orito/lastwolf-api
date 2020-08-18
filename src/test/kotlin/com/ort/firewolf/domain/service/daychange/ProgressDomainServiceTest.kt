@@ -218,7 +218,7 @@ class ProgressDomainServiceTest : FirewolfTest() {
 
         // ## Assert ##
         assertThat(afterDayChange.isChange).isTrue()
-        assertThat(afterDayChange.village.dummyChara().isAlive()).isFalse()
+        assertThat(afterDayChange.village.dummyChara()!!.isAlive()).isFalse()
         assertThat(afterDayChange.village.status.toCdef()).isEqualTo(CDef.VillageStatus.進行中)
         assertThat(afterDayChange.messages.list.any { message ->
             message.content.type.toCdef() == CDef.MessageType.公開システムメッセージ

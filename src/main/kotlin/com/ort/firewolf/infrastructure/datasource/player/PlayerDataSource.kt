@@ -109,6 +109,7 @@ class PlayerDataSource(
     private fun convertPlayerToPlayer(player: Player): com.ort.firewolf.domain.model.player.Player {
         return com.ort.firewolf.domain.model.player.Player(
             id = player.playerId,
+            uid = player.uid,
             nickname = player.nickname,
             twitterUserName = player.twitterUserName,
             otherSiteName = player.playerDetailAsOne.map { it.otherSiteName }.orElse(null),
@@ -132,6 +133,7 @@ class PlayerDataSource(
     private fun convertPlayerToSimplePlayer(player: Player): com.ort.firewolf.domain.model.player.Player {
         return com.ort.firewolf.domain.model.player.Player(
             id = player.playerId,
+            uid = player.uid,
             nickname = player.nickname,
             twitterUserName = player.twitterUserName,
             otherSiteName = player.playerDetailAsOne.map { it.otherSiteName }.orElse(null),

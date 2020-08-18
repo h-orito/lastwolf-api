@@ -97,7 +97,7 @@ class DayChangeCoordinator(
         }
         // message
         if (before.messages.existsDifference(after.messages)) {
-            messageService.updateDifference(before.village.id, before.messages, after.messages)
+            messageService.updateDifference(before, after)
         }
         // votes
         if (before.votes.existsDifference(after.votes)) {
