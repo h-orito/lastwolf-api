@@ -1,11 +1,11 @@
-# FIREWOLF
+# LASTWOLF
 
 ## Overview
 
-- 人狼ゲームがプレイできるサイトです
+- 短期人狼ゲームがプレイできるサイトです
 - Kotlin で API を提供します
 - [howling-wolf-api](https://github.com/h-orito/howling-wolf-api)の派生です
-- 画面側は[firewolf-ui](https://github.com/h-orito/firewolf-ui)を参照
+- 画面側は[lastwolf-ui](https://github.com/h-orito/lastwolf-ui)を参照
 
 ## Requirement for local development
 
@@ -47,17 +47,17 @@
 
 * 起動
 
-  - 以下の実行引数とともに`FirewolfApplication#main` を実行
+  - 以下の実行引数とともに`LastwolfApplication#main` を実行
     - `--firebase.adminsdk.secretkey.path=${Firebaseサービスアカウント秘密鍵の配置パス}`
     - `--firebase.database.url=${FirebaseデータベースURL}`
-  - http://localhost:8087/firewolf/ がベース URL になります
+  - http://localhost:8088/lastwolf/ がベース URL になります
 
 ## Run
 
   - 実行例
   
 ```
-$ java -jar firewolf.jar \
+$ java -jar lastwolf.jar \
 	--spring.profiles.active=prd \
 	--spring.datasource.url=jdbc:mysql://${server ip and port}/${database name}?characterEncoding=UTF-8 \
 	--spring.datasource.username=${db user name} \

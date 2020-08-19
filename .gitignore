@@ -27,8 +27,8 @@
 ### VS Code ###
 .vscode/
 
-/dbflute_firewolfdb/log/
-/dbflute_firewolfdb/output/doc/history-firewolfdb.html
-/dbflute_firewolfdb/output/doc/schema-firewolfdb.html
-/dbflute_firewolfdb/schema/project-history-firewolfdb.diffmap
+/dbflute_lastwolfdb/log/
+/dbflute_lastwolfdb/output/doc/history-lastwolfdb.html
+/dbflute_lastwolfdb/output/doc/schema-lastwolfdb.html
+/dbflute_lastwolfdb/schema/project-history-lastwolfdb.diffmap
 /bin/
