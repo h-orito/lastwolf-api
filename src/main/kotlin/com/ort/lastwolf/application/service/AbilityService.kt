@@ -1,5 +1,6 @@
 package com.ort.lastwolf.application.service
 
+import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.ability.VillageAbilities
 import com.ort.lastwolf.domain.model.village.ability.VillageAbility
 import com.ort.lastwolf.infrastructure.datasource.ability.AbilityDataSource
@@ -7,16 +8,19 @@ import org.springframework.stereotype.Service
 
 @Service
 class AbilityService(
-    val abilityDataSource: AbilityDataSource
+    private val abilityDataSource: AbilityDataSource
 ) {
 
     fun findVillageAbilities(villageId: Int): VillageAbilities = abilityDataSource.findAbilities(villageId)
 
-    /**
-     * 能力セット
-     * @param villageAbility ability
-     */
-    fun updateAbility(villageAbility: VillageAbility) = abilityDataSource.updateAbility(villageAbility)
+    fun updateAbility(
+        village: Village,
+        villageAbility: VillageAbility
+    ) {
+        abilityDataSource.updateAbility(village, villageAbility)
+    }
 
-    fun updateDifference(before: VillageAbilities, after: VillageAbilities) = abilityDataSource.updateDifference(before, after)
+    fun updateDifference(village: Village, before: VillageAbilities, after: VillageAbilities) {
+        abilityDataSource.updateDifference(village, before, after)
+    }
 }

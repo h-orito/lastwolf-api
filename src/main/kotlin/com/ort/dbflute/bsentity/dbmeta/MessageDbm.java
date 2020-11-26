@@ -42,19 +42,15 @@ public class MessageDbm extends AbstractDBMeta {
     protected final Map<String, PropertyGateway> _epgMap = newHashMap();
     { xsetupEpg(); }
     protected void xsetupEpg() {
+        setupEpg(_epgMap, et -> ((Message)et).getMessageId(), (et, vl) -> ((Message)et).setMessageId(ctl(vl)), "messageId");
         setupEpg(_epgMap, et -> ((Message)et).getVillageId(), (et, vl) -> ((Message)et).setVillageId(cti(vl)), "villageId");
-        setupEpg(_epgMap, et -> ((Message)et).getMessageNumber(), (et, vl) -> ((Message)et).setMessageNumber(cti(vl)), "messageNumber");
         setupEpg(_epgMap, et -> ((Message)et).getMessageTypeCode(), (et, vl) -> ((Message)et).setMessageTypeCode((String)vl), "messageTypeCode");
-        setupEpg(_epgMap, et -> ((Message)et).getMessageUnixtimestampMilli(), (et, vl) -> ((Message)et).setMessageUnixtimestampMilli(ctl(vl)), "messageUnixtimestampMilli");
         setupEpg(_epgMap, et -> ((Message)et).getVillageDayId(), (et, vl) -> ((Message)et).setVillageDayId(cti(vl)), "villageDayId");
         setupEpg(_epgMap, et -> ((Message)et).getVillagePlayerId(), (et, vl) -> ((Message)et).setVillagePlayerId(cti(vl)), "villagePlayerId");
-        setupEpg(_epgMap, et -> ((Message)et).getToVillagePlayerId(), (et, vl) -> ((Message)et).setToVillagePlayerId(cti(vl)), "toVillagePlayerId");
-        setupEpg(_epgMap, et -> ((Message)et).getPlayerId(), (et, vl) -> ((Message)et).setPlayerId(cti(vl)), "playerId");
         setupEpg(_epgMap, et -> ((Message)et).getMessageContent(), (et, vl) -> ((Message)et).setMessageContent((String)vl), "messageContent");
         setupEpg(_epgMap, et -> ((Message)et).getMessageDatetime(), (et, vl) -> ((Message)et).setMessageDatetime(ctldt(vl)), "messageDatetime");
-        setupEpg(_epgMap, et -> ((Message)et).getMessageCount(), (et, vl) -> ((Message)et).setMessageCount(cti(vl)), "messageCount");
-        setupEpg(_epgMap, et -> ((Message)et).getIsConvertDisable(), (et, vl) -> ((Message)et).setIsConvertDisable((Boolean)vl), "isConvertDisable");
-        setupEpg(_epgMap, et -> ((Message)et).getFaceTypeCode(), (et, vl) -> ((Message)et).setFaceTypeCode((String)vl), "faceTypeCode");
+        setupEpg(_epgMap, et -> ((Message)et).getMessageUnixtimestampMilli(), (et, vl) -> ((Message)et).setMessageUnixtimestampMilli(ctl(vl)), "messageUnixtimestampMilli");
+        setupEpg(_epgMap, et -> ((Message)et).getIsStrong(), (et, vl) -> ((Message)et).setIsStrong((Boolean)vl), "isStrong");
         setupEpg(_epgMap, et -> ((Message)et).getRegisterDatetime(), (et, vl) -> ((Message)et).setRegisterDatetime(ctldt(vl)), "registerDatetime");
         setupEpg(_epgMap, et -> ((Message)et).getRegisterTrace(), (et, vl) -> ((Message)et).setRegisterTrace((String)vl), "registerTrace");
         setupEpg(_epgMap, et -> ((Message)et).getUpdateDatetime(), (et, vl) -> ((Message)et).setUpdateDatetime(ctldt(vl)), "updateDatetime");
@@ -79,44 +75,35 @@ public class MessageDbm extends AbstractDBMeta {
     // ===================================================================================
     //                                                                         Column Info
     //                                                                         ===========
+    protected final ColumnInfo _columnMessageId = cci("MESSAGE_ID", "MESSAGE_ID", null, null, Long.class, "messageId", null, true, true, true, "BIGINT", 19, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnVillageId = cci("VILLAGE_ID", "VILLAGE_ID", null, null, Integer.class, "villageId", null, true, false, true, "INT UNSIGNED", 10, 0, null, null, false, null, null, null, null, null, false);
-    protected final ColumnInfo _columnMessageNumber = cci("MESSAGE_NUMBER", "MESSAGE_NUMBER", null, null, Integer.class, "messageNumber", null, true, false, true, "INT UNSIGNED", 10, 0, null, null, false, null, null, null, null, null, false);
-    protected final ColumnInfo _columnMessageTypeCode = cci("MESSAGE_TYPE_CODE", "MESSAGE_TYPE_CODE", null, null, String.class, "messageTypeCode", null, true, false, true, "VARCHAR", 20, 0, null, null, false, null, null, null, null, null, false);
-    protected final ColumnInfo _columnMessageUnixtimestampMilli = cci("MESSAGE_UNIXTIMESTAMP_MILLI", "MESSAGE_UNIXTIMESTAMP_MILLI", null, null, Long.class, "messageUnixtimestampMilli", null, false, false, true, "BIGINT UNSIGNED", 20, 0, null, null, false, null, null, null, null, null, false);
+    protected final ColumnInfo _columnMessageTypeCode = cci("MESSAGE_TYPE_CODE", "MESSAGE_TYPE_CODE", null, null, String.class, "messageTypeCode", null, false, false, true, "VARCHAR", 20, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnVillageDayId = cci("VILLAGE_DAY_ID", "VILLAGE_DAY_ID", null, null, Integer.class, "villageDayId", null, false, false, true, "INT UNSIGNED", 10, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnVillagePlayerId = cci("VILLAGE_PLAYER_ID", "VILLAGE_PLAYER_ID", null, null, Integer.class, "villagePlayerId", null, false, false, false, "INT UNSIGNED", 10, 0, null, null, false, null, null, null, null, null, false);
-    protected final ColumnInfo _columnToVillagePlayerId = cci("TO_VILLAGE_PLAYER_ID", "TO_VILLAGE_PLAYER_ID", null, null, Integer.class, "toVillagePlayerId", null, false, false, false, "INT UNSIGNED", 10, 0, null, null, false, null, null, null, null, null, false);
-    protected final ColumnInfo _columnPlayerId = cci("PLAYER_ID", "PLAYER_ID", null, null, Integer.class, "playerId", null, false, false, false, "INT UNSIGNED", 10, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnMessageContent = cci("MESSAGE_CONTENT", "MESSAGE_CONTENT", null, null, String.class, "messageContent", null, false, false, true, "VARCHAR", 10000, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnMessageDatetime = cci("MESSAGE_DATETIME", "MESSAGE_DATETIME", null, null, java.time.LocalDateTime.class, "messageDatetime", null, false, false, true, "DATETIME", 19, 0, null, null, false, null, null, null, null, null, false);
-    protected final ColumnInfo _columnMessageCount = cci("MESSAGE_COUNT", "MESSAGE_COUNT", null, null, Integer.class, "messageCount", null, false, false, false, "INT UNSIGNED", 10, 0, null, null, false, null, null, null, null, null, false);
-    protected final ColumnInfo _columnIsConvertDisable = cci("IS_CONVERT_DISABLE", "IS_CONVERT_DISABLE", null, null, Boolean.class, "isConvertDisable", null, false, false, true, "BIT", null, null, null, null, false, null, null, null, null, null, false);
-    protected final ColumnInfo _columnFaceTypeCode = cci("FACE_TYPE_CODE", "FACE_TYPE_CODE", null, null, String.class, "faceTypeCode", null, false, false, false, "VARCHAR", 20, 0, null, null, false, null, null, null, null, null, false);
+    protected final ColumnInfo _columnMessageUnixtimestampMilli = cci("MESSAGE_UNIXTIMESTAMP_MILLI", "MESSAGE_UNIXTIMESTAMP_MILLI", null, null, Long.class, "messageUnixtimestampMilli", null, false, false, true, "BIGINT UNSIGNED", 20, 0, null, null, false, null, null, null, null, null, false);
+    protected final ColumnInfo _columnIsStrong = cci("IS_STRONG", "IS_STRONG", null, null, Boolean.class, "isStrong", null, false, false, true, "BIT", null, null, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnRegisterDatetime = cci("REGISTER_DATETIME", "REGISTER_DATETIME", null, null, java.time.LocalDateTime.class, "registerDatetime", null, false, false, true, "DATETIME", 19, 0, null, null, true, null, null, null, null, null, false);
     protected final ColumnInfo _columnRegisterTrace = cci("REGISTER_TRACE", "REGISTER_TRACE", null, null, String.class, "registerTrace", null, false, false, true, "VARCHAR", 64, 0, null, null, true, null, null, null, null, null, false);
     protected final ColumnInfo _columnUpdateDatetime = cci("UPDATE_DATETIME", "UPDATE_DATETIME", null, null, java.time.LocalDateTime.class, "updateDatetime", null, false, false, true, "DATETIME", 19, 0, null, null, true, null, null, null, null, null, false);
     protected final ColumnInfo _columnUpdateTrace = cci("UPDATE_TRACE", "UPDATE_TRACE", null, null, String.class, "updateTrace", null, false, false, true, "VARCHAR", 64, 0, null, null, true, null, null, null, null, null, false);
 
     /**
-     * VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10)}
+     * MESSAGE_ID: {PK, ID, NotNull, BIGINT(19)}
+     * @return The information object of specified column. (NotNull)
+     */
+    public ColumnInfo columnMessageId() { return _columnMessageId; }
+    /**
+     * VILLAGE_ID: {PK, IX, NotNull, INT UNSIGNED(10)}
      * @return The information object of specified column. (NotNull)
      */
     public ColumnInfo columnVillageId() { return _columnVillageId; }
     /**
-     * MESSAGE_NUMBER: {PK, NotNull, INT UNSIGNED(10)}
-     * @return The information object of specified column. (NotNull)
-     */
-    public ColumnInfo columnMessageNumber() { return _columnMessageNumber; }
-    /**
-     * MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20)}
+     * MESSAGE_TYPE_CODE: {IX, NotNull, VARCHAR(20)}
      * @return The information object of specified column. (NotNull)
      */
     public ColumnInfo columnMessageTypeCode() { return _columnMessageTypeCode; }
-    /**
-     * MESSAGE_UNIXTIMESTAMP_MILLI: {IX, NotNull, BIGINT UNSIGNED(20)}
-     * @return The information object of specified column. (NotNull)
-     */
-    public ColumnInfo columnMessageUnixtimestampMilli() { return _columnMessageUnixtimestampMilli; }
     /**
      * VILLAGE_DAY_ID: {IX, NotNull, INT UNSIGNED(10)}
      * @return The information object of specified column. (NotNull)
@@ -128,16 +115,6 @@ public class MessageDbm extends AbstractDBMeta {
      */
     public ColumnInfo columnVillagePlayerId() { return _columnVillagePlayerId; }
     /**
-     * TO_VILLAGE_PLAYER_ID: {IX, INT UNSIGNED(10)}
-     * @return The information object of specified column. (NotNull)
-     */
-    public ColumnInfo columnToVillagePlayerId() { return _columnToVillagePlayerId; }
-    /**
-     * PLAYER_ID: {IX, INT UNSIGNED(10)}
-     * @return The information object of specified column. (NotNull)
-     */
-    public ColumnInfo columnPlayerId() { return _columnPlayerId; }
-    /**
      * MESSAGE_CONTENT: {NotNull, VARCHAR(10000)}
      * @return The information object of specified column. (NotNull)
      */
@@ -148,20 +125,15 @@ public class MessageDbm extends AbstractDBMeta {
      */
     public ColumnInfo columnMessageDatetime() { return _columnMessageDatetime; }
     /**
-     * MESSAGE_COUNT: {INT UNSIGNED(10)}
+     * MESSAGE_UNIXTIMESTAMP_MILLI: {IX, NotNull, BIGINT UNSIGNED(20)}
      * @return The information object of specified column. (NotNull)
      */
-    public ColumnInfo columnMessageCount() { return _columnMessageCount; }
+    public ColumnInfo columnMessageUnixtimestampMilli() { return _columnMessageUnixtimestampMilli; }
     /**
-     * IS_CONVERT_DISABLE: {NotNull, BIT}
+     * IS_STRONG: {NotNull, BIT}
      * @return The information object of specified column. (NotNull)
      */
-    public ColumnInfo columnIsConvertDisable() { return _columnIsConvertDisable; }
-    /**
-     * FACE_TYPE_CODE: {IX, VARCHAR(20)}
-     * @return The information object of specified column. (NotNull)
-     */
-    public ColumnInfo columnFaceTypeCode() { return _columnFaceTypeCode; }
+    public ColumnInfo columnIsStrong() { return _columnIsStrong; }
     /**
      * REGISTER_DATETIME: {NotNull, DATETIME(19)}
      * @return The information object of specified column. (NotNull)
@@ -185,19 +157,15 @@ public class MessageDbm extends AbstractDBMeta {
 
     protected List<ColumnInfo> ccil() {
         List<ColumnInfo> ls = newArrayList();
+        ls.add(columnMessageId());
         ls.add(columnVillageId());
-        ls.add(columnMessageNumber());
         ls.add(columnMessageTypeCode());
-        ls.add(columnMessageUnixtimestampMilli());
         ls.add(columnVillageDayId());
         ls.add(columnVillagePlayerId());
-        ls.add(columnToVillagePlayerId());
-        ls.add(columnPlayerId());
         ls.add(columnMessageContent());
         ls.add(columnMessageDatetime());
-        ls.add(columnMessageCount());
-        ls.add(columnIsConvertDisable());
-        ls.add(columnFaceTypeCode());
+        ls.add(columnMessageUnixtimestampMilli());
+        ls.add(columnIsStrong());
         ls.add(columnRegisterDatetime());
         ls.add(columnRegisterTrace());
         ls.add(columnUpdateDatetime());
@@ -215,9 +183,8 @@ public class MessageDbm extends AbstractDBMeta {
     //                                       ---------------
     protected UniqueInfo cpui() {
         List<ColumnInfo> ls = newArrayListSized(4);
+        ls.add(columnMessageId());
         ls.add(columnVillageId());
-        ls.add(columnMessageNumber());
-        ls.add(columnMessageTypeCode());
         return hpcpui(ls);
     }
     public boolean hasPrimaryKey() { return true; }
@@ -239,6 +206,7 @@ public class MessageDbm extends AbstractDBMeta {
     // ===================================================================================
     //                                                                        Various Info
     //                                                                        ============
+    public boolean hasIdentity() { return true; }
     public boolean hasCommonColumn() { return true; }
     public List<ColumnInfo> getCommonColumnInfoList()
     { return newArrayList(columnRegisterDatetime(), columnRegisterTrace(), columnUpdateDatetime(), columnUpdateTrace()); }

@@ -24,7 +24,7 @@ class CommitDataSource(
         village: com.ort.lastwolf.domain.model.village.Village,
         participant: VillageParticipant
     ): com.ort.lastwolf.domain.model.commit.Commit? {
-        val latestDay = village.day.latestDay()
+        val latestDay = village.days.latestDay()
 
         val optCommit = commitBhv.selectEntity {
             it.query().setVillageDayId_Equal(latestDay.id)

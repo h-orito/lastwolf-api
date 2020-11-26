@@ -105,7 +105,9 @@ public class VillageDayCIQ extends AbstractBsVillageDayCQ {
     protected ConditionValue xgetCValueVillageId() { return _myCQ.xdfgetVillageId(); }
     protected ConditionValue xgetCValueDay() { return _myCQ.xdfgetDay(); }
     protected ConditionValue xgetCValueNoonnightCode() { return _myCQ.xdfgetNoonnightCode(); }
-    protected ConditionValue xgetCValueDaychangeDatetime() { return _myCQ.xdfgetDaychangeDatetime(); }
+    protected ConditionValue xgetCValueStartDatetime() { return _myCQ.xdfgetStartDatetime(); }
+    protected ConditionValue xgetCValueEndDatetime() { return _myCQ.xdfgetEndDatetime(); }
+    protected ConditionValue xgetCValueIsEpilogue() { return _myCQ.xdfgetIsEpilogue(); }
     protected ConditionValue xgetCValueRegisterDatetime() { return _myCQ.xdfgetRegisterDatetime(); }
     protected ConditionValue xgetCValueRegisterTrace() { return _myCQ.xdfgetRegisterTrace(); }
     protected ConditionValue xgetCValueUpdateDatetime() { return _myCQ.xdfgetUpdateDatetime(); }

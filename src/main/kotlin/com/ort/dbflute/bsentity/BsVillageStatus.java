@@ -134,11 +134,11 @@ public abstract class BsVillageStatus extends AbstractEntity implements DomainEn
     }
 
     /**
-     * Set the value of villageStatusCode as エピローグ (EPILOGUE). <br>
-     * エピローグ
+     * Set the value of villageStatusCode as 決着 (EPILOGUE). <br>
+     * 決着
      */
-    public void setVillageStatusCode_エピローグ() {
-        setVillageStatusCodeAsVillageStatus(CDef.VillageStatus.エピローグ);
+    public void setVillageStatusCode_決着() {
+        setVillageStatusCodeAsVillageStatus(CDef.VillageStatus.決着);
     }
 
     /**
@@ -150,11 +150,19 @@ public abstract class BsVillageStatus extends AbstractEntity implements DomainEn
     }
 
     /**
-     * Set the value of villageStatusCode as プロローグ (PROLOGUE). <br>
-     * プロローグ
+     * Set the value of villageStatusCode as 募集中 (PROLOGUE). <br>
+     * 募集中
      */
-    public void setVillageStatusCode_プロローグ() {
-        setVillageStatusCodeAsVillageStatus(CDef.VillageStatus.プロローグ);
+    public void setVillageStatusCode_募集中() {
+        setVillageStatusCodeAsVillageStatus(CDef.VillageStatus.募集中);
+    }
+
+    /**
+     * Set the value of villageStatusCode as 点呼中 (ROLLCALLING). <br>
+     * 点呼中
+     */
+    public void setVillageStatusCode_点呼中() {
+        setVillageStatusCodeAsVillageStatus(CDef.VillageStatus.点呼中);
     }
 
     // ===================================================================================
@@ -183,14 +191,14 @@ public abstract class BsVillageStatus extends AbstractEntity implements DomainEn
     }
 
     /**
-     * Is the value of villageStatusCode エピローグ? <br>
-     * エピローグ
+     * Is the value of villageStatusCode 決着? <br>
+     * 決着
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
      * @return The determination, true or false.
      */
-    public boolean isVillageStatusCodeエピローグ() {
+    public boolean isVillageStatusCode決着() {
         CDef.VillageStatus cdef = getVillageStatusCodeAsVillageStatus();
-        return cdef != null ? cdef.equals(CDef.VillageStatus.エピローグ) : false;
+        return cdef != null ? cdef.equals(CDef.VillageStatus.決着) : false;
     }
 
     /**
@@ -205,19 +213,30 @@ public abstract class BsVillageStatus extends AbstractEntity implements DomainEn
     }
 
     /**
-     * Is the value of villageStatusCode プロローグ? <br>
-     * プロローグ
+     * Is the value of villageStatusCode 募集中? <br>
+     * 募集中
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
      * @return The determination, true or false.
      */
-    public boolean isVillageStatusCodeプロローグ() {
+    public boolean isVillageStatusCode募集中() {
         CDef.VillageStatus cdef = getVillageStatusCodeAsVillageStatus();
-        return cdef != null ? cdef.equals(CDef.VillageStatus.プロローグ) : false;
+        return cdef != null ? cdef.equals(CDef.VillageStatus.募集中) : false;
+    }
+
+    /**
+     * Is the value of villageStatusCode 点呼中? <br>
+     * 点呼中
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageStatusCode点呼中() {
+        CDef.VillageStatus cdef = getVillageStatusCodeAsVillageStatus();
+        return cdef != null ? cdef.equals(CDef.VillageStatus.点呼中) : false;
     }
 
     /**
      * 決着がついた村 <br>
-     * The group elements:[エピローグ, 廃村, 終了]
+     * The group elements:[決着, 廃村, 終了]
      * @return The determination, true or false.
      */
     public boolean isVillageStatusCode_SolvedVillage() {

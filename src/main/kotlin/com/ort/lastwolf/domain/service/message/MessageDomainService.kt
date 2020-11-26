@@ -10,9 +10,6 @@ import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 import com.ort.lastwolf.domain.service.say.GraveSayDomainService
 import com.ort.lastwolf.domain.service.say.MonologueSayDomainService
 import com.ort.lastwolf.domain.service.say.NormalSayDomainService
-import com.ort.lastwolf.domain.service.say.SecretSayDomainService
-import com.ort.lastwolf.domain.service.say.SpectateSayDomainService
-import com.ort.lastwolf.domain.service.say.SympathizeSayDomainService
 import com.ort.lastwolf.domain.service.say.WerewolfSayDomainService
 import org.springframework.stereotype.Service
 
@@ -20,18 +17,11 @@ import org.springframework.stereotype.Service
 class MessageDomainService(
     private val normalSayDomainService: NormalSayDomainService,
     private val werewolfSayDomainService: WerewolfSayDomainService,
-    private val sympathizeSayDomainService: SympathizeSayDomainService,
     private val graveSayDomainService: GraveSayDomainService,
-    private val spectateSayDomainService: SpectateSayDomainService,
     private val monologueSayDomainService: MonologueSayDomainService,
-    private val secretSayDomainService: SecretSayDomainService,
     private val psychicMessageDomainService: PsychicMessageDomainService,
-    private val guruPsychicMessageDomainService: GuruPsychicMessageDomainService,
     private val attackMessageDomainService: AttackMessageDomainService,
-    private val autopsyMessageDomainService: AutopsyMessageDomainService,
-    private val masonMessageDomainService: MasonMessageDomainService,
-    private val sympathizerMessageDomainService: SympathizerMessageDomainService,
-    private val fanaticMessageDomainService: FanaticMessageDomainService
+    private val masonMessageDomainService: MasonMessageDomainService
 ) {
 
     private val everyoneAllowedMessageTypeList = listOf(CDef.MessageType.公開システムメッセージ, CDef.MessageType.通常発言, CDef.MessageType.村建て発言)
@@ -47,7 +37,6 @@ class MessageDomainService(
     fun viewableMessageTypeList(
         village: Village,
         participant: VillageParticipant?,
-        day: Int,
         authority: CDef.Authority?
     ): List<CDef.MessageType> {
         // 管理者は全て見られる
@@ -60,18 +49,12 @@ class MessageDomainService(
         // 権限に応じて追加していく（独り言と秘話はここでは追加しない）
         listOf(
             CDef.MessageType.死者の呻き,
-            CDef.MessageType.見学発言,
             CDef.MessageType.人狼の囁き,
-            CDef.MessageType.共鳴発言,
             CDef.MessageType.白黒霊視結果,
-            CDef.MessageType.役職霊視結果,
             CDef.MessageType.襲撃結果,
-            CDef.MessageType.共有相互確認メッセージ,
-            CDef.MessageType.共鳴相互確認メッセージ,
-            CDef.MessageType.狂信者人狼確認メッセージ,
-            CDef.MessageType.検死結果
+            CDef.MessageType.共有相互確認メッセージ
         ).forEach {
-            if (isViewableMessage(village, participant, it.code(), day)) allowedTypeList.add(it)
+            if (isViewableMessage(village, participant, it.code())) allowedTypeList.add(it)
         }
         return allowedTypeList
     }
@@ -81,31 +64,22 @@ class MessageDomainService(
      *
      * @param participant 参加情報
      * @param messageType 発言種別
-     * @param day 何日目か
      * @return 閲覧できるか
      */
     fun isViewableMessage(
         village: Village,
         participant: VillageParticipant?,
-        messageType: String,
-        day: Int = 1
+        messageType: String
     ): Boolean {
-        if (village.dummyChara()?.id == participant?.id) return true
+        if (village.dummyParticipant()?.id == participant?.id) return true
         return when (CDef.MessageType.codeOf(messageType) ?: return false) {
             CDef.MessageType.通常発言 -> normalSayDomainService.isViewable(village, participant)
             CDef.MessageType.人狼の囁き -> werewolfSayDomainService.isViewable(village, participant)
             CDef.MessageType.死者の呻き -> graveSayDomainService.isViewable(village, participant)
-            CDef.MessageType.共鳴発言 -> sympathizeSayDomainService.isViewable(village, participant)
-            CDef.MessageType.見学発言 -> spectateSayDomainService.isViewable(village, participant, day)
             CDef.MessageType.独り言 -> monologueSayDomainService.isViewable(village, participant)
-            CDef.MessageType.秘話 -> secretSayDomainService.isViewable(village, participant)
             CDef.MessageType.白黒霊視結果 -> psychicMessageDomainService.isViewable(village, participant)
-            CDef.MessageType.役職霊視結果 -> guruPsychicMessageDomainService.isViewable(village, participant)
             CDef.MessageType.襲撃結果 -> attackMessageDomainService.isViewable(village, participant)
             CDef.MessageType.共有相互確認メッセージ -> masonMessageDomainService.isViewable(village, participant)
-            CDef.MessageType.共鳴相互確認メッセージ -> sympathizerMessageDomainService.isViewable(village, participant)
-            CDef.MessageType.狂信者人狼確認メッセージ -> fanaticMessageDomainService.isViewable(village, participant)
-            CDef.MessageType.検死結果 -> autopsyMessageDomainService.isViewable(village, participant)
             CDef.MessageType.村建て発言 -> true
             else -> return false
         }
@@ -114,7 +88,6 @@ class MessageDomainService(
     fun createQuery(
         village: Village,
         participant: VillageParticipant?,
-        day: Int,
         authority: CDef.Authority?,
         messageTypeList: List<CDef.MessageType>?,
         from: Long?,
@@ -123,7 +96,7 @@ class MessageDomainService(
         keyword: String?,
         participantIdList: List<Int>?
     ): MessageQuery {
-        val availableMessageTypeList = viewableMessageTypeList(village, participant, day, authority)
+        val availableMessageTypeList = viewableMessageTypeList(village, participant, authority)
         val requestMessageTypeList = if (messageTypeList.isNullOrEmpty()) CDef.MessageType.listAll() else messageTypeList
         val queryMessageTypeList = requestMessageTypeList.filter { availableMessageTypeList.contains(it) }
         return MessageQuery(
@@ -135,27 +108,28 @@ class MessageDomainService(
             messageTypeList = queryMessageTypeList,
             participantIdList = participantIdList,
             includeMonologue = isIncludeMonologue(participant, participantIdList, requestMessageTypeList, queryMessageTypeList),
-            includeSecret = false, // TODO 秘話実装する際に実装
             includePrivateAbility = isIncludePrivateAbility(participant, requestMessageTypeList)
         )
     }
 
     fun getViewableUserAndMessageLatestTime(
         village: Village,
-        players: Players,
         message: Message
     ): List<UserViewableMessageLatestTime> {
-        val day = village.day.dayList.first { it.id == message.time.villageDayId }.day
         val updateParticipantAndTimeList =
-            (village.participant.memberList + village.spectator.memberList).mapNotNull { participant ->
-                val isViewable = isViewableMessage(village, participant, message.content.type.code, day)
-                if (isViewable) UserViewableMessageLatestTime(
-                    uid = players.list.first { it.id == participant.playerId }.uid,
-                    time = message.time.unixTimeMilli
-                ) else null
+            village.participants.list.mapNotNull { participant ->
+                val isViewable = isViewableMessage(village, participant, message.content.type.code)
+                val isMessageForMe = isMessageForMe(participant, message)
+                val isEveryoneViewable = isEveryoneViewable(message)
+                if (isViewable || isMessageForMe || isEveryoneViewable) {
+                    UserViewableMessageLatestTime(
+                        uid = participant.player.uid,
+                        time = message.time.unixTimeMilli
+                    )
+                } else null
             }
         // 非ログインユーザ
-        return if (isViewableMessage(village, null, message.content.type.code, day)) {
+        return if (isViewableMessage(village, null, message.content.type.code)) {
             updateParticipantAndTimeList + UserViewableMessageLatestTime(null, message.time.unixTimeMilli)
         } else {
             updateParticipantAndTimeList
@@ -168,21 +142,23 @@ class MessageDomainService(
         messages: Messages
     ): List<UserViewableMessageLatestTime> {
         val updateParticipantAndTimeList =
-            (village.participant.memberList + village.spectator.memberList).mapNotNull { participant ->
+            village.participants.list.mapNotNull { participant ->
                 messages.list.filter { message ->
-                    val day = village.day.dayList.first { it.id == message.time.villageDayId }.day
-                    isViewableMessage(village, participant, message.content.type.code, day)
+                    val isViewable = isViewableMessage(village, participant, message.content.type.code)
+                    val isMessageForMe = isMessageForMe(participant, message)
+                    val isEveryoneViewable = isEveryoneViewable(message)
+                    isViewable || isMessageForMe || isEveryoneViewable
                 }.maxBy { it.time.unixTimeMilli }?.let { message ->
                     UserViewableMessageLatestTime(
-                        uid = players.list.first { it.id == participant.playerId }.uid,
+                        uid = participant.player.uid,
                         time = message.time.unixTimeMilli
                     )
                 }
             }
         // 非ログインユーザ
         val notLoginUser = messages.list.filter { message ->
-            val day = village.day.dayList.first { it.id == message.time.villageDayId }.day
-            isViewableMessage(village, null, message.content.type.code, day)
+            val day = village.days.list.first { it.id == message.time.villageDayId }.day
+            isViewableMessage(village, null, message.content.type.code)
         }.maxBy { it.time.unixTimeMilli }?.let { message ->
             UserViewableMessageLatestTime(
                 uid = null,
@@ -197,6 +173,13 @@ class MessageDomainService(
     }
 
     data class UserViewableMessageLatestTime(val uid: String?, val time: Long)
+
+    private fun isEveryoneViewable(message: Message): Boolean = everyoneAllowedMessageTypeList.any { it == message.content.type.toCdef() }
+
+    private fun isMessageForMe(participant: VillageParticipant, message: Message): Boolean {
+        return listOf(CDef.MessageType.個別能力行使結果, CDef.MessageType.独り言).any { it == message.content.type.toCdef() }
+            && message.fromParticipantId == participant.id
+    }
 
     private fun isIncludeMonologue(
         participant: VillageParticipant?,

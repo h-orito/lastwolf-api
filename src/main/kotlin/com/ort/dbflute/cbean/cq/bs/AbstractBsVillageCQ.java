@@ -159,25 +159,6 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Set up ExistsReferrer (correlated sub-query). <br>
-     * {exists (select VILLAGE_ID from message_restriction where ...)} <br>
-     * message_restriction by VILLAGE_ID, named 'messageRestrictionAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">existsMessageRestriction</span>(restrictionCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     restrictionCB.query().set...
-     * });
-     * </pre>
-     * @param subCBLambda The callback for sub-query of MessageRestrictionList for 'exists'. (NotNull)
-     */
-    public void existsMessageRestriction(SubQuery<MessageRestrictionCB> subCBLambda) {
-        assertObjectNotNull("subCBLambda", subCBLambda);
-        MessageRestrictionCB cb = new MessageRestrictionCB(); cb.xsetupForExistsReferrer(this);
-        lockCall(() -> subCBLambda.query(cb)); String pp = keepVillageId_ExistsReferrer_MessageRestrictionList(cb.query());
-        registerExistsReferrer(cb.query(), "VILLAGE_ID", "VILLAGE_ID", pp, "messageRestrictionList");
-    }
-    public abstract String keepVillageId_ExistsReferrer_MessageRestrictionList(MessageRestrictionCQ sq);
-
-    /**
-     * Set up ExistsReferrer (correlated sub-query). <br>
      * {exists (select VILLAGE_ID from village_day where ...)} <br>
      * village_day by VILLAGE_ID, named 'villageDayAsOne'.
      * <pre>
@@ -232,25 +213,6 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
         registerExistsReferrer(cb.query(), "VILLAGE_ID", "VILLAGE_ID", pp, "villageSettingList");
     }
     public abstract String keepVillageId_ExistsReferrer_VillageSettingList(VillageSettingCQ sq);
-
-    /**
-     * Set up NotExistsReferrer (correlated sub-query). <br>
-     * {not exists (select VILLAGE_ID from message_restriction where ...)} <br>
-     * message_restriction by VILLAGE_ID, named 'messageRestrictionAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">notExistsMessageRestriction</span>(restrictionCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     restrictionCB.query().set...
-     * });
-     * </pre>
-     * @param subCBLambda The callback for sub-query of VillageId_NotExistsReferrer_MessageRestrictionList for 'not exists'. (NotNull)
-     */
-    public void notExistsMessageRestriction(SubQuery<MessageRestrictionCB> subCBLambda) {
-        assertObjectNotNull("subCBLambda", subCBLambda);
-        MessageRestrictionCB cb = new MessageRestrictionCB(); cb.xsetupForExistsReferrer(this);
-        lockCall(() -> subCBLambda.query(cb)); String pp = keepVillageId_NotExistsReferrer_MessageRestrictionList(cb.query());
-        registerNotExistsReferrer(cb.query(), "VILLAGE_ID", "VILLAGE_ID", pp, "messageRestrictionList");
-    }
-    public abstract String keepVillageId_NotExistsReferrer_MessageRestrictionList(MessageRestrictionCQ sq);
 
     /**
      * Set up NotExistsReferrer (correlated sub-query). <br>
@@ -309,14 +271,6 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
     }
     public abstract String keepVillageId_NotExistsReferrer_VillageSettingList(VillageSettingCQ sq);
 
-    public void xsderiveMessageRestrictionList(String fn, SubQuery<MessageRestrictionCB> sq, String al, DerivedReferrerOption op) {
-        assertObjectNotNull("subQuery", sq);
-        MessageRestrictionCB cb = new MessageRestrictionCB(); cb.xsetupForDerivedReferrer(this);
-        lockCall(() -> sq.query(cb)); String pp = keepVillageId_SpecifyDerivedReferrer_MessageRestrictionList(cb.query());
-        registerSpecifyDerivedReferrer(fn, cb.query(), "VILLAGE_ID", "VILLAGE_ID", pp, "messageRestrictionList", al, op);
-    }
-    public abstract String keepVillageId_SpecifyDerivedReferrer_MessageRestrictionList(MessageRestrictionCQ sq);
-
     public void xsderiveVillageDayList(String fn, SubQuery<VillageDayCB> sq, String al, DerivedReferrerOption op) {
         assertObjectNotNull("subQuery", sq);
         VillageDayCB cb = new VillageDayCB(); cb.xsetupForDerivedReferrer(this);
@@ -340,33 +294,6 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
         registerSpecifyDerivedReferrer(fn, cb.query(), "VILLAGE_ID", "VILLAGE_ID", pp, "villageSettingList", al, op);
     }
     public abstract String keepVillageId_SpecifyDerivedReferrer_VillageSettingList(VillageSettingCQ sq);
-
-    /**
-     * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
-     * {FOO &lt;= (select max(BAR) from message_restriction where ...)} <br>
-     * message_restriction by VILLAGE_ID, named 'messageRestrictionAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">derivedMessageRestriction()</span>.<span style="color: #CC4747">max</span>(restrictionCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     restrictionCB.specify().<span style="color: #CC4747">columnFoo...</span> <span style="color: #3F7E5E">// derived column by function</span>
-     *     restrictionCB.query().setBar... <span style="color: #3F7E5E">// referrer condition</span>
-     * }).<span style="color: #CC4747">greaterEqual</span>(123); <span style="color: #3F7E5E">// condition to derived column</span>
-     * </pre>
-     * @return The object to set up a function for referrer table. (NotNull)
-     */
-    public HpQDRFunction<MessageRestrictionCB> derivedMessageRestriction() {
-        return xcreateQDRFunctionMessageRestrictionList();
-    }
-    protected HpQDRFunction<MessageRestrictionCB> xcreateQDRFunctionMessageRestrictionList() {
-        return xcQDRFunc((fn, sq, rd, vl, op) -> xqderiveMessageRestrictionList(fn, sq, rd, vl, op));
-    }
-    public void xqderiveMessageRestrictionList(String fn, SubQuery<MessageRestrictionCB> sq, String rd, Object vl, DerivedReferrerOption op) {
-        assertObjectNotNull("subQuery", sq);
-        MessageRestrictionCB cb = new MessageRestrictionCB(); cb.xsetupForDerivedReferrer(this);
-        lockCall(() -> sq.query(cb)); String sqpp = keepVillageId_QueryDerivedReferrer_MessageRestrictionList(cb.query()); String prpp = keepVillageId_QueryDerivedReferrer_MessageRestrictionListParameter(vl);
-        registerQueryDerivedReferrer(fn, cb.query(), "VILLAGE_ID", "VILLAGE_ID", sqpp, "messageRestrictionList", rd, vl, prpp, op);
-    }
-    public abstract String keepVillageId_QueryDerivedReferrer_MessageRestrictionList(MessageRestrictionCQ sq);
-    public abstract String keepVillageId_QueryDerivedReferrer_MessageRestrictionListParameter(Object vl);
 
     /**
      * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
@@ -752,11 +679,11 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As エピローグ (EPILOGUE). And OnlyOnceRegistered. <br>
-     * エピローグ
+     * Equal(=). As 決着 (EPILOGUE). And OnlyOnceRegistered. <br>
+     * 決着
      */
-    public void setVillageStatusCode_Equal_エピローグ() {
-        setVillageStatusCode_Equal_AsVillageStatus(CDef.VillageStatus.エピローグ);
+    public void setVillageStatusCode_Equal_決着() {
+        setVillageStatusCode_Equal_AsVillageStatus(CDef.VillageStatus.決着);
     }
 
     /**
@@ -768,11 +695,19 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As プロローグ (PROLOGUE). And OnlyOnceRegistered. <br>
-     * プロローグ
+     * Equal(=). As 募集中 (PROLOGUE). And OnlyOnceRegistered. <br>
+     * 募集中
      */
-    public void setVillageStatusCode_Equal_プロローグ() {
-        setVillageStatusCode_Equal_AsVillageStatus(CDef.VillageStatus.プロローグ);
+    public void setVillageStatusCode_Equal_募集中() {
+        setVillageStatusCode_Equal_AsVillageStatus(CDef.VillageStatus.募集中);
+    }
+
+    /**
+     * Equal(=). As 点呼中 (ROLLCALLING). And OnlyOnceRegistered. <br>
+     * 点呼中
+     */
+    public void setVillageStatusCode_Equal_点呼中() {
+        setVillageStatusCode_Equal_AsVillageStatus(CDef.VillageStatus.点呼中);
     }
 
     protected void doSetVillageStatusCode_Equal(String villageStatusCode) {
@@ -815,11 +750,11 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As エピローグ (EPILOGUE). And OnlyOnceRegistered. <br>
-     * エピローグ
+     * NotEqual(&lt;&gt;). As 決着 (EPILOGUE). And OnlyOnceRegistered. <br>
+     * 決着
      */
-    public void setVillageStatusCode_NotEqual_エピローグ() {
-        setVillageStatusCode_NotEqual_AsVillageStatus(CDef.VillageStatus.エピローグ);
+    public void setVillageStatusCode_NotEqual_決着() {
+        setVillageStatusCode_NotEqual_AsVillageStatus(CDef.VillageStatus.決着);
     }
 
     /**
@@ -831,11 +766,19 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As プロローグ (PROLOGUE). And OnlyOnceRegistered. <br>
-     * プロローグ
+     * NotEqual(&lt;&gt;). As 募集中 (PROLOGUE). And OnlyOnceRegistered. <br>
+     * 募集中
      */
-    public void setVillageStatusCode_NotEqual_プロローグ() {
-        setVillageStatusCode_NotEqual_AsVillageStatus(CDef.VillageStatus.プロローグ);
+    public void setVillageStatusCode_NotEqual_募集中() {
+        setVillageStatusCode_NotEqual_AsVillageStatus(CDef.VillageStatus.募集中);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 点呼中 (ROLLCALLING). And OnlyOnceRegistered. <br>
+     * 点呼中
+     */
+    public void setVillageStatusCode_NotEqual_点呼中() {
+        setVillageStatusCode_NotEqual_AsVillageStatus(CDef.VillageStatus.点呼中);
     }
 
     protected void doSetVillageStatusCode_NotEqual(String villageStatusCode) {
@@ -865,7 +808,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As VillageStatus. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 村ステータス <br>
      * 決着がついた村 <br>
-     * The group elements:[エピローグ, 廃村, 終了]
+     * The group elements:[決着, 廃村, 終了]
      */
     public void setVillageStatusCode_InScope_SolvedVillage() {
         setVillageStatusCode_InScope_AsVillageStatus(CDef.VillageStatus.listOfSolvedVillage());
@@ -912,135 +855,6 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
     protected abstract ConditionValue xgetCValueVillageStatusCode();
 
     /**
-     * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
-     * EPILOGUE_DAY: {INT UNSIGNED(10)}
-     * @param epilogueDay The value of epilogueDay as equal. (basically NotNull: error as default, or no condition as option)
-     */
-    public void setEpilogueDay_Equal(Integer epilogueDay) {
-        doSetEpilogueDay_Equal(epilogueDay);
-    }
-
-    protected void doSetEpilogueDay_Equal(Integer epilogueDay) {
-        regEpilogueDay(CK_EQ, epilogueDay);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * EPILOGUE_DAY: {INT UNSIGNED(10)}
-     * @param epilogueDay The value of epilogueDay as notEqual. (basically NotNull: error as default, or no condition as option)
-     */
-    public void setEpilogueDay_NotEqual(Integer epilogueDay) {
-        doSetEpilogueDay_NotEqual(epilogueDay);
-    }
-
-    protected void doSetEpilogueDay_NotEqual(Integer epilogueDay) {
-        regEpilogueDay(CK_NES, epilogueDay);
-    }
-
-    /**
-     * GreaterThan(&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * EPILOGUE_DAY: {INT UNSIGNED(10)}
-     * @param epilogueDay The value of epilogueDay as greaterThan. (basically NotNull: error as default, or no condition as option)
-     */
-    public void setEpilogueDay_GreaterThan(Integer epilogueDay) {
-        regEpilogueDay(CK_GT, epilogueDay);
-    }
-
-    /**
-     * LessThan(&lt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * EPILOGUE_DAY: {INT UNSIGNED(10)}
-     * @param epilogueDay The value of epilogueDay as lessThan. (basically NotNull: error as default, or no condition as option)
-     */
-    public void setEpilogueDay_LessThan(Integer epilogueDay) {
-        regEpilogueDay(CK_LT, epilogueDay);
-    }
-
-    /**
-     * GreaterEqual(&gt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * EPILOGUE_DAY: {INT UNSIGNED(10)}
-     * @param epilogueDay The value of epilogueDay as greaterEqual. (basically NotNull: error as default, or no condition as option)
-     */
-    public void setEpilogueDay_GreaterEqual(Integer epilogueDay) {
-        regEpilogueDay(CK_GE, epilogueDay);
-    }
-
-    /**
-     * LessEqual(&lt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * EPILOGUE_DAY: {INT UNSIGNED(10)}
-     * @param epilogueDay The value of epilogueDay as lessEqual. (basically NotNull: error as default, or no condition as option)
-     */
-    public void setEpilogueDay_LessEqual(Integer epilogueDay) {
-        regEpilogueDay(CK_LE, epilogueDay);
-    }
-
-    /**
-     * RangeOf with various options. (versatile) <br>
-     * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
-     * And NullIgnored, OnlyOnceRegistered. <br>
-     * EPILOGUE_DAY: {INT UNSIGNED(10)}
-     * @param minNumber The min number of epilogueDay. (basically NotNull: if op.allowOneSide(), null allowed)
-     * @param maxNumber The max number of epilogueDay. (basically NotNull: if op.allowOneSide(), null allowed)
-     * @param opLambda The callback for option of range-of. (NotNull)
-     */
-    public void setEpilogueDay_RangeOf(Integer minNumber, Integer maxNumber, ConditionOptionCall<RangeOfOption> opLambda) {
-        setEpilogueDay_RangeOf(minNumber, maxNumber, xcROOP(opLambda));
-    }
-
-    /**
-     * RangeOf with various options. (versatile) <br>
-     * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
-     * And NullIgnored, OnlyOnceRegistered. <br>
-     * EPILOGUE_DAY: {INT UNSIGNED(10)}
-     * @param minNumber The min number of epilogueDay. (basically NotNull: if op.allowOneSide(), null allowed)
-     * @param maxNumber The max number of epilogueDay. (basically NotNull: if op.allowOneSide(), null allowed)
-     * @param rangeOfOption The option of range-of. (NotNull)
-     */
-    protected void setEpilogueDay_RangeOf(Integer minNumber, Integer maxNumber, RangeOfOption rangeOfOption) {
-        regROO(minNumber, maxNumber, xgetCValueEpilogueDay(), "EPILOGUE_DAY", rangeOfOption);
-    }
-
-    /**
-     * InScope {in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * EPILOGUE_DAY: {INT UNSIGNED(10)}
-     * @param epilogueDayList The collection of epilogueDay as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setEpilogueDay_InScope(Collection<Integer> epilogueDayList) {
-        doSetEpilogueDay_InScope(epilogueDayList);
-    }
-
-    protected void doSetEpilogueDay_InScope(Collection<Integer> epilogueDayList) {
-        regINS(CK_INS, cTL(epilogueDayList), xgetCValueEpilogueDay(), "EPILOGUE_DAY");
-    }
-
-    /**
-     * NotInScope {not in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * EPILOGUE_DAY: {INT UNSIGNED(10)}
-     * @param epilogueDayList The collection of epilogueDay as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setEpilogueDay_NotInScope(Collection<Integer> epilogueDayList) {
-        doSetEpilogueDay_NotInScope(epilogueDayList);
-    }
-
-    protected void doSetEpilogueDay_NotInScope(Collection<Integer> epilogueDayList) {
-        regINS(CK_NINS, cTL(epilogueDayList), xgetCValueEpilogueDay(), "EPILOGUE_DAY");
-    }
-
-    /**
-     * IsNull {is null}. And OnlyOnceRegistered. <br>
-     * EPILOGUE_DAY: {INT UNSIGNED(10)}
-     */
-    public void setEpilogueDay_IsNull() { regEpilogueDay(CK_ISN, DOBJ); }
-
-    /**
-     * IsNotNull {is not null}. And OnlyOnceRegistered. <br>
-     * EPILOGUE_DAY: {INT UNSIGNED(10)}
-     */
-    public void setEpilogueDay_IsNotNull() { regEpilogueDay(CK_ISNN, DOBJ); }
-
-    protected void regEpilogueDay(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueEpilogueDay(), "EPILOGUE_DAY"); }
-    protected abstract ConditionValue xgetCValueEpilogueDay();
-
-    /**
      * Equal(=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
      * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp}
      * @param winCampCode The value of winCampCode as equal. (basically NotNull, NotEmpty: error as default, or no condition as option)
@@ -1060,11 +874,11 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As 狐陣営 (FOX). And OnlyOnceRegistered. <br>
-     * 狐陣営
+     * Equal(=). As 妖狐陣営 (FOX). And OnlyOnceRegistered. <br>
+     * 妖狐陣営
      */
-    public void setWinCampCode_Equal_狐陣営() {
-        setWinCampCode_Equal_AsCamp(CDef.Camp.狐陣営);
+    public void setWinCampCode_Equal_妖狐陣営() {
+        setWinCampCode_Equal_AsCamp(CDef.Camp.妖狐陣営);
     }
 
     /**
@@ -1107,11 +921,11 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 狐陣営 (FOX). And OnlyOnceRegistered. <br>
-     * 狐陣営
+     * NotEqual(&lt;&gt;). As 妖狐陣営 (FOX). And OnlyOnceRegistered. <br>
+     * 妖狐陣営
      */
-    public void setWinCampCode_NotEqual_狐陣営() {
-        setWinCampCode_NotEqual_AsCamp(CDef.Camp.狐陣営);
+    public void setWinCampCode_NotEqual_妖狐陣営() {
+        setWinCampCode_NotEqual_AsCamp(CDef.Camp.妖狐陣営);
     }
 
     /**

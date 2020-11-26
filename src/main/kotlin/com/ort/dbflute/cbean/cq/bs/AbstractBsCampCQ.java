@@ -63,11 +63,11 @@ public abstract class AbstractBsCampCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As 狐陣営 (FOX). And OnlyOnceRegistered. <br>
-     * 狐陣営
+     * Equal(=). As 妖狐陣営 (FOX). And OnlyOnceRegistered. <br>
+     * 妖狐陣営
      */
-    public void setCampCode_Equal_狐陣営() {
-        setCampCode_Equal_AsCamp(CDef.Camp.狐陣営);
+    public void setCampCode_Equal_妖狐陣営() {
+        setCampCode_Equal_AsCamp(CDef.Camp.妖狐陣営);
     }
 
     /**
@@ -110,11 +110,11 @@ public abstract class AbstractBsCampCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 狐陣営 (FOX). And OnlyOnceRegistered. <br>
-     * 狐陣営
+     * NotEqual(&lt;&gt;). As 妖狐陣営 (FOX). And OnlyOnceRegistered. <br>
+     * 妖狐陣営
      */
-    public void setCampCode_NotEqual_狐陣営() {
-        setCampCode_NotEqual_AsCamp(CDef.Camp.狐陣営);
+    public void setCampCode_NotEqual_妖狐陣営() {
+        setCampCode_NotEqual_AsCamp(CDef.Camp.妖狐陣営);
     }
 
     /**

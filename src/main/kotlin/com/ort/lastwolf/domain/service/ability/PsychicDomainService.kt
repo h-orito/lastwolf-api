@@ -1,7 +1,6 @@
 package com.ort.lastwolf.domain.service.ability
 
 import com.ort.lastwolf.domain.model.charachip.Chara
-import com.ort.lastwolf.domain.model.charachip.Charas
 import com.ort.lastwolf.domain.model.daychange.DayChange
 import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.village.Village
@@ -11,16 +10,16 @@ import org.springframework.stereotype.Service
 @Service
 class PsychicDomainService {
 
-    fun processDayChangeAction(dayChange: DayChange, charas: Charas): DayChange {
+    fun processDayChangeAction(dayChange: DayChange): DayChange {
         // 霊能がいない、または処刑・突然死がいない場合は何もしない
-        val existsAlivePsychic = dayChange.village.participant.filterAlive().memberList.any { it.skill!!.toCdef().isHasPsychicAbility }
+        val existsAlivePsychic = dayChange.village.participants.filterAlive().list.any { it.skill!!.toCdef().isHasPsychicAbility }
         if (!existsAlivePsychic) return dayChange
-        val todayDeadParticipants = dayChange.village.todayDeadParticipants().memberList.filter { it.dead!!.toCdef().isPsychicableDeath }
+        val todayDeadParticipants = dayChange.village.todayDeadParticipants().list.filter { it.dead!!.toCdef().isPsychicableDeath }
         if (todayDeadParticipants.isEmpty()) return dayChange
 
         var messages = dayChange.messages.copy()
         todayDeadParticipants.forEach { deadParticipant ->
-            messages = messages.add(createPsychicPrivateMessage(dayChange.village, charas, deadParticipant))
+            messages = messages.add(createPsychicPrivateMessage(dayChange.village, deadParticipant))
         }
         return dayChange.copy(messages = messages).setIsChange(dayChange)
     }
@@ -30,15 +29,13 @@ class PsychicDomainService {
     //                                                                        ============
     private fun createPsychicPrivateMessage(
         village: Village,
-        charas: Charas,
         deadParticipant: VillageParticipant
     ): Message {
-        val chara = charas.chara(deadParticipant.charaId)
-        val isWolf = village.participant.member(deadParticipant.id).skill!!.toCdef().isPsychicResultWolf
-        val text = createPsychicPrivateMessageString(chara, isWolf)
-        return Message.createPsychicPrivateMessage(text, village.day.latestDay().id)
+        val isWolf = village.participants.first(deadParticipant.id).skill!!.toCdef().isPsychicResultWolf
+        val text = createPsychicPrivateMessageString(deadParticipant.chara, isWolf)
+        return Message.createPsychicPrivateMessage(text, village.days.latestDay().id, true)
     }
 
     private fun createPsychicPrivateMessageString(chara: Chara, isWolf: Boolean): String =
-        "${chara.charaName.fullName()}は人狼${if (isWolf) "の" else "ではない"}ようだ。"
+        "${chara.name.name}は人狼${if (isWolf) "の" else "ではない"}ようだ。"
 }

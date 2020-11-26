@@ -6,7 +6,7 @@ import com.ort.lastwolf.fw.LastwolfDateUtil
 import com.ort.lastwolf.fw.LastwolfUserInfoUtil
 import com.ort.lastwolf.fw.config.FirebaseConfig
 import com.ort.lastwolf.fw.security.LastwolfUser
-import com.ort.lastwolf.infrastructure.datasource.firebase.MessageLatestDatetimeDataSource
+import com.ort.lastwolf.infrastructure.datasource.firebase.FirebaseDataSource
 import org.dbflute.hook.AccessContext
 import org.junit.Before
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -17,14 +17,15 @@ open class LastwolfTest {
     @MockBean
     lateinit var firebaseConfig: FirebaseConfig
     @MockBean
-    lateinit var messageLatestDatetimeDataSource: MessageLatestDatetimeDataSource
+    lateinit var firebaseDataSource: FirebaseDataSource
 
     @Before
     fun setUp() {
         // firebase関連はmockにする
         whenever(firebaseConfig.init()).then { }
         whenever(firebaseConfig.firebaseDatabase()).thenReturn(null)
-        whenever(messageLatestDatetimeDataSource.register(any(), any(), any())).then { }
+        whenever(firebaseDataSource.registerMessageLatest(any(), any(), any())).then { }
+        whenever(firebaseDataSource.registerVillageLatest(any())).then { }
 
         // set access context
         setAccessContext()

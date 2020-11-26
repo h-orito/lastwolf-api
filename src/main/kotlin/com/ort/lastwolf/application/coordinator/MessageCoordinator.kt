@@ -2,7 +2,6 @@ package com.ort.lastwolf.application.coordinator
 
 import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.application.service.MessageService
-import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.message.Messages
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
@@ -23,8 +22,6 @@ class MessageCoordinator(
     //                                                                           =========
     fun findMessageList(
         village: Village,
-        day: Int,
-        noonnight: String,
         user: LastwolfUser?,
         from: Long?,
         pageSize: Int?,
@@ -37,7 +34,6 @@ class MessageCoordinator(
         val query = messageDomainService.createQuery(
             village = village,
             participant = participant,
-            day = day,
             authority = user?.authority,
             messageTypeList = messageTypeList,
             from = from,
@@ -46,20 +42,12 @@ class MessageCoordinator(
             keyword = keyword,
             participantIdList = participantIdList
         )
-        val villageDayId: Int = village.day.dayList.first { it.day == day && it.noonnight == noonnight }.id
         val messages: Messages = messageService.findMessages(
             villageId = village.id,
-            villageDayId = villageDayId,
             query = query
         )
-        dayChangeCoordinator.dayChangeIfNeeded(village)
+        dayChangeCoordinator.dayChangeIfNeeded(village.id)
         return messages
-    }
-
-    fun findMessage(village: Village, messageType: String, messageNumber: Int, user: LastwolfUser?): Message? {
-        val participant: VillageParticipant? = villageCoordinator.findParticipant(village, user)
-        return if (!messageDomainService.isViewableMessage(village, participant, messageType)) null
-        else messageService.findMessage(village.id, CDef.MessageType.codeOf(messageType), messageNumber) ?: return null
     }
 
     fun findLatestMessagesUnixTimeMilli(
@@ -68,7 +56,7 @@ class MessageCoordinator(
     ): Long {
         val participant: VillageParticipant? = villageCoordinator.findParticipant(village, user)
         val messageTypeList: List<CDef.MessageType> =
-            messageDomainService.viewableMessageTypeList(village, participant, village.day.latestDay().day, user?.authority)
+            messageDomainService.viewableMessageTypeList(village, participant, user?.authority)
         return messageService.findLatestMessagesUnixTimeMilli(village.id, messageTypeList, participant)
     }
 }

@@ -12,7 +12,6 @@ data class MessageQuery(
     val messageTypeList: List<CDef.MessageType>,
     val participantIdList: List<Int>?,
     val includeMonologue: Boolean,
-    val includeSecret: Boolean,
     val includePrivateAbility: Boolean
 ) {
     constructor(
@@ -25,13 +24,12 @@ data class MessageQuery(
         participant = null,
         messageTypeList = messageTypeList,
         participantIdList = null,
-        includeSecret = false,
         includeMonologue = false,
         includePrivateAbility = false
     )
 
     companion object {
-        val personalPrivateAbilityList = listOf(CDef.MessageType.白黒占い結果, CDef.MessageType.役職占い結果)
+        val personalPrivateAbilityList = listOf(CDef.MessageType.個別能力行使結果)
     }
 
     fun isPaging(): Boolean = pageSize != null && pageNum != null

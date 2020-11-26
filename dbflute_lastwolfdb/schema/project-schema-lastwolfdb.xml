@@ -95,14 +95,12 @@
         <column comment="キャラクターグループID" dbType="INT UNSIGNED"
             javaType="Integer" name="CHARA_GROUP_ID" required="true"
             size="10" type="INTEGER"/>
-        <column comment="入村時デフォルト発言" dbType="VARCHAR" javaType="String"
-            name="DEFAULT_JOIN_MESSAGE" size="200" type="VARCHAR"/>
-        <column comment="デフォルト1日目発言" dbType="VARCHAR" javaType="String"
-            name="DEFAULT_FIRSTDAY_MESSAGE" size="200" type="VARCHAR"/>
         <column comment="表示時横幅" dbType="INT UNSIGNED" javaType="Integer"
             name="DISPLAY_WIDTH" required="true" size="10" type="INTEGER"/>
         <column comment="表示時縦幅" dbType="INT UNSIGNED" javaType="Integer"
             name="DISPLAY_HEIGHT" required="true" size="10" type="INTEGER"/>
+        <column comment="キャラクター画像URL" dbType="VARCHAR" javaType="String"
+            name="CHARA_IMG_URL" required="true" size="200" type="VARCHAR"/>
         <column comment="登録日時" dbType="DATETIME"
             javaType="java.time.LocalDateTime" name="REGISTER_DATETIME"
             required="true" size="19" type="TIMESTAMP"/>
@@ -151,28 +149,6 @@
         </foreign-key>
         <index name="FK_CHARA_GROUP_DESIGNER">
             <index-column name="DESIGNER_ID" position="1"/>
-        </index>
-    </table>
-    <table comment="キャラクター画像" name="chara_image"
-        schema="lastwolfdb.$$NoNameSchema$$" type="TABLE">
-        <column comment="キャラクターID" dbType="INT UNSIGNED"
-            javaType="Integer" name="CHARA_ID" pkName="PRIMARY"
-            pkPosition="1" primaryKey="true" required="true" size="10" type="INTEGER"/>
-        <column comment="表情種別コード" dbType="VARCHAR" javaType="String"
-            name="FACE_TYPE_CODE" pkName="PRIMARY" pkPosition="2"
-            primaryKey="true" required="true" size="20" type="VARCHAR"/>
-        <column comment="キャラクター画像URL" dbType="VARCHAR" javaType="String"
-            name="CHARA_IMG_URL" required="true" size="100" type="VARCHAR"/>
-        <foreign-key foreignSchema="lastwolfdb.$$NoNameSchema$$"
-            foreignTable="chara" name="FK_CHARA_IMAGE_CHARA">
-            <reference foreign="CHARA_ID" local="CHARA_ID"/>
-        </foreign-key>
-        <foreign-key foreignSchema="lastwolfdb.$$NoNameSchema$$"
-            foreignTable="face_type" name="FK_CHARA_IMAGE_FACE_TYPE">
-            <reference foreign="FACE_TYPE_CODE" local="FACE_TYPE_CODE"/>
-        </foreign-key>
-        <index name="FK_CHARA_IMAGE_FACE_TYPE">
-            <index-column name="FACE_TYPE_CODE" position="1"/>
         </index>
     </table>
     <table comment="カミングアウト" name="coming_out"
@@ -252,50 +228,30 @@
         <column comment="更新トレース" dbType="VARCHAR" javaType="String"
             name="UPDATE_TRACE" required="true" size="64" type="VARCHAR"/>
     </table>
-    <table comment="表情種別" name="face_type"
-        schema="lastwolfdb.$$NoNameSchema$$" type="TABLE">
-        <column comment="表情種別コード" dbType="VARCHAR" javaType="String"
-            name="FACE_TYPE_CODE" pkName="PRIMARY" pkPosition="1"
-            primaryKey="true" required="true" size="20" type="VARCHAR"/>
-        <column comment="表情種別名" dbType="VARCHAR" javaType="String"
-            name="FACE_TYPE_NAME" required="true" size="20" type="VARCHAR"/>
-        <column comment="並び順" dbType="INT UNSIGNED" javaType="Integer"
-            name="DISP_ORDER" required="true" size="10" type="INTEGER"/>
-    </table>
     <table comment="メッセージ" name="message"
         schema="lastwolfdb.$$NoNameSchema$$" type="TABLE">
+        <column autoIncrement="true" comment="メッセージID" dbType="BIGINT"
+            javaType="Long" name="MESSAGE_ID" pkName="PRIMARY"
+            pkPosition="1" primaryKey="true" required="true" size="19" type="BIGINT"/>
         <column comment="村ID" dbType="INT UNSIGNED" javaType="Integer"
-            name="VILLAGE_ID" pkName="PRIMARY" pkPosition="1"
+            name="VILLAGE_ID" pkName="PRIMARY" pkPosition="2"
             primaryKey="true" required="true" size="10" type="INTEGER"/>
-        <column comment="メッセージ番号" dbType="INT UNSIGNED"
-            javaType="Integer" name="MESSAGE_NUMBER" pkName="PRIMARY"
-            pkPosition="2" primaryKey="true" required="true" size="10" type="INTEGER"/>
         <column comment="メッセージ種別コード" dbType="VARCHAR" javaType="String"
-            name="MESSAGE_TYPE_CODE" pkName="PRIMARY" pkPosition="3"
-            primaryKey="true" required="true" size="20" type="VARCHAR"/>
-        <column comment="メッセージUNIXタイムスタンプミリ秒" dbType="BIGINT UNSIGNED"
-            javaType="Long" name="MESSAGE_UNIXTIMESTAMP_MILLI"
-            required="true" size="20" type="BIGINT"/>
+            name="MESSAGE_TYPE_CODE" required="true" size="20" type="VARCHAR"/>
         <column comment="村日付ID" dbType="INT UNSIGNED" javaType="Integer"
             name="VILLAGE_DAY_ID" required="true" size="10" type="INTEGER"/>
         <column comment="村参加者ID" dbType="INT UNSIGNED"
             javaType="Integer" name="VILLAGE_PLAYER_ID" size="10" type="INTEGER"/>
-        <column comment="秘話相手の村参加者ID" dbType="INT UNSIGNED"
-            javaType="Integer" name="TO_VILLAGE_PLAYER_ID" size="10" type="INTEGER"/>
-        <column comment="プレイヤーID" dbType="INT UNSIGNED"
-            javaType="Integer" name="PLAYER_ID" size="10" type="INTEGER"/>
         <column comment="メッセージ内容" dbType="VARCHAR" javaType="String"
             name="MESSAGE_CONTENT" required="true" size="10000" type="VARCHAR"/>
         <column comment="メッセージ日時" dbType="DATETIME"
             javaType="java.time.LocalDateTime" name="MESSAGE_DATETIME"
             required="true" size="19" type="TIMESTAMP"/>
-        <column comment="何回目の発言か : その日のその発言種別において何回目の発言か"
-            dbType="INT UNSIGNED" javaType="Integer"
-            name="MESSAGE_COUNT" size="10" type="INTEGER"/>
-        <column comment="変換無効か" dbType="BIT" javaType="Boolean"
-            name="IS_CONVERT_DISABLE" required="true" type="BIT"/>
-        <column comment="表情種別コード" dbType="VARCHAR" javaType="String"
-            name="FACE_TYPE_CODE" size="20" type="VARCHAR"/>
+        <column comment="メッセージUNIXタイムスタンプミリ秒" dbType="BIGINT UNSIGNED"
+            javaType="Long" name="MESSAGE_UNIXTIMESTAMP_MILLI"
+            required="true" size="20" type="BIGINT"/>
+        <column comment="強調発言か" dbType="BIT" javaType="Boolean"
+            name="IS_STRONG" required="true" type="BIT"/>
         <column comment="登録日時" dbType="DATETIME"
             javaType="java.time.LocalDateTime" name="REGISTER_DATETIME"
             required="true" size="19" type="TIMESTAMP"/>
@@ -306,14 +262,11 @@
             required="true" size="19" type="TIMESTAMP"/>
         <column comment="更新トレース" dbType="VARCHAR" javaType="String"
             name="UPDATE_TRACE" required="true" size="64" type="VARCHAR"/>
-        <index name="FK_MESSAGE_FACE_TYPE">
-            <index-column name="FACE_TYPE_CODE" position="1"/>
-        </index>
         <index name="FK_MESSAGE_MESSAGE_TYPE">
             <index-column name="MESSAGE_TYPE_CODE" position="1"/>
         </index>
-        <index name="FK_MESSAGE_PLAYER">
-            <index-column name="PLAYER_ID" position="1"/>
+        <index name="FK_MESSAGE_VILLAGE">
+            <index-column name="VILLAGE_ID" position="1"/>
         </index>
         <index name="FK_MESSAGE_VILLAGE_DAY">
             <index-column name="VILLAGE_DAY_ID" position="1"/>
@@ -321,46 +274,8 @@
         <index name="FK_MESSAGE_VILLAGE_PLAYER">
             <index-column name="VILLAGE_PLAYER_ID" position="1"/>
         </index>
-        <index name="FK_MESSAGE_VILLAGE_PLAYER_TO">
-            <index-column name="TO_VILLAGE_PLAYER_ID" position="1"/>
-        </index>
         <index name="IX_MESSAGE_UNIXTIMESTAMP">
             <index-column name="MESSAGE_UNIXTIMESTAMP_MILLI" position="1"/>
-        </index>
-    </table>
-    <table comment="発言制限 : レコードなしの場合は無制限" name="message_restriction"
-        schema="lastwolfdb.$$NoNameSchema$$" type="TABLE">
-        <column comment="村ID" dbType="INT UNSIGNED" javaType="Integer"
-            name="VILLAGE_ID" pkName="PRIMARY" pkPosition="1"
-            primaryKey="true" required="true" size="10" type="INTEGER"/>
-        <column comment="メッセージ種別コード" dbType="VARCHAR" javaType="String"
-            name="MESSAGE_TYPE_CODE" pkName="PRIMARY" pkPosition="2"
-            primaryKey="true" required="true" size="20" type="VARCHAR"/>
-        <column comment="最大発言回数" dbType="INT UNSIGNED"
-            javaType="Integer" name="MESSAGE_MAX_NUM" required="true"
-            size="10" type="INTEGER"/>
-        <column comment="最大文字数" dbType="INT UNSIGNED" javaType="Integer"
-            name="MESSAGE_MAX_LENGTH" required="true" size="10" type="INTEGER"/>
-        <column comment="登録日時" dbType="DATETIME"
-            javaType="java.time.LocalDateTime" name="REGISTER_DATETIME"
-            required="true" size="19" type="TIMESTAMP"/>
-        <column comment="登録トレース" dbType="VARCHAR" javaType="String"
-            name="REGISTER_TRACE" required="true" size="64" type="VARCHAR"/>
-        <column comment="更新日時" dbType="DATETIME"
-            javaType="java.time.LocalDateTime" name="UPDATE_DATETIME"
-            required="true" size="19" type="TIMESTAMP"/>
-        <column comment="更新トレース" dbType="VARCHAR" javaType="String"
-            name="UPDATE_TRACE" required="true" size="64" type="VARCHAR"/>
-        <foreign-key foreignSchema="lastwolfdb.$$NoNameSchema$$"
-            foreignTable="message_type" name="FK_MESSAGE_RESTRICTION_MESSAGE_TYPE">
-            <reference foreign="MESSAGE_TYPE_CODE" local="MESSAGE_TYPE_CODE"/>
-        </foreign-key>
-        <foreign-key foreignSchema="lastwolfdb.$$NoNameSchema$$"
-            foreignTable="village" name="FK_MESSAGE_RESTRICTION_VILLAGE">
-            <reference foreign="VILLAGE_ID" local="VILLAGE_ID"/>
-        </foreign-key>
-        <index name="FK_MESSAGE_RESTRICTION_MESSAGE_TYPE">
-            <index-column name="MESSAGE_TYPE_CODE" position="1"/>
         </index>
     </table>
     <table comment="メッセージ種別" name="message_type"
@@ -419,49 +334,6 @@
             <index-column name="AUTHORITY_CODE" position="1"/>
         </index>
     </table>
-    <table comment="プレイヤー詳細" name="player_detail"
-        schema="lastwolfdb.$$NoNameSchema$$" type="TABLE">
-        <column comment="プレイヤーID" dbType="INT UNSIGNED"
-            javaType="Integer" name="PLAYER_ID" pkName="PRIMARY"
-            pkPosition="1" primaryKey="true" required="true" size="10" type="INTEGER"/>
-        <column comment="他サイトでの名前" dbType="VARCHAR" javaType="String"
-            name="OTHER_SITE_NAME" size="20" type="VARCHAR"/>
-        <column comment="自己紹介" dbType="VARCHAR" javaType="String"
-            name="INTRODUCTION" size="2000" type="VARCHAR"/>
-        <foreign-key foreignSchema="lastwolfdb.$$NoNameSchema$$"
-            foreignTable="player" name="FK_PLAYER_DETAIL_PLAYER">
-            <reference foreign="PLAYER_ID" local="PLAYER_ID"/>
-        </foreign-key>
-    </table>
-    <table comment="予約村" name="reserved_village"
-        schema="lastwolfdb.$$NoNameSchema$$" type="TABLE">
-        <column autoIncrement="true" comment="予約村ID"
-            dbType="INT UNSIGNED" javaType="Integer"
-            name="RESERVED_VILLAGE_ID" pkName="PRIMARY" pkPosition="1"
-            primaryKey="true" required="true" size="10" type="INTEGER"/>
-        <column comment="村作成日時" dbType="DATETIME"
-            javaType="java.time.LocalDateTime" name="CREATE_DATETIME"
-            required="true" size="19" type="TIMESTAMP"/>
-        <column comment="村開始日時" dbType="DATETIME"
-            javaType="java.time.LocalDateTime" name="START_DATETIME"
-            required="true" size="19" type="TIMESTAMP"/>
-        <column comment="編成" dbType="VARCHAR" javaType="String"
-            name="ORGANIZATION" required="true" size="255" type="VARCHAR"/>
-        <column comment="沈黙時間" dbType="INT UNSIGNED" javaType="Integer"
-            name="SILENT_HOURS" required="true" size="10" type="INTEGER"/>
-        <column comment="役欠けありか" dbType="BIT" javaType="Boolean"
-            name="IS_AVAILABLE_DUMMY_SKILL" required="true" type="BIT"/>
-        <column comment="登録日時" dbType="DATETIME"
-            javaType="java.time.LocalDateTime" name="REGISTER_DATETIME"
-            required="true" size="19" type="TIMESTAMP"/>
-        <column comment="登録トレース" dbType="VARCHAR" javaType="String"
-            name="REGISTER_TRACE" required="true" size="64" type="VARCHAR"/>
-        <column comment="更新日時" dbType="DATETIME"
-            javaType="java.time.LocalDateTime" name="UPDATE_DATETIME"
-            required="true" size="19" type="TIMESTAMP"/>
-        <column comment="更新トレース" dbType="VARCHAR" javaType="String"
-            name="UPDATE_TRACE" required="true" size="64" type="VARCHAR"/>
-    </table>
     <table comment="役職" name="skill"
         schema="lastwolfdb.$$NoNameSchema$$" type="TABLE">
         <column comment="役職コード" dbType="VARCHAR" javaType="String"
@@ -497,8 +369,6 @@
             size="10" type="INTEGER"/>
         <column comment="村ステータスコード" dbType="VARCHAR" javaType="String"
             name="VILLAGE_STATUS_CODE" required="true" size="20" type="VARCHAR"/>
-        <column comment="エピローグ日" dbType="INT UNSIGNED"
-            javaType="Integer" name="EPILOGUE_DAY" size="10" type="INTEGER"/>
         <column comment="勝利陣営コード" dbType="VARCHAR" javaType="String"
             name="WIN_CAMP_CODE" size="20" type="VARCHAR"/>
         <column comment="登録日時" dbType="DATETIME"
@@ -545,9 +415,14 @@
             name="DAY" required="true" size="10" type="INTEGER"/>
         <column comment="昼夜コード" dbType="VARCHAR" javaType="String"
             name="NOONNIGHT_CODE" required="true" size="20" type="VARCHAR"/>
-        <column comment="日付更新日時" dbType="DATETIME"
-            javaType="java.time.LocalDateTime" name="DAYCHANGE_DATETIME"
+        <column comment="開始日時" dbType="DATETIME"
+            javaType="java.time.LocalDateTime" name="START_DATETIME"
             required="true" size="19" type="TIMESTAMP"/>
+        <column comment="終了日時" dbType="DATETIME"
+            javaType="java.time.LocalDateTime" name="END_DATETIME"
+            required="true" size="19" type="TIMESTAMP"/>
+        <column comment="エピローグか" dbType="BIT" javaType="Boolean"
+            name="IS_EPILOGUE" required="true" type="BIT"/>
         <column comment="登録日時" dbType="DATETIME"
             javaType="java.time.LocalDateTime" name="REGISTER_DATETIME"
             required="true" size="19" type="TIMESTAMP"/>
@@ -566,11 +441,13 @@
             foreignTable="village" name="FK_VILLAGE_DAY_VILLAGE">
             <reference foreign="VILLAGE_ID" local="VILLAGE_ID"/>
         </foreign-key>
+        <unique name="UQ_village_day">
+            <unique-column name="VILLAGE_ID" position="1"/>
+            <unique-column name="DAY" position="2"/>
+            <unique-column name="NOONNIGHT_CODE" position="3"/>
+        </unique>
         <index name="FK_VILLAGE_DAY_NOONNIGHT">
             <index-column name="NOONNIGHT_CODE" position="1"/>
-        </index>
-        <index name="FK_VILLAGE_DAY_VILLAGE">
-            <index-column name="VILLAGE_ID" position="1"/>
         </index>
     </table>
     <table comment="村参加者" name="village_player"
@@ -589,19 +466,21 @@
         <column comment="役職コード" dbType="VARCHAR" javaType="String"
             name="SKILL_CODE" size="20" type="VARCHAR"/>
         <column comment="希望役職コード" dbType="VARCHAR" javaType="String"
-            name="REQUEST_SKILL_CODE" size="20" type="VARCHAR"/>
+            name="REQUEST_SKILL_CODE" required="true" size="20" type="VARCHAR"/>
         <column comment="第二希望役職コード" dbType="VARCHAR" javaType="String"
-            name="SECOND_REQUEST_SKILL_CODE" size="20" type="VARCHAR"/>
+            name="SECOND_REQUEST_SKILL_CODE" required="true" size="20" type="VARCHAR"/>
         <column comment="死亡しているか" dbType="BIT" javaType="Boolean"
             name="IS_DEAD" required="true" type="BIT"/>
-        <column comment="見学者か" dbType="BIT" javaType="Boolean"
-            name="IS_SPECTATOR" required="true" type="BIT"/>
         <column comment="死亡理由コード" dbType="VARCHAR" javaType="String"
             name="DEAD_REASON_CODE" size="20" type="VARCHAR"/>
         <column comment="何日目に死亡したか" dbType="INT UNSIGNED"
             javaType="Integer" name="DEAD_VILLAGE_DAY_ID" size="10" type="INTEGER"/>
         <column comment="退村済みか" dbType="BIT" javaType="Boolean"
             name="IS_GONE" required="true" type="BIT"/>
+        <column comment="点呼済みか" dbType="BIT" javaType="Boolean"
+            name="DONE_ROLLCALL" required="true" type="BIT"/>
+        <column comment="勝敗コード" dbType="VARCHAR" javaType="String"
+            name="WINLOSE_CODE" size="20" type="VARCHAR"/>
         <column comment="登録日時" dbType="DATETIME"
             javaType="java.time.LocalDateTime" name="REGISTER_DATETIME"
             required="true" size="19" type="TIMESTAMP"/>
@@ -644,6 +523,10 @@
             foreignTable="village" name="FK_VILLAGE_PLAYER_VILLAGE">
             <reference foreign="VILLAGE_ID" local="VILLAGE_ID"/>
         </foreign-key>
+        <foreign-key foreignSchema="lastwolfdb.$$NoNameSchema$$"
+            foreignTable="winlose" name="FK_VILLAGE_PLAYER_WINLOSE">
+            <reference foreign="WINLOSE_CODE" local="WINLOSE_CODE"/>
+        </foreign-key>
         <index name="FK_VILLAGE_PLAYER_CHARA">
             <index-column name="CHARA_ID" position="1"/>
         </index>
@@ -667,6 +550,9 @@
         </index>
         <index name="FK_VILLAGE_PLAYER_VILLAGE_DAY">
             <index-column name="DEAD_VILLAGE_DAY_ID" position="1"/>
+        </index>
+        <index name="FK_VILLAGE_PLAYER_WINLOSE">
+            <index-column name="WINLOSE_CODE" position="1"/>
         </index>
     </table>
     <table comment="村設定" name="village_setting"
@@ -756,5 +642,15 @@
         <index name="FK_VOTE_VILLAGE_PLAYER">
             <index-column name="VILLAGE_PLAYER_ID" position="1"/>
         </index>
+    </table>
+    <table comment="勝敗" name="winlose"
+        schema="lastwolfdb.$$NoNameSchema$$" type="TABLE">
+        <column comment="勝敗コード" dbType="VARCHAR" javaType="String"
+            name="WINLOSE_CODE" pkName="PRIMARY" pkPosition="1"
+            primaryKey="true" required="true" size="20" type="VARCHAR"/>
+        <column comment="勝敗名" dbType="VARCHAR" javaType="String"
+            name="WINLOSE_NAME" required="true" size="20" type="VARCHAR"/>
+        <column comment="並び順" dbType="INT UNSIGNED" javaType="Integer"
+            name="DISP_ORDER" required="true" size="10" type="INTEGER"/>
     </table>
 </database>

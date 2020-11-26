@@ -157,14 +157,14 @@ public class BsVillageDayCQ extends AbstractBsVillageDayCQ {
 
     /**
      * Add order-by as ascend. <br>
-     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village}
      * @return this. (NotNull)
      */
     public BsVillageDayCQ addOrderBy_VillageId_Asc() { regOBA("VILLAGE_ID"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village}
      * @return this. (NotNull)
      */
     public BsVillageDayCQ addOrderBy_VillageId_Desc() { regOBD("VILLAGE_ID"); return this; }
@@ -177,14 +177,14 @@ public class BsVillageDayCQ extends AbstractBsVillageDayCQ {
 
     /**
      * Add order-by as ascend. <br>
-     * DAY: {NotNull, INT UNSIGNED(10)}
+     * DAY: {+UQ, NotNull, INT UNSIGNED(10)}
      * @return this. (NotNull)
      */
     public BsVillageDayCQ addOrderBy_Day_Asc() { regOBA("DAY"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * DAY: {NotNull, INT UNSIGNED(10)}
+     * DAY: {+UQ, NotNull, INT UNSIGNED(10)}
      * @return this. (NotNull)
      */
     public BsVillageDayCQ addOrderBy_Day_Desc() { regOBD("DAY"); return this; }
@@ -197,37 +197,77 @@ public class BsVillageDayCQ extends AbstractBsVillageDayCQ {
 
     /**
      * Add order-by as ascend. <br>
-     * NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight}
+     * NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight}
      * @return this. (NotNull)
      */
     public BsVillageDayCQ addOrderBy_NoonnightCode_Asc() { regOBA("NOONNIGHT_CODE"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight}
+     * NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight}
      * @return this. (NotNull)
      */
     public BsVillageDayCQ addOrderBy_NoonnightCode_Desc() { regOBD("NOONNIGHT_CODE"); return this; }
 
-    protected ConditionValue _daychangeDatetime;
-    public ConditionValue xdfgetDaychangeDatetime()
-    { if (_daychangeDatetime == null) { _daychangeDatetime = nCV(); }
-      return _daychangeDatetime; }
-    protected ConditionValue xgetCValueDaychangeDatetime() { return xdfgetDaychangeDatetime(); }
+    protected ConditionValue _startDatetime;
+    public ConditionValue xdfgetStartDatetime()
+    { if (_startDatetime == null) { _startDatetime = nCV(); }
+      return _startDatetime; }
+    protected ConditionValue xgetCValueStartDatetime() { return xdfgetStartDatetime(); }
 
     /**
      * Add order-by as ascend. <br>
-     * DAYCHANGE_DATETIME: {NotNull, DATETIME(19)}
+     * START_DATETIME: {NotNull, DATETIME(19)}
      * @return this. (NotNull)
      */
-    public BsVillageDayCQ addOrderBy_DaychangeDatetime_Asc() { regOBA("DAYCHANGE_DATETIME"); return this; }
+    public BsVillageDayCQ addOrderBy_StartDatetime_Asc() { regOBA("START_DATETIME"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * DAYCHANGE_DATETIME: {NotNull, DATETIME(19)}
+     * START_DATETIME: {NotNull, DATETIME(19)}
      * @return this. (NotNull)
      */
-    public BsVillageDayCQ addOrderBy_DaychangeDatetime_Desc() { regOBD("DAYCHANGE_DATETIME"); return this; }
+    public BsVillageDayCQ addOrderBy_StartDatetime_Desc() { regOBD("START_DATETIME"); return this; }
+
+    protected ConditionValue _endDatetime;
+    public ConditionValue xdfgetEndDatetime()
+    { if (_endDatetime == null) { _endDatetime = nCV(); }
+      return _endDatetime; }
+    protected ConditionValue xgetCValueEndDatetime() { return xdfgetEndDatetime(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * END_DATETIME: {NotNull, DATETIME(19)}
+     * @return this. (NotNull)
+     */
+    public BsVillageDayCQ addOrderBy_EndDatetime_Asc() { regOBA("END_DATETIME"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * END_DATETIME: {NotNull, DATETIME(19)}
+     * @return this. (NotNull)
+     */
+    public BsVillageDayCQ addOrderBy_EndDatetime_Desc() { regOBD("END_DATETIME"); return this; }
+
+    protected ConditionValue _isEpilogue;
+    public ConditionValue xdfgetIsEpilogue()
+    { if (_isEpilogue == null) { _isEpilogue = nCV(); }
+      return _isEpilogue; }
+    protected ConditionValue xgetCValueIsEpilogue() { return xdfgetIsEpilogue(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * IS_EPILOGUE: {NotNull, BIT}
+     * @return this. (NotNull)
+     */
+    public BsVillageDayCQ addOrderBy_IsEpilogue_Asc() { regOBA("IS_EPILOGUE"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * IS_EPILOGUE: {NotNull, BIT}
+     * @return this. (NotNull)
+     */
+    public BsVillageDayCQ addOrderBy_IsEpilogue_Desc() { regOBD("IS_EPILOGUE"); return this; }
 
     protected ConditionValue _registerDatetime;
     public ConditionValue xdfgetRegisterDatetime()

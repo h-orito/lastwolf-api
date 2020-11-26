@@ -19,11 +19,13 @@ data class VillageStatus(
     //                                                                           =========
     fun isSolved(): Boolean = this.toCdef().isSolvedVillage
 
-    fun isPrologue(): Boolean = this.toCdef() == CDef.VillageStatus.プロローグ
+    fun isRecruiting(): Boolean = this.toCdef() == CDef.VillageStatus.募集中
+
+    fun isRollCalling(): Boolean = this.toCdef() == CDef.VillageStatus.点呼中
 
     fun isProgress(): Boolean = this.toCdef() == CDef.VillageStatus.進行中
 
-    fun isEpilogue(): Boolean = this.toCdef() == CDef.VillageStatus.エピローグ
+    fun isSettled(): Boolean = this.toCdef() == CDef.VillageStatus.決着
 
     fun isFinished(): Boolean = this.toCdef().isFinishedVillage
 

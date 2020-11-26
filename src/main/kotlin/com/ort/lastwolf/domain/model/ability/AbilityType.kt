@@ -14,12 +14,12 @@ data class AbilityType(
         name = cdef.alias()
     )
 
-    companion object {
-        operator fun invoke(abilityTypeCode: String): AbilityType {
-            val cdefAbility = checkNotNull(CDef.AbilityType.codeOf(abilityTypeCode))
-            return AbilityType(cdefAbility)
-        }
-    }
+    constructor(
+        code: String
+    ) : this(
+        code = CDef.AbilityType.codeOf(code).code(),
+        name = CDef.AbilityType.codeOf(code).alias()
+    )
 
     fun toCdef(): CDef.AbilityType = CDef.AbilityType.codeOf(code)
 }

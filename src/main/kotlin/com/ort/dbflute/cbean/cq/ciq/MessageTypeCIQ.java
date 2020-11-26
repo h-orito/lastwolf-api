@@ -62,16 +62,6 @@ public class MessageTypeCIQ extends AbstractBsMessageTypeCQ {
     //                                                                Override about Query
     //                                                                ====================
     protected ConditionValue xgetCValueMessageTypeCode() { return _myCQ.xdfgetMessageTypeCode(); }
-    public String keepMessageTypeCode_ExistsReferrer_MessageRestrictionList(MessageRestrictionCQ sq)
-    { throwIICBOE("ExistsReferrer"); return null; }
-    public String keepMessageTypeCode_NotExistsReferrer_MessageRestrictionList(MessageRestrictionCQ sq)
-    { throwIICBOE("NotExistsReferrer"); return null; }
-    public String keepMessageTypeCode_SpecifyDerivedReferrer_MessageRestrictionList(MessageRestrictionCQ sq)
-    { throwIICBOE("(Specify)DerivedReferrer"); return null; }
-    public String keepMessageTypeCode_QueryDerivedReferrer_MessageRestrictionList(MessageRestrictionCQ sq)
-    { throwIICBOE("(Query)DerivedReferrer"); return null; }
-    public String keepMessageTypeCode_QueryDerivedReferrer_MessageRestrictionListParameter(Object vl)
-    { throwIICBOE("(Query)DerivedReferrer"); return null; }
     protected ConditionValue xgetCValueMessageTypeName() { return _myCQ.xdfgetMessageTypeName(); }
     protected Map<String, Object> xfindFixedConditionDynamicParameterMap(String pp) { return null; }
     public String keepScalarCondition(MessageTypeCQ sq)

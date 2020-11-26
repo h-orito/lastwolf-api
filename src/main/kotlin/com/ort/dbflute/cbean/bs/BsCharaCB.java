@@ -338,16 +338,6 @@ public class BsCharaCB extends AbstractConditionBean {
          */
         public SpecifiedColumn columnCharaGroupId() { return doColumn("CHARA_GROUP_ID"); }
         /**
-         * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnDefaultJoinMessage() { return doColumn("DEFAULT_JOIN_MESSAGE"); }
-        /**
-         * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnDefaultFirstdayMessage() { return doColumn("DEFAULT_FIRSTDAY_MESSAGE"); }
-        /**
          * DISPLAY_WIDTH: {NotNull, INT UNSIGNED(10)}
          * @return The information object of specified column. (NotNull)
          */
@@ -357,6 +347,11 @@ public class BsCharaCB extends AbstractConditionBean {
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnDisplayHeight() { return doColumn("DISPLAY_HEIGHT"); }
+        /**
+         * CHARA_IMG_URL: {NotNull, VARCHAR(200)}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnCharaImgUrl() { return doColumn("CHARA_IMG_URL"); }
         /**
          * REGISTER_DATETIME: {NotNull, DATETIME(19)}
          * @return The information object of specified column. (NotNull)
@@ -408,23 +403,6 @@ public class BsCharaCB extends AbstractConditionBean {
                 }
             }
             return _charaGroup;
-        }
-        /**
-         * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from chara_image where ...) as FOO_MAX} <br>
-         * CHARA_IMAGE by CHARA_ID, named 'charaImageList'.
-         * <pre>
-         * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(imageCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-         *     imageCB.specify().<span style="color: #CC4747">column...</span> <span style="color: #3F7E5E">// derived column by function</span>
-         *     imageCB.query().set... <span style="color: #3F7E5E">// referrer condition</span>
-         * }, CharaImage.<span style="color: #CC4747">ALIAS_foo...</span>);
-         * </pre>
-         * @return The object to set up a function for referrer table. (NotNull)
-         */
-        public HpSDRFunction<CharaImageCB, CharaCQ> derivedCharaImage() {
-            assertDerived("charaImageList"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
-            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<CharaImageCB> sq, CharaCQ cq, String al, DerivedReferrerOption op)
-                    -> cq.xsderiveCharaImageList(fn, sq, al, op), _dbmetaProvider);
         }
         /**
          * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>

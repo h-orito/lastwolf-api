@@ -6,7 +6,6 @@ import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 data class VillageAbilitySituation(
     val type: AbilityType,
     val targetList: List<VillageParticipant>,
-    val target: VillageParticipant?,
     val usable: Boolean,
     val isAvailableNoTarget: Boolean
 )

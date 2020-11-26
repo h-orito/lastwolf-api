@@ -265,14 +265,14 @@ public class BsVillagePlayerCQ extends AbstractBsVillagePlayerCQ {
 
     /**
      * Add order-by as ascend. <br>
-     * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+     * REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
      * @return this. (NotNull)
      */
     public BsVillagePlayerCQ addOrderBy_RequestSkillCode_Asc() { regOBA("REQUEST_SKILL_CODE"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+     * REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
      * @return this. (NotNull)
      */
     public BsVillagePlayerCQ addOrderBy_RequestSkillCode_Desc() { regOBD("REQUEST_SKILL_CODE"); return this; }
@@ -285,14 +285,14 @@ public class BsVillagePlayerCQ extends AbstractBsVillagePlayerCQ {
 
     /**
      * Add order-by as ascend. <br>
-     * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+     * SECOND_REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
      * @return this. (NotNull)
      */
     public BsVillagePlayerCQ addOrderBy_SecondRequestSkillCode_Asc() { regOBA("SECOND_REQUEST_SKILL_CODE"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+     * SECOND_REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
      * @return this. (NotNull)
      */
     public BsVillagePlayerCQ addOrderBy_SecondRequestSkillCode_Desc() { regOBD("SECOND_REQUEST_SKILL_CODE"); return this; }
@@ -316,26 +316,6 @@ public class BsVillagePlayerCQ extends AbstractBsVillagePlayerCQ {
      * @return this. (NotNull)
      */
     public BsVillagePlayerCQ addOrderBy_IsDead_Desc() { regOBD("IS_DEAD"); return this; }
-
-    protected ConditionValue _isSpectator;
-    public ConditionValue xdfgetIsSpectator()
-    { if (_isSpectator == null) { _isSpectator = nCV(); }
-      return _isSpectator; }
-    protected ConditionValue xgetCValueIsSpectator() { return xdfgetIsSpectator(); }
-
-    /**
-     * Add order-by as ascend. <br>
-     * IS_SPECTATOR: {NotNull, BIT}
-     * @return this. (NotNull)
-     */
-    public BsVillagePlayerCQ addOrderBy_IsSpectator_Asc() { regOBA("IS_SPECTATOR"); return this; }
-
-    /**
-     * Add order-by as descend. <br>
-     * IS_SPECTATOR: {NotNull, BIT}
-     * @return this. (NotNull)
-     */
-    public BsVillagePlayerCQ addOrderBy_IsSpectator_Desc() { regOBD("IS_SPECTATOR"); return this; }
 
     protected ConditionValue _deadReasonCode;
     public ConditionValue xdfgetDeadReasonCode()
@@ -396,6 +376,46 @@ public class BsVillagePlayerCQ extends AbstractBsVillagePlayerCQ {
      * @return this. (NotNull)
      */
     public BsVillagePlayerCQ addOrderBy_IsGone_Desc() { regOBD("IS_GONE"); return this; }
+
+    protected ConditionValue _doneRollcall;
+    public ConditionValue xdfgetDoneRollcall()
+    { if (_doneRollcall == null) { _doneRollcall = nCV(); }
+      return _doneRollcall; }
+    protected ConditionValue xgetCValueDoneRollcall() { return xdfgetDoneRollcall(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * DONE_ROLLCALL: {NotNull, BIT}
+     * @return this. (NotNull)
+     */
+    public BsVillagePlayerCQ addOrderBy_DoneRollcall_Asc() { regOBA("DONE_ROLLCALL"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * DONE_ROLLCALL: {NotNull, BIT}
+     * @return this. (NotNull)
+     */
+    public BsVillagePlayerCQ addOrderBy_DoneRollcall_Desc() { regOBD("DONE_ROLLCALL"); return this; }
+
+    protected ConditionValue _winloseCode;
+    public ConditionValue xdfgetWinloseCode()
+    { if (_winloseCode == null) { _winloseCode = nCV(); }
+      return _winloseCode; }
+    protected ConditionValue xgetCValueWinloseCode() { return xdfgetWinloseCode(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose}
+     * @return this. (NotNull)
+     */
+    public BsVillagePlayerCQ addOrderBy_WinloseCode_Asc() { regOBA("WINLOSE_CODE"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose}
+     * @return this. (NotNull)
+     */
+    public BsVillagePlayerCQ addOrderBy_WinloseCode_Desc() { regOBD("WINLOSE_CODE"); return this; }
 
     protected ConditionValue _registerDatetime;
     public ConditionValue xdfgetRegisterDatetime()
@@ -541,6 +561,9 @@ public class BsVillagePlayerCQ extends AbstractBsVillagePlayerCQ {
         }
         if (bq.hasConditionQueryVillage()) {
             uq.queryVillage().reflectRelationOnUnionQuery(bq.queryVillage(), uq.queryVillage());
+        }
+        if (bq.hasConditionQueryWinlose()) {
+            uq.queryWinlose().reflectRelationOnUnionQuery(bq.queryWinlose(), uq.queryWinlose());
         }
     }
 
@@ -706,6 +729,26 @@ public class BsVillagePlayerCQ extends AbstractBsVillagePlayerCQ {
     }
     protected void xsetupOuterJoinVillage() { xregOutJo("village"); }
     public boolean hasConditionQueryVillage() { return xhasQueRlMap("village"); }
+
+    /**
+     * Get the condition-query for relation table. <br>
+     * WINLOSE by my WINLOSE_CODE, named 'winlose'.
+     * @return The instance of condition-query. (NotNull)
+     */
+    public WinloseCQ queryWinlose() {
+        return xdfgetConditionQueryWinlose();
+    }
+    public WinloseCQ xdfgetConditionQueryWinlose() {
+        String prop = "winlose";
+        if (!xhasQueRlMap(prop)) { xregQueRl(prop, xcreateQueryWinlose()); xsetupOuterJoinWinlose(); }
+        return xgetQueRlMap(prop);
+    }
+    protected WinloseCQ xcreateQueryWinlose() {
+        String nrp = xresolveNRP("village_player", "winlose"); String jan = xresolveJAN(nrp, xgetNNLvl());
+        return xinitRelCQ(new WinloseCQ(this, xgetSqlClause(), jan, xgetNNLvl()), _baseCB, "winlose", nrp);
+    }
+    protected void xsetupOuterJoinWinlose() { xregOutJo("winlose"); }
+    public boolean hasConditionQueryWinlose() { return xhasQueRlMap("winlose"); }
 
     protected Map<String, Object> xfindFixedConditionDynamicParameterMap(String property) {
         return null;

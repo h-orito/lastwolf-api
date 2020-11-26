@@ -26,11 +26,6 @@ class VillageRegisterBodyValidator : Validator {
 
         // 編成
         validateOrganization(body, errors)
-
-        // 沈黙時間を設定している場合、コミットは設定できない
-        if (body.setting.rule!!.availableCommit!! && body.setting.time!!.silentHours != null && body.setting.time.silentHours!! > 0) {
-            errors.reject("", "更新後沈黙時間を設定する場合、時短希望はありにできません")
-        }
     }
 
     private fun validateOrganization(body: VillageRegisterBody, errors: Errors) {
@@ -63,7 +58,6 @@ class VillageRegisterBodyValidator : Validator {
                     val cdefSkill = Skill.skillByShortName(it)!!.toCdef()
                     !cdefSkill.isNoDeadByAttack
                         && !cdefSkill.isNotSelectableAttack
-                        && !cdefSkill.isForceDoubleSuicide
                 }
             }
         ) {

@@ -1,19 +1,14 @@
 package com.ort.lastwolf.application.coordinator
 
-import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.application.service.AbilityService
-import com.ort.lastwolf.application.service.CharachipService
 import com.ort.lastwolf.application.service.CommitService
 import com.ort.lastwolf.application.service.MessageService
 import com.ort.lastwolf.application.service.PlayerService
 import com.ort.lastwolf.application.service.VillageService
 import com.ort.lastwolf.application.service.VoteService
-import com.ort.lastwolf.domain.model.charachip.Charas
 import com.ort.lastwolf.domain.model.commit.Commits
 import com.ort.lastwolf.domain.model.daychange.DayChange
-import com.ort.lastwolf.domain.model.message.MessageQuery
 import com.ort.lastwolf.domain.model.player.Players
-import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.ability.VillageAbilities
 import com.ort.lastwolf.domain.model.village.vote.VillageVotes
 import com.ort.lastwolf.domain.service.daychange.DayChangeDomainService
@@ -28,11 +23,40 @@ class DayChangeCoordinator(
     val abilityService: AbilityService,
     val commitService: CommitService,
     val messageService: MessageService,
-    val charachipService: CharachipService,
     val playerService: PlayerService,
     // domain service
     val dayChangeDomainService: DayChangeDomainService
 ) {
+
+    // 手動開始
+    @Transactional(rollbackFor = [Exception::class, LastwolfBusinessException::class])
+    fun startVillage(villageId: Int) {
+        val village = villageService.findVillage(villageId)
+        val votes: VillageVotes = voteService.findVillageVotes(village.id)
+        val abilities: VillageAbilities = abilityService.findVillageAbilities(village.id)
+        val players: Players = playerService.findPlayers(village.id)
+
+        val beforeDayChange = DayChange(
+            village = village,
+            votes = votes,
+            abilities = abilities,
+            players = players
+        )
+
+        var dayChange = beforeDayChange.copy(
+            village = village.addNewDay()
+        ).setIsChange(beforeDayChange)
+
+        update(beforeDayChange, dayChange)
+
+        // 登録後の村日付idが必要になるので取得し直す
+        dayChange = dayChange.copy(village = villageService.findVillage(village.id))
+
+        // 日付更新
+        dayChangeDomainService.process(dayChange).also {
+            updateIfNeeded(dayChange, it)
+        }
+    }
 
     /**
      * 必要あれば日付更新
@@ -40,29 +64,27 @@ class DayChangeCoordinator(
      * @param village village
      */
     @Transactional(rollbackFor = [Exception::class, LastwolfBusinessException::class])
-    fun dayChangeIfNeeded(village: Village) {
+    fun dayChangeIfNeeded(villageId: Int) {
+        val village = villageService.findVillage(villageId)
         val votes: VillageVotes = voteService.findVillageVotes(village.id)
         val abilities: VillageAbilities = abilityService.findVillageAbilities(village.id)
         val commits: Commits = commitService.findCommits(village.id)
-        // 最新日の通常発言
-        val todayMessages = messageService.findMessages(village.id, village.day.latestDay().id, MessageQuery(listOf(CDef.MessageType.通常発言)))
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
         val players: Players = playerService.findPlayers(village.id)
 
-        val beforeDayChange = DayChange(village.copy(
-            participant = village.participant.copy(
-                count = village.participant.memberList.count { !it.isGone },
-                memberList = village.participant.memberList.filter { !it.isGone }
-            )
-        ), votes, abilities, players)
+        val beforeDayChange = DayChange(
+            village = village,
+            votes = votes,
+            abilities = abilities,
+            players = players
+        )
 
-        // プロローグ延長処理
+        // プロローグ/点呼延長処理
         var dayChange = updateIfNeeded(
             beforeDayChange,
             dayChangeDomainService.extendVillageIfNeeded(beforeDayChange)
         )
 
-        // 必要あれば日付追加
+        // 必要あれば次の日へ
         dayChange = dayChangeDomainService.addDayIfNeeded(dayChange, commits).let {
             if (!it.isChange) return
             updateIfNeeded(dayChange, it)
@@ -72,7 +94,7 @@ class DayChangeCoordinator(
         dayChange = dayChange.copy(village = villageService.findVillage(village.id))
 
         // 日付更新
-        dayChangeDomainService.process(dayChange, todayMessages, charas).also {
+        dayChangeDomainService.process(dayChange).also {
             updateIfNeeded(dayChange, it)
         }
     }
@@ -101,11 +123,11 @@ class DayChangeCoordinator(
         }
         // votes
         if (before.votes.existsDifference(after.votes)) {
-            voteService.updateDifference(before.votes, after.votes)
+            voteService.updateDifference(after.village, before.votes, after.votes)
         }
         // abilities
         if (before.abilities.existsDifference(after.abilities)) {
-            abilityService.updateDifference(before.abilities, after.abilities)
+            abilityService.updateDifference(after.village, before.abilities, after.abilities)
         }
     }
 }

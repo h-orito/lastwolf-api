@@ -2,7 +2,6 @@ package com.ort.lastwolf.infrastructure.datasource.coming_out
 
 import com.ort.dbflute.exbhv.ComingOutBhv
 import com.ort.dbflute.exentity.ComingOut
-import com.ort.lastwolf.domain.model.village.participant.coming_out.ComingOuts
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -10,14 +9,15 @@ class ComingOutDataSource(
     private val comingOutBhv: ComingOutBhv
 ) {
 
-    fun register(villageParticipantId: Int, comingOuts: ComingOuts) {
+    fun register(
+        villageParticipantId: Int,
+        comingOut: com.ort.lastwolf.domain.model.village.participant.coming_out.ComingOut
+    ) {
         delete(villageParticipantId)
-        comingOuts.list.forEach {
-            val entity = ComingOut()
-            entity.villagePlayerId = villageParticipantId
-            entity.skillCodeAsSkill = it.skill.toCdef()
-            comingOutBhv.insert(entity)
-        }
+        val entity = ComingOut()
+        entity.villagePlayerId = villageParticipantId
+        entity.skillCodeAsSkill = comingOut.skill.toCdef()
+        comingOutBhv.insert(entity)
     }
 
     fun delete(villageParticipantId: Int) {

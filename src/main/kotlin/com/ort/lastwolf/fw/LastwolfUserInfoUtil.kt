@@ -9,7 +9,7 @@ class LastwolfUserInfoUtil private constructor() {
         fun getUserInfo(): LastwolfUser? {
             val authentication = SecurityContextHolder.getContext().authentication ?: return null
             return if (authentication.principal is LastwolfUser) {
-                LastwolfUser::class.java!!.cast(authentication.principal)
+                LastwolfUser::class.java.cast(authentication.principal)
             } else null
         }
     }

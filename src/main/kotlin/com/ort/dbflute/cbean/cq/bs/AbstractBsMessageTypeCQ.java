@@ -103,27 +103,11 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As 検死結果 (PRIVATE_CORONER). And OnlyOnceRegistered. <br>
-     * 検死結果
+     * Equal(=). As 個別能力行使結果 (PRIVATE_ABILITY). And OnlyOnceRegistered. <br>
+     * 個別能力行使結果
      */
-    public void setMessageTypeCode_Equal_検死結果() {
-        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.検死結果);
-    }
-
-    /**
-     * Equal(=). As 狂信者人狼確認メッセージ (PRIVATE_FANATIC). And OnlyOnceRegistered. <br>
-     * 狂信者人狼確認メッセージ
-     */
-    public void setMessageTypeCode_Equal_狂信者人狼確認メッセージ() {
-        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.狂信者人狼確認メッセージ);
-    }
-
-    /**
-     * Equal(=). As 役職霊視結果 (PRIVATE_GURU). And OnlyOnceRegistered. <br>
-     * 役職霊視結果
-     */
-    public void setMessageTypeCode_Equal_役職霊視結果() {
-        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.役職霊視結果);
+    public void setMessageTypeCode_Equal_個別能力行使結果() {
+        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.個別能力行使結果);
     }
 
     /**
@@ -143,22 +127,6 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As 白黒占い結果 (PRIVATE_SEER). And OnlyOnceRegistered. <br>
-     * 白黒占い結果
-     */
-    public void setMessageTypeCode_Equal_白黒占い結果() {
-        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.白黒占い結果);
-    }
-
-    /**
-     * Equal(=). As 共鳴相互確認メッセージ (PRIVATE_SYMPATHIZER). And OnlyOnceRegistered. <br>
-     * 共鳴相互確認メッセージ
-     */
-    public void setMessageTypeCode_Equal_共鳴相互確認メッセージ() {
-        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.共鳴相互確認メッセージ);
-    }
-
-    /**
      * Equal(=). As 非公開システムメッセージ (PRIVATE_SYSTEM). And OnlyOnceRegistered. <br>
      * 非公開システムメッセージ
      */
@@ -175,43 +143,11 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As 役職占い結果 (PRIVATE_WISE). And OnlyOnceRegistered. <br>
-     * 役職占い結果
-     */
-    public void setMessageTypeCode_Equal_役職占い結果() {
-        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.役職占い結果);
-    }
-
-    /**
      * Equal(=). As 公開システムメッセージ (PUBLIC_SYSTEM). And OnlyOnceRegistered. <br>
      * 公開システムメッセージ
      */
     public void setMessageTypeCode_Equal_公開システムメッセージ() {
         setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.公開システムメッセージ);
-    }
-
-    /**
-     * Equal(=). As 秘話 (SECRET_SAY). And OnlyOnceRegistered. <br>
-     * 秘話
-     */
-    public void setMessageTypeCode_Equal_秘話() {
-        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.秘話);
-    }
-
-    /**
-     * Equal(=). As 見学発言 (SPECTATE_SAY). And OnlyOnceRegistered. <br>
-     * 見学発言
-     */
-    public void setMessageTypeCode_Equal_見学発言() {
-        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.見学発言);
-    }
-
-    /**
-     * Equal(=). As 共鳴発言 (SYMPATHIZE_SAY). And OnlyOnceRegistered. <br>
-     * 共鳴発言
-     */
-    public void setMessageTypeCode_Equal_共鳴発言() {
-        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.共鳴発言);
     }
 
     /**
@@ -286,27 +222,11 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 検死結果 (PRIVATE_CORONER). And OnlyOnceRegistered. <br>
-     * 検死結果
+     * NotEqual(&lt;&gt;). As 個別能力行使結果 (PRIVATE_ABILITY). And OnlyOnceRegistered. <br>
+     * 個別能力行使結果
      */
-    public void setMessageTypeCode_NotEqual_検死結果() {
-        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.検死結果);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 狂信者人狼確認メッセージ (PRIVATE_FANATIC). And OnlyOnceRegistered. <br>
-     * 狂信者人狼確認メッセージ
-     */
-    public void setMessageTypeCode_NotEqual_狂信者人狼確認メッセージ() {
-        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.狂信者人狼確認メッセージ);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 役職霊視結果 (PRIVATE_GURU). And OnlyOnceRegistered. <br>
-     * 役職霊視結果
-     */
-    public void setMessageTypeCode_NotEqual_役職霊視結果() {
-        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.役職霊視結果);
+    public void setMessageTypeCode_NotEqual_個別能力行使結果() {
+        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.個別能力行使結果);
     }
 
     /**
@@ -326,22 +246,6 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 白黒占い結果 (PRIVATE_SEER). And OnlyOnceRegistered. <br>
-     * 白黒占い結果
-     */
-    public void setMessageTypeCode_NotEqual_白黒占い結果() {
-        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.白黒占い結果);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 共鳴相互確認メッセージ (PRIVATE_SYMPATHIZER). And OnlyOnceRegistered. <br>
-     * 共鳴相互確認メッセージ
-     */
-    public void setMessageTypeCode_NotEqual_共鳴相互確認メッセージ() {
-        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.共鳴相互確認メッセージ);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As 非公開システムメッセージ (PRIVATE_SYSTEM). And OnlyOnceRegistered. <br>
      * 非公開システムメッセージ
      */
@@ -358,43 +262,11 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 役職占い結果 (PRIVATE_WISE). And OnlyOnceRegistered. <br>
-     * 役職占い結果
-     */
-    public void setMessageTypeCode_NotEqual_役職占い結果() {
-        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.役職占い結果);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As 公開システムメッセージ (PUBLIC_SYSTEM). And OnlyOnceRegistered. <br>
      * 公開システムメッセージ
      */
     public void setMessageTypeCode_NotEqual_公開システムメッセージ() {
         setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.公開システムメッセージ);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 秘話 (SECRET_SAY). And OnlyOnceRegistered. <br>
-     * 秘話
-     */
-    public void setMessageTypeCode_NotEqual_秘話() {
-        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.秘話);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 見学発言 (SPECTATE_SAY). And OnlyOnceRegistered. <br>
-     * 見学発言
-     */
-    public void setMessageTypeCode_NotEqual_見学発言() {
-        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.見学発言);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 共鳴発言 (SYMPATHIZE_SAY). And OnlyOnceRegistered. <br>
-     * 共鳴発言
-     */
-    public void setMessageTypeCode_NotEqual_共鳴発言() {
-        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.共鳴発言);
     }
 
     /**
@@ -454,79 +326,6 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     protected void doSetMessageTypeCode_NotInScope(Collection<String> messageTypeCodeList) {
         regINS(CK_NINS, cTL(messageTypeCodeList), xgetCValueMessageTypeCode(), "MESSAGE_TYPE_CODE");
     }
-
-    /**
-     * Set up ExistsReferrer (correlated sub-query). <br>
-     * {exists (select MESSAGE_TYPE_CODE from message_restriction where ...)} <br>
-     * message_restriction by MESSAGE_TYPE_CODE, named 'messageRestrictionAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">existsMessageRestriction</span>(restrictionCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     restrictionCB.query().set...
-     * });
-     * </pre>
-     * @param subCBLambda The callback for sub-query of MessageRestrictionList for 'exists'. (NotNull)
-     */
-    public void existsMessageRestriction(SubQuery<MessageRestrictionCB> subCBLambda) {
-        assertObjectNotNull("subCBLambda", subCBLambda);
-        MessageRestrictionCB cb = new MessageRestrictionCB(); cb.xsetupForExistsReferrer(this);
-        lockCall(() -> subCBLambda.query(cb)); String pp = keepMessageTypeCode_ExistsReferrer_MessageRestrictionList(cb.query());
-        registerExistsReferrer(cb.query(), "MESSAGE_TYPE_CODE", "MESSAGE_TYPE_CODE", pp, "messageRestrictionList");
-    }
-    public abstract String keepMessageTypeCode_ExistsReferrer_MessageRestrictionList(MessageRestrictionCQ sq);
-
-    /**
-     * Set up NotExistsReferrer (correlated sub-query). <br>
-     * {not exists (select MESSAGE_TYPE_CODE from message_restriction where ...)} <br>
-     * message_restriction by MESSAGE_TYPE_CODE, named 'messageRestrictionAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">notExistsMessageRestriction</span>(restrictionCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     restrictionCB.query().set...
-     * });
-     * </pre>
-     * @param subCBLambda The callback for sub-query of MessageTypeCode_NotExistsReferrer_MessageRestrictionList for 'not exists'. (NotNull)
-     */
-    public void notExistsMessageRestriction(SubQuery<MessageRestrictionCB> subCBLambda) {
-        assertObjectNotNull("subCBLambda", subCBLambda);
-        MessageRestrictionCB cb = new MessageRestrictionCB(); cb.xsetupForExistsReferrer(this);
-        lockCall(() -> subCBLambda.query(cb)); String pp = keepMessageTypeCode_NotExistsReferrer_MessageRestrictionList(cb.query());
-        registerNotExistsReferrer(cb.query(), "MESSAGE_TYPE_CODE", "MESSAGE_TYPE_CODE", pp, "messageRestrictionList");
-    }
-    public abstract String keepMessageTypeCode_NotExistsReferrer_MessageRestrictionList(MessageRestrictionCQ sq);
-
-    public void xsderiveMessageRestrictionList(String fn, SubQuery<MessageRestrictionCB> sq, String al, DerivedReferrerOption op) {
-        assertObjectNotNull("subQuery", sq);
-        MessageRestrictionCB cb = new MessageRestrictionCB(); cb.xsetupForDerivedReferrer(this);
-        lockCall(() -> sq.query(cb)); String pp = keepMessageTypeCode_SpecifyDerivedReferrer_MessageRestrictionList(cb.query());
-        registerSpecifyDerivedReferrer(fn, cb.query(), "MESSAGE_TYPE_CODE", "MESSAGE_TYPE_CODE", pp, "messageRestrictionList", al, op);
-    }
-    public abstract String keepMessageTypeCode_SpecifyDerivedReferrer_MessageRestrictionList(MessageRestrictionCQ sq);
-
-    /**
-     * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
-     * {FOO &lt;= (select max(BAR) from message_restriction where ...)} <br>
-     * message_restriction by MESSAGE_TYPE_CODE, named 'messageRestrictionAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">derivedMessageRestriction()</span>.<span style="color: #CC4747">max</span>(restrictionCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     restrictionCB.specify().<span style="color: #CC4747">columnFoo...</span> <span style="color: #3F7E5E">// derived column by function</span>
-     *     restrictionCB.query().setBar... <span style="color: #3F7E5E">// referrer condition</span>
-     * }).<span style="color: #CC4747">greaterEqual</span>(123); <span style="color: #3F7E5E">// condition to derived column</span>
-     * </pre>
-     * @return The object to set up a function for referrer table. (NotNull)
-     */
-    public HpQDRFunction<MessageRestrictionCB> derivedMessageRestriction() {
-        return xcreateQDRFunctionMessageRestrictionList();
-    }
-    protected HpQDRFunction<MessageRestrictionCB> xcreateQDRFunctionMessageRestrictionList() {
-        return xcQDRFunc((fn, sq, rd, vl, op) -> xqderiveMessageRestrictionList(fn, sq, rd, vl, op));
-    }
-    public void xqderiveMessageRestrictionList(String fn, SubQuery<MessageRestrictionCB> sq, String rd, Object vl, DerivedReferrerOption op) {
-        assertObjectNotNull("subQuery", sq);
-        MessageRestrictionCB cb = new MessageRestrictionCB(); cb.xsetupForDerivedReferrer(this);
-        lockCall(() -> sq.query(cb)); String sqpp = keepMessageTypeCode_QueryDerivedReferrer_MessageRestrictionList(cb.query()); String prpp = keepMessageTypeCode_QueryDerivedReferrer_MessageRestrictionListParameter(vl);
-        registerQueryDerivedReferrer(fn, cb.query(), "MESSAGE_TYPE_CODE", "MESSAGE_TYPE_CODE", sqpp, "messageRestrictionList", rd, vl, prpp, op);
-    }
-    public abstract String keepMessageTypeCode_QueryDerivedReferrer_MessageRestrictionList(MessageRestrictionCQ sq);
-    public abstract String keepMessageTypeCode_QueryDerivedReferrer_MessageRestrictionListParameter(Object vl);
 
     /**
      * IsNull {is null}. And OnlyOnceRegistered. <br>

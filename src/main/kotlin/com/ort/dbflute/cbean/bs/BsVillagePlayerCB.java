@@ -465,6 +465,26 @@ public class BsVillagePlayerCB extends AbstractConditionBean {
         return _nssVillage;
     }
 
+    /**
+     * Set up relation columns to select clause. <br>
+     * WINLOSE by my WINLOSE_CODE, named 'winlose'.
+     * <pre>
+     * <span style="color: #0000C0">villagePlayerBhv</span>.selectEntity(<span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     <span style="color: #553000">cb</span>.<span style="color: #CC4747">setupSelect_Winlose()</span>; <span style="color: #3F7E5E">// ...().with[nested-relation]()</span>
+     *     <span style="color: #553000">cb</span>.query().set...
+     * }).alwaysPresent(<span style="color: #553000">villagePlayer</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     ... = <span style="color: #553000">villagePlayer</span>.<span style="color: #CC4747">getWinlose()</span>; <span style="color: #3F7E5E">// you can get by using SetupSelect</span>
+     * });
+     * </pre>
+     */
+    public void setupSelect_Winlose() {
+        assertSetupSelectPurpose("winlose");
+        if (hasSpecifiedLocalColumn()) {
+            specify().columnWinloseCode();
+        }
+        doSetupSelect(() -> query().queryWinlose());
+    }
+
     // [DBFlute-0.7.4]
     // ===================================================================================
     //                                                                             Specify
@@ -514,6 +534,7 @@ public class BsVillagePlayerCB extends AbstractConditionBean {
         protected SkillCB.HpSpecification _skillBySecondRequestSkillCode;
         protected SkillCB.HpSpecification _skillBySkillCode;
         protected VillageCB.HpSpecification _village;
+        protected WinloseCB.HpSpecification _winlose;
         public HpSpecification(ConditionBean baseCB, HpSpQyCall<VillagePlayerCQ> qyCall
                              , HpCBPurpose purpose, DBMetaProvider dbmetaProvider
                              , HpSDRFunctionFactory sdrFuncFactory)
@@ -544,12 +565,12 @@ public class BsVillagePlayerCB extends AbstractConditionBean {
          */
         public SpecifiedColumn columnSkillCode() { return doColumn("SKILL_CODE"); }
         /**
-         * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+         * REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnRequestSkillCode() { return doColumn("REQUEST_SKILL_CODE"); }
         /**
-         * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+         * SECOND_REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnSecondRequestSkillCode() { return doColumn("SECOND_REQUEST_SKILL_CODE"); }
@@ -558,11 +579,6 @@ public class BsVillagePlayerCB extends AbstractConditionBean {
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnIsDead() { return doColumn("IS_DEAD"); }
-        /**
-         * IS_SPECTATOR: {NotNull, BIT}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnIsSpectator() { return doColumn("IS_SPECTATOR"); }
         /**
          * DEAD_REASON_CODE: {IX, VARCHAR(20), FK to dead_reason, classification=DeadReason}
          * @return The information object of specified column. (NotNull)
@@ -578,6 +594,16 @@ public class BsVillagePlayerCB extends AbstractConditionBean {
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnIsGone() { return doColumn("IS_GONE"); }
+        /**
+         * DONE_ROLLCALL: {NotNull, BIT}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnDoneRollcall() { return doColumn("DONE_ROLLCALL"); }
+        /**
+         * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnWinloseCode() { return doColumn("WINLOSE_CODE"); }
         /**
          * REGISTER_DATETIME: {NotNull, DATETIME(19)}
          * @return The information object of specified column. (NotNull)
@@ -634,6 +660,10 @@ public class BsVillagePlayerCB extends AbstractConditionBean {
             if (qyCall().qy().hasConditionQueryVillage()
                     || qyCall().qy().xgetReferrerQuery() instanceof VillageCQ) {
                 columnVillageId(); // FK or one-to-one referrer
+            }
+            if (qyCall().qy().hasConditionQueryWinlose()
+                    || qyCall().qy().xgetReferrerQuery() instanceof WinloseCQ) {
+                columnWinloseCode(); // FK or one-to-one referrer
             }
         }
         @Override
@@ -797,6 +827,26 @@ public class BsVillagePlayerCB extends AbstractConditionBean {
                 }
             }
             return _village;
+        }
+        /**
+         * Prepare to specify functions about relation table. <br>
+         * WINLOSE by my WINLOSE_CODE, named 'winlose'.
+         * @return The instance for specification for relation table to specify. (NotNull)
+         */
+        public WinloseCB.HpSpecification specifyWinlose() {
+            assertRelation("winlose");
+            if (_winlose == null) {
+                _winlose = new WinloseCB.HpSpecification(_baseCB
+                    , xcreateSpQyCall(() -> _qyCall.has() && _qyCall.qy().hasConditionQueryWinlose()
+                                    , () -> _qyCall.qy().queryWinlose())
+                    , _purpose, _dbmetaProvider, xgetSDRFnFc());
+                if (xhasSyncQyCall()) { // inherits it
+                    _winlose.xsetSyncQyCall(xcreateSpQyCall(
+                        () -> xsyncQyCall().has() && xsyncQyCall().qy().hasConditionQueryWinlose()
+                      , () -> xsyncQyCall().qy().queryWinlose()));
+                }
+            }
+            return _winlose;
         }
         /**
          * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>

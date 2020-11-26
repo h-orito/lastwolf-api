@@ -21,7 +21,7 @@ import com.ort.dbflute.exentity.*;
  *     VILLAGE_ID
  *
  * [column]
- *     VILLAGE_ID, VILLAGE_DISPLAY_NAME, CREATE_PLAYER_ID, VILLAGE_STATUS_CODE, EPILOGUE_DAY, WIN_CAMP_CODE, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
+ *     VILLAGE_ID, VILLAGE_DISPLAY_NAME, CREATE_PLAYER_ID, VILLAGE_STATUS_CODE, WIN_CAMP_CODE, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
  *
  * [sequence]
  *     
@@ -36,13 +36,13 @@ import com.ort.dbflute.exentity.*;
  *     PLAYER, VILLAGE_STATUS, CAMP
  *
  * [referrer table]
- *     MESSAGE_RESTRICTION, VILLAGE_DAY, VILLAGE_PLAYER, VILLAGE_SETTING
+ *     VILLAGE_DAY, VILLAGE_PLAYER, VILLAGE_SETTING
  *
  * [foreign property]
  *     player, villageStatus, camp
  *
  * [referrer property]
- *     messageRestrictionList, villageDayList, villagePlayerList, villageSettingList
+ *     villageDayList, villagePlayerList, villageSettingList
  *
  * [get/set template]
  * /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -50,7 +50,6 @@ import com.ort.dbflute.exentity.*;
  * String villageDisplayName = entity.getVillageDisplayName();
  * Integer createPlayerId = entity.getCreatePlayerId();
  * String villageStatusCode = entity.getVillageStatusCode();
- * Integer epilogueDay = entity.getEpilogueDay();
  * String winCampCode = entity.getWinCampCode();
  * java.time.LocalDateTime registerDatetime = entity.getRegisterDatetime();
  * String registerTrace = entity.getRegisterTrace();
@@ -60,7 +59,6 @@ import com.ort.dbflute.exentity.*;
  * entity.setVillageDisplayName(villageDisplayName);
  * entity.setCreatePlayerId(createPlayerId);
  * entity.setVillageStatusCode(villageStatusCode);
- * entity.setEpilogueDay(epilogueDay);
  * entity.setWinCampCode(winCampCode);
  * entity.setRegisterDatetime(registerDatetime);
  * entity.setRegisterTrace(registerTrace);
@@ -92,9 +90,6 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
 
     /** VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus} */
     protected String _villageStatusCode;
-
-    /** EPILOGUE_DAY: {INT UNSIGNED(10)} */
-    protected Integer _epilogueDay;
 
     /** WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp} */
     protected String _winCampCode;
@@ -198,11 +193,11 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     }
 
     /**
-     * Set the value of villageStatusCode as エピローグ (EPILOGUE). <br>
-     * エピローグ
+     * Set the value of villageStatusCode as 決着 (EPILOGUE). <br>
+     * 決着
      */
-    public void setVillageStatusCode_エピローグ() {
-        setVillageStatusCodeAsVillageStatus(CDef.VillageStatus.エピローグ);
+    public void setVillageStatusCode_決着() {
+        setVillageStatusCodeAsVillageStatus(CDef.VillageStatus.決着);
     }
 
     /**
@@ -214,19 +209,27 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     }
 
     /**
-     * Set the value of villageStatusCode as プロローグ (PROLOGUE). <br>
-     * プロローグ
+     * Set the value of villageStatusCode as 募集中 (PROLOGUE). <br>
+     * 募集中
      */
-    public void setVillageStatusCode_プロローグ() {
-        setVillageStatusCodeAsVillageStatus(CDef.VillageStatus.プロローグ);
+    public void setVillageStatusCode_募集中() {
+        setVillageStatusCodeAsVillageStatus(CDef.VillageStatus.募集中);
     }
 
     /**
-     * Set the value of winCampCode as 狐陣営 (FOX). <br>
-     * 狐陣営
+     * Set the value of villageStatusCode as 点呼中 (ROLLCALLING). <br>
+     * 点呼中
      */
-    public void setWinCampCode_狐陣営() {
-        setWinCampCodeAsCamp(CDef.Camp.狐陣営);
+    public void setVillageStatusCode_点呼中() {
+        setVillageStatusCodeAsVillageStatus(CDef.VillageStatus.点呼中);
+    }
+
+    /**
+     * Set the value of winCampCode as 妖狐陣営 (FOX). <br>
+     * 妖狐陣営
+     */
+    public void setWinCampCode_妖狐陣営() {
+        setWinCampCodeAsCamp(CDef.Camp.妖狐陣営);
     }
 
     /**
@@ -271,14 +274,14 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     }
 
     /**
-     * Is the value of villageStatusCode エピローグ? <br>
-     * エピローグ
+     * Is the value of villageStatusCode 決着? <br>
+     * 決着
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
      * @return The determination, true or false.
      */
-    public boolean isVillageStatusCodeエピローグ() {
+    public boolean isVillageStatusCode決着() {
         CDef.VillageStatus cdef = getVillageStatusCodeAsVillageStatus();
-        return cdef != null ? cdef.equals(CDef.VillageStatus.エピローグ) : false;
+        return cdef != null ? cdef.equals(CDef.VillageStatus.決着) : false;
     }
 
     /**
@@ -293,19 +296,30 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     }
 
     /**
-     * Is the value of villageStatusCode プロローグ? <br>
-     * プロローグ
+     * Is the value of villageStatusCode 募集中? <br>
+     * 募集中
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
      * @return The determination, true or false.
      */
-    public boolean isVillageStatusCodeプロローグ() {
+    public boolean isVillageStatusCode募集中() {
         CDef.VillageStatus cdef = getVillageStatusCodeAsVillageStatus();
-        return cdef != null ? cdef.equals(CDef.VillageStatus.プロローグ) : false;
+        return cdef != null ? cdef.equals(CDef.VillageStatus.募集中) : false;
+    }
+
+    /**
+     * Is the value of villageStatusCode 点呼中? <br>
+     * 点呼中
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageStatusCode点呼中() {
+        CDef.VillageStatus cdef = getVillageStatusCodeAsVillageStatus();
+        return cdef != null ? cdef.equals(CDef.VillageStatus.点呼中) : false;
     }
 
     /**
      * 決着がついた村 <br>
-     * The group elements:[エピローグ, 廃村, 終了]
+     * The group elements:[決着, 廃村, 終了]
      * @return The determination, true or false.
      */
     public boolean isVillageStatusCode_SolvedVillage() {
@@ -324,14 +338,14 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     }
 
     /**
-     * Is the value of winCampCode 狐陣営? <br>
-     * 狐陣営
+     * Is the value of winCampCode 妖狐陣営? <br>
+     * 妖狐陣営
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
      * @return The determination, true or false.
      */
-    public boolean isWinCampCode狐陣営() {
+    public boolean isWinCampCode妖狐陣営() {
         CDef.Camp cdef = getWinCampCodeAsCamp();
-        return cdef != null ? cdef.equals(CDef.Camp.狐陣営) : false;
+        return cdef != null ? cdef.equals(CDef.Camp.妖狐陣営) : false;
     }
 
     /**
@@ -425,26 +439,6 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     // ===================================================================================
     //                                                                   Referrer Property
     //                                                                   =================
-    /** MESSAGE_RESTRICTION by VILLAGE_ID, named 'messageRestrictionList'. */
-    protected List<MessageRestriction> _messageRestrictionList;
-
-    /**
-     * [get] MESSAGE_RESTRICTION by VILLAGE_ID, named 'messageRestrictionList'.
-     * @return The entity list of referrer property 'messageRestrictionList'. (NotNull: even if no loading, returns empty list)
-     */
-    public List<MessageRestriction> getMessageRestrictionList() {
-        if (_messageRestrictionList == null) { _messageRestrictionList = newReferrerList(); }
-        return _messageRestrictionList;
-    }
-
-    /**
-     * [set] MESSAGE_RESTRICTION by VILLAGE_ID, named 'messageRestrictionList'.
-     * @param messageRestrictionList The entity list of referrer property 'messageRestrictionList'. (NullAllowed)
-     */
-    public void setMessageRestrictionList(List<MessageRestriction> messageRestrictionList) {
-        _messageRestrictionList = messageRestrictionList;
-    }
-
     /** VILLAGE_DAY by VILLAGE_ID, named 'villageDayList'. */
     protected List<VillageDay> _villageDayList;
 
@@ -540,8 +534,6 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
         { sb.append(li).append(xbRDS(_villageStatus, "villageStatus")); }
         if (_camp != null && _camp.isPresent())
         { sb.append(li).append(xbRDS(_camp, "camp")); }
-        if (_messageRestrictionList != null) { for (MessageRestriction et : _messageRestrictionList)
-        { if (et != null) { sb.append(li).append(xbRDS(et, "messageRestrictionList")); } } }
         if (_villageDayList != null) { for (VillageDay et : _villageDayList)
         { if (et != null) { sb.append(li).append(xbRDS(et, "villageDayList")); } } }
         if (_villagePlayerList != null) { for (VillagePlayer et : _villagePlayerList)
@@ -561,7 +553,6 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
         sb.append(dm).append(xfND(_villageDisplayName));
         sb.append(dm).append(xfND(_createPlayerId));
         sb.append(dm).append(xfND(_villageStatusCode));
-        sb.append(dm).append(xfND(_epilogueDay));
         sb.append(dm).append(xfND(_winCampCode));
         sb.append(dm).append(xfND(_registerDatetime));
         sb.append(dm).append(xfND(_registerTrace));
@@ -583,8 +574,6 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
         { sb.append(dm).append("villageStatus"); }
         if (_camp != null && _camp.isPresent())
         { sb.append(dm).append("camp"); }
-        if (_messageRestrictionList != null && !_messageRestrictionList.isEmpty())
-        { sb.append(dm).append("messageRestrictionList"); }
         if (_villageDayList != null && !_villageDayList.isEmpty())
         { sb.append(dm).append("villageDayList"); }
         if (_villagePlayerList != null && !_villagePlayerList.isEmpty())
@@ -684,26 +673,6 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
         checkClassificationCode("VILLAGE_STATUS_CODE", CDef.DefMeta.VillageStatus, villageStatusCode);
         registerModifiedProperty("villageStatusCode");
         _villageStatusCode = villageStatusCode;
-    }
-
-    /**
-     * [get] EPILOGUE_DAY: {INT UNSIGNED(10)} <br>
-     * エピローグ日
-     * @return The value of the column 'EPILOGUE_DAY'. (NullAllowed even if selected: for no constraint)
-     */
-    public Integer getEpilogueDay() {
-        checkSpecifiedProperty("epilogueDay");
-        return _epilogueDay;
-    }
-
-    /**
-     * [set] EPILOGUE_DAY: {INT UNSIGNED(10)} <br>
-     * エピローグ日
-     * @param epilogueDay The value of the column 'EPILOGUE_DAY'. (NullAllowed: null update allowed for no constraint)
-     */
-    public void setEpilogueDay(Integer epilogueDay) {
-        registerModifiedProperty("epilogueDay");
-        _epilogueDay = epilogueDay;
     }
 
     /**

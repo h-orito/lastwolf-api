@@ -35,25 +35,4 @@ public class Village extends BsVillage {
     public void setParticipantCount(Integer participantCount) {
         _participantCount = participantCount;
     }
-
-    /** VISITOR_COUNT: Derived Referrer Alias. */
-    public static final String ALIAS_visitorCount = "VISITOR_COUNT";
-    /** VISITOR_COUNT: (Derived Referrer) */
-    protected Integer _visitorCount;
-
-    /**
-     * [get] VISITOR_COUNT: (Derived Referrer)
-     * @return The value of the column 'VISITOR_COUNT'. (NullAllowed)
-     */
-    public Integer getVisitorCount() {
-        return _visitorCount;
-    }
-
-    /**
-     * [set] VISITOR_COUNT: (Derived Referrer)
-     * @param visitorCount The value of the column 'VISITOR_COUNT'. (NullAllowed)
-     */
-    public void setVisitorCount(Integer visitorCount) {
-        _visitorCount = visitorCount;
-    }
 }

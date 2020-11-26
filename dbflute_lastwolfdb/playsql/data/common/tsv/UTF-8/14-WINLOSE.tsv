@@ -1,0 +1,4 @@
+WINLOSE_CODE	WINLOSE_NAME	disp_order
+WIN	勝利	1
+LOSE	敗北	2
+DRAW	引分	3

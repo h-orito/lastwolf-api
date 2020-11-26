@@ -71,27 +71,11 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
-     * Equal(=). As 更新間隔秒 (day_change_interval_seconds). And OnlyOnceRegistered. <br>
-     * 更新間隔秒
-     */
-    public void setVillageSettingItemCode_Equal_更新間隔秒() {
-        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.更新間隔秒);
-    }
-
-    /**
      * Equal(=). As ダミーキャラid (dummy_chara_id). And OnlyOnceRegistered. <br>
      * ダミーキャラID
      */
     public void setVillageSettingItemCode_Equal_ダミーキャラid() {
         setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.ダミーキャラid);
-    }
-
-    /**
-     * Equal(=). As 自動生成村か (is_auto_generated). And OnlyOnceRegistered. <br>
-     * 自動生成村か
-     */
-    public void setVillageSettingItemCode_Equal_自動生成村か() {
-        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.自動生成村か);
     }
 
     /**
@@ -119,14 +103,6 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
-     * Equal(=). As 見学可能か (is_available_spectate). And OnlyOnceRegistered. <br>
-     * 見学可能か
-     */
-    public void setVillageSettingItemCode_Equal_見学可能か() {
-        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.見学可能か);
-    }
-
-    /**
      * Equal(=). As 突然死ありか (is_available_suddenly_death). And OnlyOnceRegistered. <br>
      * 突然死ありか
      */
@@ -143,27 +119,27 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
-     * Equal(=). As 記名投票か (is_open_vote). And OnlyOnceRegistered. <br>
-     * 記名投票か
-     */
-    public void setVillageSettingItemCode_Equal_記名投票か() {
-        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.記名投票か);
-    }
-
-    /**
-     * Equal(=). As 墓下見学発言を生存者が見られるか (is_visible_grave_message). And OnlyOnceRegistered. <br>
-     * 墓下見学発言を生存者が見られるか
-     */
-    public void setVillageSettingItemCode_Equal_墓下見学発言を生存者が見られるか() {
-        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.墓下見学発言を生存者が見られるか);
-    }
-
-    /**
      * Equal(=). As 入村パスワード (join_password). And OnlyOnceRegistered. <br>
      * 入村パスワード
      */
     public void setVillageSettingItemCode_Equal_入村パスワード() {
         setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.入村パスワード);
+    }
+
+    /**
+     * Equal(=). As 夜時間秒 (night_seconds). And OnlyOnceRegistered. <br>
+     * 夜時間秒
+     */
+    public void setVillageSettingItemCode_Equal_夜時間秒() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.夜時間秒);
+    }
+
+    /**
+     * Equal(=). As 昼時間秒 (noon_seconds). And OnlyOnceRegistered. <br>
+     * 昼時間秒
+     */
+    public void setVillageSettingItemCode_Equal_昼時間秒() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.昼時間秒);
     }
 
     /**
@@ -191,14 +167,6 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
-     * Equal(=). As 沈黙時間 (silent_hours). And OnlyOnceRegistered. <br>
-     * 沈黙時間
-     */
-    public void setVillageSettingItemCode_Equal_沈黙時間() {
-        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.沈黙時間);
-    }
-
-    /**
      * Equal(=). As 開始予定日時 (start_datetime). And OnlyOnceRegistered. <br>
      * 開始予定日時
      */
@@ -207,11 +175,11 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
-     * Equal(=). As 期間形式 (term_type). And OnlyOnceRegistered. <br>
-     * 期間形式
+     * Equal(=). As 投票時間秒 (vote_seconds). And OnlyOnceRegistered. <br>
+     * 投票時間秒
      */
-    public void setVillageSettingItemCode_Equal_期間形式() {
-        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.期間形式);
+    public void setVillageSettingItemCode_Equal_投票時間秒() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.投票時間秒);
     }
 
     protected void doSetVillageSettingItemCode_Equal(String villageSettingItemCode) {
@@ -246,27 +214,11 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 更新間隔秒 (day_change_interval_seconds). And OnlyOnceRegistered. <br>
-     * 更新間隔秒
-     */
-    public void setVillageSettingItemCode_NotEqual_更新間隔秒() {
-        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.更新間隔秒);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As ダミーキャラid (dummy_chara_id). And OnlyOnceRegistered. <br>
      * ダミーキャラID
      */
     public void setVillageSettingItemCode_NotEqual_ダミーキャラid() {
         setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.ダミーキャラid);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 自動生成村か (is_auto_generated). And OnlyOnceRegistered. <br>
-     * 自動生成村か
-     */
-    public void setVillageSettingItemCode_NotEqual_自動生成村か() {
-        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.自動生成村か);
     }
 
     /**
@@ -294,14 +246,6 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 見学可能か (is_available_spectate). And OnlyOnceRegistered. <br>
-     * 見学可能か
-     */
-    public void setVillageSettingItemCode_NotEqual_見学可能か() {
-        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.見学可能か);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As 突然死ありか (is_available_suddenly_death). And OnlyOnceRegistered. <br>
      * 突然死ありか
      */
@@ -318,27 +262,27 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 記名投票か (is_open_vote). And OnlyOnceRegistered. <br>
-     * 記名投票か
-     */
-    public void setVillageSettingItemCode_NotEqual_記名投票か() {
-        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.記名投票か);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 墓下見学発言を生存者が見られるか (is_visible_grave_message). And OnlyOnceRegistered. <br>
-     * 墓下見学発言を生存者が見られるか
-     */
-    public void setVillageSettingItemCode_NotEqual_墓下見学発言を生存者が見られるか() {
-        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.墓下見学発言を生存者が見られるか);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As 入村パスワード (join_password). And OnlyOnceRegistered. <br>
      * 入村パスワード
      */
     public void setVillageSettingItemCode_NotEqual_入村パスワード() {
         setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.入村パスワード);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 夜時間秒 (night_seconds). And OnlyOnceRegistered. <br>
+     * 夜時間秒
+     */
+    public void setVillageSettingItemCode_NotEqual_夜時間秒() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.夜時間秒);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 昼時間秒 (noon_seconds). And OnlyOnceRegistered. <br>
+     * 昼時間秒
+     */
+    public void setVillageSettingItemCode_NotEqual_昼時間秒() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.昼時間秒);
     }
 
     /**
@@ -366,14 +310,6 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 沈黙時間 (silent_hours). And OnlyOnceRegistered. <br>
-     * 沈黙時間
-     */
-    public void setVillageSettingItemCode_NotEqual_沈黙時間() {
-        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.沈黙時間);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As 開始予定日時 (start_datetime). And OnlyOnceRegistered. <br>
      * 開始予定日時
      */
@@ -382,11 +318,11 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 期間形式 (term_type). And OnlyOnceRegistered. <br>
-     * 期間形式
+     * NotEqual(&lt;&gt;). As 投票時間秒 (vote_seconds). And OnlyOnceRegistered. <br>
+     * 投票時間秒
      */
-    public void setVillageSettingItemCode_NotEqual_期間形式() {
-        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.期間形式);
+    public void setVillageSettingItemCode_NotEqual_投票時間秒() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.投票時間秒);
     }
 
     protected void doSetVillageSettingItemCode_NotEqual(String villageSettingItemCode) {

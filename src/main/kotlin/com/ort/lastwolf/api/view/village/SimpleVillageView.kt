@@ -1,5 +1,6 @@
 package com.ort.lastwolf.api.view.village
 
+import com.ort.lastwolf.api.view.player.PlayerView
 import com.ort.lastwolf.domain.model.camp.Camp
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.VillageDays
@@ -9,28 +10,26 @@ import com.ort.lastwolf.domain.model.village.participant.VillageParticipants
 data class SimpleVillageView(
     val id: Int,
     val name: String,
-    val creatorPlayerId: Int,
+    val creatorPlayer: PlayerView,
     val status: VillageStatus,
     val winCamp: Camp?,
     val setting: VillageSettingsView,
-    val participant: VillageParticipants,
-    val spectator: VillageParticipants,
-    val day: VillageDays
+    val participants: VillageParticipants,
+    val days: VillageDays
 ) {
     constructor(
         village: Village
     ) : this(
         id = village.id,
         name = village.name,
-        creatorPlayerId = village.creatorPlayerId,
+        creatorPlayer = PlayerView(village.creatorPlayer),
         status = village.status,
         winCamp = village.winCamp,
         setting = VillageSettingsView(village.setting),
-        participant = VillageParticipants(
-            count = village.participant.count,
-            memberList = listOf()
+        participants = VillageParticipants(
+            count = village.participants.count,
+            list = listOf()
         ),
-        spectator = village.spectator,
-        day = village.day
+        days = village.days
     )
 }

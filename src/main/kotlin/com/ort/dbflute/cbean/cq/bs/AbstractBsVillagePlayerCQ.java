@@ -981,59 +981,11 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As パン屋 (BAKERY). And OnlyOnceRegistered. <br>
-     * パン屋
-     */
-    public void setSkillCode_Equal_パン屋() {
-        setSkillCode_Equal_AsSkill(CDef.Skill.パン屋);
-    }
-
-    /**
-     * Equal(=). As C国狂人 (CMADMAN). And OnlyOnceRegistered. <br>
-     * C国狂人
-     */
-    public void setSkillCode_Equal_C国狂人() {
-        setSkillCode_Equal_AsSkill(CDef.Skill.C国狂人);
-    }
-
-    /**
-     * Equal(=). As 検死官 (CORONER). And OnlyOnceRegistered. <br>
-     * 検死官
-     */
-    public void setSkillCode_Equal_検死官() {
-        setSkillCode_Equal_AsSkill(CDef.Skill.検死官);
-    }
-
-    /**
-     * Equal(=). As 呪狼 (CURSEWOLF). And OnlyOnceRegistered. <br>
-     * 呪狼
-     */
-    public void setSkillCode_Equal_呪狼() {
-        setSkillCode_Equal_AsSkill(CDef.Skill.呪狼);
-    }
-
-    /**
-     * Equal(=). As 狂信者 (FANATIC). And OnlyOnceRegistered. <br>
-     * 狂信者
-     */
-    public void setSkillCode_Equal_狂信者() {
-        setSkillCode_Equal_AsSkill(CDef.Skill.狂信者);
-    }
-
-    /**
      * Equal(=). As 妖狐 (FOX). And OnlyOnceRegistered. <br>
      * 妖狐
      */
     public void setSkillCode_Equal_妖狐() {
         setSkillCode_Equal_AsSkill(CDef.Skill.妖狐);
-    }
-
-    /**
-     * Equal(=). As 導師 (GURU). And OnlyOnceRegistered. <br>
-     * 導師
-     */
-    public void setSkillCode_Equal_導師() {
-        setSkillCode_Equal_AsSkill(CDef.Skill.導師);
     }
 
     /**
@@ -1077,35 +1029,11 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
-     * 猫又
-     */
-    public void setSkillCode_Equal_猫又() {
-        setSkillCode_Equal_AsSkill(CDef.Skill.猫又);
-    }
-
-    /**
      * Equal(=). As 占い師 (SEER). And OnlyOnceRegistered. <br>
      * 占い師
      */
     public void setSkillCode_Equal_占い師() {
         setSkillCode_Equal_AsSkill(CDef.Skill.占い師);
-    }
-
-    /**
-     * Equal(=). As 聖痕者 (STIGMATA). And OnlyOnceRegistered. <br>
-     * 聖痕者
-     */
-    public void setSkillCode_Equal_聖痕者() {
-        setSkillCode_Equal_AsSkill(CDef.Skill.聖痕者);
-    }
-
-    /**
-     * Equal(=). As 共鳴者 (SYMPATHIZER). And OnlyOnceRegistered. <br>
-     * 共鳴者
-     */
-    public void setSkillCode_Equal_共鳴者() {
-        setSkillCode_Equal_AsSkill(CDef.Skill.共鳴者);
     }
 
     /**
@@ -1140,22 +1068,6 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
         setSkillCode_Equal_AsSkill(CDef.Skill.おまかせ人狼陣営);
     }
 
-    /**
-     * Equal(=). As 賢者 (WISE). And OnlyOnceRegistered. <br>
-     * 賢者
-     */
-    public void setSkillCode_Equal_賢者() {
-        setSkillCode_Equal_AsSkill(CDef.Skill.賢者);
-    }
-
-    /**
-     * Equal(=). As 智狼 (WISEWOLF). And OnlyOnceRegistered. <br>
-     * 智狼
-     */
-    public void setSkillCode_Equal_智狼() {
-        setSkillCode_Equal_AsSkill(CDef.Skill.智狼);
-    }
-
     protected void doSetSkillCode_Equal(String skillCode) {
         regSkillCode(CK_EQ, skillCode);
     }
@@ -1180,59 +1092,11 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As パン屋 (BAKERY). And OnlyOnceRegistered. <br>
-     * パン屋
-     */
-    public void setSkillCode_NotEqual_パン屋() {
-        setSkillCode_NotEqual_AsSkill(CDef.Skill.パン屋);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As C国狂人 (CMADMAN). And OnlyOnceRegistered. <br>
-     * C国狂人
-     */
-    public void setSkillCode_NotEqual_C国狂人() {
-        setSkillCode_NotEqual_AsSkill(CDef.Skill.C国狂人);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 検死官 (CORONER). And OnlyOnceRegistered. <br>
-     * 検死官
-     */
-    public void setSkillCode_NotEqual_検死官() {
-        setSkillCode_NotEqual_AsSkill(CDef.Skill.検死官);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 呪狼 (CURSEWOLF). And OnlyOnceRegistered. <br>
-     * 呪狼
-     */
-    public void setSkillCode_NotEqual_呪狼() {
-        setSkillCode_NotEqual_AsSkill(CDef.Skill.呪狼);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 狂信者 (FANATIC). And OnlyOnceRegistered. <br>
-     * 狂信者
-     */
-    public void setSkillCode_NotEqual_狂信者() {
-        setSkillCode_NotEqual_AsSkill(CDef.Skill.狂信者);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As 妖狐 (FOX). And OnlyOnceRegistered. <br>
      * 妖狐
      */
     public void setSkillCode_NotEqual_妖狐() {
         setSkillCode_NotEqual_AsSkill(CDef.Skill.妖狐);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 導師 (GURU). And OnlyOnceRegistered. <br>
-     * 導師
-     */
-    public void setSkillCode_NotEqual_導師() {
-        setSkillCode_NotEqual_AsSkill(CDef.Skill.導師);
     }
 
     /**
@@ -1276,35 +1140,11 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
-     * 猫又
-     */
-    public void setSkillCode_NotEqual_猫又() {
-        setSkillCode_NotEqual_AsSkill(CDef.Skill.猫又);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As 占い師 (SEER). And OnlyOnceRegistered. <br>
      * 占い師
      */
     public void setSkillCode_NotEqual_占い師() {
         setSkillCode_NotEqual_AsSkill(CDef.Skill.占い師);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 聖痕者 (STIGMATA). And OnlyOnceRegistered. <br>
-     * 聖痕者
-     */
-    public void setSkillCode_NotEqual_聖痕者() {
-        setSkillCode_NotEqual_AsSkill(CDef.Skill.聖痕者);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 共鳴者 (SYMPATHIZER). And OnlyOnceRegistered. <br>
-     * 共鳴者
-     */
-    public void setSkillCode_NotEqual_共鳴者() {
-        setSkillCode_NotEqual_AsSkill(CDef.Skill.共鳴者);
     }
 
     /**
@@ -1339,22 +1179,6 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
         setSkillCode_NotEqual_AsSkill(CDef.Skill.おまかせ人狼陣営);
     }
 
-    /**
-     * NotEqual(&lt;&gt;). As 賢者 (WISE). And OnlyOnceRegistered. <br>
-     * 賢者
-     */
-    public void setSkillCode_NotEqual_賢者() {
-        setSkillCode_NotEqual_AsSkill(CDef.Skill.賢者);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 智狼 (WISEWOLF). And OnlyOnceRegistered. <br>
-     * 智狼
-     */
-    public void setSkillCode_NotEqual_智狼() {
-        setSkillCode_NotEqual_AsSkill(CDef.Skill.智狼);
-    }
-
     protected void doSetSkillCode_NotEqual(String skillCode) {
         regSkillCode(CK_NES, skillCode);
     }
@@ -1382,7 +1206,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁きを見られる <br>
-     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
+     * The group elements:[人狼]
      */
     public void setSkillCode_InScope_ViewableWerewolfSay() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableWerewolfSay());
@@ -1392,7 +1216,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁き可能 <br>
-     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
+     * The group elements:[人狼]
      */
     public void setSkillCode_InScope_AvailableWerewolfSay() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableWerewolfSay());
@@ -1401,28 +1225,8 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
-     * 共鳴発言を見られる <br>
-     * The group elements:[共鳴者]
-     */
-    public void setSkillCode_InScope_ViewableSympathizeSay() {
-        setSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableSympathizeSay());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 共鳴発言可能 <br>
-     * The group elements:[共鳴者]
-     */
-    public void setSkillCode_InScope_AvailableSympathizeSay() {
-        setSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableSympathizeSay());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
      * 襲撃対象に選べない <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setSkillCode_InScope_NotSelectableAttack() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfNotSelectableAttack());
@@ -1432,7 +1236,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 占い結果が人狼になる <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setSkillCode_InScope_DivineResultWolf() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfDivineResultWolf());
@@ -1442,7 +1246,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 霊能結果が人狼になる <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setSkillCode_InScope_PsychicResultWolf() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfPsychicResultWolf());
@@ -1452,7 +1256,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 襲撃能力を持つ <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setSkillCode_InScope_HasAttackAbility() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasAttackAbility());
@@ -1466,16 +1270,6 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_InScope_HasDivineAbility() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasDivineAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 役職占い能力を持つ <br>
-     * The group elements:[賢者]
-     */
-    public void setSkillCode_InScope_HasWiseDivineAbility() {
-        setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasWiseDivineAbility());
     }
 
     /**
@@ -1501,48 +1295,8 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
-     * 役職霊能能力を持つ <br>
-     * The group elements:[導師]
-     */
-    public void setSkillCode_InScope_HasGuruPsychicAbility() {
-        setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasGuruPsychicAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 検死能力を持つ <br>
-     * The group elements:[検死官]
-     */
-    public void setSkillCode_InScope_HasAutopsyAbility() {
-        setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasAutopsyAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 襲撃役職占い能力を持つ <br>
-     * The group elements:[智狼]
-     */
-    public void setSkillCode_InScope_HasWiseWolfAbility() {
-        setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasWiseWolfAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * パン焼き能力を持つ <br>
-     * The group elements:[パン屋]
-     */
-    public void setSkillCode_InScope_HasBakeryAbility() {
-        setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasBakeryAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
      * 勝敗判定時狼にカウントする <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setSkillCode_InScope_CountWolf() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfCountWolf());
@@ -1581,26 +1335,6 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
-     * 共鳴者としてお互いに認知できる <br>
-     * The group elements:[共鳴者]
-     */
-    public void setSkillCode_InScope_RecognizableEachSympathizer() {
-        setSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableEachSympathizer());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 人狼を認知できる <br>
-     * The group elements:[狂信者]
-     */
-    public void setSkillCode_InScope_RecognizableWolf() {
-        setSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableWolf());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
      * 襲撃耐性を持つ <br>
      * The group elements:[妖狐]
      */
@@ -1616,26 +1350,6 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_InScope_DeadByDivine() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfDeadByDivine());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 占いにより占った側が死亡する <br>
-     * The group elements:[呪狼]
-     */
-    public void setSkillCode_InScope_CounterDeadByDivine() {
-        setSkillCode_InScope_AsSkill(CDef.Skill.listOfCounterDeadByDivine());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 死亡時道連れにする <br>
-     * The group elements:[猫又]
-     */
-    public void setSkillCode_InScope_ForceDoubleSuicide() {
-        setSkillCode_InScope_AsSkill(CDef.Skill.listOfForceDoubleSuicide());
     }
 
     protected void doSetSkillCode_InScope(Collection<String> skillCodeList) {
@@ -1688,7 +1402,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+     * REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
      * @param requestSkillCode The value of requestSkillCode as equal. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setRequestSkillCode_Equal(String requestSkillCode) {
@@ -1697,7 +1411,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). As Skill. And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill} <br>
+     * REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill} <br>
      * 役職
      * @param cdef The instance of classification definition (as ENUM type). (basically NotNull: error as default, or no condition as option)
      */
@@ -1706,59 +1420,11 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As パン屋 (BAKERY). And OnlyOnceRegistered. <br>
-     * パン屋
-     */
-    public void setRequestSkillCode_Equal_パン屋() {
-        setRequestSkillCode_Equal_AsSkill(CDef.Skill.パン屋);
-    }
-
-    /**
-     * Equal(=). As C国狂人 (CMADMAN). And OnlyOnceRegistered. <br>
-     * C国狂人
-     */
-    public void setRequestSkillCode_Equal_C国狂人() {
-        setRequestSkillCode_Equal_AsSkill(CDef.Skill.C国狂人);
-    }
-
-    /**
-     * Equal(=). As 検死官 (CORONER). And OnlyOnceRegistered. <br>
-     * 検死官
-     */
-    public void setRequestSkillCode_Equal_検死官() {
-        setRequestSkillCode_Equal_AsSkill(CDef.Skill.検死官);
-    }
-
-    /**
-     * Equal(=). As 呪狼 (CURSEWOLF). And OnlyOnceRegistered. <br>
-     * 呪狼
-     */
-    public void setRequestSkillCode_Equal_呪狼() {
-        setRequestSkillCode_Equal_AsSkill(CDef.Skill.呪狼);
-    }
-
-    /**
-     * Equal(=). As 狂信者 (FANATIC). And OnlyOnceRegistered. <br>
-     * 狂信者
-     */
-    public void setRequestSkillCode_Equal_狂信者() {
-        setRequestSkillCode_Equal_AsSkill(CDef.Skill.狂信者);
-    }
-
-    /**
      * Equal(=). As 妖狐 (FOX). And OnlyOnceRegistered. <br>
      * 妖狐
      */
     public void setRequestSkillCode_Equal_妖狐() {
         setRequestSkillCode_Equal_AsSkill(CDef.Skill.妖狐);
-    }
-
-    /**
-     * Equal(=). As 導師 (GURU). And OnlyOnceRegistered. <br>
-     * 導師
-     */
-    public void setRequestSkillCode_Equal_導師() {
-        setRequestSkillCode_Equal_AsSkill(CDef.Skill.導師);
     }
 
     /**
@@ -1802,35 +1468,11 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
-     * 猫又
-     */
-    public void setRequestSkillCode_Equal_猫又() {
-        setRequestSkillCode_Equal_AsSkill(CDef.Skill.猫又);
-    }
-
-    /**
      * Equal(=). As 占い師 (SEER). And OnlyOnceRegistered. <br>
      * 占い師
      */
     public void setRequestSkillCode_Equal_占い師() {
         setRequestSkillCode_Equal_AsSkill(CDef.Skill.占い師);
-    }
-
-    /**
-     * Equal(=). As 聖痕者 (STIGMATA). And OnlyOnceRegistered. <br>
-     * 聖痕者
-     */
-    public void setRequestSkillCode_Equal_聖痕者() {
-        setRequestSkillCode_Equal_AsSkill(CDef.Skill.聖痕者);
-    }
-
-    /**
-     * Equal(=). As 共鳴者 (SYMPATHIZER). And OnlyOnceRegistered. <br>
-     * 共鳴者
-     */
-    public void setRequestSkillCode_Equal_共鳴者() {
-        setRequestSkillCode_Equal_AsSkill(CDef.Skill.共鳴者);
     }
 
     /**
@@ -1865,29 +1507,13 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
         setRequestSkillCode_Equal_AsSkill(CDef.Skill.おまかせ人狼陣営);
     }
 
-    /**
-     * Equal(=). As 賢者 (WISE). And OnlyOnceRegistered. <br>
-     * 賢者
-     */
-    public void setRequestSkillCode_Equal_賢者() {
-        setRequestSkillCode_Equal_AsSkill(CDef.Skill.賢者);
-    }
-
-    /**
-     * Equal(=). As 智狼 (WISEWOLF). And OnlyOnceRegistered. <br>
-     * 智狼
-     */
-    public void setRequestSkillCode_Equal_智狼() {
-        setRequestSkillCode_Equal_AsSkill(CDef.Skill.智狼);
-    }
-
     protected void doSetRequestSkillCode_Equal(String requestSkillCode) {
         regRequestSkillCode(CK_EQ, requestSkillCode);
     }
 
     /**
      * NotEqual(&lt;&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+     * REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
      * @param requestSkillCode The value of requestSkillCode as notEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setRequestSkillCode_NotEqual(String requestSkillCode) {
@@ -1896,7 +1522,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
 
     /**
      * NotEqual(&lt;&gt;). As Skill. And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill} <br>
+     * REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill} <br>
      * 役職
      * @param cdef The instance of classification definition (as ENUM type). (basically NotNull: error as default, or no condition as option)
      */
@@ -1905,59 +1531,11 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As パン屋 (BAKERY). And OnlyOnceRegistered. <br>
-     * パン屋
-     */
-    public void setRequestSkillCode_NotEqual_パン屋() {
-        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.パン屋);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As C国狂人 (CMADMAN). And OnlyOnceRegistered. <br>
-     * C国狂人
-     */
-    public void setRequestSkillCode_NotEqual_C国狂人() {
-        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.C国狂人);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 検死官 (CORONER). And OnlyOnceRegistered. <br>
-     * 検死官
-     */
-    public void setRequestSkillCode_NotEqual_検死官() {
-        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.検死官);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 呪狼 (CURSEWOLF). And OnlyOnceRegistered. <br>
-     * 呪狼
-     */
-    public void setRequestSkillCode_NotEqual_呪狼() {
-        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.呪狼);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 狂信者 (FANATIC). And OnlyOnceRegistered. <br>
-     * 狂信者
-     */
-    public void setRequestSkillCode_NotEqual_狂信者() {
-        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.狂信者);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As 妖狐 (FOX). And OnlyOnceRegistered. <br>
      * 妖狐
      */
     public void setRequestSkillCode_NotEqual_妖狐() {
         setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.妖狐);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 導師 (GURU). And OnlyOnceRegistered. <br>
-     * 導師
-     */
-    public void setRequestSkillCode_NotEqual_導師() {
-        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.導師);
     }
 
     /**
@@ -2001,35 +1579,11 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
-     * 猫又
-     */
-    public void setRequestSkillCode_NotEqual_猫又() {
-        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.猫又);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As 占い師 (SEER). And OnlyOnceRegistered. <br>
      * 占い師
      */
     public void setRequestSkillCode_NotEqual_占い師() {
         setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.占い師);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 聖痕者 (STIGMATA). And OnlyOnceRegistered. <br>
-     * 聖痕者
-     */
-    public void setRequestSkillCode_NotEqual_聖痕者() {
-        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.聖痕者);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 共鳴者 (SYMPATHIZER). And OnlyOnceRegistered. <br>
-     * 共鳴者
-     */
-    public void setRequestSkillCode_NotEqual_共鳴者() {
-        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.共鳴者);
     }
 
     /**
@@ -2064,29 +1618,13 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
         setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.おまかせ人狼陣営);
     }
 
-    /**
-     * NotEqual(&lt;&gt;). As 賢者 (WISE). And OnlyOnceRegistered. <br>
-     * 賢者
-     */
-    public void setRequestSkillCode_NotEqual_賢者() {
-        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.賢者);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 智狼 (WISEWOLF). And OnlyOnceRegistered. <br>
-     * 智狼
-     */
-    public void setRequestSkillCode_NotEqual_智狼() {
-        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.智狼);
-    }
-
     protected void doSetRequestSkillCode_NotEqual(String requestSkillCode) {
         regRequestSkillCode(CK_NES, requestSkillCode);
     }
 
     /**
      * InScope {in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+     * REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
      * @param requestSkillCodeList The collection of requestSkillCode as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setRequestSkillCode_InScope(Collection<String> requestSkillCodeList) {
@@ -2095,7 +1633,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
 
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill} <br>
+     * REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill} <br>
      * 役職
      * @param cdefList The list of classification definition (as ENUM type). (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
@@ -2107,7 +1645,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁きを見られる <br>
-     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
+     * The group elements:[人狼]
      */
     public void setRequestSkillCode_InScope_ViewableWerewolfSay() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableWerewolfSay());
@@ -2117,7 +1655,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁き可能 <br>
-     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
+     * The group elements:[人狼]
      */
     public void setRequestSkillCode_InScope_AvailableWerewolfSay() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableWerewolfSay());
@@ -2126,28 +1664,8 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
-     * 共鳴発言を見られる <br>
-     * The group elements:[共鳴者]
-     */
-    public void setRequestSkillCode_InScope_ViewableSympathizeSay() {
-        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableSympathizeSay());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 共鳴発言可能 <br>
-     * The group elements:[共鳴者]
-     */
-    public void setRequestSkillCode_InScope_AvailableSympathizeSay() {
-        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableSympathizeSay());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
      * 襲撃対象に選べない <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setRequestSkillCode_InScope_NotSelectableAttack() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfNotSelectableAttack());
@@ -2157,7 +1675,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 占い結果が人狼になる <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setRequestSkillCode_InScope_DivineResultWolf() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfDivineResultWolf());
@@ -2167,7 +1685,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 霊能結果が人狼になる <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setRequestSkillCode_InScope_PsychicResultWolf() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfPsychicResultWolf());
@@ -2177,7 +1695,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 襲撃能力を持つ <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setRequestSkillCode_InScope_HasAttackAbility() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasAttackAbility());
@@ -2191,16 +1709,6 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setRequestSkillCode_InScope_HasDivineAbility() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasDivineAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 役職占い能力を持つ <br>
-     * The group elements:[賢者]
-     */
-    public void setRequestSkillCode_InScope_HasWiseDivineAbility() {
-        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasWiseDivineAbility());
     }
 
     /**
@@ -2226,48 +1734,8 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
-     * 役職霊能能力を持つ <br>
-     * The group elements:[導師]
-     */
-    public void setRequestSkillCode_InScope_HasGuruPsychicAbility() {
-        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasGuruPsychicAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 検死能力を持つ <br>
-     * The group elements:[検死官]
-     */
-    public void setRequestSkillCode_InScope_HasAutopsyAbility() {
-        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasAutopsyAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 襲撃役職占い能力を持つ <br>
-     * The group elements:[智狼]
-     */
-    public void setRequestSkillCode_InScope_HasWiseWolfAbility() {
-        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasWiseWolfAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * パン焼き能力を持つ <br>
-     * The group elements:[パン屋]
-     */
-    public void setRequestSkillCode_InScope_HasBakeryAbility() {
-        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasBakeryAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
      * 勝敗判定時狼にカウントする <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setRequestSkillCode_InScope_CountWolf() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfCountWolf());
@@ -2306,26 +1774,6 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
-     * 共鳴者としてお互いに認知できる <br>
-     * The group elements:[共鳴者]
-     */
-    public void setRequestSkillCode_InScope_RecognizableEachSympathizer() {
-        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableEachSympathizer());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 人狼を認知できる <br>
-     * The group elements:[狂信者]
-     */
-    public void setRequestSkillCode_InScope_RecognizableWolf() {
-        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableWolf());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
      * 襲撃耐性を持つ <br>
      * The group elements:[妖狐]
      */
@@ -2343,33 +1791,13 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfDeadByDivine());
     }
 
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 占いにより占った側が死亡する <br>
-     * The group elements:[呪狼]
-     */
-    public void setRequestSkillCode_InScope_CounterDeadByDivine() {
-        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfCounterDeadByDivine());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 死亡時道連れにする <br>
-     * The group elements:[猫又]
-     */
-    public void setRequestSkillCode_InScope_ForceDoubleSuicide() {
-        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfForceDoubleSuicide());
-    }
-
     protected void doSetRequestSkillCode_InScope(Collection<String> requestSkillCodeList) {
         regINS(CK_INS, cTL(requestSkillCodeList), xgetCValueRequestSkillCode(), "REQUEST_SKILL_CODE");
     }
 
     /**
      * NotInScope {not in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+     * REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
      * @param requestSkillCodeList The collection of requestSkillCode as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setRequestSkillCode_NotInScope(Collection<String> requestSkillCodeList) {
@@ -2378,7 +1806,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
 
     /**
      * NotInScope {not in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill} <br>
+     * REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill} <br>
      * 役職
      * @param cdefList The list of classification definition (as ENUM type). (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
@@ -2390,30 +1818,12 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
         regINS(CK_NINS, cTL(requestSkillCodeList), xgetCValueRequestSkillCode(), "REQUEST_SKILL_CODE");
     }
 
-    /**
-     * IsNull {is null}. And OnlyOnceRegistered. <br>
-     * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
-     */
-    public void setRequestSkillCode_IsNull() { regRequestSkillCode(CK_ISN, DOBJ); }
-
-    /**
-     * IsNullOrEmpty {is null or empty}. And OnlyOnceRegistered. <br>
-     * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
-     */
-    public void setRequestSkillCode_IsNullOrEmpty() { regRequestSkillCode(CK_ISNOE, DOBJ); }
-
-    /**
-     * IsNotNull {is not null}. And OnlyOnceRegistered. <br>
-     * REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
-     */
-    public void setRequestSkillCode_IsNotNull() { regRequestSkillCode(CK_ISNN, DOBJ); }
-
     protected void regRequestSkillCode(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueRequestSkillCode(), "REQUEST_SKILL_CODE"); }
     protected abstract ConditionValue xgetCValueRequestSkillCode();
 
     /**
      * Equal(=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+     * SECOND_REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
      * @param secondRequestSkillCode The value of secondRequestSkillCode as equal. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setSecondRequestSkillCode_Equal(String secondRequestSkillCode) {
@@ -2422,7 +1832,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). As Skill. And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill} <br>
+     * SECOND_REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill} <br>
      * 役職
      * @param cdef The instance of classification definition (as ENUM type). (basically NotNull: error as default, or no condition as option)
      */
@@ -2431,59 +1841,11 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As パン屋 (BAKERY). And OnlyOnceRegistered. <br>
-     * パン屋
-     */
-    public void setSecondRequestSkillCode_Equal_パン屋() {
-        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.パン屋);
-    }
-
-    /**
-     * Equal(=). As C国狂人 (CMADMAN). And OnlyOnceRegistered. <br>
-     * C国狂人
-     */
-    public void setSecondRequestSkillCode_Equal_C国狂人() {
-        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.C国狂人);
-    }
-
-    /**
-     * Equal(=). As 検死官 (CORONER). And OnlyOnceRegistered. <br>
-     * 検死官
-     */
-    public void setSecondRequestSkillCode_Equal_検死官() {
-        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.検死官);
-    }
-
-    /**
-     * Equal(=). As 呪狼 (CURSEWOLF). And OnlyOnceRegistered. <br>
-     * 呪狼
-     */
-    public void setSecondRequestSkillCode_Equal_呪狼() {
-        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.呪狼);
-    }
-
-    /**
-     * Equal(=). As 狂信者 (FANATIC). And OnlyOnceRegistered. <br>
-     * 狂信者
-     */
-    public void setSecondRequestSkillCode_Equal_狂信者() {
-        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.狂信者);
-    }
-
-    /**
      * Equal(=). As 妖狐 (FOX). And OnlyOnceRegistered. <br>
      * 妖狐
      */
     public void setSecondRequestSkillCode_Equal_妖狐() {
         setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.妖狐);
-    }
-
-    /**
-     * Equal(=). As 導師 (GURU). And OnlyOnceRegistered. <br>
-     * 導師
-     */
-    public void setSecondRequestSkillCode_Equal_導師() {
-        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.導師);
     }
 
     /**
@@ -2527,35 +1889,11 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
-     * 猫又
-     */
-    public void setSecondRequestSkillCode_Equal_猫又() {
-        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.猫又);
-    }
-
-    /**
      * Equal(=). As 占い師 (SEER). And OnlyOnceRegistered. <br>
      * 占い師
      */
     public void setSecondRequestSkillCode_Equal_占い師() {
         setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.占い師);
-    }
-
-    /**
-     * Equal(=). As 聖痕者 (STIGMATA). And OnlyOnceRegistered. <br>
-     * 聖痕者
-     */
-    public void setSecondRequestSkillCode_Equal_聖痕者() {
-        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.聖痕者);
-    }
-
-    /**
-     * Equal(=). As 共鳴者 (SYMPATHIZER). And OnlyOnceRegistered. <br>
-     * 共鳴者
-     */
-    public void setSecondRequestSkillCode_Equal_共鳴者() {
-        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.共鳴者);
     }
 
     /**
@@ -2590,29 +1928,13 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
         setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.おまかせ人狼陣営);
     }
 
-    /**
-     * Equal(=). As 賢者 (WISE). And OnlyOnceRegistered. <br>
-     * 賢者
-     */
-    public void setSecondRequestSkillCode_Equal_賢者() {
-        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.賢者);
-    }
-
-    /**
-     * Equal(=). As 智狼 (WISEWOLF). And OnlyOnceRegistered. <br>
-     * 智狼
-     */
-    public void setSecondRequestSkillCode_Equal_智狼() {
-        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.智狼);
-    }
-
     protected void doSetSecondRequestSkillCode_Equal(String secondRequestSkillCode) {
         regSecondRequestSkillCode(CK_EQ, secondRequestSkillCode);
     }
 
     /**
      * NotEqual(&lt;&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+     * SECOND_REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
      * @param secondRequestSkillCode The value of secondRequestSkillCode as notEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setSecondRequestSkillCode_NotEqual(String secondRequestSkillCode) {
@@ -2621,7 +1943,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
 
     /**
      * NotEqual(&lt;&gt;). As Skill. And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill} <br>
+     * SECOND_REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill} <br>
      * 役職
      * @param cdef The instance of classification definition (as ENUM type). (basically NotNull: error as default, or no condition as option)
      */
@@ -2630,59 +1952,11 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As パン屋 (BAKERY). And OnlyOnceRegistered. <br>
-     * パン屋
-     */
-    public void setSecondRequestSkillCode_NotEqual_パン屋() {
-        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.パン屋);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As C国狂人 (CMADMAN). And OnlyOnceRegistered. <br>
-     * C国狂人
-     */
-    public void setSecondRequestSkillCode_NotEqual_C国狂人() {
-        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.C国狂人);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 検死官 (CORONER). And OnlyOnceRegistered. <br>
-     * 検死官
-     */
-    public void setSecondRequestSkillCode_NotEqual_検死官() {
-        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.検死官);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 呪狼 (CURSEWOLF). And OnlyOnceRegistered. <br>
-     * 呪狼
-     */
-    public void setSecondRequestSkillCode_NotEqual_呪狼() {
-        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.呪狼);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 狂信者 (FANATIC). And OnlyOnceRegistered. <br>
-     * 狂信者
-     */
-    public void setSecondRequestSkillCode_NotEqual_狂信者() {
-        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.狂信者);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As 妖狐 (FOX). And OnlyOnceRegistered. <br>
      * 妖狐
      */
     public void setSecondRequestSkillCode_NotEqual_妖狐() {
         setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.妖狐);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 導師 (GURU). And OnlyOnceRegistered. <br>
-     * 導師
-     */
-    public void setSecondRequestSkillCode_NotEqual_導師() {
-        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.導師);
     }
 
     /**
@@ -2726,35 +2000,11 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
-     * 猫又
-     */
-    public void setSecondRequestSkillCode_NotEqual_猫又() {
-        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.猫又);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As 占い師 (SEER). And OnlyOnceRegistered. <br>
      * 占い師
      */
     public void setSecondRequestSkillCode_NotEqual_占い師() {
         setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.占い師);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 聖痕者 (STIGMATA). And OnlyOnceRegistered. <br>
-     * 聖痕者
-     */
-    public void setSecondRequestSkillCode_NotEqual_聖痕者() {
-        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.聖痕者);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 共鳴者 (SYMPATHIZER). And OnlyOnceRegistered. <br>
-     * 共鳴者
-     */
-    public void setSecondRequestSkillCode_NotEqual_共鳴者() {
-        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.共鳴者);
     }
 
     /**
@@ -2789,29 +2039,13 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
         setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.おまかせ人狼陣営);
     }
 
-    /**
-     * NotEqual(&lt;&gt;). As 賢者 (WISE). And OnlyOnceRegistered. <br>
-     * 賢者
-     */
-    public void setSecondRequestSkillCode_NotEqual_賢者() {
-        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.賢者);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 智狼 (WISEWOLF). And OnlyOnceRegistered. <br>
-     * 智狼
-     */
-    public void setSecondRequestSkillCode_NotEqual_智狼() {
-        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.智狼);
-    }
-
     protected void doSetSecondRequestSkillCode_NotEqual(String secondRequestSkillCode) {
         regSecondRequestSkillCode(CK_NES, secondRequestSkillCode);
     }
 
     /**
      * InScope {in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+     * SECOND_REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
      * @param secondRequestSkillCodeList The collection of secondRequestSkillCode as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setSecondRequestSkillCode_InScope(Collection<String> secondRequestSkillCodeList) {
@@ -2820,7 +2054,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
 
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill} <br>
+     * SECOND_REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill} <br>
      * 役職
      * @param cdefList The list of classification definition (as ENUM type). (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
@@ -2832,7 +2066,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁きを見られる <br>
-     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
+     * The group elements:[人狼]
      */
     public void setSecondRequestSkillCode_InScope_ViewableWerewolfSay() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableWerewolfSay());
@@ -2842,7 +2076,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁き可能 <br>
-     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
+     * The group elements:[人狼]
      */
     public void setSecondRequestSkillCode_InScope_AvailableWerewolfSay() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableWerewolfSay());
@@ -2851,28 +2085,8 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
-     * 共鳴発言を見られる <br>
-     * The group elements:[共鳴者]
-     */
-    public void setSecondRequestSkillCode_InScope_ViewableSympathizeSay() {
-        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableSympathizeSay());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 共鳴発言可能 <br>
-     * The group elements:[共鳴者]
-     */
-    public void setSecondRequestSkillCode_InScope_AvailableSympathizeSay() {
-        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableSympathizeSay());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
      * 襲撃対象に選べない <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setSecondRequestSkillCode_InScope_NotSelectableAttack() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfNotSelectableAttack());
@@ -2882,7 +2096,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 占い結果が人狼になる <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setSecondRequestSkillCode_InScope_DivineResultWolf() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfDivineResultWolf());
@@ -2892,7 +2106,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 霊能結果が人狼になる <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setSecondRequestSkillCode_InScope_PsychicResultWolf() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfPsychicResultWolf());
@@ -2902,7 +2116,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 襲撃能力を持つ <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setSecondRequestSkillCode_InScope_HasAttackAbility() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasAttackAbility());
@@ -2916,16 +2130,6 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSecondRequestSkillCode_InScope_HasDivineAbility() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasDivineAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 役職占い能力を持つ <br>
-     * The group elements:[賢者]
-     */
-    public void setSecondRequestSkillCode_InScope_HasWiseDivineAbility() {
-        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasWiseDivineAbility());
     }
 
     /**
@@ -2951,48 +2155,8 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
-     * 役職霊能能力を持つ <br>
-     * The group elements:[導師]
-     */
-    public void setSecondRequestSkillCode_InScope_HasGuruPsychicAbility() {
-        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasGuruPsychicAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 検死能力を持つ <br>
-     * The group elements:[検死官]
-     */
-    public void setSecondRequestSkillCode_InScope_HasAutopsyAbility() {
-        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasAutopsyAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 襲撃役職占い能力を持つ <br>
-     * The group elements:[智狼]
-     */
-    public void setSecondRequestSkillCode_InScope_HasWiseWolfAbility() {
-        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasWiseWolfAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * パン焼き能力を持つ <br>
-     * The group elements:[パン屋]
-     */
-    public void setSecondRequestSkillCode_InScope_HasBakeryAbility() {
-        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasBakeryAbility());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
      * 勝敗判定時狼にカウントする <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼]
      */
     public void setSecondRequestSkillCode_InScope_CountWolf() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfCountWolf());
@@ -3031,26 +2195,6 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
-     * 共鳴者としてお互いに認知できる <br>
-     * The group elements:[共鳴者]
-     */
-    public void setSecondRequestSkillCode_InScope_RecognizableEachSympathizer() {
-        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableEachSympathizer());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 人狼を認知できる <br>
-     * The group elements:[狂信者]
-     */
-    public void setSecondRequestSkillCode_InScope_RecognizableWolf() {
-        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableWolf());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
      * 襲撃耐性を持つ <br>
      * The group elements:[妖狐]
      */
@@ -3068,33 +2212,13 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfDeadByDivine());
     }
 
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 占いにより占った側が死亡する <br>
-     * The group elements:[呪狼]
-     */
-    public void setSecondRequestSkillCode_InScope_CounterDeadByDivine() {
-        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfCounterDeadByDivine());
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * 役職 <br>
-     * 死亡時道連れにする <br>
-     * The group elements:[猫又]
-     */
-    public void setSecondRequestSkillCode_InScope_ForceDoubleSuicide() {
-        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfForceDoubleSuicide());
-    }
-
     protected void doSetSecondRequestSkillCode_InScope(Collection<String> secondRequestSkillCodeList) {
         regINS(CK_INS, cTL(secondRequestSkillCodeList), xgetCValueSecondRequestSkillCode(), "SECOND_REQUEST_SKILL_CODE");
     }
 
     /**
      * NotInScope {not in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
+     * SECOND_REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill}
      * @param secondRequestSkillCodeList The collection of secondRequestSkillCode as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setSecondRequestSkillCode_NotInScope(Collection<String> secondRequestSkillCodeList) {
@@ -3103,7 +2227,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
 
     /**
      * NotInScope {not in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill} <br>
+     * SECOND_REQUEST_SKILL_CODE: {IX, NotNull, VARCHAR(20), FK to skill, classification=Skill} <br>
      * 役職
      * @param cdefList The list of classification definition (as ENUM type). (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
@@ -3114,24 +2238,6 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     protected void doSetSecondRequestSkillCode_NotInScope(Collection<String> secondRequestSkillCodeList) {
         regINS(CK_NINS, cTL(secondRequestSkillCodeList), xgetCValueSecondRequestSkillCode(), "SECOND_REQUEST_SKILL_CODE");
     }
-
-    /**
-     * IsNull {is null}. And OnlyOnceRegistered. <br>
-     * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
-     */
-    public void setSecondRequestSkillCode_IsNull() { regSecondRequestSkillCode(CK_ISN, DOBJ); }
-
-    /**
-     * IsNullOrEmpty {is null or empty}. And OnlyOnceRegistered. <br>
-     * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
-     */
-    public void setSecondRequestSkillCode_IsNullOrEmpty() { regSecondRequestSkillCode(CK_ISNOE, DOBJ); }
-
-    /**
-     * IsNotNull {is not null}. And OnlyOnceRegistered. <br>
-     * SECOND_REQUEST_SKILL_CODE: {IX, VARCHAR(20), FK to skill, classification=Skill}
-     */
-    public void setSecondRequestSkillCode_IsNotNull() { regSecondRequestSkillCode(CK_ISNN, DOBJ); }
 
     protected void regSecondRequestSkillCode(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueSecondRequestSkillCode(), "SECOND_REQUEST_SKILL_CODE"); }
     protected abstract ConditionValue xgetCValueSecondRequestSkillCode();
@@ -3147,18 +2253,6 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
 
     protected void regIsDead(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueIsDead(), "IS_DEAD"); }
     protected abstract ConditionValue xgetCValueIsDead();
-
-    /**
-     * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
-     * IS_SPECTATOR: {NotNull, BIT}
-     * @param isSpectator The value of isSpectator as equal. (basically NotNull: error as default, or no condition as option)
-     */
-    public void setIsSpectator_Equal(Boolean isSpectator) {
-        regIsSpectator(CK_EQ, isSpectator);
-    }
-
-    protected void regIsSpectator(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueIsSpectator(), "IS_SPECTATOR"); }
-    protected abstract ConditionValue xgetCValueIsSpectator();
 
     /**
      * Equal(=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
@@ -3497,6 +2591,179 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
 
     protected void regIsGone(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueIsGone(), "IS_GONE"); }
     protected abstract ConditionValue xgetCValueIsGone();
+
+    /**
+     * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
+     * DONE_ROLLCALL: {NotNull, BIT}
+     * @param doneRollcall The value of doneRollcall as equal. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setDoneRollcall_Equal(Boolean doneRollcall) {
+        regDoneRollcall(CK_EQ, doneRollcall);
+    }
+
+    protected void regDoneRollcall(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueDoneRollcall(), "DONE_ROLLCALL"); }
+    protected abstract ConditionValue xgetCValueDoneRollcall();
+
+    /**
+     * Equal(=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
+     * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose}
+     * @param winloseCode The value of winloseCode as equal. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    protected void setWinloseCode_Equal(String winloseCode) {
+        doSetWinloseCode_Equal(fRES(winloseCode));
+    }
+
+    /**
+     * Equal(=). As WinLose. And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
+     * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose} <br>
+     * 勝敗
+     * @param cdef The instance of classification definition (as ENUM type). (basically NotNull: error as default, or no condition as option)
+     */
+    public void setWinloseCode_Equal_AsWinLose(CDef.WinLose cdef) {
+        doSetWinloseCode_Equal(cdef != null ? cdef.code() : null);
+    }
+
+    /**
+     * Equal(=). As 引分 (DRAW). And OnlyOnceRegistered. <br>
+     * 引分
+     */
+    public void setWinloseCode_Equal_引分() {
+        setWinloseCode_Equal_AsWinLose(CDef.WinLose.引分);
+    }
+
+    /**
+     * Equal(=). As 敗北 (LOSE). And OnlyOnceRegistered. <br>
+     * 敗北
+     */
+    public void setWinloseCode_Equal_敗北() {
+        setWinloseCode_Equal_AsWinLose(CDef.WinLose.敗北);
+    }
+
+    /**
+     * Equal(=). As 勝利 (WIN). And OnlyOnceRegistered. <br>
+     * 勝利
+     */
+    public void setWinloseCode_Equal_勝利() {
+        setWinloseCode_Equal_AsWinLose(CDef.WinLose.勝利);
+    }
+
+    protected void doSetWinloseCode_Equal(String winloseCode) {
+        regWinloseCode(CK_EQ, winloseCode);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
+     * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose}
+     * @param winloseCode The value of winloseCode as notEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    protected void setWinloseCode_NotEqual(String winloseCode) {
+        doSetWinloseCode_NotEqual(fRES(winloseCode));
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As WinLose. And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
+     * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose} <br>
+     * 勝敗
+     * @param cdef The instance of classification definition (as ENUM type). (basically NotNull: error as default, or no condition as option)
+     */
+    public void setWinloseCode_NotEqual_AsWinLose(CDef.WinLose cdef) {
+        doSetWinloseCode_NotEqual(cdef != null ? cdef.code() : null);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 引分 (DRAW). And OnlyOnceRegistered. <br>
+     * 引分
+     */
+    public void setWinloseCode_NotEqual_引分() {
+        setWinloseCode_NotEqual_AsWinLose(CDef.WinLose.引分);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 敗北 (LOSE). And OnlyOnceRegistered. <br>
+     * 敗北
+     */
+    public void setWinloseCode_NotEqual_敗北() {
+        setWinloseCode_NotEqual_AsWinLose(CDef.WinLose.敗北);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 勝利 (WIN). And OnlyOnceRegistered. <br>
+     * 勝利
+     */
+    public void setWinloseCode_NotEqual_勝利() {
+        setWinloseCode_NotEqual_AsWinLose(CDef.WinLose.勝利);
+    }
+
+    protected void doSetWinloseCode_NotEqual(String winloseCode) {
+        regWinloseCode(CK_NES, winloseCode);
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose}
+     * @param winloseCodeList The collection of winloseCode as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    protected void setWinloseCode_InScope(Collection<String> winloseCodeList) {
+        doSetWinloseCode_InScope(winloseCodeList);
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As WinLose. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose} <br>
+     * 勝敗
+     * @param cdefList The list of classification definition (as ENUM type). (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setWinloseCode_InScope_AsWinLose(Collection<CDef.WinLose> cdefList) {
+        doSetWinloseCode_InScope(cTStrL(cdefList));
+    }
+
+    protected void doSetWinloseCode_InScope(Collection<String> winloseCodeList) {
+        regINS(CK_INS, cTL(winloseCodeList), xgetCValueWinloseCode(), "WINLOSE_CODE");
+    }
+
+    /**
+     * NotInScope {not in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose}
+     * @param winloseCodeList The collection of winloseCode as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    protected void setWinloseCode_NotInScope(Collection<String> winloseCodeList) {
+        doSetWinloseCode_NotInScope(winloseCodeList);
+    }
+
+    /**
+     * NotInScope {not in ('a', 'b')}. As WinLose. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose} <br>
+     * 勝敗
+     * @param cdefList The list of classification definition (as ENUM type). (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setWinloseCode_NotInScope_AsWinLose(Collection<CDef.WinLose> cdefList) {
+        doSetWinloseCode_NotInScope(cTStrL(cdefList));
+    }
+
+    protected void doSetWinloseCode_NotInScope(Collection<String> winloseCodeList) {
+        regINS(CK_NINS, cTL(winloseCodeList), xgetCValueWinloseCode(), "WINLOSE_CODE");
+    }
+
+    /**
+     * IsNull {is null}. And OnlyOnceRegistered. <br>
+     * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose}
+     */
+    public void setWinloseCode_IsNull() { regWinloseCode(CK_ISN, DOBJ); }
+
+    /**
+     * IsNullOrEmpty {is null or empty}. And OnlyOnceRegistered. <br>
+     * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose}
+     */
+    public void setWinloseCode_IsNullOrEmpty() { regWinloseCode(CK_ISNOE, DOBJ); }
+
+    /**
+     * IsNotNull {is not null}. And OnlyOnceRegistered. <br>
+     * WINLOSE_CODE: {IX, VARCHAR(20), FK to winlose, classification=WinLose}
+     */
+    public void setWinloseCode_IsNotNull() { regWinloseCode(CK_ISNN, DOBJ); }
+
+    protected void regWinloseCode(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueWinloseCode(), "WINLOSE_CODE"); }
+    protected abstract ConditionValue xgetCValueWinloseCode();
 
     /**
      * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>

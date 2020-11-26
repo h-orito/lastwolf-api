@@ -1,6 +1,5 @@
 package com.ort.lastwolf.domain.model.village
 
-import com.ort.lastwolf.domain.model.message.MessageType
 import java.time.LocalDateTime
 
 data class VillageCreateResource(
@@ -18,7 +17,9 @@ data class VillageSettingCreateResource(
 
 data class VillageTimeCreateResource(
     val startDatetime: LocalDateTime,
-    val silentHours: Int?
+    val noonSeconds: Int,
+    val voteSeconds: Int,
+    val nightSeconds: Int
 )
 
 data class VillageOrganizationCreateResource(
@@ -31,20 +32,11 @@ data class VillageCharachipCreateResource(
 )
 
 data class VillageRuleCreateResource(
-    val isOpenVote: Boolean,
     val isAvailableSkillRequest: Boolean,
-    val isAvailableSpectate: Boolean,
     val isOpenSkillInGrave: Boolean,
     val isVisibleGraveMessage: Boolean,
     val isAvailableSuddenlyDeath: Boolean,
     val isAvailableCommit: Boolean,
     val isAvailableDummySkill: Boolean,
-    val restrictList: List<VillageMessageRestrictCreateResource>,
     val joinPassword: String?
-)
-
-data class VillageMessageRestrictCreateResource(
-    val type: MessageType,
-    val count: Int,
-    val length: Int
 )

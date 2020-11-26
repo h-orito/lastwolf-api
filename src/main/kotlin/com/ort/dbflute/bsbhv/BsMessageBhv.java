@@ -25,16 +25,16 @@ import com.ort.dbflute.cbean.*;
  * The behavior of MESSAGE as TABLE. <br>
  * <pre>
  * [primary key]
- *     VILLAGE_ID, MESSAGE_NUMBER, MESSAGE_TYPE_CODE
+ *     MESSAGE_ID, VILLAGE_ID
  *
  * [column]
- *     VILLAGE_ID, MESSAGE_NUMBER, MESSAGE_TYPE_CODE, MESSAGE_UNIXTIMESTAMP_MILLI, VILLAGE_DAY_ID, VILLAGE_PLAYER_ID, TO_VILLAGE_PLAYER_ID, PLAYER_ID, MESSAGE_CONTENT, MESSAGE_DATETIME, MESSAGE_COUNT, IS_CONVERT_DISABLE, FACE_TYPE_CODE, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
+ *     MESSAGE_ID, VILLAGE_ID, MESSAGE_TYPE_CODE, VILLAGE_DAY_ID, VILLAGE_PLAYER_ID, MESSAGE_CONTENT, MESSAGE_DATETIME, MESSAGE_UNIXTIMESTAMP_MILLI, IS_STRONG, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
  *
  * [sequence]
  *     
  *
  * [identity]
- *     
+ *     MESSAGE_ID
  *
  * [version-no]
  *     
@@ -159,33 +159,32 @@ public abstract class BsMessageBhv extends AbstractBehaviorWritable<Message, Mes
 
     /**
      * Select the entity by the primary-key value.
-     * @param villageId : PK, NotNull, INT UNSIGNED(10). (NotNull)
-     * @param messageNumber : PK, NotNull, INT UNSIGNED(10). (NotNull)
-     * @param messageTypeCode : PK, IX, NotNull, VARCHAR(20). (NotNull)
+     * @param messageId : PK, ID, NotNull, BIGINT(19). (NotNull)
+     * @param villageId : PK, IX, NotNull, INT UNSIGNED(10). (NotNull)
      * @return The optional entity selected by the PK. (NotNull: if no data, empty entity)
      * @throws EntityAlreadyDeletedException When get(), required() of return value is called and the value is null, which means entity has already been deleted (not found).
      * @throws EntityDuplicatedException When the entity has been duplicated.
      * @throws SelectEntityConditionNotFoundException When the condition for selecting an entity is not found.
      */
-    public OptionalEntity<Message> selectByPK(Integer villageId, Integer messageNumber, String messageTypeCode) {
-        return facadeSelectByPK(villageId, messageNumber, messageTypeCode);
+    public OptionalEntity<Message> selectByPK(Long messageId, Integer villageId) {
+        return facadeSelectByPK(messageId, villageId);
     }
 
-    protected OptionalEntity<Message> facadeSelectByPK(Integer villageId, Integer messageNumber, String messageTypeCode) {
-        return doSelectOptionalByPK(villageId, messageNumber, messageTypeCode, typeOfSelectedEntity());
+    protected OptionalEntity<Message> facadeSelectByPK(Long messageId, Integer villageId) {
+        return doSelectOptionalByPK(messageId, villageId, typeOfSelectedEntity());
     }
 
-    protected <ENTITY extends Message> ENTITY doSelectByPK(Integer villageId, Integer messageNumber, String messageTypeCode, Class<? extends ENTITY> tp) {
-        return doSelectEntity(xprepareCBAsPK(villageId, messageNumber, messageTypeCode), tp);
+    protected <ENTITY extends Message> ENTITY doSelectByPK(Long messageId, Integer villageId, Class<? extends ENTITY> tp) {
+        return doSelectEntity(xprepareCBAsPK(messageId, villageId), tp);
     }
 
-    protected <ENTITY extends Message> OptionalEntity<ENTITY> doSelectOptionalByPK(Integer villageId, Integer messageNumber, String messageTypeCode, Class<? extends ENTITY> tp) {
-        return createOptionalEntity(doSelectByPK(villageId, messageNumber, messageTypeCode, tp), villageId, messageNumber, messageTypeCode);
+    protected <ENTITY extends Message> OptionalEntity<ENTITY> doSelectOptionalByPK(Long messageId, Integer villageId, Class<? extends ENTITY> tp) {
+        return createOptionalEntity(doSelectByPK(messageId, villageId, tp), messageId, villageId);
     }
 
-    protected MessageCB xprepareCBAsPK(Integer villageId, Integer messageNumber, String messageTypeCode) {
-        assertObjectNotNull("villageId", villageId);assertObjectNotNull("messageNumber", messageNumber);assertObjectNotNull("messageTypeCode", messageTypeCode);
-        return newConditionBean().acceptPK(villageId, messageNumber, messageTypeCode);
+    protected MessageCB xprepareCBAsPK(Long messageId, Integer villageId) {
+        assertObjectNotNull("messageId", messageId);assertObjectNotNull("villageId", villageId);
+        return newConditionBean().acceptPK(messageId, villageId);
     }
 
     // ===================================================================================

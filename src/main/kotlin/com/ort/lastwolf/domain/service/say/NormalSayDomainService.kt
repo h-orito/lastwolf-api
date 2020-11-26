@@ -1,6 +1,5 @@
 package com.ort.lastwolf.domain.service.say
 
-import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 import com.ort.lastwolf.fw.exception.LastwolfBusinessException
@@ -15,7 +14,7 @@ class NormalSayDomainService {
 
     fun isSayable(village: Village, participant: VillageParticipant): Boolean {
         // 参加者として可能か
-        if (!participant.isSayableNormalSay(village.status.toCdef() == CDef.VillageStatus.エピローグ)) return false
+        if (!participant.isSayableNormalSay(village.status.isSettled())) return false
         // 村として可能か
         return village.isSayableNormalSay()
     }

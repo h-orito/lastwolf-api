@@ -2,13 +2,9 @@ package com.ort.lastwolf.domain.service.say
 
 import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.domain.model.charachip.Chara
-import com.ort.lastwolf.domain.model.charachip.CharaFace
-import com.ort.lastwolf.domain.model.charachip.Charas
 import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.message.MessageContent
 import com.ort.lastwolf.domain.model.message.MessageType
-import com.ort.lastwolf.domain.model.myself.participant.VillageSayMessageTypeSituation
-import com.ort.lastwolf.domain.model.myself.participant.VillageSayRestrictSituation
 import com.ort.lastwolf.domain.model.myself.participant.VillageSaySituation
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
@@ -21,33 +17,26 @@ class SayDomainService(
     private val normalSayDomainService: NormalSayDomainService,
     private val graveSayDomainService: GraveSayDomainService,
     private val monologueSayDomainService: MonologueSayDomainService,
-    private val spectateSayDomainService: SpectateSayDomainService,
-    private val werewolfSayDomainService: WerewolfSayDomainService,
-    private val sympathizeSayDomainService: SympathizeSayDomainService
+    private val werewolfSayDomainService: WerewolfSayDomainService
 ) {
 
     private val defaultMessageTypeOrder = listOf(
         CDef.MessageType.人狼の囁き,
-        CDef.MessageType.共鳴発言,
         CDef.MessageType.通常発言,
         CDef.MessageType.死者の呻き,
-        CDef.MessageType.見学発言,
         CDef.MessageType.独り言
     )
 
     fun convertToSituation(
         village: Village,
-        participant: VillageParticipant?,
-        charas: Charas,
-        latestDayMessageList: List<Message>
+        participant: VillageParticipant?
     ): VillageSaySituation {
         return VillageSaySituation(
             isAvailableSay = isAvailableSay(village, participant),
-            selectableMessageTypeList = getSelectableMessageTypeList(village, participant, latestDayMessageList),
-            selectableFaceTypeList = getSelectableFaceTypeList(participant, charas),
+            selectableMessageTypeList = getSelectableMessageTypeList(village, participant),
             defaultMessageType = detectDefaultMessageType(
                 isAvailableSay(village, participant),
-                getSelectableMessageTypeList(village, participant, latestDayMessageList)
+                getSelectableMessageTypeList(village, participant)
             )
         )
     }
@@ -65,16 +54,12 @@ class SayDomainService(
         when (messageContent.type.toCdef()) {
             CDef.MessageType.通常発言 -> normalSayDomainService.assertSay(village, participant!!)
             CDef.MessageType.人狼の囁き -> werewolfSayDomainService.assertSay(village, participant!!)
-            CDef.MessageType.共鳴発言 -> sympathizeSayDomainService.assertSay(village, participant!!)
             CDef.MessageType.死者の呻き -> graveSayDomainService.assertSay(village, participant!!)
             CDef.MessageType.独り言 -> monologueSayDomainService.assertSay(village, participant!!)
-            CDef.MessageType.見学発言 -> spectateSayDomainService.assertSay(village, participant!!)
             else -> throw LastwolfBadRequestException("不正な発言種別です")
         }
-        // 表情種別チェック
-        if (!isSelectableFaceType(chara!!, messageContent)) throw LastwolfBadRequestException("不正な表情種別です")
         // 発言回数、長さ、行数チェック
-        village.assertMessageRestrict(messageContent, latestDayMessageList)
+        messageContent.assertMessageLength()
     }
 
     fun assertCreatorSay(
@@ -84,7 +69,7 @@ class SayDomainService(
         // 事前チェック
         if (!village.isAvailableSay()) throw LastwolfBusinessException("発言できません")
         // 長さ、行数チェック
-        messageContent.assertMessageLength(200)
+        messageContent.assertMessageLength()
     }
 
     fun assertParticipateSay(
@@ -94,22 +79,17 @@ class SayDomainService(
     ) {
         // 事前チェック
         if (!village.isAvailableSay()) throw LastwolfBusinessException("入村発言できません")
-        // 表情種別チェック
-        if (!isSelectableFaceType(chara!!, messageContent)) throw LastwolfBadRequestException("不正な表情種別です")
         // 発言長さ、行数チェック
-        village.assertMessageRestrict(messageContent, listOf())
+        messageContent.assertMessageLength()
     }
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun isSelectableFaceType(chara: Chara, messageContent: MessageContent): Boolean =
-        chara.faceList.any { it.type == messageContent.faceCode }
-
     private fun isAvailableSay(village: Village, participant: VillageParticipant?): Boolean {
         // 参加者として可能か
         participant ?: return false
-        if (!participant.isAvailableSay(village.status.toCdef() == CDef.VillageStatus.エピローグ)) return false
+        if (!participant.isAvailableSay(village.status.isSettled())) return false
         // 村として可能か
         if (!village.isAvailableSay()) return false
         return true
@@ -117,100 +97,34 @@ class SayDomainService(
 
     private fun getSelectableMessageTypeList(
         village: Village,
-        participant: VillageParticipant?,
-        latestDayMessageList: List<Message>
-    ): List<VillageSayMessageTypeSituation> {
+        participant: VillageParticipant?
+    ): List<MessageType> {
         if (!isAvailableSay(village, participant)) return listOf()
 
-        val list: MutableList<VillageSayMessageTypeSituation> = mutableListOf()
+        val list: MutableList<MessageType> = mutableListOf()
 
         if (normalSayDomainService.isSayable(village, participant!!)) list.add(
-            convertToMessageTypeSituation(
-                village,
-                latestDayMessageList,
-                CDef.MessageType.通常発言
-            )
+            MessageType(CDef.MessageType.通常発言)
         )
         if (werewolfSayDomainService.isSayable(village, participant)) list.add(
-            convertToMessageTypeSituation(
-                village,
-                latestDayMessageList,
-                CDef.MessageType.人狼の囁き
-            )
-        )
-        if (sympathizeSayDomainService.isSayable(village, participant)) list.add(
-            convertToMessageTypeSituation(
-                village,
-                latestDayMessageList,
-                CDef.MessageType.共鳴発言
-            )
+            MessageType(CDef.MessageType.人狼の囁き)
         )
         if (graveSayDomainService.isSayable(village, participant)) list.add(
-            convertToMessageTypeSituation(
-                village,
-                latestDayMessageList,
-                CDef.MessageType.死者の呻き
-            )
+            MessageType(CDef.MessageType.死者の呻き)
         )
         if (monologueSayDomainService.isSayable(village, participant)) list.add(
-            convertToMessageTypeSituation(
-                village,
-                latestDayMessageList,
-                CDef.MessageType.独り言
-            )
-        )
-        if (spectateSayDomainService.isSayable(village, participant)) list.add(
-            convertToMessageTypeSituation(
-                village,
-                latestDayMessageList,
-                CDef.MessageType.見学発言
-            )
+            MessageType(CDef.MessageType.独り言)
         )
 
         return list
     }
 
-    private fun convertToMessageTypeSituation(
-        village: Village,
-        latestDayMessageList: List<Message>,
-        messageType: CDef.MessageType
-    ): VillageSayMessageTypeSituation {
-        return VillageSayMessageTypeSituation(
-            messageType = MessageType(messageType),
-            restrict = convertToRestrictSituation(village, latestDayMessageList, messageType),
-            targetList = listOf() // todo
-        )
-    }
-
-    private fun convertToRestrictSituation(
-        village: Village,
-        latestDayMessageList: List<Message>,
-        messageType: CDef.MessageType
-    ): VillageSayRestrictSituation {
-        val restrict = village.setting.rules.messageRestrict.restrict(messageType)
-        return VillageSayRestrictSituation(
-            isRestricted = restrict != null,
-            maxCount = restrict?.count,
-            remainingCount = restrict?.remainingCount(
-                village.status.toCdef(),
-                latestDayMessageList
-            ),
-            maxLength = restrict?.length ?: MessageContent.defaultLengthMax,
-            maxLine = restrict?.line ?: MessageContent.lineMax
-        )
-    }
-
-    private fun getSelectableFaceTypeList(participant: VillageParticipant?, charas: Charas): List<CharaFace> {
-        if (participant == null) return listOf()
-        return charas.chara(participant.charaId).faceList
-    }
-
     private fun detectDefaultMessageType(
         availableSay: Boolean,
-        selectableMessageTypeList: List<VillageSayMessageTypeSituation>
+        selectableMessageTypeList: List<MessageType>
     ): MessageType? {
         if (!availableSay || selectableMessageTypeList.isEmpty()) return null
-        val selectableMessageTypeCdefList = selectableMessageTypeList.map { it.messageType.toCdef() }
+        val selectableMessageTypeCdefList = selectableMessageTypeList.map { it.toCdef() }
 
         defaultMessageTypeOrder.forEach { cdefMessageType ->
             if (selectableMessageTypeCdefList.contains(cdefMessageType)) return MessageType(cdefMessageType)
