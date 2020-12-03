@@ -1,8 +1,6 @@
 package com.ort.lastwolf.api.view.message
 
-import com.ort.lastwolf.domain.model.charachip.Charas
 import com.ort.lastwolf.domain.model.message.Messages
-import com.ort.lastwolf.domain.model.player.Players
 import com.ort.lastwolf.domain.model.village.Village
 
 data class MessagesView(
@@ -11,22 +9,16 @@ data class MessagesView(
     val allPageCount: Int?,
     val isExistPrePage: Boolean?,
     val isExistNextPage: Boolean?,
-    val currentPageNum: Int?,
-    val todayMessageCountMap: Map<Int, Int>
+    val currentPageNum: Int?
 ) {
     constructor(
         messages: Messages,
-        village: Village,
-        players: Players,
-        charas: Charas,
-        todayMessages: Messages
+        village: Village
     ) : this(
         list = messages.list.map {
             MessageView(
                 message = it,
                 village = village,
-                players = players,
-                charas = charas,
                 shouldHidePlayer = !village.status.isSolved()
             )
         },
@@ -34,16 +26,7 @@ data class MessagesView(
         allPageCount = messages.allPageCount,
         isExistPrePage = messages.isExistPrePage,
         isExistNextPage = messages.isExistNextPage,
-        currentPageNum = messages.currentPageNum,
-        todayMessageCountMap = convertToMessageCountMap(village, todayMessages)
+        currentPageNum = messages.currentPageNum
     )
-
-    companion object {
-        private fun convertToMessageCountMap(village: Village, todayMessages: Messages): Map<Int, Int> {
-            return village.participant.memberList.map { member ->
-                member.id to todayMessages.list.count { it.fromVillageParticipantId == member.id }
-            }.toMap()
-        }
-    }
 }
 

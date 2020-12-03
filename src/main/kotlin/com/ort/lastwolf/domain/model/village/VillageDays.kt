@@ -3,7 +3,7 @@ package com.ort.lastwolf.domain.model.village
 import com.ort.dbflute.allcommon.CDef
 
 data class VillageDays(
-    val dayList: List<VillageDay>
+    val list: List<VillageDay>
 ) {
     // ===================================================================================
     //                                                                          Definition
@@ -13,38 +13,56 @@ data class VillageDays(
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
+    fun first(id: Int): VillageDay = list.first { it.id == id }
+
     fun latestDay(): VillageDay {
-        return dayList.last()
+        return list.last()
     }
 
     fun yesterday(): VillageDay {
-        check(dayList.size >= 2) { "no exists yesterday" }
-        return dayList[dayList.size - 2]
+        check(list.size >= 2) { "no exists yesterday" }
+        return list[list.size - 2]
+    }
+
+    fun latestNoonDay(): VillageDay {
+        return list.last { it.isNoonTime() }
     }
 
     fun prologueDay(): VillageDay {
-        return dayList.find { it.day == 0 && it.noonnight == CDef.Noonnight.昼.code() }!!
+        return list.find { it.day == 1 && it.noonNight.code == CDef.Noonnight.昼.code() }!!
     }
 
     fun existsDifference(villageDays: VillageDays): Boolean {
-        if (dayList.size != villageDays.dayList.size) return true
-        return dayList.any { day1 ->
-            villageDays.dayList.none { day2 -> !day1.existsDifference(day2) }
+        if (list.size != villageDays.list.size) return true
+        return list.any { day1 ->
+            villageDays.list.none { day2 -> !day1.existsDifference(day2) }
         }
-
     }
 
     fun extendPrologue(): VillageDays {
-        return this.copy(dayList = dayList.map {
-            if (it.id == latestDay().id) latestDay().copy(dayChangeDatetime = latestDay().dayChangeDatetime.plusDays(1L))
+        return this.copy(list = list.map {
+            if (it.id == latestDay().id) latestDay().copy(endDatetime = latestDay().endDatetime.plusHours(1L))
             else it
         })
     }
 
-    fun extendLatestDay(): VillageDays {
-        return this.copy(dayList = dayList.map {
-            if (it.id == latestDay().id) latestDay().copy(dayChangeDatetime = yesterday().dayChangeDatetime.plusHours(extendHours))
+    fun extendRollCall(): VillageDays {
+        return this.copy(list = list.map {
+            if (it.id == latestDay().id) latestDay().copy(endDatetime = latestDay().endDatetime.plusMinutes(10L))
             else it
+        })
+    }
+
+    fun toLatestDayEpilogue(): VillageDays {
+        return this.copy(list = list.map {
+            if (it.id == latestDay().id) {
+                latestDay().copy(
+                    endDatetime = yesterday().endDatetime.plusHours(extendHours),
+                    isEpilogue = true
+                )
+            } else {
+                it
+            }
         })
     }
 }

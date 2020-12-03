@@ -466,7 +466,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
-     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village}
      * @param villageId The value of villageId as equal. (basically NotNull: error as default, or no condition as option)
      */
     public void setVillageId_Equal(Integer villageId) {
@@ -479,7 +479,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * NotEqual(&lt;&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village}
      * @param villageId The value of villageId as notEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setVillageId_NotEqual(Integer villageId) {
@@ -492,7 +492,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * GreaterThan(&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village}
      * @param villageId The value of villageId as greaterThan. (basically NotNull: error as default, or no condition as option)
      */
     public void setVillageId_GreaterThan(Integer villageId) {
@@ -501,7 +501,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * LessThan(&lt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village}
      * @param villageId The value of villageId as lessThan. (basically NotNull: error as default, or no condition as option)
      */
     public void setVillageId_LessThan(Integer villageId) {
@@ -510,7 +510,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * GreaterEqual(&gt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village}
      * @param villageId The value of villageId as greaterEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setVillageId_GreaterEqual(Integer villageId) {
@@ -519,7 +519,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * LessEqual(&lt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village}
      * @param villageId The value of villageId as lessEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setVillageId_LessEqual(Integer villageId) {
@@ -530,7 +530,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
      * RangeOf with various options. (versatile) <br>
      * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
      * And NullIgnored, OnlyOnceRegistered. <br>
-     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village}
      * @param minNumber The min number of villageId. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param maxNumber The max number of villageId. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param opLambda The callback for option of range-of. (NotNull)
@@ -543,7 +543,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
      * RangeOf with various options. (versatile) <br>
      * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
      * And NullIgnored, OnlyOnceRegistered. <br>
-     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village}
      * @param minNumber The min number of villageId. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param maxNumber The max number of villageId. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param rangeOfOption The option of range-of. (NotNull)
@@ -554,7 +554,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * InScope {in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village}
      * @param villageIdList The collection of villageId as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     public void setVillageId_InScope(Collection<Integer> villageIdList) {
@@ -567,7 +567,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * NotInScope {not in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village}
      * @param villageIdList The collection of villageId as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     public void setVillageId_NotInScope(Collection<Integer> villageIdList) {
@@ -583,7 +583,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
-     * DAY: {NotNull, INT UNSIGNED(10)}
+     * DAY: {+UQ, NotNull, INT UNSIGNED(10)}
      * @param day The value of day as equal. (basically NotNull: error as default, or no condition as option)
      */
     public void setDay_Equal(Integer day) {
@@ -596,7 +596,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * NotEqual(&lt;&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * DAY: {NotNull, INT UNSIGNED(10)}
+     * DAY: {+UQ, NotNull, INT UNSIGNED(10)}
      * @param day The value of day as notEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setDay_NotEqual(Integer day) {
@@ -609,7 +609,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * GreaterThan(&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * DAY: {NotNull, INT UNSIGNED(10)}
+     * DAY: {+UQ, NotNull, INT UNSIGNED(10)}
      * @param day The value of day as greaterThan. (basically NotNull: error as default, or no condition as option)
      */
     public void setDay_GreaterThan(Integer day) {
@@ -618,7 +618,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * LessThan(&lt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * DAY: {NotNull, INT UNSIGNED(10)}
+     * DAY: {+UQ, NotNull, INT UNSIGNED(10)}
      * @param day The value of day as lessThan. (basically NotNull: error as default, or no condition as option)
      */
     public void setDay_LessThan(Integer day) {
@@ -627,7 +627,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * GreaterEqual(&gt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * DAY: {NotNull, INT UNSIGNED(10)}
+     * DAY: {+UQ, NotNull, INT UNSIGNED(10)}
      * @param day The value of day as greaterEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setDay_GreaterEqual(Integer day) {
@@ -636,7 +636,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * LessEqual(&lt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * DAY: {NotNull, INT UNSIGNED(10)}
+     * DAY: {+UQ, NotNull, INT UNSIGNED(10)}
      * @param day The value of day as lessEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setDay_LessEqual(Integer day) {
@@ -647,7 +647,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
      * RangeOf with various options. (versatile) <br>
      * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
      * And NullIgnored, OnlyOnceRegistered. <br>
-     * DAY: {NotNull, INT UNSIGNED(10)}
+     * DAY: {+UQ, NotNull, INT UNSIGNED(10)}
      * @param minNumber The min number of day. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param maxNumber The max number of day. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param opLambda The callback for option of range-of. (NotNull)
@@ -660,7 +660,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
      * RangeOf with various options. (versatile) <br>
      * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
      * And NullIgnored, OnlyOnceRegistered. <br>
-     * DAY: {NotNull, INT UNSIGNED(10)}
+     * DAY: {+UQ, NotNull, INT UNSIGNED(10)}
      * @param minNumber The min number of day. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param maxNumber The max number of day. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param rangeOfOption The option of range-of. (NotNull)
@@ -671,7 +671,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * InScope {in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * DAY: {NotNull, INT UNSIGNED(10)}
+     * DAY: {+UQ, NotNull, INT UNSIGNED(10)}
      * @param dayList The collection of day as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     public void setDay_InScope(Collection<Integer> dayList) {
@@ -684,7 +684,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * NotInScope {not in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * DAY: {NotNull, INT UNSIGNED(10)}
+     * DAY: {+UQ, NotNull, INT UNSIGNED(10)}
      * @param dayList The collection of day as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     public void setDay_NotInScope(Collection<Integer> dayList) {
@@ -700,7 +700,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight}
+     * NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight}
      * @param noonnightCode The value of noonnightCode as equal. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setNoonnightCode_Equal(String noonnightCode) {
@@ -709,7 +709,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). As Noonnight. And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
+     * NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
      * 昼夜
      * @param cdef The instance of classification definition (as ENUM type). (basically NotNull: error as default, or no condition as option)
      */
@@ -733,13 +733,37 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
         setNoonnightCode_Equal_AsNoonnight(CDef.Noonnight.昼);
     }
 
+    /**
+     * Equal(=). As 投票1回目 (VOTE_FIRST). And OnlyOnceRegistered. <br>
+     * 投票1回目
+     */
+    public void setNoonnightCode_Equal_投票1回目() {
+        setNoonnightCode_Equal_AsNoonnight(CDef.Noonnight.投票1回目);
+    }
+
+    /**
+     * Equal(=). As 投票2回目 (VOTE_SECOND). And OnlyOnceRegistered. <br>
+     * 投票2回目
+     */
+    public void setNoonnightCode_Equal_投票2回目() {
+        setNoonnightCode_Equal_AsNoonnight(CDef.Noonnight.投票2回目);
+    }
+
+    /**
+     * Equal(=). As 投票3回目 (VOTE_THIRD). And OnlyOnceRegistered. <br>
+     * 投票3回目
+     */
+    public void setNoonnightCode_Equal_投票3回目() {
+        setNoonnightCode_Equal_AsNoonnight(CDef.Noonnight.投票3回目);
+    }
+
     protected void doSetNoonnightCode_Equal(String noonnightCode) {
         regNoonnightCode(CK_EQ, noonnightCode);
     }
 
     /**
      * NotEqual(&lt;&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight}
+     * NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight}
      * @param noonnightCode The value of noonnightCode as notEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setNoonnightCode_NotEqual(String noonnightCode) {
@@ -748,7 +772,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * NotEqual(&lt;&gt;). As Noonnight. And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
+     * NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
      * 昼夜
      * @param cdef The instance of classification definition (as ENUM type). (basically NotNull: error as default, or no condition as option)
      */
@@ -772,13 +796,37 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
         setNoonnightCode_NotEqual_AsNoonnight(CDef.Noonnight.昼);
     }
 
+    /**
+     * NotEqual(&lt;&gt;). As 投票1回目 (VOTE_FIRST). And OnlyOnceRegistered. <br>
+     * 投票1回目
+     */
+    public void setNoonnightCode_NotEqual_投票1回目() {
+        setNoonnightCode_NotEqual_AsNoonnight(CDef.Noonnight.投票1回目);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 投票2回目 (VOTE_SECOND). And OnlyOnceRegistered. <br>
+     * 投票2回目
+     */
+    public void setNoonnightCode_NotEqual_投票2回目() {
+        setNoonnightCode_NotEqual_AsNoonnight(CDef.Noonnight.投票2回目);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 投票3回目 (VOTE_THIRD). And OnlyOnceRegistered. <br>
+     * 投票3回目
+     */
+    public void setNoonnightCode_NotEqual_投票3回目() {
+        setNoonnightCode_NotEqual_AsNoonnight(CDef.Noonnight.投票3回目);
+    }
+
     protected void doSetNoonnightCode_NotEqual(String noonnightCode) {
         regNoonnightCode(CK_NES, noonnightCode);
     }
 
     /**
      * InScope {in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight}
+     * NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight}
      * @param noonnightCodeList The collection of noonnightCode as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setNoonnightCode_InScope(Collection<String> noonnightCodeList) {
@@ -787,7 +835,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * InScope {in ('a', 'b')}. As Noonnight. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
+     * NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
      * 昼夜
      * @param cdefList The list of classification definition (as ENUM type). (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
@@ -801,7 +849,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * NotInScope {not in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight}
+     * NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight}
      * @param noonnightCodeList The collection of noonnightCode as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setNoonnightCode_NotInScope(Collection<String> noonnightCodeList) {
@@ -810,7 +858,7 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * NotInScope {not in ('a', 'b')}. As Noonnight. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
+     * NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
      * 昼夜
      * @param cdefList The list of classification definition (as ENUM type). (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
@@ -827,78 +875,165 @@ public abstract class AbstractBsVillageDayCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
-     * DAYCHANGE_DATETIME: {NotNull, DATETIME(19)}
-     * @param daychangeDatetime The value of daychangeDatetime as equal. (basically NotNull: error as default, or no condition as option)
+     * START_DATETIME: {NotNull, DATETIME(19)}
+     * @param startDatetime The value of startDatetime as equal. (basically NotNull: error as default, or no condition as option)
      */
-    public void setDaychangeDatetime_Equal(java.time.LocalDateTime daychangeDatetime) {
-        regDaychangeDatetime(CK_EQ,  daychangeDatetime);
+    public void setStartDatetime_Equal(java.time.LocalDateTime startDatetime) {
+        regStartDatetime(CK_EQ,  startDatetime);
     }
 
     /**
      * GreaterThan(&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * DAYCHANGE_DATETIME: {NotNull, DATETIME(19)}
-     * @param daychangeDatetime The value of daychangeDatetime as greaterThan. (basically NotNull: error as default, or no condition as option)
+     * START_DATETIME: {NotNull, DATETIME(19)}
+     * @param startDatetime The value of startDatetime as greaterThan. (basically NotNull: error as default, or no condition as option)
      */
-    public void setDaychangeDatetime_GreaterThan(java.time.LocalDateTime daychangeDatetime) {
-        regDaychangeDatetime(CK_GT,  daychangeDatetime);
+    public void setStartDatetime_GreaterThan(java.time.LocalDateTime startDatetime) {
+        regStartDatetime(CK_GT,  startDatetime);
     }
 
     /**
      * LessThan(&lt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * DAYCHANGE_DATETIME: {NotNull, DATETIME(19)}
-     * @param daychangeDatetime The value of daychangeDatetime as lessThan. (basically NotNull: error as default, or no condition as option)
+     * START_DATETIME: {NotNull, DATETIME(19)}
+     * @param startDatetime The value of startDatetime as lessThan. (basically NotNull: error as default, or no condition as option)
      */
-    public void setDaychangeDatetime_LessThan(java.time.LocalDateTime daychangeDatetime) {
-        regDaychangeDatetime(CK_LT,  daychangeDatetime);
+    public void setStartDatetime_LessThan(java.time.LocalDateTime startDatetime) {
+        regStartDatetime(CK_LT,  startDatetime);
     }
 
     /**
      * GreaterEqual(&gt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * DAYCHANGE_DATETIME: {NotNull, DATETIME(19)}
-     * @param daychangeDatetime The value of daychangeDatetime as greaterEqual. (basically NotNull: error as default, or no condition as option)
+     * START_DATETIME: {NotNull, DATETIME(19)}
+     * @param startDatetime The value of startDatetime as greaterEqual. (basically NotNull: error as default, or no condition as option)
      */
-    public void setDaychangeDatetime_GreaterEqual(java.time.LocalDateTime daychangeDatetime) {
-        regDaychangeDatetime(CK_GE,  daychangeDatetime);
+    public void setStartDatetime_GreaterEqual(java.time.LocalDateTime startDatetime) {
+        regStartDatetime(CK_GE,  startDatetime);
     }
 
     /**
      * LessEqual(&lt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * DAYCHANGE_DATETIME: {NotNull, DATETIME(19)}
-     * @param daychangeDatetime The value of daychangeDatetime as lessEqual. (basically NotNull: error as default, or no condition as option)
+     * START_DATETIME: {NotNull, DATETIME(19)}
+     * @param startDatetime The value of startDatetime as lessEqual. (basically NotNull: error as default, or no condition as option)
      */
-    public void setDaychangeDatetime_LessEqual(java.time.LocalDateTime daychangeDatetime) {
-        regDaychangeDatetime(CK_LE, daychangeDatetime);
+    public void setStartDatetime_LessEqual(java.time.LocalDateTime startDatetime) {
+        regStartDatetime(CK_LE, startDatetime);
     }
 
     /**
      * FromTo with various options. (versatile) {(default) fromDatetime &lt;= column &lt;= toDatetime} <br>
      * And NullIgnored, OnlyOnceRegistered. <br>
-     * DAYCHANGE_DATETIME: {NotNull, DATETIME(19)}
-     * <pre>e.g. setDaychangeDatetime_FromTo(fromDate, toDate, op <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> op.<span style="color: #CC4747">compareAsDate()</span>);</pre>
-     * @param fromDatetime The from-datetime(yyyy/MM/dd HH:mm:ss.SSS) of daychangeDatetime. (basically NotNull: if op.allowOneSide(), null allowed)
-     * @param toDatetime The to-datetime(yyyy/MM/dd HH:mm:ss.SSS) of daychangeDatetime. (basically NotNull: if op.allowOneSide(), null allowed)
+     * START_DATETIME: {NotNull, DATETIME(19)}
+     * <pre>e.g. setStartDatetime_FromTo(fromDate, toDate, op <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> op.<span style="color: #CC4747">compareAsDate()</span>);</pre>
+     * @param fromDatetime The from-datetime(yyyy/MM/dd HH:mm:ss.SSS) of startDatetime. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param toDatetime The to-datetime(yyyy/MM/dd HH:mm:ss.SSS) of startDatetime. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param opLambda The callback for option of from-to. (NotNull)
      */
-    public void setDaychangeDatetime_FromTo(java.time.LocalDateTime fromDatetime, java.time.LocalDateTime toDatetime, ConditionOptionCall<FromToOption> opLambda) {
-        setDaychangeDatetime_FromTo(fromDatetime, toDatetime, xcFTOP(opLambda));
+    public void setStartDatetime_FromTo(java.time.LocalDateTime fromDatetime, java.time.LocalDateTime toDatetime, ConditionOptionCall<FromToOption> opLambda) {
+        setStartDatetime_FromTo(fromDatetime, toDatetime, xcFTOP(opLambda));
     }
 
     /**
      * FromTo with various options. (versatile) {(default) fromDatetime &lt;= column &lt;= toDatetime} <br>
      * And NullIgnored, OnlyOnceRegistered. <br>
-     * DAYCHANGE_DATETIME: {NotNull, DATETIME(19)}
-     * <pre>e.g. setDaychangeDatetime_FromTo(fromDate, toDate, new <span style="color: #CC4747">FromToOption</span>().compareAsDate());</pre>
-     * @param fromDatetime The from-datetime(yyyy/MM/dd HH:mm:ss.SSS) of daychangeDatetime. (basically NotNull: if op.allowOneSide(), null allowed)
-     * @param toDatetime The to-datetime(yyyy/MM/dd HH:mm:ss.SSS) of daychangeDatetime. (basically NotNull: if op.allowOneSide(), null allowed)
+     * START_DATETIME: {NotNull, DATETIME(19)}
+     * <pre>e.g. setStartDatetime_FromTo(fromDate, toDate, new <span style="color: #CC4747">FromToOption</span>().compareAsDate());</pre>
+     * @param fromDatetime The from-datetime(yyyy/MM/dd HH:mm:ss.SSS) of startDatetime. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param toDatetime The to-datetime(yyyy/MM/dd HH:mm:ss.SSS) of startDatetime. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param fromToOption The option of from-to. (NotNull)
      */
-    protected void setDaychangeDatetime_FromTo(java.time.LocalDateTime fromDatetime, java.time.LocalDateTime toDatetime, FromToOption fromToOption) {
-        String nm = "DAYCHANGE_DATETIME"; FromToOption op = fromToOption;
-        regFTQ(xfFTHD(fromDatetime, nm, op), xfFTHD(toDatetime, nm, op), xgetCValueDaychangeDatetime(), nm, op);
+    protected void setStartDatetime_FromTo(java.time.LocalDateTime fromDatetime, java.time.LocalDateTime toDatetime, FromToOption fromToOption) {
+        String nm = "START_DATETIME"; FromToOption op = fromToOption;
+        regFTQ(xfFTHD(fromDatetime, nm, op), xfFTHD(toDatetime, nm, op), xgetCValueStartDatetime(), nm, op);
     }
 
-    protected void regDaychangeDatetime(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueDaychangeDatetime(), "DAYCHANGE_DATETIME"); }
-    protected abstract ConditionValue xgetCValueDaychangeDatetime();
+    protected void regStartDatetime(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueStartDatetime(), "START_DATETIME"); }
+    protected abstract ConditionValue xgetCValueStartDatetime();
+
+    /**
+     * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
+     * END_DATETIME: {NotNull, DATETIME(19)}
+     * @param endDatetime The value of endDatetime as equal. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setEndDatetime_Equal(java.time.LocalDateTime endDatetime) {
+        regEndDatetime(CK_EQ,  endDatetime);
+    }
+
+    /**
+     * GreaterThan(&gt;). And NullIgnored, OnlyOnceRegistered. <br>
+     * END_DATETIME: {NotNull, DATETIME(19)}
+     * @param endDatetime The value of endDatetime as greaterThan. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setEndDatetime_GreaterThan(java.time.LocalDateTime endDatetime) {
+        regEndDatetime(CK_GT,  endDatetime);
+    }
+
+    /**
+     * LessThan(&lt;). And NullIgnored, OnlyOnceRegistered. <br>
+     * END_DATETIME: {NotNull, DATETIME(19)}
+     * @param endDatetime The value of endDatetime as lessThan. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setEndDatetime_LessThan(java.time.LocalDateTime endDatetime) {
+        regEndDatetime(CK_LT,  endDatetime);
+    }
+
+    /**
+     * GreaterEqual(&gt;=). And NullIgnored, OnlyOnceRegistered. <br>
+     * END_DATETIME: {NotNull, DATETIME(19)}
+     * @param endDatetime The value of endDatetime as greaterEqual. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setEndDatetime_GreaterEqual(java.time.LocalDateTime endDatetime) {
+        regEndDatetime(CK_GE,  endDatetime);
+    }
+
+    /**
+     * LessEqual(&lt;=). And NullIgnored, OnlyOnceRegistered. <br>
+     * END_DATETIME: {NotNull, DATETIME(19)}
+     * @param endDatetime The value of endDatetime as lessEqual. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setEndDatetime_LessEqual(java.time.LocalDateTime endDatetime) {
+        regEndDatetime(CK_LE, endDatetime);
+    }
+
+    /**
+     * FromTo with various options. (versatile) {(default) fromDatetime &lt;= column &lt;= toDatetime} <br>
+     * And NullIgnored, OnlyOnceRegistered. <br>
+     * END_DATETIME: {NotNull, DATETIME(19)}
+     * <pre>e.g. setEndDatetime_FromTo(fromDate, toDate, op <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> op.<span style="color: #CC4747">compareAsDate()</span>);</pre>
+     * @param fromDatetime The from-datetime(yyyy/MM/dd HH:mm:ss.SSS) of endDatetime. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param toDatetime The to-datetime(yyyy/MM/dd HH:mm:ss.SSS) of endDatetime. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param opLambda The callback for option of from-to. (NotNull)
+     */
+    public void setEndDatetime_FromTo(java.time.LocalDateTime fromDatetime, java.time.LocalDateTime toDatetime, ConditionOptionCall<FromToOption> opLambda) {
+        setEndDatetime_FromTo(fromDatetime, toDatetime, xcFTOP(opLambda));
+    }
+
+    /**
+     * FromTo with various options. (versatile) {(default) fromDatetime &lt;= column &lt;= toDatetime} <br>
+     * And NullIgnored, OnlyOnceRegistered. <br>
+     * END_DATETIME: {NotNull, DATETIME(19)}
+     * <pre>e.g. setEndDatetime_FromTo(fromDate, toDate, new <span style="color: #CC4747">FromToOption</span>().compareAsDate());</pre>
+     * @param fromDatetime The from-datetime(yyyy/MM/dd HH:mm:ss.SSS) of endDatetime. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param toDatetime The to-datetime(yyyy/MM/dd HH:mm:ss.SSS) of endDatetime. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param fromToOption The option of from-to. (NotNull)
+     */
+    protected void setEndDatetime_FromTo(java.time.LocalDateTime fromDatetime, java.time.LocalDateTime toDatetime, FromToOption fromToOption) {
+        String nm = "END_DATETIME"; FromToOption op = fromToOption;
+        regFTQ(xfFTHD(fromDatetime, nm, op), xfFTHD(toDatetime, nm, op), xgetCValueEndDatetime(), nm, op);
+    }
+
+    protected void regEndDatetime(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueEndDatetime(), "END_DATETIME"); }
+    protected abstract ConditionValue xgetCValueEndDatetime();
+
+    /**
+     * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
+     * IS_EPILOGUE: {NotNull, BIT}
+     * @param isEpilogue The value of isEpilogue as equal. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setIsEpilogue_Equal(Boolean isEpilogue) {
+        regIsEpilogue(CK_EQ, isEpilogue);
+    }
+
+    protected void regIsEpilogue(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueIsEpilogue(), "IS_EPILOGUE"); }
+    protected abstract ConditionValue xgetCValueIsEpilogue();
 
     /**
      * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>

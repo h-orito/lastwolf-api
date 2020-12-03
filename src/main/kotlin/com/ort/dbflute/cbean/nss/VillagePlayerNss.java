@@ -88,4 +88,11 @@ public class VillagePlayerNss {
         _query.xdoNss(() -> _query.queryVillage());
         return new VillageNss(_query.queryVillage());
     }
+    /**
+     * With nested relation columns to select clause. <br>
+     * WINLOSE by my WINLOSE_CODE, named 'winlose'.
+     */
+    public void withWinlose() {
+        _query.xdoNss(() -> _query.queryWinlose());
+    }
 }

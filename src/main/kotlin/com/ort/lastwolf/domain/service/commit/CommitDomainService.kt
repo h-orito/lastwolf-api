@@ -36,7 +36,7 @@ class CommitDomainService {
         if (!village.isAvailableCommit()) return false
         // 参加者として可能か
         participant ?: return false
-        return participant.isAvailableCommit(village.dummyChara()!!.id)
+        return participant.isAvailableCommit(village.dummyParticipant()!!.id)
     }
 
     /**
@@ -65,5 +65,5 @@ class CommitDomainService {
     //                                                                        Assist Logic
     //                                                                        ============
     private fun getCommitSetMessage(doCommit: Boolean, chara: Chara): String =
-        if (doCommit) "${chara.charaName.fullName()}が時短希望しました。" else "${chara.charaName.fullName()}が時短希望を取り消しました。"
+        if (doCommit) "${chara.name.name}が時短希望しました。" else "${chara.name.name}が時短希望を取り消しました。"
 }

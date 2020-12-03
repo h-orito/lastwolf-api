@@ -3,13 +3,11 @@ package com.ort.lastwolf.domain.service.ability
 import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.domain.model.ability.AbilityType
 import com.ort.lastwolf.domain.model.ability.AbilityTypes
-import com.ort.lastwolf.domain.model.charachip.Chara
-import com.ort.lastwolf.domain.model.daychange.DayChange
-import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.myself.participant.VillageAbilitySituation
 import com.ort.lastwolf.domain.model.myself.participant.VillageAbilitySituations
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.ability.VillageAbilities
+import com.ort.lastwolf.domain.model.village.ability.VillageAbility
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 import com.ort.lastwolf.fw.exception.LastwolfBadRequestException
 import com.ort.lastwolf.fw.exception.LastwolfBusinessException
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service
 class AbilityDomainService(
     private val attackDomainService: AttackDomainService,
     private val divineDomainService: DivineDomainService,
-    private val wiseDivineDomainService: WiseDivineDomainService,
     private val guardDomainService: GuardDomainService
 ) {
 
@@ -27,40 +24,19 @@ class AbilityDomainService(
     fun getSelectableTargetList(
         village: Village,
         participant: VillageParticipant?,
-        abilityType: AbilityType
+        abilityType: AbilityType,
+        abilities: VillageAbilities
     ): List<VillageParticipant> {
         if (!canUseAbility(village, participant)) return listOf()
-        return detectDomainService(abilityType)?.getSelectableTargetList(village, participant) ?: listOf()
-    }
-
-    // 選択中の対象
-    fun getSelectingTarget(
-        village: Village,
-        participant: VillageParticipant?,
-        villageAbilities: VillageAbilities,
-        abilityType: AbilityType
-    ): VillageParticipant? {
-        if (!canUseAbility(village, participant)) return null
-        return detectDomainService(abilityType)?.getSelectingTarget(village, participant, villageAbilities)
-    }
-
-    // 能力セットメッセージ
-    fun createAbilitySetMessage(
-        village: Village,
-        myChara: Chara,
-        targetChara: Chara?,
-        abilityType: AbilityType
-    ): Message {
-        return detectDomainService(abilityType)?.createSetMessage(myChara, targetChara)?.let {
-            Message.createPrivateSystemMessage(it, village.day.latestDay().id)
-        } ?: throw IllegalStateException("想定外の能力")
+        return detectDomainService(abilityType)?.getSelectableTargetList(village, participant, abilities) ?: listOf()
     }
 
     fun assertAbility(
         village: Village,
         participant: VillageParticipant?,
         targetId: Int?,
-        abilityType: AbilityType
+        abilityType: AbilityType,
+        abilities: VillageAbilities
     ) {
         participant?.skill ?: throw LastwolfBadRequestException("役職なし")
         // その能力を持っていない
@@ -68,10 +44,10 @@ class AbilityDomainService(
             throw LastwolfBadRequestException("${abilityType.name}の能力を持っていません")
         }
         // 使えない状況
-        if (!isUsable(village, participant, abilityType)) throw LastwolfBusinessException("${abilityType.name}能力を使えない状態です")
+        if (!isUsable(village, participant, abilityType, abilities)) throw LastwolfBusinessException("${abilityType.name}能力を使えない状態です")
         // 対象指定がおかしい
         if (targetId == null && !canNoTarget(village, abilityType)) throw LastwolfBusinessException("対象指定が必要です")
-        if (targetId != null && getSelectableTargetList(village, participant, abilityType).none { it.id == targetId }) {
+        if (targetId != null && getSelectableTargetList(village, participant, abilityType, abilities).none { it.id == targetId }) {
             throw LastwolfBusinessException("指定できない対象を指定しています")
         }
     }
@@ -79,12 +55,15 @@ class AbilityDomainService(
     fun isUsable(
         village: Village,
         participant: VillageParticipant?,
-        abilityType: AbilityType
+        abilityType: AbilityType,
+        abilities: VillageAbilities
     ): Boolean {
         participant ?: return false
+        // 夜でないと使えない
+        if (!village.days.latestDay().isNightTime()) return false
         // 進行中でないと使えない
         if (!village.status.isProgress()) return false
-        return detectDomainService(abilityType)?.isUsable(village, participant) ?: false
+        return detectDomainService(abilityType)?.isUsable(village, participant, abilities) ?: false
     }
 
     fun canNoTarget(village: Village, abilityType: AbilityType): Boolean =
@@ -93,35 +72,22 @@ class AbilityDomainService(
     fun convertToSituationList(
         village: Village,
         participant: VillageParticipant?,
-        villageAbilities: VillageAbilities
+        abilities: VillageAbilities
     ): VillageAbilitySituations {
         participant?.skill ?: return VillageAbilitySituations(listOf())
         val abilityTypes = AbilityTypes(participant.skill)
         return VillageAbilitySituations(
-            list = abilityTypes.list.map { convertToSituation(village, participant, it, villageAbilities) }
+            list = abilityTypes.list.map { convertToSituation(village, participant, it, abilities) }
         )
     }
 
-    // 日付更新時のデフォルト能力行使を追加
-    fun addDefaultAbilities(dayChange: DayChange): DayChange {
-        val village = dayChange.village
-        var abilities = dayChange.abilities
+    fun createAbilityMessage(
+        village: Village,
+        participant: VillageParticipant,
+        ability: VillageAbility
+    ) = detectDomainService(ability.abilityType)!!.createAbilityMessage(village, participant, ability)
 
-        // 襲撃
-        abilities = abilities.addAll(attackDomainService.getDefaultAbilityList(village, abilities))
-        // 占い
-        abilities = abilities.addAll(divineDomainService.getDefaultAbilityList(village, abilities))
-        abilities = abilities.addAll(wiseDivineDomainService.getDefaultAbilityList(village, abilities))
-        // 護衛
-        abilities = abilities.addAll(guardDomainService.getDefaultAbilityList(village, abilities))
-
-        return dayChange.copy(abilities = abilities).setIsChange(dayChange)
-    }
-
-    // ===================================================================================
-    //                                                                        Assist Logic
-    //                                                                        ============
-    private fun detectDomainService(abilityType: AbilityType): IAbilityDomainService? {
+    fun detectDomainService(abilityType: AbilityType): IAbilityDomainService? {
         return when (abilityType.code) {
             CDef.AbilityType.襲撃.code() -> attackDomainService
             CDef.AbilityType.占い.code() -> divineDomainService
@@ -130,6 +96,9 @@ class AbilityDomainService(
         }
     }
 
+    // ===================================================================================
+    //                                                                        Assist Logic
+    //                                                                        ============
     private fun canUseAbility(village: Village, participant: VillageParticipant?): Boolean {
         // 村として可能か
         if (!village.canUseAbility()) return false
@@ -142,13 +111,12 @@ class AbilityDomainService(
         village: Village,
         participant: VillageParticipant?,
         abilityType: AbilityType,
-        villageAbilities: VillageAbilities
+        abilities: VillageAbilities
     ): VillageAbilitySituation {
         return VillageAbilitySituation(
             type = abilityType,
-            targetList = this.getSelectableTargetList(village, participant, abilityType),
-            target = this.getSelectingTarget(village, participant, villageAbilities, abilityType),
-            usable = this.isUsable(village, participant, abilityType),
+            targetList = this.getSelectableTargetList(village, participant, abilityType, abilities),
+            usable = this.isUsable(village, participant, abilityType, abilities),
             isAvailableNoTarget = this.canNoTarget(village, abilityType)
         )
     }

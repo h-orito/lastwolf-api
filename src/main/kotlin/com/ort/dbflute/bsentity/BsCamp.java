@@ -123,11 +123,11 @@ public abstract class BsCamp extends AbstractEntity implements DomainEntity {
     //                                                              Classification Setting
     //                                                              ======================
     /**
-     * Set the value of campCode as 狐陣営 (FOX). <br>
-     * 狐陣営
+     * Set the value of campCode as 妖狐陣営 (FOX). <br>
+     * 妖狐陣営
      */
-    public void setCampCode_狐陣営() {
-        setCampCodeAsCamp(CDef.Camp.狐陣営);
+    public void setCampCode_妖狐陣営() {
+        setCampCodeAsCamp(CDef.Camp.妖狐陣営);
     }
 
     /**
@@ -150,14 +150,14 @@ public abstract class BsCamp extends AbstractEntity implements DomainEntity {
     //                                                        Classification Determination
     //                                                        ============================
     /**
-     * Is the value of campCode 狐陣営? <br>
-     * 狐陣営
+     * Is the value of campCode 妖狐陣営? <br>
+     * 妖狐陣営
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
      * @return The determination, true or false.
      */
-    public boolean isCampCode狐陣営() {
+    public boolean isCampCode妖狐陣営() {
         CDef.Camp cdef = getCampCodeAsCamp();
-        return cdef != null ? cdef.equals(CDef.Camp.狐陣営) : false;
+        return cdef != null ? cdef.equals(CDef.Camp.妖狐陣営) : false;
     }
 
     /**

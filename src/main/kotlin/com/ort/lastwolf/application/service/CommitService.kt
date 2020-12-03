@@ -20,7 +20,8 @@ class CommitService(
 
     /**
      * コミット/取り消し
+     * @param village village
      * @param commit commit
      */
-    fun updateCommit(commit: Commit) = commitDataSource.updateCommit(commit)
+    fun updateCommit(village: Village, commit: Commit) = commitDataSource.updateCommit(village, commit)
 }

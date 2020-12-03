@@ -1,8 +1,6 @@
 package com.ort.lastwolf.api.view.player
 
-import com.ort.lastwolf.domain.model.charachip.Charas
 import com.ort.lastwolf.domain.model.player.PlayerRecords
-import com.ort.lastwolf.domain.model.player.Players
 import com.ort.lastwolf.domain.model.player.record.CampRecord
 import com.ort.lastwolf.domain.model.player.record.Record
 import com.ort.lastwolf.domain.model.player.record.SkillRecord
@@ -15,10 +13,7 @@ data class PlayerRecordsView(
     val participateVillageList: List<ParticipateVillageView>
 ) {
     constructor(
-        playerRecords: PlayerRecords,
-        charas: Charas,
-        players: Players,
-        createPlayers: Players
+        playerRecords: PlayerRecords
     ) : this(
         player = PlayerView(playerRecords.player),
         wholeRecord = playerRecords.wholeRecord,
@@ -27,13 +22,7 @@ data class PlayerRecordsView(
         participateVillageList = playerRecords.participateVillageList.map { participateVillage ->
             ParticipateVillageView(
                 participateVillage.village,
-                participateVillage.participant,
-                Charas(charas.list.filter { it.charachipId == participateVillage.village.setting.charachip.charachipId }),
-                Players(players.list.filter { player ->
-                    participateVillage.village.participant.memberList.any { member -> member.playerId == player.id }
-                        || participateVillage.village.spectator.memberList.any { member -> member.playerId == player.id }
-                }),
-                createPlayers.list.first { it.id == participateVillage.village.creatorPlayerId }
+                participateVillage.participant
             )
         }
     )

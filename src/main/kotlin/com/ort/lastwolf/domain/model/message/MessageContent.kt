@@ -1,32 +1,29 @@
 package com.ort.lastwolf.domain.model.message
 
+import com.google.firebase.database.PropertyName
 import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.fw.exception.LastwolfBadRequestException
 
 data class MessageContent(
     val type: MessageType,
-    val num: Int?,
-    val count: Int?,
     val text: String,
-    val faceCode: String?
+    @get:PropertyName("strong") // firebase用
+    val isStrong: Boolean
 ) {
     companion object {
 
-        const val defaultLengthMax = 400
-        const val lineMax: Int = 20
+        const val defaultLengthMax = 100
 
         operator fun invoke(
             messageType: String,
             text: String,
-            faceCode: String?
+            isStrong: Boolean
         ): MessageContent {
             val cdefMessageType = checkNotNull(CDef.MessageType.codeOf(messageType))
             return MessageContent(
                 type = MessageType(cdefMessageType),
-                num = null,
-                count = null,
                 text = removeSurrogate(text.trim()),
-                faceCode = faceCode
+                isStrong = isStrong
             )
         }
 
@@ -42,14 +39,9 @@ data class MessageContent(
         }
     }
 
-    fun assertMessageLength(maxLength: Int) {
-        // 行数
-        if (text.replace("\r\n", "\n").split("\n").size > lineMax) throw LastwolfBadRequestException("行数オーバーです")
+    fun assertMessageLength() {
         // 文字数
         if (text.isEmpty()) throw LastwolfBadRequestException("発言内容がありません")
-        // 改行は文字数としてカウントしない
-        val length = text.replace("\r\n", "").replace("\n", "").length
-        if (length <= 0) throw LastwolfBadRequestException("発言内容がありません") // 改行のみもNG
-        if (maxLength < length) throw LastwolfBadRequestException("文字数オーバーです")
+        if (defaultLengthMax < text.length) throw LastwolfBadRequestException("文字数オーバーです")
     }
 }

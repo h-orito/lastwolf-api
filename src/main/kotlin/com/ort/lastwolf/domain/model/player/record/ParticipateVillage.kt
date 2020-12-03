@@ -13,6 +13,6 @@ data class ParticipateVillage(
         village: Village
     ) : this(
         village = village,
-        participant = village.findMemberByPlayerId(player.id)!!
+        participant = village.participants.findByPlayerId(player.id)!!
     )
 }

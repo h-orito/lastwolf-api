@@ -33,13 +33,13 @@ import com.ort.dbflute.exentity.*;
  *     
  *
  * [foreign table]
- *     AUTHORITY, PLAYER_DETAIL(AsOne)
+ *     AUTHORITY
  *
  * [referrer table]
- *     VILLAGE, VILLAGE_PLAYER, PLAYER_DETAIL
+ *     VILLAGE, VILLAGE_PLAYER
  *
  * [foreign property]
- *     authority, playerDetailAsOne
+ *     authority
  *
  * [referrer property]
  *     villageList, villagePlayerList
@@ -236,27 +236,6 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
         _authority = authority;
     }
 
-    /** player_detail by PLAYER_ID, named 'playerDetailAsOne'. */
-    protected OptionalEntity<PlayerDetail> _playerDetailAsOne;
-
-    /**
-     * [get] player_detail by PLAYER_ID, named 'playerDetailAsOne'.
-     * Optional: alwaysPresent(), ifPresent().orElse(), get(), ...
-     * @return the entity of foreign property(referrer-as-one) 'playerDetailAsOne'. (NotNull, EmptyAllowed: when e.g. no data, no setupSelect)
-     */
-    public OptionalEntity<PlayerDetail> getPlayerDetailAsOne() {
-        if (_playerDetailAsOne == null) { _playerDetailAsOne = OptionalEntity.relationEmpty(this, "playerDetailAsOne"); }
-        return _playerDetailAsOne;
-    }
-
-    /**
-     * [set] player_detail by PLAYER_ID, named 'playerDetailAsOne'.
-     * @param playerDetailAsOne The entity of foreign property(referrer-as-one) 'playerDetailAsOne'. (NullAllowed)
-     */
-    public void setPlayerDetailAsOne(OptionalEntity<PlayerDetail> playerDetailAsOne) {
-        _playerDetailAsOne = playerDetailAsOne;
-    }
-
     // ===================================================================================
     //                                                                   Referrer Property
     //                                                                   =================
@@ -331,8 +310,6 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
         StringBuilder sb = new StringBuilder();
         if (_authority != null && _authority.isPresent())
         { sb.append(li).append(xbRDS(_authority, "authority")); }
-        if (_playerDetailAsOne != null && _playerDetailAsOne.isPresent())
-        { sb.append(li).append(xbRDS(_playerDetailAsOne, "playerDetailAsOne")); }
         if (_villageList != null) { for (Village et : _villageList)
         { if (et != null) { sb.append(li).append(xbRDS(et, "villageList")); } } }
         if (_villagePlayerList != null) { for (VillagePlayer et : _villagePlayerList)
@@ -368,8 +345,6 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
         StringBuilder sb = new StringBuilder();
         if (_authority != null && _authority.isPresent())
         { sb.append(dm).append("authority"); }
-        if (_playerDetailAsOne != null && _playerDetailAsOne.isPresent())
-        { sb.append(dm).append("playerDetailAsOne"); }
         if (_villageList != null && !_villageList.isEmpty())
         { sb.append(dm).append("villageList"); }
         if (_villagePlayerList != null && !_villagePlayerList.isEmpty())

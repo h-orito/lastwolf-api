@@ -7,9 +7,9 @@ data class VillageVotes(
     val list: List<VillageVote>
 ) {
 
-    fun filterLatestday(village: Village): VillageVotes = filterByDay(village.day.latestDay())
+    fun filterLatestday(village: Village): VillageVotes = filterByDay(village.days.latestDay())
 
-    fun filterYesterday(village: Village): VillageVotes = filterByDay(village.day.yesterday())
+    fun filterYesterday(village: Village): VillageVotes = filterByDay(village.days.yesterday())
 
     fun addAll(voteList: List<VillageVote>): VillageVotes {
         if (voteList.isEmpty()) return this
@@ -26,5 +26,15 @@ data class VillageVotes(
         return this.copy(
             list = list.filter { it.villageDayId == villageDay.id }
         )
+    }
+
+    // 得票 key: target participant id, value: vote list
+    fun toVotedMap(village: Village): Map<Int, List<VillageVote>> {
+        return list
+            .filter {
+                it.villageDayId == village.days.yesterday().id &&
+                    village.participants.first(it.myselfId).isAlive()
+            }
+            .groupBy { it.targetId }
     }
 }

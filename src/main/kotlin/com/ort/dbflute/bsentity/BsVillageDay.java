@@ -21,7 +21,7 @@ import com.ort.dbflute.exentity.*;
  *     VILLAGE_DAY_ID
  *
  * [column]
- *     VILLAGE_DAY_ID, VILLAGE_ID, DAY, NOONNIGHT_CODE, DAYCHANGE_DATETIME, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
+ *     VILLAGE_DAY_ID, VILLAGE_ID, DAY, NOONNIGHT_CODE, START_DATETIME, END_DATETIME, IS_EPILOGUE, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
  *
  * [sequence]
  *     
@@ -50,7 +50,9 @@ import com.ort.dbflute.exentity.*;
  * Integer villageId = entity.getVillageId();
  * Integer day = entity.getDay();
  * String noonnightCode = entity.getNoonnightCode();
- * java.time.LocalDateTime daychangeDatetime = entity.getDaychangeDatetime();
+ * java.time.LocalDateTime startDatetime = entity.getStartDatetime();
+ * java.time.LocalDateTime endDatetime = entity.getEndDatetime();
+ * Boolean isEpilogue = entity.getIsEpilogue();
  * java.time.LocalDateTime registerDatetime = entity.getRegisterDatetime();
  * String registerTrace = entity.getRegisterTrace();
  * java.time.LocalDateTime updateDatetime = entity.getUpdateDatetime();
@@ -59,7 +61,9 @@ import com.ort.dbflute.exentity.*;
  * entity.setVillageId(villageId);
  * entity.setDay(day);
  * entity.setNoonnightCode(noonnightCode);
- * entity.setDaychangeDatetime(daychangeDatetime);
+ * entity.setStartDatetime(startDatetime);
+ * entity.setEndDatetime(endDatetime);
+ * entity.setIsEpilogue(isEpilogue);
  * entity.setRegisterDatetime(registerDatetime);
  * entity.setRegisterTrace(registerTrace);
  * entity.setUpdateDatetime(updateDatetime);
@@ -82,17 +86,23 @@ public abstract class BsVillageDay extends AbstractEntity implements DomainEntit
     /** VILLAGE_DAY_ID: {PK, ID, NotNull, INT UNSIGNED(10)} */
     protected Integer _villageDayId;
 
-    /** VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village} */
+    /** VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village} */
     protected Integer _villageId;
 
-    /** DAY: {NotNull, INT UNSIGNED(10)} */
+    /** DAY: {+UQ, NotNull, INT UNSIGNED(10)} */
     protected Integer _day;
 
-    /** NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} */
+    /** NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} */
     protected String _noonnightCode;
 
-    /** DAYCHANGE_DATETIME: {NotNull, DATETIME(19)} */
-    protected java.time.LocalDateTime _daychangeDatetime;
+    /** START_DATETIME: {NotNull, DATETIME(19)} */
+    protected java.time.LocalDateTime _startDatetime;
+
+    /** END_DATETIME: {NotNull, DATETIME(19)} */
+    protected java.time.LocalDateTime _endDatetime;
+
+    /** IS_EPILOGUE: {NotNull, BIT} */
+    protected Boolean _isEpilogue;
 
     /** REGISTER_DATETIME: {NotNull, DATETIME(19)} */
     protected java.time.LocalDateTime _registerDatetime;
@@ -128,12 +138,27 @@ public abstract class BsVillageDay extends AbstractEntity implements DomainEntit
         return true;
     }
 
+    /**
+     * To be unique by the unique column. <br>
+     * You can update the entity by the key when entity update (NOT batch update).
+     * @param villageId : UQ+, NotNull, INT UNSIGNED(10), FK to village. (NotNull)
+     * @param day : +UQ, NotNull, INT UNSIGNED(10). (NotNull)
+     * @param noonnightCode : +UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight. (NotNull)
+     */
+    public void uniqueBy(Integer villageId, Integer day, CDef.Noonnight noonnightCode) {
+        __uniqueDrivenProperties.clear();
+        __uniqueDrivenProperties.addPropertyName("villageId");
+        __uniqueDrivenProperties.addPropertyName("day");
+        __uniqueDrivenProperties.addPropertyName("noonnightCode");
+        setVillageId(villageId);setDay(day);setNoonnightCodeAsNoonnight(noonnightCode);
+    }
+
     // ===================================================================================
     //                                                             Classification Property
     //                                                             =======================
     /**
      * Get the value of noonnightCode as the classification of Noonnight. <br>
-     * NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
+     * NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
      * 昼夜
      * <p>It's treated as case insensitive and if the code value is null, it returns null.</p>
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
@@ -144,7 +169,7 @@ public abstract class BsVillageDay extends AbstractEntity implements DomainEntit
 
     /**
      * Set the value of noonnightCode as the classification of Noonnight. <br>
-     * NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
+     * NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
      * 昼夜
      * @param cdef The instance of classification definition (as ENUM type). (NullAllowed: if null, null value is set to the column)
      */
@@ -171,6 +196,30 @@ public abstract class BsVillageDay extends AbstractEntity implements DomainEntit
         setNoonnightCodeAsNoonnight(CDef.Noonnight.昼);
     }
 
+    /**
+     * Set the value of noonnightCode as 投票1回目 (VOTE_FIRST). <br>
+     * 投票1回目
+     */
+    public void setNoonnightCode_投票1回目() {
+        setNoonnightCodeAsNoonnight(CDef.Noonnight.投票1回目);
+    }
+
+    /**
+     * Set the value of noonnightCode as 投票2回目 (VOTE_SECOND). <br>
+     * 投票2回目
+     */
+    public void setNoonnightCode_投票2回目() {
+        setNoonnightCodeAsNoonnight(CDef.Noonnight.投票2回目);
+    }
+
+    /**
+     * Set the value of noonnightCode as 投票3回目 (VOTE_THIRD). <br>
+     * 投票3回目
+     */
+    public void setNoonnightCode_投票3回目() {
+        setNoonnightCodeAsNoonnight(CDef.Noonnight.投票3回目);
+    }
+
     // ===================================================================================
     //                                                        Classification Determination
     //                                                        ============================
@@ -194,6 +243,39 @@ public abstract class BsVillageDay extends AbstractEntity implements DomainEntit
     public boolean isNoonnightCode昼() {
         CDef.Noonnight cdef = getNoonnightCodeAsNoonnight();
         return cdef != null ? cdef.equals(CDef.Noonnight.昼) : false;
+    }
+
+    /**
+     * Is the value of noonnightCode 投票1回目? <br>
+     * 投票1回目
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isNoonnightCode投票1回目() {
+        CDef.Noonnight cdef = getNoonnightCodeAsNoonnight();
+        return cdef != null ? cdef.equals(CDef.Noonnight.投票1回目) : false;
+    }
+
+    /**
+     * Is the value of noonnightCode 投票2回目? <br>
+     * 投票2回目
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isNoonnightCode投票2回目() {
+        CDef.Noonnight cdef = getNoonnightCodeAsNoonnight();
+        return cdef != null ? cdef.equals(CDef.Noonnight.投票2回目) : false;
+    }
+
+    /**
+     * Is the value of noonnightCode 投票3回目? <br>
+     * 投票3回目
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isNoonnightCode投票3回目() {
+        CDef.Noonnight cdef = getNoonnightCodeAsNoonnight();
+        return cdef != null ? cdef.equals(CDef.Noonnight.投票3回目) : false;
     }
 
     // ===================================================================================
@@ -378,7 +460,9 @@ public abstract class BsVillageDay extends AbstractEntity implements DomainEntit
         sb.append(dm).append(xfND(_villageId));
         sb.append(dm).append(xfND(_day));
         sb.append(dm).append(xfND(_noonnightCode));
-        sb.append(dm).append(xfND(_daychangeDatetime));
+        sb.append(dm).append(xfND(_startDatetime));
+        sb.append(dm).append(xfND(_endDatetime));
+        sb.append(dm).append(xfND(_isEpilogue));
         sb.append(dm).append(xfND(_registerDatetime));
         sb.append(dm).append(xfND(_registerTrace));
         sb.append(dm).append(xfND(_updateDatetime));
@@ -440,7 +524,7 @@ public abstract class BsVillageDay extends AbstractEntity implements DomainEntit
     }
 
     /**
-     * [get] VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village} <br>
+     * [get] VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village} <br>
      * 村ID
      * @return The value of the column 'VILLAGE_ID'. (basically NotNull if selected: for the constraint)
      */
@@ -450,7 +534,7 @@ public abstract class BsVillageDay extends AbstractEntity implements DomainEntit
     }
 
     /**
-     * [set] VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village} <br>
+     * [set] VILLAGE_ID: {UQ+, NotNull, INT UNSIGNED(10), FK to village} <br>
      * 村ID
      * @param villageId The value of the column 'VILLAGE_ID'. (basically NotNull if update: for the constraint)
      */
@@ -460,7 +544,7 @@ public abstract class BsVillageDay extends AbstractEntity implements DomainEntit
     }
 
     /**
-     * [get] DAY: {NotNull, INT UNSIGNED(10)} <br>
+     * [get] DAY: {+UQ, NotNull, INT UNSIGNED(10)} <br>
      * 何日目か
      * @return The value of the column 'DAY'. (basically NotNull if selected: for the constraint)
      */
@@ -470,7 +554,7 @@ public abstract class BsVillageDay extends AbstractEntity implements DomainEntit
     }
 
     /**
-     * [set] DAY: {NotNull, INT UNSIGNED(10)} <br>
+     * [set] DAY: {+UQ, NotNull, INT UNSIGNED(10)} <br>
      * 何日目か
      * @param day The value of the column 'DAY'. (basically NotNull if update: for the constraint)
      */
@@ -480,7 +564,7 @@ public abstract class BsVillageDay extends AbstractEntity implements DomainEntit
     }
 
     /**
-     * [get] NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
+     * [get] NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
      * 昼夜コード
      * @return The value of the column 'NOONNIGHT_CODE'. (basically NotNull if selected: for the constraint)
      */
@@ -490,7 +574,7 @@ public abstract class BsVillageDay extends AbstractEntity implements DomainEntit
     }
 
     /**
-     * [set] NOONNIGHT_CODE: {IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
+     * [set] NOONNIGHT_CODE: {+UQ, IX, NotNull, VARCHAR(20), FK to noonnight, classification=Noonnight} <br>
      * 昼夜コード
      * @param noonnightCode The value of the column 'NOONNIGHT_CODE'. (basically NotNull if update: for the constraint)
      */
@@ -501,23 +585,63 @@ public abstract class BsVillageDay extends AbstractEntity implements DomainEntit
     }
 
     /**
-     * [get] DAYCHANGE_DATETIME: {NotNull, DATETIME(19)} <br>
-     * 日付更新日時
-     * @return The value of the column 'DAYCHANGE_DATETIME'. (basically NotNull if selected: for the constraint)
+     * [get] START_DATETIME: {NotNull, DATETIME(19)} <br>
+     * 開始日時
+     * @return The value of the column 'START_DATETIME'. (basically NotNull if selected: for the constraint)
      */
-    public java.time.LocalDateTime getDaychangeDatetime() {
-        checkSpecifiedProperty("daychangeDatetime");
-        return _daychangeDatetime;
+    public java.time.LocalDateTime getStartDatetime() {
+        checkSpecifiedProperty("startDatetime");
+        return _startDatetime;
     }
 
     /**
-     * [set] DAYCHANGE_DATETIME: {NotNull, DATETIME(19)} <br>
-     * 日付更新日時
-     * @param daychangeDatetime The value of the column 'DAYCHANGE_DATETIME'. (basically NotNull if update: for the constraint)
+     * [set] START_DATETIME: {NotNull, DATETIME(19)} <br>
+     * 開始日時
+     * @param startDatetime The value of the column 'START_DATETIME'. (basically NotNull if update: for the constraint)
      */
-    public void setDaychangeDatetime(java.time.LocalDateTime daychangeDatetime) {
-        registerModifiedProperty("daychangeDatetime");
-        _daychangeDatetime = daychangeDatetime;
+    public void setStartDatetime(java.time.LocalDateTime startDatetime) {
+        registerModifiedProperty("startDatetime");
+        _startDatetime = startDatetime;
+    }
+
+    /**
+     * [get] END_DATETIME: {NotNull, DATETIME(19)} <br>
+     * 終了日時
+     * @return The value of the column 'END_DATETIME'. (basically NotNull if selected: for the constraint)
+     */
+    public java.time.LocalDateTime getEndDatetime() {
+        checkSpecifiedProperty("endDatetime");
+        return _endDatetime;
+    }
+
+    /**
+     * [set] END_DATETIME: {NotNull, DATETIME(19)} <br>
+     * 終了日時
+     * @param endDatetime The value of the column 'END_DATETIME'. (basically NotNull if update: for the constraint)
+     */
+    public void setEndDatetime(java.time.LocalDateTime endDatetime) {
+        registerModifiedProperty("endDatetime");
+        _endDatetime = endDatetime;
+    }
+
+    /**
+     * [get] IS_EPILOGUE: {NotNull, BIT} <br>
+     * エピローグか
+     * @return The value of the column 'IS_EPILOGUE'. (basically NotNull if selected: for the constraint)
+     */
+    public Boolean getIsEpilogue() {
+        checkSpecifiedProperty("isEpilogue");
+        return _isEpilogue;
+    }
+
+    /**
+     * [set] IS_EPILOGUE: {NotNull, BIT} <br>
+     * エピローグか
+     * @param isEpilogue The value of the column 'IS_EPILOGUE'. (basically NotNull if update: for the constraint)
+     */
+    public void setIsEpilogue(Boolean isEpilogue) {
+        registerModifiedProperty("isEpilogue");
+        _isEpilogue = isEpilogue;
     }
 
     /**

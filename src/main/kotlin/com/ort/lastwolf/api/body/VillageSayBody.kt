@@ -9,8 +9,8 @@ data class VillageSayBody(
     @field:NotNull(message = "発言種別は必須")
     val messageType: String?,
 
-    @field:NotNull(message = "表情種別は必須")
-    val faceType: String?
+    @field:NotNull(message = "強調発言かは必須")
+    val strong: Boolean?
 ) {
     constructor() : this(null, null, null)
 }

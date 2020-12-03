@@ -23,7 +23,6 @@ class ParticipateDomainService {
         return VillageParticipateSituation(
             isParticipating = participant != null,
             isAvailableParticipate = isAvailableParticipate(player, village),
-            isAvailableSpectate = isAvailableSpectate(player, village, charas.list.size),
             selectableCharaList = getSelectableCharaList(village, charas),
             isAvailableLeave = isAvailableLeave(village, participant),
             myself = participant
@@ -60,43 +59,15 @@ class ParticipateDomainService {
     }
 
     /**
-     * 見学チェック
-     * @param player player
-     * @param village village
-     * @param charachipCharaNum 使用するキャラチップのキャラ数
-     */
-    fun assertSpectate(
-        player: Player?,
-        village: Village,
-        charaId: Int,
-        charachipCharaNum: Int,
-        password: String?
-    ) {
-        if (!isAvailableSpectate(player, village, charachipCharaNum)) throw LastwolfBusinessException("見学できません")
-        // 既にそのキャラが参加していたりパスワードを間違えていたらNG
-        village.assertParticipate(charaId, password)
-    }
-
-    /**
      * 参加メッセージ
      * @param village village
      * @param chara chara
-     * @param isSpectate 見学か
-     * @return 参加時のメッセージ e.g. {N}人目、{キャラ名}。
+     * @return 参加時のメッセージ
      */
-    fun createParticipateMessage(village: Village, chara: Chara, isSpectate: Boolean): Message {
+    fun createParticipateMessage(village: Village, chara: Chara): Message {
         // 何人目か
-        val number = if (isSpectate) {
-            village.spectator.count
-        } else {
-            village.participant.count
-        }
-        val text = if (isSpectate) {
-            "（見学）${number}人目、${chara.charaName.fullName()}。"
-        } else {
-            "${number}人目、${chara.charaName.fullName()}。"
-        }
-        return Message.createPublicSystemMessage(text, village.day.prologueDay().id)
+        val text = "${chara.name.name}が参加しました。（${village.participants.count}人目）"
+        return Message.createPublicSystemMessage(text, village.days.prologueDay().id)
     }
 
     /**
@@ -106,8 +77,7 @@ class ParticipateDomainService {
      */
     fun getSelectableCharaList(village: Village, charas: Charas): List<Chara> {
         return charas.list.filterNot { chara ->
-            village.participant.memberList.any { it.charaId == chara.id }
-                || village.spectator.memberList.any { it.charaId == chara.id }
+            village.participants.list.any { it.chara.id == chara.id }
         }
     }
 
@@ -148,7 +118,7 @@ class ParticipateDomainService {
      * @return 退村時のメッセージ e.g. {キャラ名}は村を去った。
      */
     fun createLeaveMessage(village: Village, chara: Chara): Message =
-        Message.createPublicSystemMessage(createLeaveMessageString(chara), village.day.latestDay().id)
+        Message.createPublicSystemMessage(createLeaveMessageString(chara), village.days.latestDay().id)
 
 
     // ===================================================================================
@@ -169,23 +139,6 @@ class ParticipateDomainService {
         return village.isAvailableParticipate()
     }
 
-    /**
-     * @param player player
-     * @param charachipCharaNum 使用するキャラチップのキャラ数
-     * @return 見学可能な状況か
-     */
-    private fun isAvailableSpectate(
-        player: Player?,
-        village: Village,
-        charachipCharaNum: Int
-    ): Boolean {
-        // プレイヤーとして参加可能か
-        player ?: return false
-        if (!player.isAvailableParticipate()) return false
-        // 村として見学可能か
-        return village.isAvailableSpectate(charachipCharaNum)
-    }
-
     private fun createLeaveMessageString(chara: Chara): String =
-        "${chara.charaName.fullName()}は村を去った。"
+        "${chara.name.name}は村を去った。"
 }

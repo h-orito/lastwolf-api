@@ -3,7 +3,6 @@ package com.ort.lastwolf.domain.service.ability
 import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.domain.model.ability.AbilityType
 import com.ort.lastwolf.domain.model.charachip.Chara
-import com.ort.lastwolf.domain.model.charachip.Charas
 import com.ort.lastwolf.domain.model.daychange.DayChange
 import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.village.Village
@@ -19,89 +18,95 @@ class DivineDomainService : IAbilityDomainService {
 
     override fun getSelectableTargetList(
         village: Village,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
+        abilities: VillageAbilities
     ): List<VillageParticipant> {
         participant ?: return listOf()
 
+        // すでに指定していたらもう使えない
+        if (abilities
+                .filterByType(getAbilityType())
+                .filterLatestday(village).list
+                .any { it.myselfId == participant.id }
+        ) {
+            return listOf()
+        }
+
         // 自分以外の生存者全員
-        return village.participant.memberList.filter {
+        return village.participants.list.filter {
             it.id != participant.id && it.isAlive()
         }
     }
 
-    override fun getSelectingTarget(
-        village: Village,
-        participant: VillageParticipant?,
-        villageAbilities: VillageAbilities
-    ): VillageParticipant? {
-        participant ?: return null
-
-        val targetVillageParticipantId = villageAbilities
-            .filterLatestday(village)
-            .filterByType(getAbilityType()).list
-            .find { it.myselfId == participant.id }
-            ?.targetId
-        targetVillageParticipantId ?: return null
-        return village.participant.member(targetVillageParticipantId)
-    }
-
-    override fun createSetMessage(myChara: Chara, targetChara: Chara?): String {
-        return "${myChara.charaName.fullName()}が占い対象を${targetChara?.charaName?.fullName() ?: "なし"}に設定しました。"
-    }
-
-    override fun getDefaultAbilityList(
-        village: Village,
-        villageAbilities: VillageAbilities
-    ): List<VillageAbility> {
+    override fun processDummyAbility(
+        dayChange: DayChange
+    ): DayChange {
+        val village = dayChange.village
         // 進行中のみ
-        if (!village.status.isProgress()) return listOf()
-        // 生存している占い能力持ちごとに
-        return village.participant.filterAlive().memberList.filter {
-            it.skill!!.toCdef().isHasDivineAbility
-        }.mapNotNull { seer ->
-            // 対象は自分以外の生存者からランダム
-            village.participant
-                .filterAlive()
-                .findRandom { it.id != seer.id }
-                ?.let {
-                    VillageAbility(
-                        villageDayId = village.day.latestDay().id,
-                        myselfId = seer.id,
-                        targetId = it.id,
-                        abilityType = getAbilityType()
-                    )
-                }
-        }
+        if (!village.status.isProgress()) return dayChange
+        // ダミー
+        val dummyParticipant = village.dummyParticipant()!!
+        // 対象
+        val target = getSelectableTargetList(village, dummyParticipant, dayChange.abilities).random()
+        // 能力
+        val ability = VillageAbility(
+            villageDayId = village.days.latestDay().id,
+            myselfId = dummyParticipant.id,
+            targetId = target.id,
+            abilityType = getAbilityType()
+        )
+        // メッセージ
+        val message = createDivineMessage(village, ability, dummyParticipant)
+
+        return dayChange.copy(
+            messages = dayChange.messages.add(message),
+            abilities = dayChange.abilities.add(ability)
+        )
     }
 
-    override fun processDayChangeAction(dayChange: DayChange, charas: Charas): DayChange {
-        val latestDay = dayChange.village.day.latestDay()
-        var messages = dayChange.messages.copy()
+    override fun createAbilityMessage(
+        village: Village,
+        participant: VillageParticipant,
+        ability: VillageAbility
+    ) = createDivineMessage(village, ability, participant)
+
+    fun divineKill(dayChange: DayChange): DayChange {
+        val latestDay = dayChange.village.days.latestDay()
         var village = dayChange.village.copy()
 
-        dayChange.village.participant.memberList.filter {
+        dayChange.village.participants.list.filter {
             it.isAlive() && it.skill!!.toCdef().isHasDivineAbility
         }.forEach { seer ->
             dayChange.abilities.filterYesterday(village).list.find {
                 it.myselfId == seer.id
             }?.let { ability ->
-                messages = messages.add(createDivineMessage(dayChange.village, charas, ability, seer))
+                // 占いメッセージは実行時に追加するのでここでは何もしない
                 // 呪殺対象なら死亡
                 if (isDivineKill(dayChange, ability.targetId!!)) village = village.divineKillParticipant(ability.targetId, latestDay)
-                // 逆呪殺対象なら自分が死亡
-                if (isCounterDivineKill(dayChange, ability.targetId)) village = village.divineKillParticipant(seer.id, latestDay)
             }
         }
 
         return dayChange.copy(
-            messages = messages,
             village = village
         ).setIsChange(dayChange)
     }
 
     override fun isAvailableNoTarget(village: Village): Boolean = false
 
-    override fun isUsable(village: Village, participant: VillageParticipant): Boolean {
+    override fun isUsable(
+        village: Village,
+        participant: VillageParticipant,
+        abilities: VillageAbilities
+    ): Boolean {
+        // すでに指定していたらもう使えない
+        if (abilities
+                .filterByType(getAbilityType())
+                .filterLatestday(village).list
+                .any { it.myselfId == participant.id }
+        ) {
+            return false
+        }
+
         // 生存していたら行使できる
         return participant.isAlive()
     }
@@ -111,32 +116,22 @@ class DivineDomainService : IAbilityDomainService {
     //                                                                        ============
     private fun createDivineMessage(
         village: Village,
-        charas: Charas,
         ability: VillageAbility,
         seer: VillageParticipant
     ): Message {
-        val myself = village.participant.member(ability.myselfId)
-        val myChara = charas.chara(myself.charaId)
-        val targetChara = charas.chara(village.participant, ability.targetId!!)
-        val isWolf = village.participant.member(ability.targetId).skill!!.toCdef().isDivineResultWolf
-        val text = createDivineMessageString(myChara, targetChara, isWolf)
-        return Message.createSeerPrivateMessage(text, village.day.latestDay().id, seer)
+        val target = village.participants.first(ability.targetId!!)
+        val isWolf = village.participants.first(ability.targetId).skill!!.toCdef().isDivineResultWolf
+        val text = createDivineMessageString(target.chara, isWolf)
+        return Message.createPrivateAbilityMessage(text, village.days.latestDay().id, seer, true)
     }
 
-    private fun createDivineMessageString(chara: Chara, targetChara: Chara, isWolf: Boolean): String =
-        "${chara.charaName.fullName()}は、${targetChara.charaName.fullName()}を占った。\n${targetChara.charaName.fullName()}は人狼${if (isWolf) "の" else "ではない"}ようだ。"
+    private fun createDivineMessageString(targetChara: Chara, isWolf: Boolean): String =
+        "${targetChara.name.name}を占った。${targetChara.name.name}は人狼${if (isWolf) "の" else "ではない"}ようだ。"
 
     private fun isDivineKill(dayChange: DayChange, targetId: Int): Boolean {
         // 対象が既に死亡していたら呪殺ではない
-        if (!dayChange.village.participant.member(targetId).isAlive()) return false
+        if (!dayChange.village.participants.first(targetId).isAlive()) return false
         // 対象が呪殺対象でなければ呪殺ではない
-        return dayChange.village.participant.member(targetId).skill!!.toCdef().isDeadByDivine
-    }
-
-    private fun isCounterDivineKill(dayChange: DayChange, targetId: Int): Boolean {
-        // 対象が既に死亡していたら呪殺ではない
-        if (!dayChange.village.participant.member(targetId).isAlive()) return false
-        // 対象が逆呪殺対象でなければ逆呪殺されない
-        return dayChange.village.participant.member(targetId).skill!!.toCdef().isCounterDeadByDivine
+        return dayChange.village.participants.first(targetId).skill!!.toCdef().isDeadByDivine
     }
 }

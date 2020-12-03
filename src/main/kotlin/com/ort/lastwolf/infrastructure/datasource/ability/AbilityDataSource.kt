@@ -3,13 +3,16 @@ package com.ort.lastwolf.infrastructure.datasource.ability
 import com.ort.dbflute.allcommon.CDef
 import com.ort.dbflute.exbhv.AbilityBhv
 import com.ort.dbflute.exentity.Ability
+import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.ability.VillageAbilities
 import com.ort.lastwolf.domain.model.village.ability.VillageAbility
+import com.ort.lastwolf.infrastructure.datasource.firebase.FirebaseDataSource
 import org.springframework.stereotype.Repository
 
 @Repository
 class AbilityDataSource(
-    val abilityBhv: AbilityBhv
+    val abilityBhv: AbilityBhv,
+    val firebaseDataSource: FirebaseDataSource
 ) {
 
     // ===================================================================================
@@ -25,14 +28,16 @@ class AbilityDataSource(
     // ===================================================================================
     //                                                                              Update
     //                                                                              ======
-    fun updateAbility(villageAbility: VillageAbility) {
+    fun updateAbility(village: Village, villageAbility: VillageAbility) {
         deleteAbility(villageAbility)
         insertAbility(villageAbility)
+        firebaseDataSource.registerSituationLatest(village, villageAbility)
     }
 
-    fun updateDifference(before: VillageAbilities, after: VillageAbilities) {
+    fun updateDifference(village: Village, before: VillageAbilities, after: VillageAbilities) {
         after.list.drop(before.list.size).forEach {
             insertAbility(it)
+            firebaseDataSource.registerSituationLatest(village, it)
         }
     }
 

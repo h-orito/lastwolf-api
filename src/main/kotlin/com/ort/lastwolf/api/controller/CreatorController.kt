@@ -10,11 +10,9 @@ import com.ort.lastwolf.application.service.MessageService
 import com.ort.lastwolf.application.service.PlayerService
 import com.ort.lastwolf.application.service.VillageService
 import com.ort.lastwolf.domain.model.charachip.Chara
-import com.ort.lastwolf.domain.model.charachip.Charas
 import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.message.MessageContent
 import com.ort.lastwolf.domain.model.message.MessageTime
-import com.ort.lastwolf.domain.model.player.Players
 import com.ort.lastwolf.fw.exception.LastwolfBusinessException
 import com.ort.lastwolf.fw.security.LastwolfUser
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -44,18 +42,17 @@ class CreatorController(
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
 
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayer.id != player.id)
             throw LastwolfBusinessException("村建てか管理者しか使えません")
 
         // キック
         val changedVillage = village.leaveParticipant(body.targetId!!)
-        val participant = village.memberById(body.targetId)
-        if (participant.playerId == 1) return // ダミーはキックできない
+        val participant = village.participants.first(body.targetId)
+        if (participant.player.id == 1) return // ダミーはキックできない
         // シスメ
-        val chara: Chara = charachipService.findChara(participant.charaId)
-        val players = playerService.findPlayers(villageId)
+        val chara: Chara = charachipService.findChara(participant.chara.id)
         val updatedVillage = villageService.updateVillageDifference(village, changedVillage)
-        messageService.registerLeaveMessage(updatedVillage, players, chara)
+        messageService.registerLeaveMessage(updatedVillage, chara)
     }
 
     @PostMapping("/creator/village/{villageId}/cancel")
@@ -66,14 +63,13 @@ class CreatorController(
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
 
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayer.id != player.id)
             throw LastwolfBusinessException("村建てか管理者しか使えません")
 
         val changedVillage = village.changeStatus(CDef.VillageStatus.廃村)
         villageService.updateVillageDifference(village, changedVillage)
         val message = village.createCreatorCancelVillageMessage()
-        val players = playerService.findPlayers(villageId)
-        messageService.registerMessage(village, players, message)
+        messageService.registerMessage(village, message)
     }
 
     @PostMapping("/creator/village/{villageId}/say-confirm")
@@ -85,28 +81,25 @@ class CreatorController(
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
 
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayer.id != player.id)
             throw LastwolfBusinessException("村建てか管理者しか使えません")
 
         villageCoordinator.confirmToCreatorSay(village, body.message!!)
         return MessageView(
             message = Message(
-                fromVillageParticipantId = null,
-                toVillageParticipantId = null,
+                fromParticipantId = null,
                 time = MessageTime(
-                    villageDayId = village.day.latestDay().id,
+                    villageDayId = village.days.latestDay().id,
                     datetime = LocalDateTime.now(),
                     unixTimeMilli = LocalDateTime.now().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
                 ),
                 content = MessageContent.invoke(
                     messageType = CDef.MessageType.村建て発言.code(),
                     text = body.message,
-                    faceCode = null
-                ).copy(num = 1)
+                    isStrong = false
+                )
             ),
             village = village,
-            players = Players(listOf()),
-            charas = Charas(listOf()),
             shouldHidePlayer = true
         )
     }
@@ -120,10 +113,34 @@ class CreatorController(
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
 
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayer.id != player.id)
             throw LastwolfBusinessException("村建てか管理者しか使えません")
 
         villageCoordinator.confirmToCreatorSay(village, body.message!!)
         villageCoordinator.creatorSay(village, body.message)
+    }
+
+    @PostMapping("/creator/village/{villageId}/start-rollcall")
+    fun startRollCall(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: LastwolfUser
+    ) {
+        villageCoordinator.startRollCall(villageId, user)
+    }
+
+    @PostMapping("/creator/village/{villageId}/cancel-rollcall")
+    fun cancelRollCall(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: LastwolfUser
+    ) {
+        villageCoordinator.cancelRollCall(villageId, user)
+    }
+
+    @PostMapping("/creator/village/{villageId}/start-village")
+    fun startVillage(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: LastwolfUser
+    ) {
+        villageCoordinator.startVillage(villageId, user)
     }
 }

@@ -78,6 +78,30 @@ public abstract class AbstractBsNoonnightCQ extends AbstractConditionQuery {
         setNoonnightCode_Equal_AsNoonnight(CDef.Noonnight.昼);
     }
 
+    /**
+     * Equal(=). As 投票1回目 (VOTE_FIRST). And OnlyOnceRegistered. <br>
+     * 投票1回目
+     */
+    public void setNoonnightCode_Equal_投票1回目() {
+        setNoonnightCode_Equal_AsNoonnight(CDef.Noonnight.投票1回目);
+    }
+
+    /**
+     * Equal(=). As 投票2回目 (VOTE_SECOND). And OnlyOnceRegistered. <br>
+     * 投票2回目
+     */
+    public void setNoonnightCode_Equal_投票2回目() {
+        setNoonnightCode_Equal_AsNoonnight(CDef.Noonnight.投票2回目);
+    }
+
+    /**
+     * Equal(=). As 投票3回目 (VOTE_THIRD). And OnlyOnceRegistered. <br>
+     * 投票3回目
+     */
+    public void setNoonnightCode_Equal_投票3回目() {
+        setNoonnightCode_Equal_AsNoonnight(CDef.Noonnight.投票3回目);
+    }
+
     protected void doSetNoonnightCode_Equal(String noonnightCode) {
         regNoonnightCode(CK_EQ, noonnightCode);
     }
@@ -115,6 +139,30 @@ public abstract class AbstractBsNoonnightCQ extends AbstractConditionQuery {
      */
     public void setNoonnightCode_NotEqual_昼() {
         setNoonnightCode_NotEqual_AsNoonnight(CDef.Noonnight.昼);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 投票1回目 (VOTE_FIRST). And OnlyOnceRegistered. <br>
+     * 投票1回目
+     */
+    public void setNoonnightCode_NotEqual_投票1回目() {
+        setNoonnightCode_NotEqual_AsNoonnight(CDef.Noonnight.投票1回目);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 投票2回目 (VOTE_SECOND). And OnlyOnceRegistered. <br>
+     * 投票2回目
+     */
+    public void setNoonnightCode_NotEqual_投票2回目() {
+        setNoonnightCode_NotEqual_AsNoonnight(CDef.Noonnight.投票2回目);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 投票3回目 (VOTE_THIRD). And OnlyOnceRegistered. <br>
+     * 投票3回目
+     */
+    public void setNoonnightCode_NotEqual_投票3回目() {
+        setNoonnightCode_NotEqual_AsNoonnight(CDef.Noonnight.投票3回目);
     }
 
     protected void doSetNoonnightCode_NotEqual(String noonnightCode) {

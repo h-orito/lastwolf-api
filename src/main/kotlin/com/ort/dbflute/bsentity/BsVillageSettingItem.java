@@ -131,27 +131,11 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Set the value of villageSettingItemCode as 更新間隔秒 (day_change_interval_seconds). <br>
-     * 更新間隔秒
-     */
-    public void setVillageSettingItemCode_更新間隔秒() {
-        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.更新間隔秒);
-    }
-
-    /**
      * Set the value of villageSettingItemCode as ダミーキャラid (dummy_chara_id). <br>
      * ダミーキャラID
      */
     public void setVillageSettingItemCode_ダミーキャラid() {
         setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.ダミーキャラid);
-    }
-
-    /**
-     * Set the value of villageSettingItemCode as 自動生成村か (is_auto_generated). <br>
-     * 自動生成村か
-     */
-    public void setVillageSettingItemCode_自動生成村か() {
-        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.自動生成村か);
     }
 
     /**
@@ -179,14 +163,6 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Set the value of villageSettingItemCode as 見学可能か (is_available_spectate). <br>
-     * 見学可能か
-     */
-    public void setVillageSettingItemCode_見学可能か() {
-        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.見学可能か);
-    }
-
-    /**
      * Set the value of villageSettingItemCode as 突然死ありか (is_available_suddenly_death). <br>
      * 突然死ありか
      */
@@ -203,27 +179,27 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Set the value of villageSettingItemCode as 記名投票か (is_open_vote). <br>
-     * 記名投票か
-     */
-    public void setVillageSettingItemCode_記名投票か() {
-        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.記名投票か);
-    }
-
-    /**
-     * Set the value of villageSettingItemCode as 墓下見学発言を生存者が見られるか (is_visible_grave_message). <br>
-     * 墓下見学発言を生存者が見られるか
-     */
-    public void setVillageSettingItemCode_墓下見学発言を生存者が見られるか() {
-        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.墓下見学発言を生存者が見られるか);
-    }
-
-    /**
      * Set the value of villageSettingItemCode as 入村パスワード (join_password). <br>
      * 入村パスワード
      */
     public void setVillageSettingItemCode_入村パスワード() {
         setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.入村パスワード);
+    }
+
+    /**
+     * Set the value of villageSettingItemCode as 夜時間秒 (night_seconds). <br>
+     * 夜時間秒
+     */
+    public void setVillageSettingItemCode_夜時間秒() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.夜時間秒);
+    }
+
+    /**
+     * Set the value of villageSettingItemCode as 昼時間秒 (noon_seconds). <br>
+     * 昼時間秒
+     */
+    public void setVillageSettingItemCode_昼時間秒() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.昼時間秒);
     }
 
     /**
@@ -251,14 +227,6 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Set the value of villageSettingItemCode as 沈黙時間 (silent_hours). <br>
-     * 沈黙時間
-     */
-    public void setVillageSettingItemCode_沈黙時間() {
-        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.沈黙時間);
-    }
-
-    /**
      * Set the value of villageSettingItemCode as 開始予定日時 (start_datetime). <br>
      * 開始予定日時
      */
@@ -267,11 +235,11 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Set the value of villageSettingItemCode as 期間形式 (term_type). <br>
-     * 期間形式
+     * Set the value of villageSettingItemCode as 投票時間秒 (vote_seconds). <br>
+     * 投票時間秒
      */
-    public void setVillageSettingItemCode_期間形式() {
-        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.期間形式);
+    public void setVillageSettingItemCode_投票時間秒() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.投票時間秒);
     }
 
     // ===================================================================================
@@ -289,17 +257,6 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Is the value of villageSettingItemCode 更新間隔秒? <br>
-     * 更新間隔秒
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isVillageSettingItemCode更新間隔秒() {
-        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
-        return cdef != null ? cdef.equals(CDef.VillageSettingItem.更新間隔秒) : false;
-    }
-
-    /**
      * Is the value of villageSettingItemCode ダミーキャラid? <br>
      * ダミーキャラID
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -308,17 +265,6 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     public boolean isVillageSettingItemCodeダミーキャラid() {
         CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
         return cdef != null ? cdef.equals(CDef.VillageSettingItem.ダミーキャラid) : false;
-    }
-
-    /**
-     * Is the value of villageSettingItemCode 自動生成村か? <br>
-     * 自動生成村か
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isVillageSettingItemCode自動生成村か() {
-        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
-        return cdef != null ? cdef.equals(CDef.VillageSettingItem.自動生成村か) : false;
     }
 
     /**
@@ -355,17 +301,6 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Is the value of villageSettingItemCode 見学可能か? <br>
-     * 見学可能か
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isVillageSettingItemCode見学可能か() {
-        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
-        return cdef != null ? cdef.equals(CDef.VillageSettingItem.見学可能か) : false;
-    }
-
-    /**
      * Is the value of villageSettingItemCode 突然死ありか? <br>
      * 突然死ありか
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -388,28 +323,6 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Is the value of villageSettingItemCode 記名投票か? <br>
-     * 記名投票か
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isVillageSettingItemCode記名投票か() {
-        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
-        return cdef != null ? cdef.equals(CDef.VillageSettingItem.記名投票か) : false;
-    }
-
-    /**
-     * Is the value of villageSettingItemCode 墓下見学発言を生存者が見られるか? <br>
-     * 墓下見学発言を生存者が見られるか
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isVillageSettingItemCode墓下見学発言を生存者が見られるか() {
-        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
-        return cdef != null ? cdef.equals(CDef.VillageSettingItem.墓下見学発言を生存者が見られるか) : false;
-    }
-
-    /**
      * Is the value of villageSettingItemCode 入村パスワード? <br>
      * 入村パスワード
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -418,6 +331,28 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     public boolean isVillageSettingItemCode入村パスワード() {
         CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
         return cdef != null ? cdef.equals(CDef.VillageSettingItem.入村パスワード) : false;
+    }
+
+    /**
+     * Is the value of villageSettingItemCode 夜時間秒? <br>
+     * 夜時間秒
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCode夜時間秒() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.夜時間秒) : false;
+    }
+
+    /**
+     * Is the value of villageSettingItemCode 昼時間秒? <br>
+     * 昼時間秒
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCode昼時間秒() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.昼時間秒) : false;
     }
 
     /**
@@ -454,17 +389,6 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Is the value of villageSettingItemCode 沈黙時間? <br>
-     * 沈黙時間
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isVillageSettingItemCode沈黙時間() {
-        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
-        return cdef != null ? cdef.equals(CDef.VillageSettingItem.沈黙時間) : false;
-    }
-
-    /**
      * Is the value of villageSettingItemCode 開始予定日時? <br>
      * 開始予定日時
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -476,14 +400,14 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Is the value of villageSettingItemCode 期間形式? <br>
-     * 期間形式
+     * Is the value of villageSettingItemCode 投票時間秒? <br>
+     * 投票時間秒
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
      * @return The determination, true or false.
      */
-    public boolean isVillageSettingItemCode期間形式() {
+    public boolean isVillageSettingItemCode投票時間秒() {
         CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
-        return cdef != null ? cdef.equals(CDef.VillageSettingItem.期間形式) : false;
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.投票時間秒) : false;
     }
 
     // ===================================================================================

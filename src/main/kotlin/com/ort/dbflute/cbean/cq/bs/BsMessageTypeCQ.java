@@ -79,20 +79,6 @@ public class BsMessageTypeCQ extends AbstractBsMessageTypeCQ {
       return _messageTypeCode; }
     protected ConditionValue xgetCValueMessageTypeCode() { return xdfgetMessageTypeCode(); }
 
-    public Map<String, MessageRestrictionCQ> xdfgetMessageTypeCode_ExistsReferrer_MessageRestrictionList() { return xgetSQueMap("messageTypeCode_ExistsReferrer_MessageRestrictionList"); }
-    public String keepMessageTypeCode_ExistsReferrer_MessageRestrictionList(MessageRestrictionCQ sq) { return xkeepSQue("messageTypeCode_ExistsReferrer_MessageRestrictionList", sq); }
-
-    public Map<String, MessageRestrictionCQ> xdfgetMessageTypeCode_NotExistsReferrer_MessageRestrictionList() { return xgetSQueMap("messageTypeCode_NotExistsReferrer_MessageRestrictionList"); }
-    public String keepMessageTypeCode_NotExistsReferrer_MessageRestrictionList(MessageRestrictionCQ sq) { return xkeepSQue("messageTypeCode_NotExistsReferrer_MessageRestrictionList", sq); }
-
-    public Map<String, MessageRestrictionCQ> xdfgetMessageTypeCode_SpecifyDerivedReferrer_MessageRestrictionList() { return xgetSQueMap("messageTypeCode_SpecifyDerivedReferrer_MessageRestrictionList"); }
-    public String keepMessageTypeCode_SpecifyDerivedReferrer_MessageRestrictionList(MessageRestrictionCQ sq) { return xkeepSQue("messageTypeCode_SpecifyDerivedReferrer_MessageRestrictionList", sq); }
-
-    public Map<String, MessageRestrictionCQ> xdfgetMessageTypeCode_QueryDerivedReferrer_MessageRestrictionList() { return xgetSQueMap("messageTypeCode_QueryDerivedReferrer_MessageRestrictionList"); }
-    public String keepMessageTypeCode_QueryDerivedReferrer_MessageRestrictionList(MessageRestrictionCQ sq) { return xkeepSQue("messageTypeCode_QueryDerivedReferrer_MessageRestrictionList", sq); }
-    public Map<String, Object> xdfgetMessageTypeCode_QueryDerivedReferrer_MessageRestrictionListParameter() { return xgetSQuePmMap("messageTypeCode_QueryDerivedReferrer_MessageRestrictionList"); }
-    public String keepMessageTypeCode_QueryDerivedReferrer_MessageRestrictionListParameter(Object pm) { return xkeepSQuePm("messageTypeCode_QueryDerivedReferrer_MessageRestrictionList", pm); }
-
     /**
      * Add order-by as ascend. <br>
      * MESSAGE_TYPE_CODE: {PK, NotNull, VARCHAR(20), classification=MessageType}

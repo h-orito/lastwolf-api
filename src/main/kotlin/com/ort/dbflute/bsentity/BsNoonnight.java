@@ -138,6 +138,30 @@ public abstract class BsNoonnight extends AbstractEntity implements DomainEntity
         setNoonnightCodeAsNoonnight(CDef.Noonnight.昼);
     }
 
+    /**
+     * Set the value of noonnightCode as 投票1回目 (VOTE_FIRST). <br>
+     * 投票1回目
+     */
+    public void setNoonnightCode_投票1回目() {
+        setNoonnightCodeAsNoonnight(CDef.Noonnight.投票1回目);
+    }
+
+    /**
+     * Set the value of noonnightCode as 投票2回目 (VOTE_SECOND). <br>
+     * 投票2回目
+     */
+    public void setNoonnightCode_投票2回目() {
+        setNoonnightCodeAsNoonnight(CDef.Noonnight.投票2回目);
+    }
+
+    /**
+     * Set the value of noonnightCode as 投票3回目 (VOTE_THIRD). <br>
+     * 投票3回目
+     */
+    public void setNoonnightCode_投票3回目() {
+        setNoonnightCodeAsNoonnight(CDef.Noonnight.投票3回目);
+    }
+
     // ===================================================================================
     //                                                        Classification Determination
     //                                                        ============================
@@ -161,6 +185,39 @@ public abstract class BsNoonnight extends AbstractEntity implements DomainEntity
     public boolean isNoonnightCode昼() {
         CDef.Noonnight cdef = getNoonnightCodeAsNoonnight();
         return cdef != null ? cdef.equals(CDef.Noonnight.昼) : false;
+    }
+
+    /**
+     * Is the value of noonnightCode 投票1回目? <br>
+     * 投票1回目
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isNoonnightCode投票1回目() {
+        CDef.Noonnight cdef = getNoonnightCodeAsNoonnight();
+        return cdef != null ? cdef.equals(CDef.Noonnight.投票1回目) : false;
+    }
+
+    /**
+     * Is the value of noonnightCode 投票2回目? <br>
+     * 投票2回目
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isNoonnightCode投票2回目() {
+        CDef.Noonnight cdef = getNoonnightCodeAsNoonnight();
+        return cdef != null ? cdef.equals(CDef.Noonnight.投票2回目) : false;
+    }
+
+    /**
+     * Is the value of noonnightCode 投票3回目? <br>
+     * 投票3回目
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isNoonnightCode投票3回目() {
+        CDef.Noonnight cdef = getNoonnightCodeAsNoonnight();
+        return cdef != null ? cdef.equals(CDef.Noonnight.投票3回目) : false;
     }
 
     // ===================================================================================

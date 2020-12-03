@@ -1,6 +1,5 @@
 package com.ort.lastwolf.api.controller
 
-import com.ort.lastwolf.api.body.PlayerUpdateDetailBody
 import com.ort.lastwolf.api.body.PlayerUpdateNicknameBody
 import com.ort.lastwolf.api.view.player.MyselfPlayerView
 import com.ort.lastwolf.api.view.player.PlayerRecordsView
@@ -8,12 +7,9 @@ import com.ort.lastwolf.application.coordinator.PlayerCoordinator
 import com.ort.lastwolf.application.service.CharachipService
 import com.ort.lastwolf.application.service.PlayerService
 import com.ort.lastwolf.application.service.VillageService
-import com.ort.lastwolf.domain.model.charachip.Charas
 import com.ort.lastwolf.domain.model.player.Player
-import com.ort.lastwolf.domain.model.player.Players
 import com.ort.lastwolf.domain.model.village.Villages
 import com.ort.lastwolf.fw.security.LastwolfUser
-import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -61,30 +57,12 @@ class PlayerController(
         playerService.updateNickname(user, body.nickname!!, body.twitterUserName!!)
     }
 
-    @PostMapping("/player/detail")
-    fun updateDetail(
-        @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: PlayerUpdateDetailBody
-    ) {
-        playerService.updateDetail(user.uid, body.otherSiteName, body.introduction)
-    }
-
-    private val logger = LoggerFactory.getLogger(PlayerController::class.java)
     @GetMapping("/player/{playerId}/record")
     fun stats(
         @PathVariable("playerId") playerId: Int
     ): PlayerRecordsView {
         val player: Player = playerService.findPlayer(playerId)
         val playerRecords = playerCoordinator.findPlayerRecords(player)
-        val charachipIdList = playerRecords.participateVillageList.map { it.village.setting.charachip.charachipId }.distinct()
-        val charas: Charas = charachipService.findCharas(charachipIdList)
-        val playerIdList =
-            playerRecords.participateVillageList.flatMap {
-                (it.village.participant.memberList + it.village.spectator.memberList).map { member -> member.playerId!! }
-            }.distinct()
-        val players: Players = playerService.findPlayers(playerIdList)
-        val createPlayerIdList = playerRecords.participateVillageList.map { it.village.creatorPlayerId }
-        val createPlayers: Players = playerService.findPlayers(createPlayerIdList)
-        return PlayerRecordsView(playerRecords, charas, players, createPlayers)
+        return PlayerRecordsView(playerRecords)
     }
 }

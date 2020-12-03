@@ -9,14 +9,12 @@ import org.springframework.stereotype.Service
 @Service
 class MiserableDeathDomainService {
 
-    fun processDayChangeAction(dayChange: DayChange, charas: Charas): DayChange {
-        val latestDay = dayChange.village.day.latestDay()
+    fun processDayChangeAction(dayChange: DayChange): DayChange {
+        val latestDay = dayChange.village.days.latestDay()
 
-        val miserableDeathCharaList = dayChange.village.participant.memberList.filter {
+        val miserableDeathCharaList = dayChange.village.participants.list.filter {
             !it.isAlive() && it.dead?.villageDay?.id == latestDay.id && it.dead.toCdef().isMiserableDeath
-        }.map { member ->
-            charas.chara(member.charaId)
-        }
+        }.map { member -> member.chara }
 
         return dayChange.copy(
             messages = dayChange.messages.add(createMiserableDeathMessage(dayChange.village, Charas(miserableDeathCharaList)))
@@ -40,10 +38,11 @@ class MiserableDeathDomainService {
             "今日は犠牲者がいないようだ。人狼は襲撃に失敗したのだろうか。"
         } else {
             charas.list.shuffled().joinToString(
-                prefix = "次の日の朝、以下の村人が無惨な姿で発見された。\n",
-                separator = "、\n"
-            ) { it.charaName.fullName() }
+                prefix = "次の日の朝、",
+                postfix = "が無惨な姿で発見された。",
+                separator = "と"
+            ) { it.name.name }
         }
-        return Message.createPublicSystemMessage(text, village.day.latestDay().id)
+        return Message.createPublicSystemMessage(text, village.days.latestDay().id, true)
     }
 }

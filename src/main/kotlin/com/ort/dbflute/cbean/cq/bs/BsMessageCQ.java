@@ -73,6 +73,26 @@ public class BsMessageCQ extends AbstractBsMessageCQ {
     // ===================================================================================
     //                                                                               Query
     //                                                                               =====
+    protected ConditionValue _messageId;
+    public ConditionValue xdfgetMessageId()
+    { if (_messageId == null) { _messageId = nCV(); }
+      return _messageId; }
+    protected ConditionValue xgetCValueMessageId() { return xdfgetMessageId(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * MESSAGE_ID: {PK, ID, NotNull, BIGINT(19)}
+     * @return this. (NotNull)
+     */
+    public BsMessageCQ addOrderBy_MessageId_Asc() { regOBA("MESSAGE_ID"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * MESSAGE_ID: {PK, ID, NotNull, BIGINT(19)}
+     * @return this. (NotNull)
+     */
+    public BsMessageCQ addOrderBy_MessageId_Desc() { regOBD("MESSAGE_ID"); return this; }
+
     protected ConditionValue _villageId;
     public ConditionValue xdfgetVillageId()
     { if (_villageId == null) { _villageId = nCV(); }
@@ -81,37 +101,17 @@ public class BsMessageCQ extends AbstractBsMessageCQ {
 
     /**
      * Add order-by as ascend. <br>
-     * VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10)}
+     * VILLAGE_ID: {PK, IX, NotNull, INT UNSIGNED(10)}
      * @return this. (NotNull)
      */
     public BsMessageCQ addOrderBy_VillageId_Asc() { regOBA("VILLAGE_ID"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10)}
+     * VILLAGE_ID: {PK, IX, NotNull, INT UNSIGNED(10)}
      * @return this. (NotNull)
      */
     public BsMessageCQ addOrderBy_VillageId_Desc() { regOBD("VILLAGE_ID"); return this; }
-
-    protected ConditionValue _messageNumber;
-    public ConditionValue xdfgetMessageNumber()
-    { if (_messageNumber == null) { _messageNumber = nCV(); }
-      return _messageNumber; }
-    protected ConditionValue xgetCValueMessageNumber() { return xdfgetMessageNumber(); }
-
-    /**
-     * Add order-by as ascend. <br>
-     * MESSAGE_NUMBER: {PK, NotNull, INT UNSIGNED(10)}
-     * @return this. (NotNull)
-     */
-    public BsMessageCQ addOrderBy_MessageNumber_Asc() { regOBA("MESSAGE_NUMBER"); return this; }
-
-    /**
-     * Add order-by as descend. <br>
-     * MESSAGE_NUMBER: {PK, NotNull, INT UNSIGNED(10)}
-     * @return this. (NotNull)
-     */
-    public BsMessageCQ addOrderBy_MessageNumber_Desc() { regOBD("MESSAGE_NUMBER"); return this; }
 
     protected ConditionValue _messageTypeCode;
     public ConditionValue xdfgetMessageTypeCode()
@@ -121,37 +121,17 @@ public class BsMessageCQ extends AbstractBsMessageCQ {
 
     /**
      * Add order-by as ascend. <br>
-     * MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20)}
+     * MESSAGE_TYPE_CODE: {IX, NotNull, VARCHAR(20)}
      * @return this. (NotNull)
      */
     public BsMessageCQ addOrderBy_MessageTypeCode_Asc() { regOBA("MESSAGE_TYPE_CODE"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20)}
+     * MESSAGE_TYPE_CODE: {IX, NotNull, VARCHAR(20)}
      * @return this. (NotNull)
      */
     public BsMessageCQ addOrderBy_MessageTypeCode_Desc() { regOBD("MESSAGE_TYPE_CODE"); return this; }
-
-    protected ConditionValue _messageUnixtimestampMilli;
-    public ConditionValue xdfgetMessageUnixtimestampMilli()
-    { if (_messageUnixtimestampMilli == null) { _messageUnixtimestampMilli = nCV(); }
-      return _messageUnixtimestampMilli; }
-    protected ConditionValue xgetCValueMessageUnixtimestampMilli() { return xdfgetMessageUnixtimestampMilli(); }
-
-    /**
-     * Add order-by as ascend. <br>
-     * MESSAGE_UNIXTIMESTAMP_MILLI: {IX, NotNull, BIGINT UNSIGNED(20)}
-     * @return this. (NotNull)
-     */
-    public BsMessageCQ addOrderBy_MessageUnixtimestampMilli_Asc() { regOBA("MESSAGE_UNIXTIMESTAMP_MILLI"); return this; }
-
-    /**
-     * Add order-by as descend. <br>
-     * MESSAGE_UNIXTIMESTAMP_MILLI: {IX, NotNull, BIGINT UNSIGNED(20)}
-     * @return this. (NotNull)
-     */
-    public BsMessageCQ addOrderBy_MessageUnixtimestampMilli_Desc() { regOBD("MESSAGE_UNIXTIMESTAMP_MILLI"); return this; }
 
     protected ConditionValue _villageDayId;
     public ConditionValue xdfgetVillageDayId()
@@ -193,46 +173,6 @@ public class BsMessageCQ extends AbstractBsMessageCQ {
      */
     public BsMessageCQ addOrderBy_VillagePlayerId_Desc() { regOBD("VILLAGE_PLAYER_ID"); return this; }
 
-    protected ConditionValue _toVillagePlayerId;
-    public ConditionValue xdfgetToVillagePlayerId()
-    { if (_toVillagePlayerId == null) { _toVillagePlayerId = nCV(); }
-      return _toVillagePlayerId; }
-    protected ConditionValue xgetCValueToVillagePlayerId() { return xdfgetToVillagePlayerId(); }
-
-    /**
-     * Add order-by as ascend. <br>
-     * TO_VILLAGE_PLAYER_ID: {IX, INT UNSIGNED(10)}
-     * @return this. (NotNull)
-     */
-    public BsMessageCQ addOrderBy_ToVillagePlayerId_Asc() { regOBA("TO_VILLAGE_PLAYER_ID"); return this; }
-
-    /**
-     * Add order-by as descend. <br>
-     * TO_VILLAGE_PLAYER_ID: {IX, INT UNSIGNED(10)}
-     * @return this. (NotNull)
-     */
-    public BsMessageCQ addOrderBy_ToVillagePlayerId_Desc() { regOBD("TO_VILLAGE_PLAYER_ID"); return this; }
-
-    protected ConditionValue _playerId;
-    public ConditionValue xdfgetPlayerId()
-    { if (_playerId == null) { _playerId = nCV(); }
-      return _playerId; }
-    protected ConditionValue xgetCValuePlayerId() { return xdfgetPlayerId(); }
-
-    /**
-     * Add order-by as ascend. <br>
-     * PLAYER_ID: {IX, INT UNSIGNED(10)}
-     * @return this. (NotNull)
-     */
-    public BsMessageCQ addOrderBy_PlayerId_Asc() { regOBA("PLAYER_ID"); return this; }
-
-    /**
-     * Add order-by as descend. <br>
-     * PLAYER_ID: {IX, INT UNSIGNED(10)}
-     * @return this. (NotNull)
-     */
-    public BsMessageCQ addOrderBy_PlayerId_Desc() { regOBD("PLAYER_ID"); return this; }
-
     protected ConditionValue _messageContent;
     public ConditionValue xdfgetMessageContent()
     { if (_messageContent == null) { _messageContent = nCV(); }
@@ -273,65 +213,45 @@ public class BsMessageCQ extends AbstractBsMessageCQ {
      */
     public BsMessageCQ addOrderBy_MessageDatetime_Desc() { regOBD("MESSAGE_DATETIME"); return this; }
 
-    protected ConditionValue _messageCount;
-    public ConditionValue xdfgetMessageCount()
-    { if (_messageCount == null) { _messageCount = nCV(); }
-      return _messageCount; }
-    protected ConditionValue xgetCValueMessageCount() { return xdfgetMessageCount(); }
+    protected ConditionValue _messageUnixtimestampMilli;
+    public ConditionValue xdfgetMessageUnixtimestampMilli()
+    { if (_messageUnixtimestampMilli == null) { _messageUnixtimestampMilli = nCV(); }
+      return _messageUnixtimestampMilli; }
+    protected ConditionValue xgetCValueMessageUnixtimestampMilli() { return xdfgetMessageUnixtimestampMilli(); }
 
     /**
      * Add order-by as ascend. <br>
-     * MESSAGE_COUNT: {INT UNSIGNED(10)}
+     * MESSAGE_UNIXTIMESTAMP_MILLI: {IX, NotNull, BIGINT UNSIGNED(20)}
      * @return this. (NotNull)
      */
-    public BsMessageCQ addOrderBy_MessageCount_Asc() { regOBA("MESSAGE_COUNT"); return this; }
+    public BsMessageCQ addOrderBy_MessageUnixtimestampMilli_Asc() { regOBA("MESSAGE_UNIXTIMESTAMP_MILLI"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * MESSAGE_COUNT: {INT UNSIGNED(10)}
+     * MESSAGE_UNIXTIMESTAMP_MILLI: {IX, NotNull, BIGINT UNSIGNED(20)}
      * @return this. (NotNull)
      */
-    public BsMessageCQ addOrderBy_MessageCount_Desc() { regOBD("MESSAGE_COUNT"); return this; }
+    public BsMessageCQ addOrderBy_MessageUnixtimestampMilli_Desc() { regOBD("MESSAGE_UNIXTIMESTAMP_MILLI"); return this; }
 
-    protected ConditionValue _isConvertDisable;
-    public ConditionValue xdfgetIsConvertDisable()
-    { if (_isConvertDisable == null) { _isConvertDisable = nCV(); }
-      return _isConvertDisable; }
-    protected ConditionValue xgetCValueIsConvertDisable() { return xdfgetIsConvertDisable(); }
+    protected ConditionValue _isStrong;
+    public ConditionValue xdfgetIsStrong()
+    { if (_isStrong == null) { _isStrong = nCV(); }
+      return _isStrong; }
+    protected ConditionValue xgetCValueIsStrong() { return xdfgetIsStrong(); }
 
     /**
      * Add order-by as ascend. <br>
-     * IS_CONVERT_DISABLE: {NotNull, BIT}
+     * IS_STRONG: {NotNull, BIT}
      * @return this. (NotNull)
      */
-    public BsMessageCQ addOrderBy_IsConvertDisable_Asc() { regOBA("IS_CONVERT_DISABLE"); return this; }
+    public BsMessageCQ addOrderBy_IsStrong_Asc() { regOBA("IS_STRONG"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * IS_CONVERT_DISABLE: {NotNull, BIT}
+     * IS_STRONG: {NotNull, BIT}
      * @return this. (NotNull)
      */
-    public BsMessageCQ addOrderBy_IsConvertDisable_Desc() { regOBD("IS_CONVERT_DISABLE"); return this; }
-
-    protected ConditionValue _faceTypeCode;
-    public ConditionValue xdfgetFaceTypeCode()
-    { if (_faceTypeCode == null) { _faceTypeCode = nCV(); }
-      return _faceTypeCode; }
-    protected ConditionValue xgetCValueFaceTypeCode() { return xdfgetFaceTypeCode(); }
-
-    /**
-     * Add order-by as ascend. <br>
-     * FACE_TYPE_CODE: {IX, VARCHAR(20)}
-     * @return this. (NotNull)
-     */
-    public BsMessageCQ addOrderBy_FaceTypeCode_Asc() { regOBA("FACE_TYPE_CODE"); return this; }
-
-    /**
-     * Add order-by as descend. <br>
-     * FACE_TYPE_CODE: {IX, VARCHAR(20)}
-     * @return this. (NotNull)
-     */
-    public BsMessageCQ addOrderBy_FaceTypeCode_Desc() { regOBD("FACE_TYPE_CODE"); return this; }
+    public BsMessageCQ addOrderBy_IsStrong_Desc() { regOBD("IS_STRONG"); return this; }
 
     protected ConditionValue _registerDatetime;
     public ConditionValue xdfgetRegisterDatetime()

@@ -6,6 +6,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 class LastwolfWebMvcConfigurer : WebMvcConfigurer {
     override fun addInterceptors(registry: InterceptorRegistry) {
-        registry!!.addInterceptor(LastwolfAccessContextInterceptor()).addPathPatterns("/**")
+        registry.addInterceptor(LastwolfAccessContextInterceptor()).addPathPatterns("/**")
     }
 }

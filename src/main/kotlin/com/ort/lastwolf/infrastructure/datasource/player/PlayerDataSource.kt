@@ -1,21 +1,17 @@
 package com.ort.lastwolf.infrastructure.datasource.player
 
 import com.ort.dbflute.exbhv.PlayerBhv
-import com.ort.dbflute.exbhv.PlayerDetailBhv
 import com.ort.dbflute.exentity.Player
-import com.ort.dbflute.exentity.PlayerDetail
 import com.ort.lastwolf.domain.model.player.Players
 import org.springframework.stereotype.Repository
 
 @Repository
 class PlayerDataSource(
-    private val playerBhv: PlayerBhv,
-    private val playerDetailBhv: PlayerDetailBhv
+    private val playerBhv: PlayerBhv
 ) {
 
     fun findPlayer(id: Int): com.ort.lastwolf.domain.model.player.Player {
         val player = playerBhv.selectEntityWithDeletedCheck {
-            it.setupSelect_PlayerDetailAsOne()
             it.query().setPlayerId_Equal(id)
         }
         playerBhv.load(player) {
@@ -30,7 +26,6 @@ class PlayerDataSource(
 
     fun findPlayer(uid: String): com.ort.lastwolf.domain.model.player.Player {
         val player = playerBhv.selectEntityWithDeletedCheck {
-            it.setupSelect_PlayerDetailAsOne()
             it.query().setUid_Equal(uid)
         }
         playerBhv.load(player) {
@@ -45,7 +40,6 @@ class PlayerDataSource(
 
     fun findPlayers(villageId: Int): Players {
         val playerList = playerBhv.selectList {
-            it.setupSelect_PlayerDetailAsOne()
             it.query().existsVillagePlayer {
                 it.query().setVillageId_Equal(villageId)
             }
@@ -56,7 +50,6 @@ class PlayerDataSource(
     fun findPlayers(playerIdList: List<Int>): Players {
         if (playerIdList.isEmpty()) return Players(listOf())
         val playerList = playerBhv.selectList {
-            it.setupSelect_PlayerDetailAsOne()
             it.query().existsVillagePlayer {
                 it.query().setPlayerId_InScope(playerIdList)
             }
@@ -70,24 +63,6 @@ class PlayerDataSource(
         player.nickname = removeSurrogate(nickname)
         player.twitterUserName = twitterUserName
         playerBhv.update(player)
-    }
-
-    fun updateDetail(uid: String, otherSiteName: String?, introduction: String?) {
-        val detail = PlayerDetail()
-        detail.otherSiteName = otherSiteName
-        detail.introduction = introduction
-        val entity = playerDetailBhv.selectEntity {
-            it.query().queryPlayer().setUid_Equal(uid)
-        }
-        if (entity.isPresent) {
-            playerDetailBhv.queryUpdate(detail) {
-                it.query().queryPlayer().setUid_Equal(uid)
-            }
-        } else {
-            val player = playerBhv.selectByUniqueOf(uid)
-            detail.playerId = player.get().playerId
-            playerDetailBhv.insert(detail)
-        }
     }
 
     fun updateDifference(before: Players, after: Players) {
@@ -112,8 +87,6 @@ class PlayerDataSource(
             uid = player.uid,
             nickname = player.nickname,
             twitterUserName = player.twitterUserName,
-            otherSiteName = player.playerDetailAsOne.map { it.otherSiteName }.orElse(null),
-            introduction = player.playerDetailAsOne.map { it.introduction }.orElse(null),
             isRestrictedParticipation = player.isRestrictedParticipation,
             participateProgressVillageIdList = player.villagePlayerList.filter {
                 !it.village.get().villageStatusCodeAsVillageStatus.isSolvedVillage
@@ -136,8 +109,6 @@ class PlayerDataSource(
             uid = player.uid,
             nickname = player.nickname,
             twitterUserName = player.twitterUserName,
-            otherSiteName = player.playerDetailAsOne.map { it.otherSiteName }.orElse(null),
-            introduction = player.playerDetailAsOne.map { it.introduction }.orElse(null),
             isRestrictedParticipation = player.isRestrictedParticipation
         )
     }

@@ -1,5 +1,6 @@
 package com.ort.lastwolf.application.service
 
+import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.vote.VillageVote
 import com.ort.lastwolf.domain.model.village.vote.VillageVotes
 import com.ort.lastwolf.infrastructure.datasource.vote.VoteDataSource
@@ -12,11 +13,11 @@ class VoteService(
 
     fun findVillageVotes(villageId: Int): VillageVotes = voteDataSource.findVotes(villageId)
 
-    fun updateVote(villageVote: VillageVote) {
-        voteDataSource.updateVote(villageVote)
+    fun updateVote(village: Village, villageVote: VillageVote) {
+        voteDataSource.updateVote(village, villageVote)
     }
 
-    fun updateDifference(before: VillageVotes, after: VillageVotes) {
-        voteDataSource.updateDifference(before, after)
+    fun updateDifference(village: Village, before: VillageVotes, after: VillageVotes) {
+        voteDataSource.updateDifference(village, before, after)
     }
 }

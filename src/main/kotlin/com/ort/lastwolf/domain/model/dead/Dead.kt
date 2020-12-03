@@ -21,4 +21,6 @@ data class Dead(
     fun toCdef(): CDef.DeadReason {
         return CDef.DeadReason.codeOf(code)
     }
+
+    fun isMiserable(): Boolean = toCdef().isMiserableDeath
 }

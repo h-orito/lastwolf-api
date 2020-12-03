@@ -4,28 +4,23 @@ import com.ort.dbflute.allcommon.CDef
 import com.ort.dbflute.cbean.MessageCB
 import com.ort.dbflute.exbhv.MessageBhv
 import com.ort.dbflute.exentity.Message
-import com.ort.lastwolf.api.controller.VillageController
 import com.ort.lastwolf.domain.model.message.MessageContent
 import com.ort.lastwolf.domain.model.message.MessageQuery
 import com.ort.lastwolf.domain.model.message.MessageTime
 import com.ort.lastwolf.domain.model.message.MessageType
 import com.ort.lastwolf.domain.model.message.Messages
+import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 import com.ort.lastwolf.fw.LastwolfDateUtil
-import com.ort.lastwolf.fw.exception.LastwolfBusinessException
-import org.slf4j.LoggerFactory
+import com.ort.lastwolf.infrastructure.datasource.firebase.FirebaseDataSource
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset
 
 @Repository
 class MessageDataSource(
-    val messageBhv: MessageBhv
+    val messageBhv: MessageBhv,
+    val firebaseDataSource: FirebaseDataSource
 ) {
-
-    // ===================================================================================
-    //                                                                          Definition
-    //                                                                          ==========
-    private val logger = LoggerFactory.getLogger(VillageController::class.java)
 
     // ===================================================================================
     //                                                                             Execute
@@ -34,16 +29,14 @@ class MessageDataSource(
      * 発言取得
      *
      * @param villageId villageId
-     * @param villageDayId 村日付ID
      * @param query query
      * @return 発言
      */
     fun findMessages(
         villageId: Int,
-        villageDayId: Int,
         query: MessageQuery
     ): Messages {
-        if (query.messageTypeList.isEmpty() && !query.includeMonologue && !query.includeSecret) {
+        if (query.messageTypeList.isEmpty() && !query.includeMonologue) {
             return Messages(listOf())
         }
 
@@ -52,7 +45,6 @@ class MessageDataSource(
                 queryMessage(
                     cb = it,
                     villageId = villageId,
-                    villageDayId = villageDayId,
                     query = query
                 )
                 it.query().addOrderBy_MessageUnixtimestampMilli_Asc()
@@ -72,7 +64,6 @@ class MessageDataSource(
                 queryMessage(
                     cb = it,
                     villageId = villageId,
-                    villageDayId = villageDayId,
                     query = query
                 )
                 it.query().addOrderBy_MessageUnixtimestampMilli_Asc()
@@ -105,35 +96,13 @@ class MessageDataSource(
             messageTypeList = messageTypeList,
             participantIdList = null,
             includeMonologue = false,
-            includeSecret = false,
             includePrivateAbility = false
         )
         return messageBhv.selectEntityWithDeletedCheck() {
-            queryMessage(it, villageId, null, query)
+            queryMessage(it, villageId, query)
             it.query().addOrderBy_MessageUnixtimestampMilli_Desc()
             it.fetchFirst(1)
         }.messageUnixtimestampMilli
-    }
-
-    /**
-     * アンカー発言取得
-     *
-     * @param villageId villageId
-     * @param messageType 発言種別
-     * @param messageNumber 発言番号
-     * @return 発言
-     */
-    fun findMessage(
-        villageId: Int,
-        messageType: CDef.MessageType,
-        messageNumber: Int
-    ): com.ort.lastwolf.domain.model.message.Message? {
-        val optMessage = messageBhv.selectEntity {
-            it.query().setVillageId_Equal(villageId)
-            it.query().setMessageNumber_Equal(messageNumber)
-            it.query().setMessageTypeCode_Equal(messageType.code())
-        }
-        return optMessage.map { convertMessageToMessage(it) }.orElse(null)
     }
 
     /**
@@ -158,56 +127,42 @@ class MessageDataSource(
     }
 
     fun registerMessage(
-        villageId: Int,
+        village: Village,
         message: com.ort.lastwolf.domain.model.message.Message
     ): com.ort.lastwolf.domain.model.message.Message {
+        val villageDay = village.days.first(message.time.villageDayId)
+        if (villageDay.isEpilogue || !villageDay.isNightTime()) {
+            firebaseDataSource.registerMessage(village, message)
+            return message
+        }
         val mes = Message()
         val messageTypeCode = message.content.type.code
-        mes.villageId = villageId
+        mes.villageId = village.id
         mes.villageDayId = message.time.villageDayId
         mes.messageTypeCode = messageTypeCode
         mes.messageContent = message.content.text
-        mes.villagePlayerId = message.fromVillageParticipantId
-        mes.toVillagePlayerId = message.toVillageParticipantId
-        mes.playerId = null // TODO プレイヤー発言を実装する際に実装する
-        mes.faceTypeCode = message.content.faceCode
-        mes.isConvertDisable = true
+        mes.villagePlayerId = message.fromParticipantId
+        mes.isStrong = message.content.isStrong
         val now = LastwolfDateUtil.currentLocalDateTime()
         mes.messageDatetime = now
         val epocTimeMilli = now.toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
         mes.messageUnixtimestampMilli = epocTimeMilli
 
-        // 何回目の発言か
-        if (message.content.type.shouldSetCount()) {
-            val count: Int = selectMessageTypeCount(villageId, message.time.villageDayId, messageTypeCode, message.fromVillageParticipantId)
-            mes.messageCount = count + 1
-        }
-
-        // 発言番号の採番 & insert (3回チャレンジする)
-        for (i in 1..3) {
-            try {
-                val messageNumber = selectNextMessageNumber(villageId, message.content.type.code)
-                mes.messageNumber = messageNumber
-                messageBhv.insert(mes)
-                return convertMessageToMessage(mes)
-            } catch (e: RuntimeException) {
-                logger.error(e.message, e)
-            }
-        }
-        throw LastwolfBusinessException("混み合っているため発言に失敗しました。再度発言してください。")
+        messageBhv.insert(mes)
+        return convertMessageToMessage(mes)
     }
 
 
     /**
      * 差分更新
-     * @param villageId villageId
+     * @param village village
      * @param before messages
      * @param after messages
      */
-    fun updateDifference(villageId: Int, before: Messages, after: Messages): Messages {
+    fun updateDifference(village: Village, before: Messages, after: Messages): Messages {
         // 追加しかないのでbeforeにないindexから追加していく
         val messageList = after.list.drop(before.list.size).map {
-            registerMessage(villageId, it)
+            registerMessage(village, it)
         }
         return Messages(list = messageList)
     }
@@ -215,33 +170,9 @@ class MessageDataSource(
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun selectNextMessageNumber(villageId: Int, messageType: String): Int {
-        val maxNumber: Int = messageBhv.selectScalar(Int::class.java).max {
-            it.specify().columnMessageNumber()
-            it.query().setVillageId_Equal(villageId)
-            it.query().setMessageTypeCode_Equal(messageType)
-        }.orElse(0)
-        return maxNumber + 1
-    }
-
-    private fun selectMessageTypeCount(
-        villageId: Int,
-        villageDayId: Int,
-        messageTypeCode: String,
-        villageParticipantId: Int?
-    ): Int {
-        return messageBhv.selectCount {
-            it.query().setVillageId_Equal(villageId)
-            it.query().setVillageDayId_Equal(villageDayId)
-            it.query().setMessageTypeCode_Equal(messageTypeCode)
-            it.query().setVillagePlayerId_Equal(villageParticipantId)
-        }
-    }
-
     private fun convertMessageToMessage(message: Message): com.ort.lastwolf.domain.model.message.Message {
         return com.ort.lastwolf.domain.model.message.Message(
-            fromVillageParticipantId = message.villagePlayerId,
-            toVillageParticipantId = message.toVillagePlayerId,
+            fromParticipantId = message.villagePlayerId,
             time = MessageTime(
                 villageDayId = message.villageDayId,
                 datetime = message.messageDatetime,
@@ -252,10 +183,8 @@ class MessageDataSource(
                     code = message.messageTypeCode,
                     name = CDef.MessageType.codeOf(message.messageTypeCode).alias()
                 ),
-                num = message.messageNumber,
-                count = message.messageCount,
                 text = message.messageContent,
-                faceCode = message.faceTypeCode
+                isStrong = message.isStrong
             )
         )
     }
@@ -263,11 +192,9 @@ class MessageDataSource(
     private fun queryMessage(
         cb: MessageCB,
         villageId: Int,
-        villageDayId: Int?,
         query: MessageQuery
     ) {
         cb.query().setVillageId_Equal(villageId)
-        if (villageDayId != null) cb.query().setVillageDayId_Equal(villageDayId)
         // 参加していない場合は特に考慮不要
         if (query.participant == null) {
             cb.query().setMessageTypeCode_InScope(query.messageTypeList.map { type -> type.code() })
@@ -275,18 +202,17 @@ class MessageDataSource(
             val participantId = query.participant.id
             // 進行中で独り言や秘話だけを見たい場合
             if (query.messageTypeList.isEmpty()) {
-                if (!query.includeMonologue && !query.includeSecret && !query.includePrivateAbility) {
+                if (!query.includeMonologue && !query.includePrivateAbility) {
                     // 何もしない
                 } else {
                     cb.orScopeQuery { orCB ->
                         if (query.includeMonologue) orCB.orScopeQueryAndPart { andCB -> queryMyMonologue(andCB, participantId) }
-                        if (query.includeSecret) orCB.orScopeQueryAndPart { andCB -> querySecretSayToMe(andCB, participantId) }
                         if (query.includePrivateAbility) orCB.orScopeQueryAndPart { andCB -> queryMyPrivateAbility(andCB, participantId) }
                     }
                 }
             }
             // エピローグなど、全部見える状況の場合はorでなくて良い
-            else if (!query.includeMonologue && !query.includeSecret && !query.includePrivateAbility) {
+            else if (!query.includeMonologue && !query.includePrivateAbility) {
                 cb.query().setMessageTypeCode_InScope(query.messageTypeList.map { type -> type.code() })
             }
             // その他
@@ -294,7 +220,6 @@ class MessageDataSource(
                 cb.orScopeQuery { orCB ->
                     orCB.query().setMessageTypeCode_InScope(query.messageTypeList.map { type -> type.code() })
                     if (query.includeMonologue) orCB.orScopeQueryAndPart { andCB -> queryMyMonologue(andCB, participantId) }
-                    if (query.includeSecret) orCB.orScopeQueryAndPart { andCB -> querySecretSayToMe(andCB, participantId) }
                     if (query.includePrivateAbility) orCB.orScopeQueryAndPart { andCB -> queryMyPrivateAbility(andCB, participantId) }
                 }
             }
@@ -312,10 +237,5 @@ class MessageDataSource(
     private fun queryMyPrivateAbility(cb: MessageCB, id: Int) {
         cb.query().setVillagePlayerId_Equal(id)
         cb.query().setMessageTypeCode_InScope(MessageQuery.personalPrivateAbilityList.map { it.code() })
-    }
-
-    private fun querySecretSayToMe(cb: MessageCB, id: Int) {
-        cb.query().setToVillagePlayerId_Equal(id)
-        cb.query().setMessageTypeCode_Equal(CDef.MessageType.秘話.code())
     }
 }

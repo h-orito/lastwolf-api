@@ -20,11 +20,11 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
         status: HttpStatus,
         request: WebRequest
     ): ResponseEntity<Any> {
-        var body = body
-        if (body !is LastwolfErrorResponse) {
-            body = LastwolfErrorResponse(status.value(), status.reasonPhrase)
+        var b = body
+        if (b !is LastwolfErrorResponse) {
+            b = LastwolfErrorResponse(status.value(), status.reasonPhrase)
         }
-        return ResponseEntity(body, headers, status)
+        return ResponseEntity(b, headers, status)
     }
 
     override fun handleMethodArgumentNotValid(
@@ -34,10 +34,8 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
         request: WebRequest
     ): ResponseEntity<Any> {
         val message = ex.bindingResult.allErrors.mapNotNull { it.defaultMessage }.joinToString("\n")
-        val headers = HttpHeaders()
         val body = LastwolfErrorResponse(499, message)
-        val status = HttpStatus.NOT_FOUND
-        return handleExceptionInternal(ex, body, headers, status, request)
+        return handleExceptionInternal(ex, body, headers, HttpStatus.NOT_FOUND, request)
     }
 
     @ExceptionHandler(LastwolfBusinessException::class)

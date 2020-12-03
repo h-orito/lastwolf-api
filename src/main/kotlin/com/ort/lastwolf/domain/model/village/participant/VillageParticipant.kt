@@ -2,23 +2,28 @@ package com.ort.lastwolf.domain.model.village.participant
 
 import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.domain.model.camp.Camp
+import com.ort.lastwolf.domain.model.charachip.Chara
+import com.ort.lastwolf.domain.model.charachip.CharaImage
+import com.ort.lastwolf.domain.model.charachip.CharaName
 import com.ort.lastwolf.domain.model.dead.Dead
+import com.ort.lastwolf.domain.model.player.Player
 import com.ort.lastwolf.domain.model.skill.Skill
 import com.ort.lastwolf.domain.model.skill.SkillRequest
 import com.ort.lastwolf.domain.model.village.VillageDay
-import com.ort.lastwolf.domain.model.village.participant.coming_out.ComingOuts
+import com.ort.lastwolf.domain.model.village.participant.coming_out.ComingOut
+import com.ort.lastwolf.domain.model.winlose.WinLose
 
 data class VillageParticipant(
     val id: Int,
-    val charaId: Int,
-    val playerId: Int?,
+    val chara: Chara, // 本来IDで持つべきだが簡略化
+    val player: Player,
     val dead: Dead?,
-    val isSpectator: Boolean,
     val isGone: Boolean,
     val skill: Skill?,
     val skillRequest: SkillRequest,
-    val isWin: Boolean?,
-    val commigOuts: ComingOuts
+    val winlose: WinLose?,
+    val comingOut: ComingOut?,
+    val doneRollCall: Boolean
 ) {
     // ===================================================================================
     //                                                                                read
@@ -29,14 +34,15 @@ data class VillageParticipant(
     // 差分有無
     fun existsDifference(participant: VillageParticipant): Boolean {
         if (id != participant.id) return true
-        if (charaId != participant.charaId) return true
-        if (playerId != participant.playerId) return true
+        if (chara.id != participant.chara.id) return true
+        if (player.id != participant.player.id) return true
         if (dead?.code != participant.dead?.code) return true
-        if (isSpectator != participant.isSpectator) return true
         if (isGone != participant.isGone) return true
         if (skill?.code != participant.skill?.code) return true
         if (skillRequest.first.code != participant.skillRequest.first.code) return true
         if (skillRequest.second.code != participant.skillRequest.second.code) return true
+        if (doneRollCall != participant.doneRollCall) return true
+        if (winlose?.code != participant.winlose?.code) return true
         return false
     }
 
@@ -66,10 +72,43 @@ data class VillageParticipant(
         this.copy(skillRequest = SkillRequest(Skill(first), Skill(second)))
 
     // 勝敗
-    fun winLose(winCamp: Camp): VillageParticipant {
-        val isSuddenlyDeath = dead?.toCdef() == CDef.DeadReason.突然
-        return this.copy(
-            isWin = !isSuddenlyDeath && skill?.toCdef()?.campCode() == winCamp.code
+    fun winLose(winCamp: Camp?): VillageParticipant {
+        if (dead?.toCdef() == CDef.DeadReason.突然) return this.copy(winlose = WinLose(CDef.WinLose.敗北))
+        winCamp ?: return this.copy(winlose = WinLose(CDef.WinLose.引分))
+        val isWin = skill?.toCdef()?.campCode() == winCamp.code
+        return this.copy(winlose = if (isWin) WinLose(CDef.WinLose.勝利) else WinLose(CDef.WinLose.敗北))
+    }
+
+    // 点呼
+    fun rollCall(done: Boolean): VillageParticipant = this.copy(doneRollCall = done)
+
+    companion object {
+        fun createForRegister(
+            charaId: Int,
+            playerId: Int,
+            skillRequest: SkillRequest
+        ): VillageParticipant = VillageParticipant(
+            id = -1, // dummy
+            chara = Chara(
+                id = charaId,
+                name = CharaName("", ""), // dummy
+                charachipId = 0, // dummy
+                image = CharaImage(0, 0, "") // dummy
+            ),
+            player = Player(
+                id = playerId,
+                nickname = "",
+                uid = "",
+                twitterUserName = "",
+                isRestrictedParticipation = false
+            ),
+            dead = null,
+            isGone = false,
+            skill = null,
+            skillRequest = skillRequest,
+            winlose = null,
+            comingOut = null,
+            doneRollCall = false
         )
     }
 
@@ -77,12 +116,11 @@ data class VillageParticipant(
     //                                                                                権限
     //                                                                        ============
     // 役職希望可能か
-    fun isAvailableSkillRequest(): Boolean = !isSpectator
+    fun isAvailableSkillRequest(): Boolean = true
 
     // コミット可能か
     fun isAvailableCommit(dummyParticipantId: Int): Boolean {
         // 参加していなかったり死亡していたらNG
-        if (isSpectator) return false
         if (!isAlive()) return false
         // ダミーはコミットできない
         if (id == dummyParticipantId) return false
@@ -90,12 +128,7 @@ data class VillageParticipant(
         return true
     }
 
-    fun isAvailableComingOut(): Boolean {
-        // 参加していなかったり死亡していたらNG
-        if (isSpectator) return false
-        if (!isAlive()) return false
-        return true
-    }
+    fun isAvailableComingOut(): Boolean = isAlive()
 
     // 発言可能か
     fun isAvailableSay(isEpilogue: Boolean): Boolean {
@@ -106,9 +139,7 @@ data class VillageParticipant(
 
     fun isSayableNormalSay(isEpilogue: Boolean): Boolean {
         // ダミーはOK
-        if (playerId == 1) return true
-        // 見学は不可
-        if (isSpectator) return false
+        if (player.id == 1) return true
         // エピローグ以外で死亡している場合は不可
         if (!isAlive() && !isEpilogue) return false
 
@@ -121,77 +152,47 @@ data class VillageParticipant(
 
     fun isSayableWerewolfSay(): Boolean {
         // ダミーはOK
-        if (playerId == 1) return true
+        if (player.id == 1) return true
         // 死亡していたら不可
         if (!isAlive()) return false
         // 囁ける役職でなければ不可
         return skill?.toCdef()?.isAvailableWerewolfSay ?: false
     }
 
-    fun isViewableSympathizeSay(): Boolean {
-        return skill?.toCdef()?.isViewableSympathizeSay ?: false
+    fun isViewableMasonSay(): Boolean {
+        return skill?.toCdef()?.isViewableMasonSay ?: false
     }
 
-    fun isSayableSympathizeSay(): Boolean {
+    fun isSayableMasonSay(): Boolean {
         // ダミーはOK
-        if (playerId == 1) return true
+        if (player.id == 1) return true
         // 死亡していたら不可
         if (!isAlive()) return false
-        // 共鳴発言できる役職でなければ不可
-        return skill?.toCdef()?.isAvailableSympathizeSay ?: false
+        // 共有発言できる役職でなければ不可
+        return skill?.toCdef()?.isAvailableMasonSay ?: false
     }
 
     fun isViewableGraveSay(): Boolean {
-        if (isSpectator) return true
         // 突然死以外で死亡している
         return !isAlive() && CDef.DeadReason.突然.code() != dead?.code
     }
 
     fun isSayableGraveSay(): Boolean {
         // ダミーはOK
-        if (playerId == 1) return true
+        if (player.id == 1) return true
         // 死亡していなかったら不可
         if (isAlive()) return false
-        // 見学は不可
-        if (isSpectator) return false
         // 突然死は不可
         if (dead?.toCdef() == CDef.DeadReason.突然) return false
         return true
     }
 
-    fun isViewableMonologueSay(): Boolean = true // 制約なし
-
     fun isSayableMonologueSay(): Boolean = true // 制約なし
-
-    fun isViewableSpectateSay(): Boolean {
-        // 見学は開放
-        if (isSpectator) return true
-        // 突然死以外で死亡している
-        return !isAlive() && CDef.DeadReason.突然.code() != dead?.code
-    }
-
-    fun isSayableSpectateSay(): Boolean {
-        // ダミーはOK
-        if (playerId == 1) return true
-        return isSpectator // 見学していなかったら不可
-    }
 
     fun isViewableAttackMessage(): Boolean {
         // 生存していて囁き可能なら開放
         if (!isAlive()) return false
         return skill?.toCdef()?.isAvailableWerewolfSay ?: false
-    }
-
-    fun isViewableAutopsyMessage(): Boolean {
-        // 生存していて検死可能なら開放
-        if (!isAlive()) return false
-        return skill?.toCdef()?.isHasAutopsyAbility ?: false
-    }
-
-    fun isViewableFanaticMessage(): Boolean {
-        // 生存していて狂信者なら開放
-        if (!isAlive()) return false
-        return skill?.toCdef()?.isRecognizableWolf ?: false
     }
 
     fun isViewableMasonMessage(): Boolean {
@@ -200,33 +201,17 @@ data class VillageParticipant(
         return skill?.toCdef()?.isRecognizableEachMason ?: false
     }
 
-    fun isViewableSympathizerMessage(): Boolean {
-        // 生存していて共鳴なら開放
-        if (!isAlive()) return false
-        return skill?.toCdef()?.isRecognizableEachSympathizer ?: false
-    }
-
     fun isViewablePsychicMessage(): Boolean {
         // 生存していて霊能者なら開放
         if (!isAlive()) return false
         return skill?.toCdef()?.isHasPsychicAbility ?: false
     }
 
-    fun isViewableGuruPsychicMessage(): Boolean {
-        // 生存していて導師なら開放
-        if (!isAlive()) return false
-        return skill?.toCdef()?.isHasGuruPsychicAbility ?: false
-    }
-
-    fun isViewableSecretSay(): Boolean = true // 制約なし
-
     // 能力行使可能か
-    fun canUseAbility(): Boolean = !isSpectator
+    fun canUseAbility(): Boolean = true
 
     // 投票可能か
-    fun isAvailableVote(): Boolean {
-        if (!isAlive()) return false
-        if (isSpectator) return false
-        return true
-    }
+    fun isAvailableVote(): Boolean = isAlive()
+
+    fun isAvailableRollCall(): Boolean = true
 }

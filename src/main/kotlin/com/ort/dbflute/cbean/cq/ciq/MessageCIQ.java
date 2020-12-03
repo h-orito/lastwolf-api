@@ -61,19 +61,15 @@ public class MessageCIQ extends AbstractBsMessageCQ {
     // ===================================================================================
     //                                                                Override about Query
     //                                                                ====================
+    protected ConditionValue xgetCValueMessageId() { return _myCQ.xdfgetMessageId(); }
     protected ConditionValue xgetCValueVillageId() { return _myCQ.xdfgetVillageId(); }
-    protected ConditionValue xgetCValueMessageNumber() { return _myCQ.xdfgetMessageNumber(); }
     protected ConditionValue xgetCValueMessageTypeCode() { return _myCQ.xdfgetMessageTypeCode(); }
-    protected ConditionValue xgetCValueMessageUnixtimestampMilli() { return _myCQ.xdfgetMessageUnixtimestampMilli(); }
     protected ConditionValue xgetCValueVillageDayId() { return _myCQ.xdfgetVillageDayId(); }
     protected ConditionValue xgetCValueVillagePlayerId() { return _myCQ.xdfgetVillagePlayerId(); }
-    protected ConditionValue xgetCValueToVillagePlayerId() { return _myCQ.xdfgetToVillagePlayerId(); }
-    protected ConditionValue xgetCValuePlayerId() { return _myCQ.xdfgetPlayerId(); }
     protected ConditionValue xgetCValueMessageContent() { return _myCQ.xdfgetMessageContent(); }
     protected ConditionValue xgetCValueMessageDatetime() { return _myCQ.xdfgetMessageDatetime(); }
-    protected ConditionValue xgetCValueMessageCount() { return _myCQ.xdfgetMessageCount(); }
-    protected ConditionValue xgetCValueIsConvertDisable() { return _myCQ.xdfgetIsConvertDisable(); }
-    protected ConditionValue xgetCValueFaceTypeCode() { return _myCQ.xdfgetFaceTypeCode(); }
+    protected ConditionValue xgetCValueMessageUnixtimestampMilli() { return _myCQ.xdfgetMessageUnixtimestampMilli(); }
+    protected ConditionValue xgetCValueIsStrong() { return _myCQ.xdfgetIsStrong(); }
     protected ConditionValue xgetCValueRegisterDatetime() { return _myCQ.xdfgetRegisterDatetime(); }
     protected ConditionValue xgetCValueRegisterTrace() { return _myCQ.xdfgetRegisterTrace(); }
     protected ConditionValue xgetCValueUpdateDatetime() { return _myCQ.xdfgetUpdateDatetime(); }

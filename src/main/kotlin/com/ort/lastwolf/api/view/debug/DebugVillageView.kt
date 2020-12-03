@@ -3,9 +3,7 @@ package com.ort.lastwolf.api.view.debug
 import com.ort.lastwolf.api.view.player.PlayerView
 import com.ort.lastwolf.api.view.village.VillageParticipantsView
 import com.ort.lastwolf.api.view.village.VillageSettingsView
-import com.ort.lastwolf.domain.model.charachip.Charas
 import com.ort.lastwolf.domain.model.player.Player
-import com.ort.lastwolf.domain.model.player.Players
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.VillageDays
 import com.ort.lastwolf.domain.model.village.VillageStatus
@@ -16,15 +14,12 @@ data class DebugVillageView(
     val creatorPlayer: PlayerView,
     val status: VillageStatus,
     val setting: VillageSettingsView,
-    val participant: VillageParticipantsView,
-    val spectator: VillageParticipantsView,
-    val day: VillageDays
+    val participants: VillageParticipantsView,
+    val days: VillageDays
 ) {
 
     constructor(
         village: Village,
-        charas: Charas,
-        players: Players,
         createPlayer: Player
     ) : this(
         id = village.id,
@@ -32,20 +27,11 @@ data class DebugVillageView(
         creatorPlayer = PlayerView(createPlayer),
         status = village.status,
         setting = VillageSettingsView(village.setting),
-        participant = VillageParticipantsView(
+        participants = VillageParticipantsView(
             village = village,
-            participants = village.participant,
-            charas = charas,
-            players = players,
+            participants = village.participants,
             shouldHidePlayer = false
         ),
-        spectator = VillageParticipantsView(
-            village = village,
-            participants = village.spectator,
-            charas = charas,
-            players = players,
-            shouldHidePlayer = false
-        ),
-        day = village.day
+        days = village.days
     )
 }

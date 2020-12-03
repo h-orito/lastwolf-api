@@ -20,7 +20,7 @@ import com.ort.dbflute.exentity.*;
  *     CHARA_ID
  *
  * [column]
- *     CHARA_ID, CHARA_NAME, CHARA_SHORT_NAME, CHARA_GROUP_ID, DEFAULT_JOIN_MESSAGE, DEFAULT_FIRSTDAY_MESSAGE, DISPLAY_WIDTH, DISPLAY_HEIGHT, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
+ *     CHARA_ID, CHARA_NAME, CHARA_SHORT_NAME, CHARA_GROUP_ID, DISPLAY_WIDTH, DISPLAY_HEIGHT, CHARA_IMG_URL, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
  *
  * [sequence]
  *     
@@ -35,13 +35,13 @@ import com.ort.dbflute.exentity.*;
  *     CHARA_GROUP
  *
  * [referrer table]
- *     CHARA_IMAGE, VILLAGE_PLAYER
+ *     VILLAGE_PLAYER
  *
  * [foreign property]
  *     charaGroup
  *
  * [referrer property]
- *     charaImageList, villagePlayerList
+ *     villagePlayerList
  *
  * [get/set template]
  * /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -49,10 +49,9 @@ import com.ort.dbflute.exentity.*;
  * String charaName = entity.getCharaName();
  * String charaShortName = entity.getCharaShortName();
  * Integer charaGroupId = entity.getCharaGroupId();
- * String defaultJoinMessage = entity.getDefaultJoinMessage();
- * String defaultFirstdayMessage = entity.getDefaultFirstdayMessage();
  * Integer displayWidth = entity.getDisplayWidth();
  * Integer displayHeight = entity.getDisplayHeight();
+ * String charaImgUrl = entity.getCharaImgUrl();
  * java.time.LocalDateTime registerDatetime = entity.getRegisterDatetime();
  * String registerTrace = entity.getRegisterTrace();
  * java.time.LocalDateTime updateDatetime = entity.getUpdateDatetime();
@@ -61,10 +60,9 @@ import com.ort.dbflute.exentity.*;
  * entity.setCharaName(charaName);
  * entity.setCharaShortName(charaShortName);
  * entity.setCharaGroupId(charaGroupId);
- * entity.setDefaultJoinMessage(defaultJoinMessage);
- * entity.setDefaultFirstdayMessage(defaultFirstdayMessage);
  * entity.setDisplayWidth(displayWidth);
  * entity.setDisplayHeight(displayHeight);
+ * entity.setCharaImgUrl(charaImgUrl);
  * entity.setRegisterDatetime(registerDatetime);
  * entity.setRegisterTrace(registerTrace);
  * entity.setUpdateDatetime(updateDatetime);
@@ -96,17 +94,14 @@ public abstract class BsChara extends AbstractEntity implements DomainEntity, En
     /** CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group} */
     protected Integer _charaGroupId;
 
-    /** DEFAULT_JOIN_MESSAGE: {VARCHAR(200)} */
-    protected String _defaultJoinMessage;
-
-    /** DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)} */
-    protected String _defaultFirstdayMessage;
-
     /** DISPLAY_WIDTH: {NotNull, INT UNSIGNED(10)} */
     protected Integer _displayWidth;
 
     /** DISPLAY_HEIGHT: {NotNull, INT UNSIGNED(10)} */
     protected Integer _displayHeight;
+
+    /** CHARA_IMG_URL: {NotNull, VARCHAR(200)} */
+    protected String _charaImgUrl;
 
     /** REGISTER_DATETIME: {NotNull, DATETIME(19)} */
     protected java.time.LocalDateTime _registerDatetime;
@@ -169,26 +164,6 @@ public abstract class BsChara extends AbstractEntity implements DomainEntity, En
     // ===================================================================================
     //                                                                   Referrer Property
     //                                                                   =================
-    /** CHARA_IMAGE by CHARA_ID, named 'charaImageList'. */
-    protected List<CharaImage> _charaImageList;
-
-    /**
-     * [get] CHARA_IMAGE by CHARA_ID, named 'charaImageList'.
-     * @return The entity list of referrer property 'charaImageList'. (NotNull: even if no loading, returns empty list)
-     */
-    public List<CharaImage> getCharaImageList() {
-        if (_charaImageList == null) { _charaImageList = newReferrerList(); }
-        return _charaImageList;
-    }
-
-    /**
-     * [set] CHARA_IMAGE by CHARA_ID, named 'charaImageList'.
-     * @param charaImageList The entity list of referrer property 'charaImageList'. (NullAllowed)
-     */
-    public void setCharaImageList(List<CharaImage> charaImageList) {
-        _charaImageList = charaImageList;
-    }
-
     /** VILLAGE_PLAYER by CHARA_ID, named 'villagePlayerList'. */
     protected List<VillagePlayer> _villagePlayerList;
 
@@ -240,8 +215,6 @@ public abstract class BsChara extends AbstractEntity implements DomainEntity, En
         StringBuilder sb = new StringBuilder();
         if (_charaGroup != null && _charaGroup.isPresent())
         { sb.append(li).append(xbRDS(_charaGroup, "charaGroup")); }
-        if (_charaImageList != null) { for (CharaImage et : _charaImageList)
-        { if (et != null) { sb.append(li).append(xbRDS(et, "charaImageList")); } } }
         if (_villagePlayerList != null) { for (VillagePlayer et : _villagePlayerList)
         { if (et != null) { sb.append(li).append(xbRDS(et, "villagePlayerList")); } } }
         return sb.toString();
@@ -257,10 +230,9 @@ public abstract class BsChara extends AbstractEntity implements DomainEntity, En
         sb.append(dm).append(xfND(_charaName));
         sb.append(dm).append(xfND(_charaShortName));
         sb.append(dm).append(xfND(_charaGroupId));
-        sb.append(dm).append(xfND(_defaultJoinMessage));
-        sb.append(dm).append(xfND(_defaultFirstdayMessage));
         sb.append(dm).append(xfND(_displayWidth));
         sb.append(dm).append(xfND(_displayHeight));
+        sb.append(dm).append(xfND(_charaImgUrl));
         sb.append(dm).append(xfND(_registerDatetime));
         sb.append(dm).append(xfND(_registerTrace));
         sb.append(dm).append(xfND(_updateDatetime));
@@ -277,8 +249,6 @@ public abstract class BsChara extends AbstractEntity implements DomainEntity, En
         StringBuilder sb = new StringBuilder();
         if (_charaGroup != null && _charaGroup.isPresent())
         { sb.append(dm).append("charaGroup"); }
-        if (_charaImageList != null && !_charaImageList.isEmpty())
-        { sb.append(dm).append("charaImageList"); }
         if (_villagePlayerList != null && !_villagePlayerList.isEmpty())
         { sb.append(dm).append("villagePlayerList"); }
         if (sb.length() > dm.length()) {
@@ -376,46 +346,6 @@ public abstract class BsChara extends AbstractEntity implements DomainEntity, En
     }
 
     /**
-     * [get] DEFAULT_JOIN_MESSAGE: {VARCHAR(200)} <br>
-     * 入村時デフォルト発言
-     * @return The value of the column 'DEFAULT_JOIN_MESSAGE'. (NullAllowed even if selected: for no constraint)
-     */
-    public String getDefaultJoinMessage() {
-        checkSpecifiedProperty("defaultJoinMessage");
-        return convertEmptyToNull(_defaultJoinMessage);
-    }
-
-    /**
-     * [set] DEFAULT_JOIN_MESSAGE: {VARCHAR(200)} <br>
-     * 入村時デフォルト発言
-     * @param defaultJoinMessage The value of the column 'DEFAULT_JOIN_MESSAGE'. (NullAllowed: null update allowed for no constraint)
-     */
-    public void setDefaultJoinMessage(String defaultJoinMessage) {
-        registerModifiedProperty("defaultJoinMessage");
-        _defaultJoinMessage = defaultJoinMessage;
-    }
-
-    /**
-     * [get] DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)} <br>
-     * デフォルト1日目発言
-     * @return The value of the column 'DEFAULT_FIRSTDAY_MESSAGE'. (NullAllowed even if selected: for no constraint)
-     */
-    public String getDefaultFirstdayMessage() {
-        checkSpecifiedProperty("defaultFirstdayMessage");
-        return convertEmptyToNull(_defaultFirstdayMessage);
-    }
-
-    /**
-     * [set] DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)} <br>
-     * デフォルト1日目発言
-     * @param defaultFirstdayMessage The value of the column 'DEFAULT_FIRSTDAY_MESSAGE'. (NullAllowed: null update allowed for no constraint)
-     */
-    public void setDefaultFirstdayMessage(String defaultFirstdayMessage) {
-        registerModifiedProperty("defaultFirstdayMessage");
-        _defaultFirstdayMessage = defaultFirstdayMessage;
-    }
-
-    /**
      * [get] DISPLAY_WIDTH: {NotNull, INT UNSIGNED(10)} <br>
      * 表示時横幅
      * @return The value of the column 'DISPLAY_WIDTH'. (basically NotNull if selected: for the constraint)
@@ -453,6 +383,26 @@ public abstract class BsChara extends AbstractEntity implements DomainEntity, En
     public void setDisplayHeight(Integer displayHeight) {
         registerModifiedProperty("displayHeight");
         _displayHeight = displayHeight;
+    }
+
+    /**
+     * [get] CHARA_IMG_URL: {NotNull, VARCHAR(200)} <br>
+     * キャラクター画像URL
+     * @return The value of the column 'CHARA_IMG_URL'. (basically NotNull if selected: for the constraint)
+     */
+    public String getCharaImgUrl() {
+        checkSpecifiedProperty("charaImgUrl");
+        return convertEmptyToNull(_charaImgUrl);
+    }
+
+    /**
+     * [set] CHARA_IMG_URL: {NotNull, VARCHAR(200)} <br>
+     * キャラクター画像URL
+     * @param charaImgUrl The value of the column 'CHARA_IMG_URL'. (basically NotNull if update: for the constraint)
+     */
+    public void setCharaImgUrl(String charaImgUrl) {
+        registerModifiedProperty("charaImgUrl");
+        _charaImgUrl = charaImgUrl;
     }
 
     /**

@@ -38,19 +38,14 @@ public class DBMetaInstanceHandler implements DBMetaProvider {
         tmpMap.put("camp", "com.ort.dbflute.bsentity.dbmeta.CampDbm");
         tmpMap.put("chara", "com.ort.dbflute.bsentity.dbmeta.CharaDbm");
         tmpMap.put("chara_group", "com.ort.dbflute.bsentity.dbmeta.CharaGroupDbm");
-        tmpMap.put("chara_image", "com.ort.dbflute.bsentity.dbmeta.CharaImageDbm");
         tmpMap.put("coming_out", "com.ort.dbflute.bsentity.dbmeta.ComingOutDbm");
         tmpMap.put("commit", "com.ort.dbflute.bsentity.dbmeta.CommitDbm");
         tmpMap.put("dead_reason", "com.ort.dbflute.bsentity.dbmeta.DeadReasonDbm");
         tmpMap.put("designer", "com.ort.dbflute.bsentity.dbmeta.DesignerDbm");
-        tmpMap.put("face_type", "com.ort.dbflute.bsentity.dbmeta.FaceTypeDbm");
         tmpMap.put("message", "com.ort.dbflute.bsentity.dbmeta.MessageDbm");
-        tmpMap.put("message_restriction", "com.ort.dbflute.bsentity.dbmeta.MessageRestrictionDbm");
         tmpMap.put("message_type", "com.ort.dbflute.bsentity.dbmeta.MessageTypeDbm");
         tmpMap.put("noonnight", "com.ort.dbflute.bsentity.dbmeta.NoonnightDbm");
         tmpMap.put("player", "com.ort.dbflute.bsentity.dbmeta.PlayerDbm");
-        tmpMap.put("player_detail", "com.ort.dbflute.bsentity.dbmeta.PlayerDetailDbm");
-        tmpMap.put("reserved_village", "com.ort.dbflute.bsentity.dbmeta.ReservedVillageDbm");
         tmpMap.put("skill", "com.ort.dbflute.bsentity.dbmeta.SkillDbm");
         tmpMap.put("village", "com.ort.dbflute.bsentity.dbmeta.VillageDbm");
         tmpMap.put("village_day", "com.ort.dbflute.bsentity.dbmeta.VillageDayDbm");
@@ -59,6 +54,7 @@ public class DBMetaInstanceHandler implements DBMetaProvider {
         tmpMap.put("village_setting_item", "com.ort.dbflute.bsentity.dbmeta.VillageSettingItemDbm");
         tmpMap.put("village_status", "com.ort.dbflute.bsentity.dbmeta.VillageStatusDbm");
         tmpMap.put("vote", "com.ort.dbflute.bsentity.dbmeta.VoteDbm");
+        tmpMap.put("winlose", "com.ort.dbflute.bsentity.dbmeta.WinloseDbm");
         _tableDbNameClassNameMap = Collections.unmodifiableMap(tmpMap);
     }
 

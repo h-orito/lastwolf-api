@@ -3,11 +3,9 @@ package com.ort.lastwolf.domain.service.ability
 import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.domain.model.ability.AbilityType
 import com.ort.lastwolf.domain.model.charachip.Chara
-import com.ort.lastwolf.domain.model.charachip.Charas
 import com.ort.lastwolf.domain.model.daychange.DayChange
 import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.village.Village
-import com.ort.lastwolf.domain.model.village.VillageDay
 import com.ort.lastwolf.domain.model.village.ability.VillageAbilities
 import com.ort.lastwolf.domain.model.village.ability.VillageAbility
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
@@ -20,119 +18,73 @@ class AttackDomainService : IAbilityDomainService {
 
     override fun getSelectableTargetList(
         village: Village,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
+        abilities: VillageAbilities
     ): List<VillageParticipant> {
         participant ?: return listOf()
 
-        return if (village.day.latestDay().day == 1) {
+        // すでに指定していたらもう使えない
+        if (abilities.filterByType(getAbilityType()).filterLatestday(village).list.isNotEmpty()) {
+            return listOf()
+        }
+
+        return if (village.days.latestDay().day == 1) {
             // ダミーキャラ固定
-            listOf(village.dummyChara()!!)
+            listOf(village.dummyParticipant()!!)
         } else {
             // 襲撃対象に選べる & 生存している
-            village.participant.filterAlive().memberList.filter {
+            village.participants.filterAlive().list.filter {
                 !it.skill!!.toCdef().isNotSelectableAttack
             }
         }
     }
 
-    override fun getSelectingTarget(
-        village: Village,
-        participant: VillageParticipant?,
-        villageAbilities: VillageAbilities
-    ): VillageParticipant? {
-        participant ?: return null
-
-        // 襲撃能力のある参加者のID
-        val attackableParticipantIdList =
-            village.participant.memberList.filter { it.skill!!.toCdef().isHasAttackAbility }.map { it.id }
-
-        val targetVillageParticipantId = villageAbilities
-            .filterLatestday(village)
-            .filterByType(getAbilityType()).list
-            .find { attackableParticipantIdList.contains(it.myselfId) }
-            ?.targetId
-        targetVillageParticipantId ?: return null
-        return village.participant.member(targetVillageParticipantId)
-    }
-
-    override fun createSetMessage(myChara: Chara, targetChara: Chara?): String =
-        "${myChara.charaName.name}が襲撃対象を${targetChara?.charaName?.name ?: "なし"}に設定しました。"
-
-    override fun getDefaultAbilityList(
-        village: Village,
-        villageAbilities: VillageAbilities
-    ): List<VillageAbility> {
-        // 進行中のみ
-        if (!village.status.isProgress()) return listOf()
-        // 襲撃者は生存している人狼からランダムに
-        val wolf = village.participant.filterAlive().findRandom {
-            it.skill!!.toCdef().isHasAttackAbility
-        } ?: return listOf() // 生存している人狼がいないので襲撃なし
-        // 対象も選択可能なものからランダム
-        return getSelectableTargetList(village, wolf)
-            .shuffled().firstOrNull()
-            ?.let {
-                listOf(
-                    VillageAbility(
-                        villageDayId = village.day.latestDay().id,
-                        myselfId = wolf.id,
-                        targetId = it.id,
-                        abilityType = getAbilityType()
-                    )
-                )
-            } ?: return listOf()
-    }
-
-    override fun processDayChangeAction(
-        dayChange: DayChange,
-        charas: Charas
+    override fun processDummyAbility(
+        dayChange: DayChange
     ): DayChange {
-        val latestDay = dayChange.village.day.latestDay()
-        val aliveWolf = dayChange.village.participant.filterAlive().findRandom {
-            it.skill!!.toCdef().isHasAttackAbility
-        } ?: return dayChange
+        // ダミーは人狼を引くことがないので何もしない
+        return dayChange
+    }
+
+    override fun createAbilityMessage(
+        village: Village,
+        participant: VillageParticipant,
+        ability: VillageAbility
+    ): Message = createAttackMessage(village, participant, ability)
+
+    fun attack(
+        dayChange: DayChange
+    ): DayChange {
+        val latestDay = dayChange.village.days.latestDay()
 
         var village = dayChange.village.copy()
-        var messages = dayChange.messages.copy()
         dayChange.abilities
             .filterByType(getAbilityType())
             .filterYesterday(village).list
             .find { it.targetId != null }
             ?.let { ability ->
-                // 襲撃メッセージ
-                messages = messages.add(createAttackMessage(village, charas, aliveWolf, ability))
                 // 襲撃成功したら死亡
                 if (isAttackSuccess(dayChange, ability.targetId!!)) {
                     village = village.attackParticipant(ability.targetId, latestDay)
-
-                    // 智狼がいれば追加メッセージ
-                    createWiseWolfMessage(village, charas, village.participant.member(ability.targetId))?.let {
-                        messages = messages.add(it)
-                    }
-                    // 猫又による道連れ
-                    forceSuicidedParticipant(village.participant.member(ability.targetId), aliveWolf)?.let {
-                        village = village.divineKillParticipant(it.id, village.day.latestDay())
-                        messages = messages.add(
-                            createForceSuicideMessage(
-                                village.participant.member(ability.targetId),
-                                it,
-                                village.day.latestDay(),
-                                charas
-                            )
-                        )
-                    }
                 }
             } ?: return dayChange
 
         return dayChange.copy(
-            village = village,
-            messages = messages
+            village = village
         ).setIsChange(dayChange)
     }
 
-    override fun isAvailableNoTarget(village: Village): Boolean = village.day.latestDay().day != 1 // 1日目はダミー固定
+    override fun isAvailableNoTarget(village: Village): Boolean = false
 
-    override fun isUsable(village: Village, participant: VillageParticipant): Boolean {
+    override fun isUsable(
+        village: Village,
+        participant: VillageParticipant,
+        abilities: VillageAbilities
+    ): Boolean {
+        // すでに指定していたらもう使えない
+        if (abilities.filterByType(getAbilityType()).filterLatestday(village).list.isNotEmpty()) {
+            return false
+        }
         // 生存していたら行使できる
         return participant.isAlive()
     }
@@ -142,69 +94,30 @@ class AttackDomainService : IAbilityDomainService {
     //                                                                        ============
     private fun isAttackSuccess(dayChange: DayChange, targetId: Int): Boolean {
         // 対象が既に死亡していたら失敗
-        if (!dayChange.village.participant.member(targetId).isAlive()) return false
+        if (!dayChange.village.participants.first(targetId).isAlive()) return false
         // 対象が護衛されていたら失敗
         if (dayChange.abilities.list.any { villageAbility ->
                 villageAbility.abilityType.code == CDef.AbilityType.護衛.code()
                     && villageAbility.targetId == targetId
-                    && villageAbility.villageDayId == dayChange.village.day.yesterday().id
-                    && dayChange.village.participant.member(villageAbility.myselfId).isAlive()
+                    && villageAbility.villageDayId == dayChange.village.days.yesterday().id
+                    && dayChange.village.participants.first(villageAbility.myselfId).isAlive()
             }) {
             return false
         }
         // 対象が襲撃を耐える役職なら失敗
-        return !dayChange.village.participant.member(targetId).skill!!.toCdef().isNoDeadByAttack
+        return !dayChange.village.participants.first(targetId).skill!!.toCdef().isNoDeadByAttack
     }
 
     private fun createAttackMessage(
         village: Village,
-        charas: Charas,
         wolf: VillageParticipant,
         ability: VillageAbility
     ): Message {
-        val fromChara = charas.chara(wolf.charaId)
-        val targetChara = charas.chara(village.participant, ability.targetId!!)
-        val text = createAttackMessageString(fromChara, targetChara)
-        return Message.createAttackPrivateMessage(text, village.day.latestDay().id)
+        val target = village.participants.first(ability.targetId!!)
+        val text = createAttackMessageString(wolf.chara, target.chara)
+        return Message.createAttackPrivateMessage(text, village.days.latestDay().id, true)
     }
 
     private fun createAttackMessageString(chara: Chara, targetChara: Chara): String =
-        "${chara.charaName.fullName()}達は、${targetChara.charaName.fullName()}を襲撃した。"
-
-    private fun createWiseWolfMessage(village: Village, charas: Charas, target: VillageParticipant): Message? {
-        // 智狼がいなければ何もしない
-        if (!village.participant.filterAlive().memberList.any { it.skill!!.toCdef().isHasWiseWolfAbility }) return null
-        // 対象の役職を知られる
-        val targetChara = charas.chara(target.charaId)
-        val skill = target.skill!!.name
-        return Message.createAttackPrivateMessage(
-            "${targetChara.charaName.fullName()}は${skill}だったようだ。",
-            village.day.latestDay().id
-        )
-    }
-
-    private fun forceSuicidedParticipant(
-        attackedParticipant: VillageParticipant,
-        attacker: VillageParticipant
-    ): VillageParticipant? {
-        // 襲撃されたのが道連れ役職でなければ何もしない
-        if (!attackedParticipant.skill!!.toCdef().isForceDoubleSuicide) return null
-        // 襲撃者を道連れにする
-        return attacker
-    }
-
-    private fun createForceSuicideMessage(
-        attackedParticipant: VillageParticipant,
-        forceSuicidedParticipant: VillageParticipant,
-        latestDay: VillageDay,
-        charas: Charas
-    ): Message {
-        val attackedCharaName = charas.chara(attackedParticipant.charaId).charaName.fullName()
-        val forceSuicidedCharaName = charas.chara(forceSuicidedParticipant.charaId).charaName.fullName()
-        val message = "${attackedCharaName}は、${forceSuicidedCharaName}を道連れにした。"
-        return Message.createPrivateSystemMessage(
-            message,
-            latestDay.id
-        )
-    }
+        "${chara.name.name}が${targetChara.name.name}を襲撃します。"
 }

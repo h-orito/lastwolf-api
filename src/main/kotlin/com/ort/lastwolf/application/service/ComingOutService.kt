@@ -2,7 +2,6 @@ package com.ort.lastwolf.application.service
 
 import com.ort.lastwolf.domain.model.skill.Skill
 import com.ort.lastwolf.domain.model.village.participant.coming_out.ComingOut
-import com.ort.lastwolf.domain.model.village.participant.coming_out.ComingOuts
 import com.ort.lastwolf.infrastructure.datasource.coming_out.ComingOutDataSource
 import org.springframework.stereotype.Service
 
@@ -13,10 +12,10 @@ class ComingOutService(
 
     fun registerComingOut(
         participantId: Int,
-        skillList: List<Skill>
+        skill: Skill
     ) = comingOutDataSource.register(
         participantId,
-        ComingOuts(list = skillList.map { ComingOut(it) })
+        ComingOut(skill)
     )
 
     fun deleteComingOut(participantId: Int) = comingOutDataSource.delete(participantId)

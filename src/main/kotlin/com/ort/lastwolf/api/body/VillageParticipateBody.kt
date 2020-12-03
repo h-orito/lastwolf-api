@@ -12,12 +12,7 @@ data class VillageParticipateBody(
     @field:NotNull(message = "secondRequestSkillは必須")
     val secondRequestSkill: String?,
 
-    @field:NotNull(message = "joinMessageは必須")
-    val joinMessage: String?,
-
-    val joinPassword: String?,
-
-    val spectator: Boolean?
+    val joinPassword: String?
 ) {
-    constructor() : this(null, null, null, null, null, null) {}
+    constructor() : this(null, null, null, null) {}
 }

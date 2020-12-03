@@ -54,7 +54,6 @@ public class VillageDbm extends AbstractDBMeta {
                 ((Village)et).mynativeMappingVillageStatusCode((String)vl);
             }
         }, "villageStatusCode");
-        setupEpg(_epgMap, et -> ((Village)et).getEpilogueDay(), (et, vl) -> ((Village)et).setEpilogueDay(cti(vl)), "epilogueDay");
         setupEpg(_epgMap, et -> ((Village)et).getWinCampCode(), (et, vl) -> {
             CDef.Camp cls = (CDef.Camp)gcls(et, columnWinCampCode(), vl);
             if (cls != null) {
@@ -101,11 +100,10 @@ public class VillageDbm extends AbstractDBMeta {
     // ===================================================================================
     //                                                                         Column Info
     //                                                                         ===========
-    protected final ColumnInfo _columnVillageId = cci("VILLAGE_ID", "VILLAGE_ID", null, null, Integer.class, "villageId", null, true, true, true, "INT UNSIGNED", 10, 0, null, null, false, null, null, null, "messageRestrictionList,villageDayList,villagePlayerList,villageSettingList", null, false);
+    protected final ColumnInfo _columnVillageId = cci("VILLAGE_ID", "VILLAGE_ID", null, null, Integer.class, "villageId", null, true, true, true, "INT UNSIGNED", 10, 0, null, null, false, null, null, null, "villageDayList,villagePlayerList,villageSettingList", null, false);
     protected final ColumnInfo _columnVillageDisplayName = cci("VILLAGE_DISPLAY_NAME", "VILLAGE_DISPLAY_NAME", null, null, String.class, "villageDisplayName", null, false, false, true, "VARCHAR", 40, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnCreatePlayerId = cci("CREATE_PLAYER_ID", "CREATE_PLAYER_ID", null, null, Integer.class, "createPlayerId", null, false, false, true, "INT UNSIGNED", 10, 0, null, null, false, null, null, "player", null, null, false);
     protected final ColumnInfo _columnVillageStatusCode = cci("VILLAGE_STATUS_CODE", "VILLAGE_STATUS_CODE", null, null, String.class, "villageStatusCode", null, false, false, true, "VARCHAR", 20, 0, null, null, false, null, null, "villageStatus", null, CDef.DefMeta.VillageStatus, false);
-    protected final ColumnInfo _columnEpilogueDay = cci("EPILOGUE_DAY", "EPILOGUE_DAY", null, null, Integer.class, "epilogueDay", null, false, false, false, "INT UNSIGNED", 10, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnWinCampCode = cci("WIN_CAMP_CODE", "WIN_CAMP_CODE", null, null, String.class, "winCampCode", null, false, false, false, "VARCHAR", 20, 0, null, null, false, null, null, "camp", null, CDef.DefMeta.Camp, false);
     protected final ColumnInfo _columnRegisterDatetime = cci("REGISTER_DATETIME", "REGISTER_DATETIME", null, null, java.time.LocalDateTime.class, "registerDatetime", null, false, false, true, "DATETIME", 19, 0, null, null, true, null, null, null, null, null, false);
     protected final ColumnInfo _columnRegisterTrace = cci("REGISTER_TRACE", "REGISTER_TRACE", null, null, String.class, "registerTrace", null, false, false, true, "VARCHAR", 64, 0, null, null, true, null, null, null, null, null, false);
@@ -132,11 +130,6 @@ public class VillageDbm extends AbstractDBMeta {
      * @return The information object of specified column. (NotNull)
      */
     public ColumnInfo columnVillageStatusCode() { return _columnVillageStatusCode; }
-    /**
-     * EPILOGUE_DAY: {INT UNSIGNED(10)}
-     * @return The information object of specified column. (NotNull)
-     */
-    public ColumnInfo columnEpilogueDay() { return _columnEpilogueDay; }
     /**
      * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp}
      * @return The information object of specified column. (NotNull)
@@ -169,7 +162,6 @@ public class VillageDbm extends AbstractDBMeta {
         ls.add(columnVillageDisplayName());
         ls.add(columnCreatePlayerId());
         ls.add(columnVillageStatusCode());
-        ls.add(columnEpilogueDay());
         ls.add(columnWinCampCode());
         ls.add(columnRegisterDatetime());
         ls.add(columnRegisterTrace());
@@ -226,14 +218,6 @@ public class VillageDbm extends AbstractDBMeta {
     // -----------------------------------------------------
     //                                     Referrer Property
     //                                     -----------------
-    /**
-     * MESSAGE_RESTRICTION by VILLAGE_ID, named 'messageRestrictionList'.
-     * @return The information object of referrer property. (NotNull)
-     */
-    public ReferrerInfo referrerMessageRestrictionList() {
-        Map<ColumnInfo, ColumnInfo> mp = newLinkedHashMap(columnVillageId(), MessageRestrictionDbm.getInstance().columnVillageId());
-        return cri("FK_MESSAGE_RESTRICTION_VILLAGE", "messageRestrictionList", this, MessageRestrictionDbm.getInstance(), mp, false, "village");
-    }
     /**
      * VILLAGE_DAY by VILLAGE_ID, named 'villageDayList'.
      * @return The information object of referrer property. (NotNull)

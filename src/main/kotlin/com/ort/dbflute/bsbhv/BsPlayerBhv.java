@@ -40,13 +40,13 @@ import com.ort.dbflute.cbean.*;
  *     
  *
  * [foreign table]
- *     AUTHORITY, PLAYER_DETAIL(AsOne)
+ *     AUTHORITY
  *
  * [referrer table]
- *     VILLAGE, VILLAGE_PLAYER, PLAYER_DETAIL
+ *     VILLAGE, VILLAGE_PLAYER
  *
  * [foreign property]
- *     authority, playerDetailAsOne
+ *     authority
  *
  * [referrer property]
  *     villageList, villagePlayerList
@@ -524,14 +524,6 @@ public abstract class BsPlayerBhv extends AbstractBehaviorWritable<Player, Playe
      */
     public List<Authority> pulloutAuthority(List<Player> playerList)
     { return helpPulloutInternally(playerList, "authority"); }
-
-    /**
-     * Pull out the list of referrer-as-one table 'PlayerDetail'.
-     * @param playerList The list of player. (NotNull, EmptyAllowed)
-     * @return The list of referrer-as-one table. (NotNull, EmptyAllowed, NotNullElement)
-     */
-    public List<PlayerDetail> pulloutPlayerDetailAsOne(List<Player> playerList)
-    { return helpPulloutInternally(playerList, "playerDetailAsOne"); }
 
     // ===================================================================================
     //                                                                      Extract Column

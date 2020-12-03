@@ -159,25 +159,6 @@ public abstract class AbstractBsCharaCQ extends AbstractConditionQuery {
 
     /**
      * Set up ExistsReferrer (correlated sub-query). <br>
-     * {exists (select CHARA_ID from chara_image where ...)} <br>
-     * chara_image by CHARA_ID, named 'charaImageAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">existsCharaImage</span>(imageCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     imageCB.query().set...
-     * });
-     * </pre>
-     * @param subCBLambda The callback for sub-query of CharaImageList for 'exists'. (NotNull)
-     */
-    public void existsCharaImage(SubQuery<CharaImageCB> subCBLambda) {
-        assertObjectNotNull("subCBLambda", subCBLambda);
-        CharaImageCB cb = new CharaImageCB(); cb.xsetupForExistsReferrer(this);
-        lockCall(() -> subCBLambda.query(cb)); String pp = keepCharaId_ExistsReferrer_CharaImageList(cb.query());
-        registerExistsReferrer(cb.query(), "CHARA_ID", "CHARA_ID", pp, "charaImageList");
-    }
-    public abstract String keepCharaId_ExistsReferrer_CharaImageList(CharaImageCQ sq);
-
-    /**
-     * Set up ExistsReferrer (correlated sub-query). <br>
      * {exists (select CHARA_ID from village_player where ...)} <br>
      * village_player by CHARA_ID, named 'villagePlayerAsOne'.
      * <pre>
@@ -194,25 +175,6 @@ public abstract class AbstractBsCharaCQ extends AbstractConditionQuery {
         registerExistsReferrer(cb.query(), "CHARA_ID", "CHARA_ID", pp, "villagePlayerList");
     }
     public abstract String keepCharaId_ExistsReferrer_VillagePlayerList(VillagePlayerCQ sq);
-
-    /**
-     * Set up NotExistsReferrer (correlated sub-query). <br>
-     * {not exists (select CHARA_ID from chara_image where ...)} <br>
-     * chara_image by CHARA_ID, named 'charaImageAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">notExistsCharaImage</span>(imageCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     imageCB.query().set...
-     * });
-     * </pre>
-     * @param subCBLambda The callback for sub-query of CharaId_NotExistsReferrer_CharaImageList for 'not exists'. (NotNull)
-     */
-    public void notExistsCharaImage(SubQuery<CharaImageCB> subCBLambda) {
-        assertObjectNotNull("subCBLambda", subCBLambda);
-        CharaImageCB cb = new CharaImageCB(); cb.xsetupForExistsReferrer(this);
-        lockCall(() -> subCBLambda.query(cb)); String pp = keepCharaId_NotExistsReferrer_CharaImageList(cb.query());
-        registerNotExistsReferrer(cb.query(), "CHARA_ID", "CHARA_ID", pp, "charaImageList");
-    }
-    public abstract String keepCharaId_NotExistsReferrer_CharaImageList(CharaImageCQ sq);
 
     /**
      * Set up NotExistsReferrer (correlated sub-query). <br>
@@ -233,14 +195,6 @@ public abstract class AbstractBsCharaCQ extends AbstractConditionQuery {
     }
     public abstract String keepCharaId_NotExistsReferrer_VillagePlayerList(VillagePlayerCQ sq);
 
-    public void xsderiveCharaImageList(String fn, SubQuery<CharaImageCB> sq, String al, DerivedReferrerOption op) {
-        assertObjectNotNull("subQuery", sq);
-        CharaImageCB cb = new CharaImageCB(); cb.xsetupForDerivedReferrer(this);
-        lockCall(() -> sq.query(cb)); String pp = keepCharaId_SpecifyDerivedReferrer_CharaImageList(cb.query());
-        registerSpecifyDerivedReferrer(fn, cb.query(), "CHARA_ID", "CHARA_ID", pp, "charaImageList", al, op);
-    }
-    public abstract String keepCharaId_SpecifyDerivedReferrer_CharaImageList(CharaImageCQ sq);
-
     public void xsderiveVillagePlayerList(String fn, SubQuery<VillagePlayerCB> sq, String al, DerivedReferrerOption op) {
         assertObjectNotNull("subQuery", sq);
         VillagePlayerCB cb = new VillagePlayerCB(); cb.xsetupForDerivedReferrer(this);
@@ -248,33 +202,6 @@ public abstract class AbstractBsCharaCQ extends AbstractConditionQuery {
         registerSpecifyDerivedReferrer(fn, cb.query(), "CHARA_ID", "CHARA_ID", pp, "villagePlayerList", al, op);
     }
     public abstract String keepCharaId_SpecifyDerivedReferrer_VillagePlayerList(VillagePlayerCQ sq);
-
-    /**
-     * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
-     * {FOO &lt;= (select max(BAR) from chara_image where ...)} <br>
-     * chara_image by CHARA_ID, named 'charaImageAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">derivedCharaImage()</span>.<span style="color: #CC4747">max</span>(imageCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     imageCB.specify().<span style="color: #CC4747">columnFoo...</span> <span style="color: #3F7E5E">// derived column by function</span>
-     *     imageCB.query().setBar... <span style="color: #3F7E5E">// referrer condition</span>
-     * }).<span style="color: #CC4747">greaterEqual</span>(123); <span style="color: #3F7E5E">// condition to derived column</span>
-     * </pre>
-     * @return The object to set up a function for referrer table. (NotNull)
-     */
-    public HpQDRFunction<CharaImageCB> derivedCharaImage() {
-        return xcreateQDRFunctionCharaImageList();
-    }
-    protected HpQDRFunction<CharaImageCB> xcreateQDRFunctionCharaImageList() {
-        return xcQDRFunc((fn, sq, rd, vl, op) -> xqderiveCharaImageList(fn, sq, rd, vl, op));
-    }
-    public void xqderiveCharaImageList(String fn, SubQuery<CharaImageCB> sq, String rd, Object vl, DerivedReferrerOption op) {
-        assertObjectNotNull("subQuery", sq);
-        CharaImageCB cb = new CharaImageCB(); cb.xsetupForDerivedReferrer(this);
-        lockCall(() -> sq.query(cb)); String sqpp = keepCharaId_QueryDerivedReferrer_CharaImageList(cb.query()); String prpp = keepCharaId_QueryDerivedReferrer_CharaImageListParameter(vl);
-        registerQueryDerivedReferrer(fn, cb.query(), "CHARA_ID", "CHARA_ID", sqpp, "charaImageList", rd, vl, prpp, op);
-    }
-    public abstract String keepCharaId_QueryDerivedReferrer_CharaImageList(CharaImageCQ sq);
-    public abstract String keepCharaId_QueryDerivedReferrer_CharaImageListParameter(Object vl);
 
     /**
      * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
@@ -706,312 +633,6 @@ public abstract class AbstractBsCharaCQ extends AbstractConditionQuery {
     protected abstract ConditionValue xgetCValueCharaGroupId();
 
     /**
-     * Equal(=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     * @param defaultJoinMessage The value of defaultJoinMessage as equal. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultJoinMessage_Equal(String defaultJoinMessage) {
-        doSetDefaultJoinMessage_Equal(fRES(defaultJoinMessage));
-    }
-
-    protected void doSetDefaultJoinMessage_Equal(String defaultJoinMessage) {
-        regDefaultJoinMessage(CK_EQ, defaultJoinMessage);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     * @param defaultJoinMessage The value of defaultJoinMessage as notEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultJoinMessage_NotEqual(String defaultJoinMessage) {
-        doSetDefaultJoinMessage_NotEqual(fRES(defaultJoinMessage));
-    }
-
-    protected void doSetDefaultJoinMessage_NotEqual(String defaultJoinMessage) {
-        regDefaultJoinMessage(CK_NES, defaultJoinMessage);
-    }
-
-    /**
-     * GreaterThan(&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     * @param defaultJoinMessage The value of defaultJoinMessage as greaterThan. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultJoinMessage_GreaterThan(String defaultJoinMessage) {
-        regDefaultJoinMessage(CK_GT, fRES(defaultJoinMessage));
-    }
-
-    /**
-     * LessThan(&lt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     * @param defaultJoinMessage The value of defaultJoinMessage as lessThan. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultJoinMessage_LessThan(String defaultJoinMessage) {
-        regDefaultJoinMessage(CK_LT, fRES(defaultJoinMessage));
-    }
-
-    /**
-     * GreaterEqual(&gt;=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     * @param defaultJoinMessage The value of defaultJoinMessage as greaterEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultJoinMessage_GreaterEqual(String defaultJoinMessage) {
-        regDefaultJoinMessage(CK_GE, fRES(defaultJoinMessage));
-    }
-
-    /**
-     * LessEqual(&lt;=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     * @param defaultJoinMessage The value of defaultJoinMessage as lessEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultJoinMessage_LessEqual(String defaultJoinMessage) {
-        regDefaultJoinMessage(CK_LE, fRES(defaultJoinMessage));
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     * @param defaultJoinMessageList The collection of defaultJoinMessage as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultJoinMessage_InScope(Collection<String> defaultJoinMessageList) {
-        doSetDefaultJoinMessage_InScope(defaultJoinMessageList);
-    }
-
-    protected void doSetDefaultJoinMessage_InScope(Collection<String> defaultJoinMessageList) {
-        regINS(CK_INS, cTL(defaultJoinMessageList), xgetCValueDefaultJoinMessage(), "DEFAULT_JOIN_MESSAGE");
-    }
-
-    /**
-     * NotInScope {not in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     * @param defaultJoinMessageList The collection of defaultJoinMessage as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultJoinMessage_NotInScope(Collection<String> defaultJoinMessageList) {
-        doSetDefaultJoinMessage_NotInScope(defaultJoinMessageList);
-    }
-
-    protected void doSetDefaultJoinMessage_NotInScope(Collection<String> defaultJoinMessageList) {
-        regINS(CK_NINS, cTL(defaultJoinMessageList), xgetCValueDefaultJoinMessage(), "DEFAULT_JOIN_MESSAGE");
-    }
-
-    /**
-     * LikeSearch with various options. (versatile) {like '%xxx%' escape ...}. And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)} <br>
-     * <pre>e.g. setDefaultJoinMessage_LikeSearch("xxx", op <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> op.<span style="color: #CC4747">likeContain()</span>);</pre>
-     * @param defaultJoinMessage The value of defaultJoinMessage as likeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param opLambda The callback for option of like-search. (NotNull)
-     */
-    public void setDefaultJoinMessage_LikeSearch(String defaultJoinMessage, ConditionOptionCall<LikeSearchOption> opLambda) {
-        setDefaultJoinMessage_LikeSearch(defaultJoinMessage, xcLSOP(opLambda));
-    }
-
-    /**
-     * LikeSearch with various options. (versatile) {like '%xxx%' escape ...}. And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)} <br>
-     * <pre>e.g. setDefaultJoinMessage_LikeSearch("xxx", new <span style="color: #CC4747">LikeSearchOption</span>().likeContain());</pre>
-     * @param defaultJoinMessage The value of defaultJoinMessage as likeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param likeSearchOption The option of like-search. (NotNull)
-     */
-    protected void setDefaultJoinMessage_LikeSearch(String defaultJoinMessage, LikeSearchOption likeSearchOption) {
-        regLSQ(CK_LS, fRES(defaultJoinMessage), xgetCValueDefaultJoinMessage(), "DEFAULT_JOIN_MESSAGE", likeSearchOption);
-    }
-
-    /**
-     * NotLikeSearch with various options. (versatile) {not like 'xxx%' escape ...} <br>
-     * And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     * @param defaultJoinMessage The value of defaultJoinMessage as notLikeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param opLambda The callback for option of like-search. (NotNull)
-     */
-    public void setDefaultJoinMessage_NotLikeSearch(String defaultJoinMessage, ConditionOptionCall<LikeSearchOption> opLambda) {
-        setDefaultJoinMessage_NotLikeSearch(defaultJoinMessage, xcLSOP(opLambda));
-    }
-
-    /**
-     * NotLikeSearch with various options. (versatile) {not like 'xxx%' escape ...} <br>
-     * And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     * @param defaultJoinMessage The value of defaultJoinMessage as notLikeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param likeSearchOption The option of not-like-search. (NotNull)
-     */
-    protected void setDefaultJoinMessage_NotLikeSearch(String defaultJoinMessage, LikeSearchOption likeSearchOption) {
-        regLSQ(CK_NLS, fRES(defaultJoinMessage), xgetCValueDefaultJoinMessage(), "DEFAULT_JOIN_MESSAGE", likeSearchOption);
-    }
-
-    /**
-     * IsNull {is null}. And OnlyOnceRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     */
-    public void setDefaultJoinMessage_IsNull() { regDefaultJoinMessage(CK_ISN, DOBJ); }
-
-    /**
-     * IsNullOrEmpty {is null or empty}. And OnlyOnceRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     */
-    public void setDefaultJoinMessage_IsNullOrEmpty() { regDefaultJoinMessage(CK_ISNOE, DOBJ); }
-
-    /**
-     * IsNotNull {is not null}. And OnlyOnceRegistered. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     */
-    public void setDefaultJoinMessage_IsNotNull() { regDefaultJoinMessage(CK_ISNN, DOBJ); }
-
-    protected void regDefaultJoinMessage(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueDefaultJoinMessage(), "DEFAULT_JOIN_MESSAGE"); }
-    protected abstract ConditionValue xgetCValueDefaultJoinMessage();
-
-    /**
-     * Equal(=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     * @param defaultFirstdayMessage The value of defaultFirstdayMessage as equal. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultFirstdayMessage_Equal(String defaultFirstdayMessage) {
-        doSetDefaultFirstdayMessage_Equal(fRES(defaultFirstdayMessage));
-    }
-
-    protected void doSetDefaultFirstdayMessage_Equal(String defaultFirstdayMessage) {
-        regDefaultFirstdayMessage(CK_EQ, defaultFirstdayMessage);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     * @param defaultFirstdayMessage The value of defaultFirstdayMessage as notEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultFirstdayMessage_NotEqual(String defaultFirstdayMessage) {
-        doSetDefaultFirstdayMessage_NotEqual(fRES(defaultFirstdayMessage));
-    }
-
-    protected void doSetDefaultFirstdayMessage_NotEqual(String defaultFirstdayMessage) {
-        regDefaultFirstdayMessage(CK_NES, defaultFirstdayMessage);
-    }
-
-    /**
-     * GreaterThan(&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     * @param defaultFirstdayMessage The value of defaultFirstdayMessage as greaterThan. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultFirstdayMessage_GreaterThan(String defaultFirstdayMessage) {
-        regDefaultFirstdayMessage(CK_GT, fRES(defaultFirstdayMessage));
-    }
-
-    /**
-     * LessThan(&lt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     * @param defaultFirstdayMessage The value of defaultFirstdayMessage as lessThan. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultFirstdayMessage_LessThan(String defaultFirstdayMessage) {
-        regDefaultFirstdayMessage(CK_LT, fRES(defaultFirstdayMessage));
-    }
-
-    /**
-     * GreaterEqual(&gt;=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     * @param defaultFirstdayMessage The value of defaultFirstdayMessage as greaterEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultFirstdayMessage_GreaterEqual(String defaultFirstdayMessage) {
-        regDefaultFirstdayMessage(CK_GE, fRES(defaultFirstdayMessage));
-    }
-
-    /**
-     * LessEqual(&lt;=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     * @param defaultFirstdayMessage The value of defaultFirstdayMessage as lessEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultFirstdayMessage_LessEqual(String defaultFirstdayMessage) {
-        regDefaultFirstdayMessage(CK_LE, fRES(defaultFirstdayMessage));
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     * @param defaultFirstdayMessageList The collection of defaultFirstdayMessage as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultFirstdayMessage_InScope(Collection<String> defaultFirstdayMessageList) {
-        doSetDefaultFirstdayMessage_InScope(defaultFirstdayMessageList);
-    }
-
-    protected void doSetDefaultFirstdayMessage_InScope(Collection<String> defaultFirstdayMessageList) {
-        regINS(CK_INS, cTL(defaultFirstdayMessageList), xgetCValueDefaultFirstdayMessage(), "DEFAULT_FIRSTDAY_MESSAGE");
-    }
-
-    /**
-     * NotInScope {not in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     * @param defaultFirstdayMessageList The collection of defaultFirstdayMessage as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDefaultFirstdayMessage_NotInScope(Collection<String> defaultFirstdayMessageList) {
-        doSetDefaultFirstdayMessage_NotInScope(defaultFirstdayMessageList);
-    }
-
-    protected void doSetDefaultFirstdayMessage_NotInScope(Collection<String> defaultFirstdayMessageList) {
-        regINS(CK_NINS, cTL(defaultFirstdayMessageList), xgetCValueDefaultFirstdayMessage(), "DEFAULT_FIRSTDAY_MESSAGE");
-    }
-
-    /**
-     * LikeSearch with various options. (versatile) {like '%xxx%' escape ...}. And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)} <br>
-     * <pre>e.g. setDefaultFirstdayMessage_LikeSearch("xxx", op <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> op.<span style="color: #CC4747">likeContain()</span>);</pre>
-     * @param defaultFirstdayMessage The value of defaultFirstdayMessage as likeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param opLambda The callback for option of like-search. (NotNull)
-     */
-    public void setDefaultFirstdayMessage_LikeSearch(String defaultFirstdayMessage, ConditionOptionCall<LikeSearchOption> opLambda) {
-        setDefaultFirstdayMessage_LikeSearch(defaultFirstdayMessage, xcLSOP(opLambda));
-    }
-
-    /**
-     * LikeSearch with various options. (versatile) {like '%xxx%' escape ...}. And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)} <br>
-     * <pre>e.g. setDefaultFirstdayMessage_LikeSearch("xxx", new <span style="color: #CC4747">LikeSearchOption</span>().likeContain());</pre>
-     * @param defaultFirstdayMessage The value of defaultFirstdayMessage as likeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param likeSearchOption The option of like-search. (NotNull)
-     */
-    protected void setDefaultFirstdayMessage_LikeSearch(String defaultFirstdayMessage, LikeSearchOption likeSearchOption) {
-        regLSQ(CK_LS, fRES(defaultFirstdayMessage), xgetCValueDefaultFirstdayMessage(), "DEFAULT_FIRSTDAY_MESSAGE", likeSearchOption);
-    }
-
-    /**
-     * NotLikeSearch with various options. (versatile) {not like 'xxx%' escape ...} <br>
-     * And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     * @param defaultFirstdayMessage The value of defaultFirstdayMessage as notLikeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param opLambda The callback for option of like-search. (NotNull)
-     */
-    public void setDefaultFirstdayMessage_NotLikeSearch(String defaultFirstdayMessage, ConditionOptionCall<LikeSearchOption> opLambda) {
-        setDefaultFirstdayMessage_NotLikeSearch(defaultFirstdayMessage, xcLSOP(opLambda));
-    }
-
-    /**
-     * NotLikeSearch with various options. (versatile) {not like 'xxx%' escape ...} <br>
-     * And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     * @param defaultFirstdayMessage The value of defaultFirstdayMessage as notLikeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param likeSearchOption The option of not-like-search. (NotNull)
-     */
-    protected void setDefaultFirstdayMessage_NotLikeSearch(String defaultFirstdayMessage, LikeSearchOption likeSearchOption) {
-        regLSQ(CK_NLS, fRES(defaultFirstdayMessage), xgetCValueDefaultFirstdayMessage(), "DEFAULT_FIRSTDAY_MESSAGE", likeSearchOption);
-    }
-
-    /**
-     * IsNull {is null}. And OnlyOnceRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     */
-    public void setDefaultFirstdayMessage_IsNull() { regDefaultFirstdayMessage(CK_ISN, DOBJ); }
-
-    /**
-     * IsNullOrEmpty {is null or empty}. And OnlyOnceRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     */
-    public void setDefaultFirstdayMessage_IsNullOrEmpty() { regDefaultFirstdayMessage(CK_ISNOE, DOBJ); }
-
-    /**
-     * IsNotNull {is not null}. And OnlyOnceRegistered. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     */
-    public void setDefaultFirstdayMessage_IsNotNull() { regDefaultFirstdayMessage(CK_ISNN, DOBJ); }
-
-    protected void regDefaultFirstdayMessage(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueDefaultFirstdayMessage(), "DEFAULT_FIRSTDAY_MESSAGE"); }
-    protected abstract ConditionValue xgetCValueDefaultFirstdayMessage();
-
-    /**
      * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
      * DISPLAY_WIDTH: {NotNull, INT UNSIGNED(10)}
      * @param displayWidth The value of displayWidth as equal. (basically NotNull: error as default, or no condition as option)
@@ -1244,6 +865,141 @@ public abstract class AbstractBsCharaCQ extends AbstractConditionQuery {
 
     protected void regDisplayHeight(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueDisplayHeight(), "DISPLAY_HEIGHT"); }
     protected abstract ConditionValue xgetCValueDisplayHeight();
+
+    /**
+     * Equal(=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)}
+     * @param charaImgUrl The value of charaImgUrl as equal. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setCharaImgUrl_Equal(String charaImgUrl) {
+        doSetCharaImgUrl_Equal(fRES(charaImgUrl));
+    }
+
+    protected void doSetCharaImgUrl_Equal(String charaImgUrl) {
+        regCharaImgUrl(CK_EQ, charaImgUrl);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)}
+     * @param charaImgUrl The value of charaImgUrl as notEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setCharaImgUrl_NotEqual(String charaImgUrl) {
+        doSetCharaImgUrl_NotEqual(fRES(charaImgUrl));
+    }
+
+    protected void doSetCharaImgUrl_NotEqual(String charaImgUrl) {
+        regCharaImgUrl(CK_NES, charaImgUrl);
+    }
+
+    /**
+     * GreaterThan(&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)}
+     * @param charaImgUrl The value of charaImgUrl as greaterThan. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setCharaImgUrl_GreaterThan(String charaImgUrl) {
+        regCharaImgUrl(CK_GT, fRES(charaImgUrl));
+    }
+
+    /**
+     * LessThan(&lt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)}
+     * @param charaImgUrl The value of charaImgUrl as lessThan. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setCharaImgUrl_LessThan(String charaImgUrl) {
+        regCharaImgUrl(CK_LT, fRES(charaImgUrl));
+    }
+
+    /**
+     * GreaterEqual(&gt;=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)}
+     * @param charaImgUrl The value of charaImgUrl as greaterEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setCharaImgUrl_GreaterEqual(String charaImgUrl) {
+        regCharaImgUrl(CK_GE, fRES(charaImgUrl));
+    }
+
+    /**
+     * LessEqual(&lt;=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)}
+     * @param charaImgUrl The value of charaImgUrl as lessEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setCharaImgUrl_LessEqual(String charaImgUrl) {
+        regCharaImgUrl(CK_LE, fRES(charaImgUrl));
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)}
+     * @param charaImgUrlList The collection of charaImgUrl as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setCharaImgUrl_InScope(Collection<String> charaImgUrlList) {
+        doSetCharaImgUrl_InScope(charaImgUrlList);
+    }
+
+    protected void doSetCharaImgUrl_InScope(Collection<String> charaImgUrlList) {
+        regINS(CK_INS, cTL(charaImgUrlList), xgetCValueCharaImgUrl(), "CHARA_IMG_URL");
+    }
+
+    /**
+     * NotInScope {not in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)}
+     * @param charaImgUrlList The collection of charaImgUrl as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setCharaImgUrl_NotInScope(Collection<String> charaImgUrlList) {
+        doSetCharaImgUrl_NotInScope(charaImgUrlList);
+    }
+
+    protected void doSetCharaImgUrl_NotInScope(Collection<String> charaImgUrlList) {
+        regINS(CK_NINS, cTL(charaImgUrlList), xgetCValueCharaImgUrl(), "CHARA_IMG_URL");
+    }
+
+    /**
+     * LikeSearch with various options. (versatile) {like '%xxx%' escape ...}. And NullOrEmptyIgnored, SeveralRegistered. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)} <br>
+     * <pre>e.g. setCharaImgUrl_LikeSearch("xxx", op <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> op.<span style="color: #CC4747">likeContain()</span>);</pre>
+     * @param charaImgUrl The value of charaImgUrl as likeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     * @param opLambda The callback for option of like-search. (NotNull)
+     */
+    public void setCharaImgUrl_LikeSearch(String charaImgUrl, ConditionOptionCall<LikeSearchOption> opLambda) {
+        setCharaImgUrl_LikeSearch(charaImgUrl, xcLSOP(opLambda));
+    }
+
+    /**
+     * LikeSearch with various options. (versatile) {like '%xxx%' escape ...}. And NullOrEmptyIgnored, SeveralRegistered. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)} <br>
+     * <pre>e.g. setCharaImgUrl_LikeSearch("xxx", new <span style="color: #CC4747">LikeSearchOption</span>().likeContain());</pre>
+     * @param charaImgUrl The value of charaImgUrl as likeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     * @param likeSearchOption The option of like-search. (NotNull)
+     */
+    protected void setCharaImgUrl_LikeSearch(String charaImgUrl, LikeSearchOption likeSearchOption) {
+        regLSQ(CK_LS, fRES(charaImgUrl), xgetCValueCharaImgUrl(), "CHARA_IMG_URL", likeSearchOption);
+    }
+
+    /**
+     * NotLikeSearch with various options. (versatile) {not like 'xxx%' escape ...} <br>
+     * And NullOrEmptyIgnored, SeveralRegistered. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)}
+     * @param charaImgUrl The value of charaImgUrl as notLikeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     * @param opLambda The callback for option of like-search. (NotNull)
+     */
+    public void setCharaImgUrl_NotLikeSearch(String charaImgUrl, ConditionOptionCall<LikeSearchOption> opLambda) {
+        setCharaImgUrl_NotLikeSearch(charaImgUrl, xcLSOP(opLambda));
+    }
+
+    /**
+     * NotLikeSearch with various options. (versatile) {not like 'xxx%' escape ...} <br>
+     * And NullOrEmptyIgnored, SeveralRegistered. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)}
+     * @param charaImgUrl The value of charaImgUrl as notLikeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     * @param likeSearchOption The option of not-like-search. (NotNull)
+     */
+    protected void setCharaImgUrl_NotLikeSearch(String charaImgUrl, LikeSearchOption likeSearchOption) {
+        regLSQ(CK_NLS, fRES(charaImgUrl), xgetCValueCharaImgUrl(), "CHARA_IMG_URL", likeSearchOption);
+    }
+
+    protected void regCharaImgUrl(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueCharaImgUrl(), "CHARA_IMG_URL"); }
+    protected abstract ConditionValue xgetCValueCharaImgUrl();
 
     /**
      * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>

@@ -79,11 +79,11 @@ public abstract class AbstractBsVillageStatusCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As エピローグ (EPILOGUE). And OnlyOnceRegistered. <br>
-     * エピローグ
+     * Equal(=). As 決着 (EPILOGUE). And OnlyOnceRegistered. <br>
+     * 決着
      */
-    public void setVillageStatusCode_Equal_エピローグ() {
-        setVillageStatusCode_Equal_AsVillageStatus(CDef.VillageStatus.エピローグ);
+    public void setVillageStatusCode_Equal_決着() {
+        setVillageStatusCode_Equal_AsVillageStatus(CDef.VillageStatus.決着);
     }
 
     /**
@@ -95,11 +95,19 @@ public abstract class AbstractBsVillageStatusCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As プロローグ (PROLOGUE). And OnlyOnceRegistered. <br>
-     * プロローグ
+     * Equal(=). As 募集中 (PROLOGUE). And OnlyOnceRegistered. <br>
+     * 募集中
      */
-    public void setVillageStatusCode_Equal_プロローグ() {
-        setVillageStatusCode_Equal_AsVillageStatus(CDef.VillageStatus.プロローグ);
+    public void setVillageStatusCode_Equal_募集中() {
+        setVillageStatusCode_Equal_AsVillageStatus(CDef.VillageStatus.募集中);
+    }
+
+    /**
+     * Equal(=). As 点呼中 (ROLLCALLING). And OnlyOnceRegistered. <br>
+     * 点呼中
+     */
+    public void setVillageStatusCode_Equal_点呼中() {
+        setVillageStatusCode_Equal_AsVillageStatus(CDef.VillageStatus.点呼中);
     }
 
     protected void doSetVillageStatusCode_Equal(String villageStatusCode) {
@@ -142,11 +150,11 @@ public abstract class AbstractBsVillageStatusCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As エピローグ (EPILOGUE). And OnlyOnceRegistered. <br>
-     * エピローグ
+     * NotEqual(&lt;&gt;). As 決着 (EPILOGUE). And OnlyOnceRegistered. <br>
+     * 決着
      */
-    public void setVillageStatusCode_NotEqual_エピローグ() {
-        setVillageStatusCode_NotEqual_AsVillageStatus(CDef.VillageStatus.エピローグ);
+    public void setVillageStatusCode_NotEqual_決着() {
+        setVillageStatusCode_NotEqual_AsVillageStatus(CDef.VillageStatus.決着);
     }
 
     /**
@@ -158,11 +166,19 @@ public abstract class AbstractBsVillageStatusCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As プロローグ (PROLOGUE). And OnlyOnceRegistered. <br>
-     * プロローグ
+     * NotEqual(&lt;&gt;). As 募集中 (PROLOGUE). And OnlyOnceRegistered. <br>
+     * 募集中
      */
-    public void setVillageStatusCode_NotEqual_プロローグ() {
-        setVillageStatusCode_NotEqual_AsVillageStatus(CDef.VillageStatus.プロローグ);
+    public void setVillageStatusCode_NotEqual_募集中() {
+        setVillageStatusCode_NotEqual_AsVillageStatus(CDef.VillageStatus.募集中);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 点呼中 (ROLLCALLING). And OnlyOnceRegistered. <br>
+     * 点呼中
+     */
+    public void setVillageStatusCode_NotEqual_点呼中() {
+        setVillageStatusCode_NotEqual_AsVillageStatus(CDef.VillageStatus.点呼中);
     }
 
     protected void doSetVillageStatusCode_NotEqual(String villageStatusCode) {
@@ -192,7 +208,7 @@ public abstract class AbstractBsVillageStatusCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As VillageStatus. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 村ステータス <br>
      * 決着がついた村 <br>
-     * The group elements:[エピローグ, 廃村, 終了]
+     * The group elements:[決着, 廃村, 終了]
      */
     public void setVillageStatusCode_InScope_SolvedVillage() {
         setVillageStatusCode_InScope_AsVillageStatus(CDef.VillageStatus.listOfSolvedVillage());

@@ -79,28 +79,14 @@ public class BsCharaCQ extends AbstractBsCharaCQ {
       return _charaId; }
     protected ConditionValue xgetCValueCharaId() { return xdfgetCharaId(); }
 
-    public Map<String, CharaImageCQ> xdfgetCharaId_ExistsReferrer_CharaImageList() { return xgetSQueMap("charaId_ExistsReferrer_CharaImageList"); }
-    public String keepCharaId_ExistsReferrer_CharaImageList(CharaImageCQ sq) { return xkeepSQue("charaId_ExistsReferrer_CharaImageList", sq); }
-
     public Map<String, VillagePlayerCQ> xdfgetCharaId_ExistsReferrer_VillagePlayerList() { return xgetSQueMap("charaId_ExistsReferrer_VillagePlayerList"); }
     public String keepCharaId_ExistsReferrer_VillagePlayerList(VillagePlayerCQ sq) { return xkeepSQue("charaId_ExistsReferrer_VillagePlayerList", sq); }
-
-    public Map<String, CharaImageCQ> xdfgetCharaId_NotExistsReferrer_CharaImageList() { return xgetSQueMap("charaId_NotExistsReferrer_CharaImageList"); }
-    public String keepCharaId_NotExistsReferrer_CharaImageList(CharaImageCQ sq) { return xkeepSQue("charaId_NotExistsReferrer_CharaImageList", sq); }
 
     public Map<String, VillagePlayerCQ> xdfgetCharaId_NotExistsReferrer_VillagePlayerList() { return xgetSQueMap("charaId_NotExistsReferrer_VillagePlayerList"); }
     public String keepCharaId_NotExistsReferrer_VillagePlayerList(VillagePlayerCQ sq) { return xkeepSQue("charaId_NotExistsReferrer_VillagePlayerList", sq); }
 
-    public Map<String, CharaImageCQ> xdfgetCharaId_SpecifyDerivedReferrer_CharaImageList() { return xgetSQueMap("charaId_SpecifyDerivedReferrer_CharaImageList"); }
-    public String keepCharaId_SpecifyDerivedReferrer_CharaImageList(CharaImageCQ sq) { return xkeepSQue("charaId_SpecifyDerivedReferrer_CharaImageList", sq); }
-
     public Map<String, VillagePlayerCQ> xdfgetCharaId_SpecifyDerivedReferrer_VillagePlayerList() { return xgetSQueMap("charaId_SpecifyDerivedReferrer_VillagePlayerList"); }
     public String keepCharaId_SpecifyDerivedReferrer_VillagePlayerList(VillagePlayerCQ sq) { return xkeepSQue("charaId_SpecifyDerivedReferrer_VillagePlayerList", sq); }
-
-    public Map<String, CharaImageCQ> xdfgetCharaId_QueryDerivedReferrer_CharaImageList() { return xgetSQueMap("charaId_QueryDerivedReferrer_CharaImageList"); }
-    public String keepCharaId_QueryDerivedReferrer_CharaImageList(CharaImageCQ sq) { return xkeepSQue("charaId_QueryDerivedReferrer_CharaImageList", sq); }
-    public Map<String, Object> xdfgetCharaId_QueryDerivedReferrer_CharaImageListParameter() { return xgetSQuePmMap("charaId_QueryDerivedReferrer_CharaImageList"); }
-    public String keepCharaId_QueryDerivedReferrer_CharaImageListParameter(Object pm) { return xkeepSQuePm("charaId_QueryDerivedReferrer_CharaImageList", pm); }
 
     public Map<String, VillagePlayerCQ> xdfgetCharaId_QueryDerivedReferrer_VillagePlayerList() { return xgetSQueMap("charaId_QueryDerivedReferrer_VillagePlayerList"); }
     public String keepCharaId_QueryDerivedReferrer_VillagePlayerList(VillagePlayerCQ sq) { return xkeepSQue("charaId_QueryDerivedReferrer_VillagePlayerList", sq); }
@@ -181,46 +167,6 @@ public class BsCharaCQ extends AbstractBsCharaCQ {
      */
     public BsCharaCQ addOrderBy_CharaGroupId_Desc() { regOBD("CHARA_GROUP_ID"); return this; }
 
-    protected ConditionValue _defaultJoinMessage;
-    public ConditionValue xdfgetDefaultJoinMessage()
-    { if (_defaultJoinMessage == null) { _defaultJoinMessage = nCV(); }
-      return _defaultJoinMessage; }
-    protected ConditionValue xgetCValueDefaultJoinMessage() { return xdfgetDefaultJoinMessage(); }
-
-    /**
-     * Add order-by as ascend. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     * @return this. (NotNull)
-     */
-    public BsCharaCQ addOrderBy_DefaultJoinMessage_Asc() { regOBA("DEFAULT_JOIN_MESSAGE"); return this; }
-
-    /**
-     * Add order-by as descend. <br>
-     * DEFAULT_JOIN_MESSAGE: {VARCHAR(200)}
-     * @return this. (NotNull)
-     */
-    public BsCharaCQ addOrderBy_DefaultJoinMessage_Desc() { regOBD("DEFAULT_JOIN_MESSAGE"); return this; }
-
-    protected ConditionValue _defaultFirstdayMessage;
-    public ConditionValue xdfgetDefaultFirstdayMessage()
-    { if (_defaultFirstdayMessage == null) { _defaultFirstdayMessage = nCV(); }
-      return _defaultFirstdayMessage; }
-    protected ConditionValue xgetCValueDefaultFirstdayMessage() { return xdfgetDefaultFirstdayMessage(); }
-
-    /**
-     * Add order-by as ascend. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     * @return this. (NotNull)
-     */
-    public BsCharaCQ addOrderBy_DefaultFirstdayMessage_Asc() { regOBA("DEFAULT_FIRSTDAY_MESSAGE"); return this; }
-
-    /**
-     * Add order-by as descend. <br>
-     * DEFAULT_FIRSTDAY_MESSAGE: {VARCHAR(200)}
-     * @return this. (NotNull)
-     */
-    public BsCharaCQ addOrderBy_DefaultFirstdayMessage_Desc() { regOBD("DEFAULT_FIRSTDAY_MESSAGE"); return this; }
-
     protected ConditionValue _displayWidth;
     public ConditionValue xdfgetDisplayWidth()
     { if (_displayWidth == null) { _displayWidth = nCV(); }
@@ -260,6 +206,26 @@ public class BsCharaCQ extends AbstractBsCharaCQ {
      * @return this. (NotNull)
      */
     public BsCharaCQ addOrderBy_DisplayHeight_Desc() { regOBD("DISPLAY_HEIGHT"); return this; }
+
+    protected ConditionValue _charaImgUrl;
+    public ConditionValue xdfgetCharaImgUrl()
+    { if (_charaImgUrl == null) { _charaImgUrl = nCV(); }
+      return _charaImgUrl; }
+    protected ConditionValue xgetCValueCharaImgUrl() { return xdfgetCharaImgUrl(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)}
+     * @return this. (NotNull)
+     */
+    public BsCharaCQ addOrderBy_CharaImgUrl_Asc() { regOBA("CHARA_IMG_URL"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * CHARA_IMG_URL: {NotNull, VARCHAR(200)}
+     * @return this. (NotNull)
+     */
+    public BsCharaCQ addOrderBy_CharaImgUrl_Desc() { regOBD("CHARA_IMG_URL"); return this; }
 
     protected ConditionValue _registerDatetime;
     public ConditionValue xdfgetRegisterDatetime()

@@ -33,13 +33,13 @@ import com.ort.dbflute.exentity.*;
  *     
  *
  * [referrer table]
- *     MESSAGE_RESTRICTION
+ *     
  *
  * [foreign property]
  *     
  *
  * [referrer property]
- *     messageRestrictionList
+ *     
  *
  * [get/set template]
  * /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -134,6 +134,14 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
     }
 
     /**
+     * Set the value of messageTypeCode as 共有発言 (MASON_SAY). <br>
+     * 共有発言
+     */
+    public void setMessageTypeCode_共有発言() {
+        setMessageTypeCodeAsMessageType(CDef.MessageType.共有発言);
+    }
+
+    /**
      * Set the value of messageTypeCode as 独り言 (MONOLOGUE_SAY). <br>
      * 独り言
      */
@@ -158,27 +166,11 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
     }
 
     /**
-     * Set the value of messageTypeCode as 検死結果 (PRIVATE_CORONER). <br>
-     * 検死結果
+     * Set the value of messageTypeCode as 個別能力行使結果 (PRIVATE_ABILITY). <br>
+     * 個別能力行使結果
      */
-    public void setMessageTypeCode_検死結果() {
-        setMessageTypeCodeAsMessageType(CDef.MessageType.検死結果);
-    }
-
-    /**
-     * Set the value of messageTypeCode as 狂信者人狼確認メッセージ (PRIVATE_FANATIC). <br>
-     * 狂信者人狼確認メッセージ
-     */
-    public void setMessageTypeCode_狂信者人狼確認メッセージ() {
-        setMessageTypeCodeAsMessageType(CDef.MessageType.狂信者人狼確認メッセージ);
-    }
-
-    /**
-     * Set the value of messageTypeCode as 役職霊視結果 (PRIVATE_GURU). <br>
-     * 役職霊視結果
-     */
-    public void setMessageTypeCode_役職霊視結果() {
-        setMessageTypeCodeAsMessageType(CDef.MessageType.役職霊視結果);
+    public void setMessageTypeCode_個別能力行使結果() {
+        setMessageTypeCodeAsMessageType(CDef.MessageType.個別能力行使結果);
     }
 
     /**
@@ -198,22 +190,6 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
     }
 
     /**
-     * Set the value of messageTypeCode as 白黒占い結果 (PRIVATE_SEER). <br>
-     * 白黒占い結果
-     */
-    public void setMessageTypeCode_白黒占い結果() {
-        setMessageTypeCodeAsMessageType(CDef.MessageType.白黒占い結果);
-    }
-
-    /**
-     * Set the value of messageTypeCode as 共鳴相互確認メッセージ (PRIVATE_SYMPATHIZER). <br>
-     * 共鳴相互確認メッセージ
-     */
-    public void setMessageTypeCode_共鳴相互確認メッセージ() {
-        setMessageTypeCodeAsMessageType(CDef.MessageType.共鳴相互確認メッセージ);
-    }
-
-    /**
      * Set the value of messageTypeCode as 非公開システムメッセージ (PRIVATE_SYSTEM). <br>
      * 非公開システムメッセージ
      */
@@ -230,43 +206,11 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
     }
 
     /**
-     * Set the value of messageTypeCode as 役職占い結果 (PRIVATE_WISE). <br>
-     * 役職占い結果
-     */
-    public void setMessageTypeCode_役職占い結果() {
-        setMessageTypeCodeAsMessageType(CDef.MessageType.役職占い結果);
-    }
-
-    /**
      * Set the value of messageTypeCode as 公開システムメッセージ (PUBLIC_SYSTEM). <br>
      * 公開システムメッセージ
      */
     public void setMessageTypeCode_公開システムメッセージ() {
         setMessageTypeCodeAsMessageType(CDef.MessageType.公開システムメッセージ);
-    }
-
-    /**
-     * Set the value of messageTypeCode as 秘話 (SECRET_SAY). <br>
-     * 秘話
-     */
-    public void setMessageTypeCode_秘話() {
-        setMessageTypeCodeAsMessageType(CDef.MessageType.秘話);
-    }
-
-    /**
-     * Set the value of messageTypeCode as 見学発言 (SPECTATE_SAY). <br>
-     * 見学発言
-     */
-    public void setMessageTypeCode_見学発言() {
-        setMessageTypeCodeAsMessageType(CDef.MessageType.見学発言);
-    }
-
-    /**
-     * Set the value of messageTypeCode as 共鳴発言 (SYMPATHIZE_SAY). <br>
-     * 共鳴発言
-     */
-    public void setMessageTypeCode_共鳴発言() {
-        setMessageTypeCodeAsMessageType(CDef.MessageType.共鳴発言);
     }
 
     /**
@@ -303,6 +247,17 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
     }
 
     /**
+     * Is the value of messageTypeCode 共有発言? <br>
+     * 共有発言
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isMessageTypeCode共有発言() {
+        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
+        return cdef != null ? cdef.equals(CDef.MessageType.共有発言) : false;
+    }
+
+    /**
      * Is the value of messageTypeCode 独り言? <br>
      * 独り言
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -336,36 +291,14 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
     }
 
     /**
-     * Is the value of messageTypeCode 検死結果? <br>
-     * 検死結果
+     * Is the value of messageTypeCode 個別能力行使結果? <br>
+     * 個別能力行使結果
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
      * @return The determination, true or false.
      */
-    public boolean isMessageTypeCode検死結果() {
+    public boolean isMessageTypeCode個別能力行使結果() {
         CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
-        return cdef != null ? cdef.equals(CDef.MessageType.検死結果) : false;
-    }
-
-    /**
-     * Is the value of messageTypeCode 狂信者人狼確認メッセージ? <br>
-     * 狂信者人狼確認メッセージ
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isMessageTypeCode狂信者人狼確認メッセージ() {
-        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
-        return cdef != null ? cdef.equals(CDef.MessageType.狂信者人狼確認メッセージ) : false;
-    }
-
-    /**
-     * Is the value of messageTypeCode 役職霊視結果? <br>
-     * 役職霊視結果
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isMessageTypeCode役職霊視結果() {
-        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
-        return cdef != null ? cdef.equals(CDef.MessageType.役職霊視結果) : false;
+        return cdef != null ? cdef.equals(CDef.MessageType.個別能力行使結果) : false;
     }
 
     /**
@@ -391,28 +324,6 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
     }
 
     /**
-     * Is the value of messageTypeCode 白黒占い結果? <br>
-     * 白黒占い結果
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isMessageTypeCode白黒占い結果() {
-        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
-        return cdef != null ? cdef.equals(CDef.MessageType.白黒占い結果) : false;
-    }
-
-    /**
-     * Is the value of messageTypeCode 共鳴相互確認メッセージ? <br>
-     * 共鳴相互確認メッセージ
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isMessageTypeCode共鳴相互確認メッセージ() {
-        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
-        return cdef != null ? cdef.equals(CDef.MessageType.共鳴相互確認メッセージ) : false;
-    }
-
-    /**
      * Is the value of messageTypeCode 非公開システムメッセージ? <br>
      * 非公開システムメッセージ
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -435,17 +346,6 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
     }
 
     /**
-     * Is the value of messageTypeCode 役職占い結果? <br>
-     * 役職占い結果
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isMessageTypeCode役職占い結果() {
-        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
-        return cdef != null ? cdef.equals(CDef.MessageType.役職占い結果) : false;
-    }
-
-    /**
      * Is the value of messageTypeCode 公開システムメッセージ? <br>
      * 公開システムメッセージ
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -454,39 +354,6 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
     public boolean isMessageTypeCode公開システムメッセージ() {
         CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
         return cdef != null ? cdef.equals(CDef.MessageType.公開システムメッセージ) : false;
-    }
-
-    /**
-     * Is the value of messageTypeCode 秘話? <br>
-     * 秘話
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isMessageTypeCode秘話() {
-        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
-        return cdef != null ? cdef.equals(CDef.MessageType.秘話) : false;
-    }
-
-    /**
-     * Is the value of messageTypeCode 見学発言? <br>
-     * 見学発言
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isMessageTypeCode見学発言() {
-        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
-        return cdef != null ? cdef.equals(CDef.MessageType.見学発言) : false;
-    }
-
-    /**
-     * Is the value of messageTypeCode 共鳴発言? <br>
-     * 共鳴発言
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isMessageTypeCode共鳴発言() {
-        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
-        return cdef != null ? cdef.equals(CDef.MessageType.共鳴発言) : false;
     }
 
     /**
@@ -506,26 +373,6 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
     // ===================================================================================
     //                                                                   Referrer Property
     //                                                                   =================
-    /** MESSAGE_RESTRICTION by MESSAGE_TYPE_CODE, named 'messageRestrictionList'. */
-    protected List<MessageRestriction> _messageRestrictionList;
-
-    /**
-     * [get] MESSAGE_RESTRICTION by MESSAGE_TYPE_CODE, named 'messageRestrictionList'.
-     * @return The entity list of referrer property 'messageRestrictionList'. (NotNull: even if no loading, returns empty list)
-     */
-    public List<MessageRestriction> getMessageRestrictionList() {
-        if (_messageRestrictionList == null) { _messageRestrictionList = newReferrerList(); }
-        return _messageRestrictionList;
-    }
-
-    /**
-     * [set] MESSAGE_RESTRICTION by MESSAGE_TYPE_CODE, named 'messageRestrictionList'.
-     * @param messageRestrictionList The entity list of referrer property 'messageRestrictionList'. (NullAllowed)
-     */
-    public void setMessageRestrictionList(List<MessageRestriction> messageRestrictionList) {
-        _messageRestrictionList = messageRestrictionList;
-    }
-
     protected <ELEMENT> List<ELEMENT> newReferrerList() { // overriding to import
         return new ArrayList<ELEMENT>();
     }
@@ -554,10 +401,7 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
 
     @Override
     protected String doBuildStringWithRelation(String li) {
-        StringBuilder sb = new StringBuilder();
-        if (_messageRestrictionList != null) { for (MessageRestriction et : _messageRestrictionList)
-        { if (et != null) { sb.append(li).append(xbRDS(et, "messageRestrictionList")); } } }
-        return sb.toString();
+        return "";
     }
 
     @Override
@@ -574,13 +418,7 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
 
     @Override
     protected String doBuildRelationString(String dm) {
-        StringBuilder sb = new StringBuilder();
-        if (_messageRestrictionList != null && !_messageRestrictionList.isEmpty())
-        { sb.append(dm).append("messageRestrictionList"); }
-        if (sb.length() > dm.length()) {
-            sb.delete(0, dm.length()).insert(0, "(").append(")");
-        }
-        return sb.toString();
+        return "";
     }
 
     @Override

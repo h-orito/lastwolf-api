@@ -8,9 +8,9 @@ data class VillageAbilities(
     val list: List<VillageAbility>
 ) {
 
-    fun filterLatestday(village: Village): VillageAbilities = filterByDay(village.day.latestDay())
+    fun filterLatestday(village: Village): VillageAbilities = filterByDay(village.days.latestDay())
 
-    fun filterYesterday(village: Village): VillageAbilities = filterByDay(village.day.yesterday())
+    fun filterYesterday(village: Village): VillageAbilities = filterByDay(village.days.yesterday())
 
     fun filterByType(abilityType: AbilityType): VillageAbilities {
         return this.copy(

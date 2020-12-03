@@ -4,12 +4,14 @@ import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.VillageStatus
 import com.ort.lastwolf.domain.model.village.Villages
 import com.ort.lastwolf.fw.security.LastwolfUser
+import com.ort.lastwolf.infrastructure.datasource.firebase.FirebaseDataSource
 import com.ort.lastwolf.infrastructure.datasource.village.VillageDataSource
 import org.springframework.stereotype.Service
 
 @Service
 class VillageService(
-    val villageDataSource: VillageDataSource
+    private val villageDataSource: VillageDataSource,
+    private val firebaseDataSource: FirebaseDataSource
 ) {
 
     /**
@@ -58,5 +60,9 @@ class VillageService(
      * @param before village
      * @param after village
      */
-    fun updateVillageDifference(before: Village, after: Village): Village = villageDataSource.updateDifference(before, after)
+    fun updateVillageDifference(before: Village, after: Village): Village {
+        val village = villageDataSource.updateDifference(before, after)
+        firebaseDataSource.registerVillageLatest(before.id)
+        return village
+    }
 }

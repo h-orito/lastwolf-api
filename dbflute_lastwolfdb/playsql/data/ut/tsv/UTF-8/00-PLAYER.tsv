@@ -17,3 +17,5 @@ PLAYER_ID	UID	NICKNAME	TWITTER_USER_NAME	AUTHORITY_CODE	IS_RESTRICTED_PARTICIPAT
 16	dummy16	nickname_16	user_name_16	ROLE_PLAYER	0
 17	dummy17	nickname_17	user_name_17	ROLE_PLAYER	0
 18	dummy18	nickname_18	user_name_18	ROLE_PLAYER	0
+19	dummy19	nickname_19	user_name_19	ROLE_PLAYER	0
+20	dummy20	nickname_20	user_name_20	ROLE_PLAYER	0

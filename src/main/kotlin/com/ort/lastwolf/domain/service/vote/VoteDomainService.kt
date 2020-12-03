@@ -1,8 +1,6 @@
 package com.ort.lastwolf.domain.service.vote
 
 import com.ort.lastwolf.domain.model.charachip.Chara
-import com.ort.lastwolf.domain.model.charachip.Charas
-import com.ort.lastwolf.domain.model.daychange.DayChange
 import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.myself.participant.VillageVoteSituation
 import com.ort.lastwolf.domain.model.village.Village
@@ -35,27 +33,25 @@ class VoteDomainService {
     /**
      * 投票結果メッセージ
      * @param village village
-     * @param charas charas
      * @param votedMap key: 非投票参加者ID, value: 投票
      * @return 投票結果メッセージ
      */
     fun createEachVoteMessage(
         village: Village,
-        charas: Charas,
         votedMap: Map<Int, List<VillageVote>>
     ): Message {
         val maxFromCharaNameLength = votedMap.values.flatten().map { vote ->
-            charas.chara(village.participant, vote.myselfId).charaName.fullName().length
+            village.participants.first(vote.myselfId).chara.name.name.length
         }.max()!!
         val maxToCharaNameLength = votedMap.values.flatten().map { vote ->
-            charas.chara(village.participant, vote.targetId).charaName.fullName().length
+            village.participants.first(vote.targetId).chara.name.name.length
         }.max()!!
 
         val text = votedMap.entries.sortedBy { it.value.size }.reversed().map { entry ->
             // 得票数が多い順
             entry.value.map { vote ->
-                val fromChara = charas.chara(village.participant, vote.myselfId)
-                val toChara = charas.chara(village.participant, vote.targetId)
+                val fromChara = village.participants.first(vote.myselfId).chara
+                val toChara = village.participants.first(vote.targetId).chara
                 createEachVoteResultString(
                     fromChara,
                     toChara,
@@ -68,31 +64,7 @@ class VoteDomainService {
             prefix = "投票結果は以下の通り。\n",
             separator = "\n"
         )
-
-        return if (village.setting.rules.openVote) {
-            Message.createPublicSystemMessage(text, village.day.latestDay().id)
-        } else {
-            Message.createPrivateSystemMessage(text, village.day.latestDay().id)
-        }
-    }
-
-    fun addDefaultVote(dayChange: DayChange): DayChange {
-        val village = dayChange.village
-        var votes = dayChange.votes
-
-        // 最新日
-        val latestVillageDayId = village.day.latestDay().id
-        // 生存している人だけ自分に投票
-        val newVoteList = village.participant.filterAlive().memberList.map { member ->
-            VillageVote(
-                villageDayId = latestVillageDayId,
-                myselfId = member.id,
-                targetId = member.id
-            )
-        }
-        return dayChange.copy(
-            votes = votes.addAll(newVoteList)
-        )
+        return Message.createPublicSystemMessage(text, village.days.latestNoonDay().id)
     }
 
     // ===================================================================================
@@ -113,12 +85,12 @@ class VoteDomainService {
         maxToCharaNameLength: Int,
         count: Int
     ): String {
-        return fromChara.charaName.fullName().padEnd(
+        return fromChara.name.name.padEnd(
             length = maxFromCharaNameLength,
             padChar = '　'
         ) +
             " → " +
-            toChara.charaName.fullName().padEnd(
+            toChara.name.name.padEnd(
                 length = maxToCharaNameLength,
                 padChar = '　'
             ) +
@@ -138,15 +110,15 @@ class VoteDomainService {
 
     fun getSelectableTargetList(village: Village, participant: VillageParticipant?): List<VillageParticipant> {
         if (!isAvailableVote(village, participant)) return listOf()
-        return village.participant.memberList.filter { it.isAlive() }
+        return village.participants.list.filter { it.isAlive() && it.id != participant!!.id }
     }
 
     fun getSelectingTarget(village: Village, participant: VillageParticipant?, votes: VillageVotes): VillageParticipant? {
         if (!isAvailableVote(village, participant)) return null
         val voteTargetParticipantId = votes.list.find {
-            it.villageDayId == village.day.latestDay().id
+            it.villageDayId == village.days.latestDay().id
                 && it.myselfId == participant!!.id
         }?.targetId ?: return null
-        return village.participant.member(voteTargetParticipantId)
+        return village.participants.first(voteTargetParticipantId)
     }
 }

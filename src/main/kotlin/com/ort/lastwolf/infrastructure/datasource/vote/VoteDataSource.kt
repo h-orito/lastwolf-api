@@ -2,13 +2,16 @@ package com.ort.lastwolf.infrastructure.datasource.vote
 
 import com.ort.dbflute.exbhv.VoteBhv
 import com.ort.dbflute.exentity.Vote
+import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.vote.VillageVote
 import com.ort.lastwolf.domain.model.village.vote.VillageVotes
+import com.ort.lastwolf.infrastructure.datasource.firebase.FirebaseDataSource
 import org.springframework.stereotype.Repository
 
 @Repository
 class VoteDataSource(
-    val voteBhv: VoteBhv
+    val voteBhv: VoteBhv,
+    val firebaseDataSource: FirebaseDataSource
 ) {
 
     // ===================================================================================
@@ -24,9 +27,10 @@ class VoteDataSource(
     // ===================================================================================
     //                                                                              Update
     //                                                                              ======
-    fun updateVote(villageVote: VillageVote) {
+    fun updateVote(village: Village, villageVote: VillageVote) {
         deleteVote(villageVote)
         insertVote(villageVote)
+        firebaseDataSource.registerSituationLatest(village, villageVote)
     }
 
     private fun deleteVote(villageVote: VillageVote) {
@@ -44,7 +48,7 @@ class VoteDataSource(
         voteBhv.insert(vote)
     }
 
-    fun updateDifference(before: VillageVotes, after: VillageVotes) {
+    fun updateDifference(village: Village, before: VillageVotes, after: VillageVotes) {
         // 削除
         before.list.filterNot { beforeVote ->
             after.list.any { afterVote ->
@@ -58,7 +62,7 @@ class VoteDataSource(
                 beforeVote.villageDayId == afterVote.villageDayId
                     && beforeVote.myselfId == afterVote.myselfId
             }
-        }.forEach { updateVote(it) }
+        }.forEach { updateVote(village, it) }
         // 追加
         after.list.filterNot { afterVote ->
             before.list.any { beforeVote ->

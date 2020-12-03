@@ -9,6 +9,7 @@ import com.ort.lastwolf.api.body.VillageCommitBody
 import com.ort.lastwolf.api.body.VillageOrganizationCreateBody
 import com.ort.lastwolf.api.body.VillageParticipateBody
 import com.ort.lastwolf.api.body.VillageRegisterBody
+import com.ort.lastwolf.api.body.VillageRollcallBody
 import com.ort.lastwolf.api.body.VillageRuleCreateBody
 import com.ort.lastwolf.api.body.VillageSayBody
 import com.ort.lastwolf.api.body.VillageSettingRegisterBody
@@ -17,46 +18,35 @@ import com.ort.lastwolf.api.body.VillageVoteBody
 import com.ort.lastwolf.api.body.validator.VillageRegisterBodyValidator
 import com.ort.lastwolf.api.form.VillageListForm
 import com.ort.lastwolf.api.form.VillageMessageForm
-import com.ort.lastwolf.api.view.charachip.CharaView
-import com.ort.lastwolf.api.view.message.MessageTimeView
 import com.ort.lastwolf.api.view.message.MessageView
 import com.ort.lastwolf.api.view.message.MessagesView
 import com.ort.lastwolf.api.view.myself.participant.SituationAsParticipantView
-import com.ort.lastwolf.api.view.village.VillageAnchorMessageView
 import com.ort.lastwolf.api.view.village.VillageLatestView
-import com.ort.lastwolf.api.view.village.VillageParticipantView
 import com.ort.lastwolf.api.view.village.VillageRegisterView
 import com.ort.lastwolf.api.view.village.VillageView
 import com.ort.lastwolf.api.view.village.VillagesView
+import com.ort.lastwolf.application.coordinator.DayChangeCoordinator
 import com.ort.lastwolf.application.coordinator.MessageCoordinator
 import com.ort.lastwolf.application.coordinator.VillageCoordinator
 import com.ort.lastwolf.application.service.CharachipService
-import com.ort.lastwolf.application.service.MessageService
 import com.ort.lastwolf.application.service.PlayerService
 import com.ort.lastwolf.application.service.VillageService
-import com.ort.lastwolf.domain.model.charachip.Chara
 import com.ort.lastwolf.domain.model.charachip.Charas
 import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.message.MessageContent
-import com.ort.lastwolf.domain.model.message.MessageQuery
 import com.ort.lastwolf.domain.model.message.MessageTime
-import com.ort.lastwolf.domain.model.message.MessageType
 import com.ort.lastwolf.domain.model.message.Messages
 import com.ort.lastwolf.domain.model.player.Player
-import com.ort.lastwolf.domain.model.player.Players
 import com.ort.lastwolf.domain.model.skill.Skill
-import com.ort.lastwolf.domain.model.skill.Skills
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.VillageCharachipCreateResource
 import com.ort.lastwolf.domain.model.village.VillageCreateResource
-import com.ort.lastwolf.domain.model.village.VillageMessageRestrictCreateResource
 import com.ort.lastwolf.domain.model.village.VillageOrganizationCreateResource
 import com.ort.lastwolf.domain.model.village.VillageRuleCreateResource
 import com.ort.lastwolf.domain.model.village.VillageSettingCreateResource
 import com.ort.lastwolf.domain.model.village.VillageStatus
 import com.ort.lastwolf.domain.model.village.VillageTimeCreateResource
 import com.ort.lastwolf.domain.model.village.Villages
-import com.ort.lastwolf.domain.model.village.participant.coming_out.ComingOuts
 import com.ort.lastwolf.fw.exception.LastwolfBusinessException
 import com.ort.lastwolf.fw.security.LastwolfUser
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -79,11 +69,11 @@ class VillageController(
 
     val villageCoordinator: VillageCoordinator,
     val messageCoordinator: MessageCoordinator,
+    val daychangeCoordinator: DayChangeCoordinator,
 
     val villageService: VillageService,
     val playerService: PlayerService,
-    val charachipService: CharachipService,
-    val messageService: MessageService
+    val charachipService: CharachipService
 ) {
 
     @InitBinder("villageRegisterBody")
@@ -118,41 +108,7 @@ class VillageController(
     @GetMapping("/village/{villageId}")
     fun village(@PathVariable("villageId") villageId: Int): VillageView {
         val village: Village = villageService.findVillage(villageId)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
-        val players: Players = playerService.findPlayers(villageId)
-        val createPlayer: Player = playerService.findPlayer(village.creatorPlayerId)
-        return VillageView(
-            village = village,
-            charas = charas,
-            players = players,
-            createPlayer = createPlayer
-        )
-    }
-
-    /**
-     * アンカー発言取得
-     * @param villageId villageId
-     * @param messageType 発言種別
-     * @param messageNumber 発言番号
-     * @param user user
-     */
-    @GetMapping("/village/{villageId}/message/type/{messageType}/number/{messageNumber}")
-    fun anchorMessage(
-        @PathVariable("villageId") villageId: Int,
-        @PathVariable("messageType") messageType: String,
-        @PathVariable("messageNumber") messageNumber: Int,
-        @AuthenticationPrincipal user: LastwolfUser?
-    ): VillageAnchorMessageView {
-        val village: Village = villageService.findVillage(villageId, false)
-        val message: Message? = messageCoordinator.findMessage(village, messageType, messageNumber, user)
-        val players: Players = playerService.findPlayers(villageId)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
-        return VillageAnchorMessageView(
-            message = message,
-            village = village,
-            players = players,
-            charas = charas
-        )
+        return VillageView(village)
     }
 
     /**
@@ -162,11 +118,9 @@ class VillageController(
      * @param noonnight 昼夜
      * @param user user
      */
-    @GetMapping("/village/{villageId}/day/{day}/time/{noonnight}/message-list")
+    @GetMapping("/village/{villageId}/message-list")
     fun message(
         @PathVariable("villageId") villageId: Int,
-        @PathVariable("day") day: Int,
-        @PathVariable("noonnight") noonnight: String,
         @AuthenticationPrincipal user: LastwolfUser?,
         @Validated form: VillageMessageForm
     ): MessagesView {
@@ -174,8 +128,6 @@ class VillageController(
         val messageTypeList = form.message_type_list?.mapNotNull { CDef.MessageType.codeOf(it) }
         val messages: Messages = messageCoordinator.findMessageList(
             village = village,
-            day = day,
-            noonnight = noonnight,
             user = user,
             from = form.from,
             pageSize = form.page_size,
@@ -184,16 +136,9 @@ class VillageController(
             messageTypeList = messageTypeList,
             participantIdList = form.participant_id_list?.filterNotNull() // [null]で来る問題に対応
         )
-        val players: Players = playerService.findPlayers(villageId)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
-        val villageDayId: Int = village.day.dayList.first { it.day == day && it.noonnight == noonnight }.id
-        val todayMessages = messageService.findMessages(village.id, villageDayId, MessageQuery(listOf(CDef.MessageType.通常発言)))
         return MessagesView(
             messages = messages,
-            village = village,
-            players = players,
-            charas = charas,
-            todayMessages = todayMessages
+            village = village
         )
     }
 
@@ -211,7 +156,7 @@ class VillageController(
         val unixTimeMilli = messageCoordinator.findLatestMessagesUnixTimeMilli(village, user)
         return VillageLatestView(
             unixTimeMilli = unixTimeMilli,
-            villageDayId = village.day.latestDay().id
+            villageDayId = village.days.latestDay().id
         )
     }
 
@@ -263,12 +208,9 @@ class VillageController(
     ): SituationAsParticipantView {
         val village: Village = villageService.findVillage(villageId)
         val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
-        val players: Players = playerService.findPlayers(villageId)
         return SituationAsParticipantView(
-            situation = villageCoordinator.findActionSituation(village, user, players, charas),
-            village = village,
-            charas = charas,
-            players = players
+            situation = villageCoordinator.findActionSituation(village, user, charas),
+            village = village
         )
     }
 
@@ -283,44 +225,14 @@ class VillageController(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
         @RequestBody @Validated body: VillageParticipateBody
-    ): MessageView {
-        val isSpectate = body.spectator ?: false
+    ) {
         villageCoordinator.assertParticipate(
             villageId = villageId,
             user = user,
             charaId = body.charaId!!,
-            message = body.joinMessage!!,
-            isSpectate = isSpectate,
             firstRequestSkill = CDef.Skill.codeOf(body.firstRequestSkill),
             secondRequestSkill = CDef.Skill.codeOf(body.secondRequestSkill),
             password = body.joinPassword
-        )
-        val messageContent = MessageContent.invoke(
-            if (isSpectate) CDef.MessageType.見学発言.code() else CDef.MessageType.通常発言.code(),
-            body.joinMessage,
-            CDef.FaceType.通常.code()
-        ).copy(num = 0)
-        val chara: Chara = charachipService.findChara(body.charaId)
-        return MessageView(
-            from = VillageParticipantView(
-                id = 1, // dummy
-                chara = CharaView(chara),
-                player = null,
-                dead = null,
-                isSpectator = body.spectator ?: false,
-                skill = null,
-                skillRequest = null,
-                isWin = null,
-                commingOuts = ComingOuts()
-            ),
-            to = null,
-            time = MessageTimeView(
-                villageDayId = 1, // dummy
-                day = 0,
-                datetime = LocalDateTime.now(),
-                unixTimeMilli = LocalDateTime.now().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
-            ),
-            content = messageContent
         )
     }
 
@@ -340,8 +252,6 @@ class VillageController(
             villageId = villageId,
             user = user,
             charaId = body.charaId!!,
-            message = body.joinMessage!!,
-            isSpectate = body.spectator ?: false,
             firstRequestSkill = CDef.Skill.codeOf(body.firstRequestSkill),
             secondRequestSkill = CDef.Skill.codeOf(body.secondRequestSkill),
             password = body.joinPassword
@@ -351,8 +261,6 @@ class VillageController(
             villageId = villageId,
             playerId = player.id,
             charaId = body.charaId,
-            message = body.joinMessage!!,
-            isSpectate = body.spectator ?: false,
             firstRequestSkill = CDef.Skill.codeOf(body.firstRequestSkill),
             secondRequestSkill = CDef.Skill.codeOf(body.secondRequestSkill)
         )
@@ -399,31 +307,41 @@ class VillageController(
         @AuthenticationPrincipal user: LastwolfUser,
         @RequestBody @Validated body: VillageSayBody
     ): MessageView {
-        villageCoordinator.confirmToSay(villageId, user, body.message!!, body.messageType!!, body.faceType!!)
+        villageCoordinator.confirmToSay(villageId, user, body.message!!, body.messageType!!, body.strong!!)
         val village = villageService.findVillage(villageId)
         val participant = villageCoordinator.findParticipant(village, user)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
-        val players: Players = playerService.findPlayers(villageId)
         return MessageView(
             message = Message(
-                fromVillageParticipantId = participant!!.id,
-                toVillageParticipantId = null,
+                fromParticipantId = participant!!.id,
                 time = MessageTime(
-                    villageDayId = village.day.latestDay().id,
+                    villageDayId = village.days.latestDay().id,
                     datetime = LocalDateTime.now(),
                     unixTimeMilli = LocalDateTime.now().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
                 ),
                 content = MessageContent.invoke(
                     messageType = body.messageType,
                     text = body.message,
-                    faceCode = body.faceType
-                ).copy(num = 1)
+                    isStrong = false
+                )
             ),
             village = village,
-            players = players,
-            charas = charas,
             shouldHidePlayer = true
         )
+    }
+
+    /**
+     * 点呼
+     * @param villageId villageId
+     * @param user user
+     * @param body 点呼/取り消し
+     */
+    @PostMapping("/village/{villageId}/rollcall")
+    fun rollcall(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: LastwolfUser,
+        @RequestBody @Validated body: VillageRollcallBody
+    ) {
+        villageCoordinator.rollCall(villageId, user, body.rollcall!!)
     }
 
     /**
@@ -438,7 +356,7 @@ class VillageController(
         @AuthenticationPrincipal user: LastwolfUser,
         @RequestBody @Validated body: VillageSayBody
     ) {
-        villageCoordinator.say(villageId, user, body.message!!, body.messageType!!, body.faceType!!)
+        villageCoordinator.say(villageId, user, body.message!!, body.messageType!!, body.strong!!)
     }
 
     /**
@@ -499,12 +417,12 @@ class VillageController(
         @AuthenticationPrincipal user: LastwolfUser,
         @RequestBody @Validated body: VillageComingOutBody
     ) {
-        val skills = if (body.skillCode.isNullOrEmpty()) Skills(listOf())
-        else Skills(body.skillCode.map { Skill(CDef.Skill.codeOf(it)) })
+        val skill = if (body.skillCode.isNullOrEmpty()) null
+        else Skill(CDef.Skill.codeOf(body.skillCode))
         villageCoordinator.setComingOut(
             villageId,
             user,
-            skills
+            skill
         )
     }
 
@@ -523,11 +441,11 @@ class VillageController(
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
 
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayer.id != player.id)
             throw LastwolfBusinessException("村建てか管理者しか使えません")
 
         val createResource = convertToVillageCreateResource(villageRegisterBody, player).copy(
-            createPlayerId = village.creatorPlayerId // 管理者に上書きされるのを防ぐ
+            createPlayerId = village.creatorPlayer.id // 管理者に上書きされるのを防ぐ
         )
         villageCoordinator.assertModifySetting(village, player, createResource)
     }
@@ -545,14 +463,20 @@ class VillageController(
         @RequestBody @Validated villageRegisterBody: VillageRegisterBody
     ) {
         val village = villageService.findVillage(villageId)
-        val players = playerService.findPlayers(villageId)
         val player = playerService.findPlayer(user)
 
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayer.id != player.id)
             throw LastwolfBusinessException("村建てか管理者しか使えません")
 
         val createResource = convertToVillageCreateResource(villageRegisterBody, player)
-        villageCoordinator.modifySetting(village, players, player, createResource)
+        villageCoordinator.modifySetting(village, player, createResource)
+    }
+
+    @PostMapping("/village/{villageId}/daychange-check")
+    fun checkDaychange(
+        @PathVariable("villageId") villageId: Int
+    ) {
+        daychangeCoordinator.dayChangeIfNeeded(villageId)
     }
 
     // ===================================================================================
@@ -585,7 +509,9 @@ class VillageController(
         body: VillageTimeCreateBody
     ): VillageTimeCreateResource = VillageTimeCreateResource(
         startDatetime = body.startDatetime!!,
-        silentHours = body.silentHours
+        noonSeconds = body.noonSeconds!!,
+        voteSeconds = body.voteSeconds!!,
+        nightSeconds = body.nightSeconds!!
     )
 
     private fun convertToVillageOrganizationCreateResource(
@@ -604,21 +530,12 @@ class VillageController(
     private fun convertToVillageRuleCreateResource(
         body: VillageRuleCreateBody
     ): VillageRuleCreateResource = VillageRuleCreateResource(
-        isOpenVote = body.openVote!!,
         isAvailableSkillRequest = body.availableSkillRequest!!,
-        isAvailableSpectate = body.availableSpectate!!,
         isOpenSkillInGrave = body.openSkillInGrave!!,
         isVisibleGraveMessage = body.visibleGraveMessage!!,
         isAvailableSuddenlyDeath = body.availableSuddenlyDeath!!,
         isAvailableCommit = body.availableCommit!!,
         isAvailableDummySkill = body.availableDummySkill!!,
-        restrictList = body.restrictList!!.map {
-            VillageMessageRestrictCreateResource(
-                type = MessageType(CDef.MessageType.codeOf(it.type!!)),
-                count = it.count!!,
-                length = it.length!!
-            )
-        },
         joinPassword = body.joinPassword
     )
 }

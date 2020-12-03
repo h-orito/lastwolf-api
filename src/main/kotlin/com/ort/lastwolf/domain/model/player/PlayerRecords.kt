@@ -31,8 +31,8 @@ data class PlayerRecords(
         private fun createCampRecordList(player: Player, villages: Villages): List<CampRecord> {
             return CDef.Camp.listAll().sortedBy { Integer.parseInt(it.order()) }.map { camp ->
                 val campVillageList = villages.list.filter { village ->
-                    val myCampCode = village.participant.memberList.firstOrNull {
-                        !it.isGone && it.playerId == player.id
+                    val myCampCode = village.participants.list.firstOrNull {
+                        !it.isGone && it.player.id == player.id
                     }?.skill?.winJudgeCamp?.code
                     myCampCode == camp.code()
                 }
@@ -45,8 +45,8 @@ data class PlayerRecords(
                 .filterNot { CDef.Skill.listOfSomeoneSkill().contains(it) }
                 .map { skill ->
                     val skillVillageList = villages.list.filter { village ->
-                        val mySkillCode = village.participant.memberList.firstOrNull {
-                            !it.isGone && it.playerId == player.id
+                        val mySkillCode = village.participants.list.firstOrNull {
+                            !it.isGone && it.player.id == player.id
                         }?.skill?.code
                         mySkillCode == skill.code()
                     }

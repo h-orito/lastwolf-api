@@ -13,8 +13,6 @@ import com.ort.lastwolf.application.coordinator.VillageCoordinator
 import com.ort.lastwolf.application.service.CharachipService
 import com.ort.lastwolf.application.service.PlayerService
 import com.ort.lastwolf.application.service.VillageService
-import com.ort.lastwolf.domain.model.charachip.Charas
-import com.ort.lastwolf.domain.model.player.Players
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.fw.LastwolfDateUtil
 import com.ort.lastwolf.fw.exception.LastwolfBusinessException
@@ -90,8 +88,6 @@ class DebugController(
                 villageId = villageId,
                 playerId = playerId,
                 charaId = chara.charaId,
-                message = "テストアカウント入村 playerId: ${playerId}",
-                isSpectate = false,
                 firstRequestSkill = randomSkill.toCdef(),
                 secondRequestSkill = randomSkill2.toCdef()
             )
@@ -128,7 +124,7 @@ class DebugController(
     }
 
     /**
-     * 次の日へ
+     * 最新日の残り時間を30秒にする
      * @param villageId villageId
      * @param user user
      */
@@ -145,7 +141,7 @@ class DebugController(
             it.query().queryNoonnight().addOrderBy_DispOrder_Desc()
             it.fetchFirst(1)
         }
-        latestDay.daychangeDatetime = LastwolfDateUtil.currentLocalDateTime().minusSeconds(1L)
+        latestDay.endDatetime = LastwolfDateUtil.currentLocalDateTime().plusSeconds(30L)
         villageDayBhv.update(latestDay)
     }
 
@@ -158,13 +154,9 @@ class DebugController(
         if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
 
         val village: Village = villageService.findVillage(villageId)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
-        val players: Players = playerService.findPlayers(villageId)
-        val createPlayer: com.ort.lastwolf.domain.model.player.Player = playerService.findPlayer(village.creatorPlayerId)
+        val createPlayer: com.ort.lastwolf.domain.model.player.Player = playerService.findPlayer(village.creatorPlayer.id)
         return DebugVillageView(
             village = village,
-            charas = charas,
-            players = players,
             createPlayer = createPlayer
         )
     }
@@ -196,8 +188,23 @@ class DebugController(
         if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
 
         repeat(100) {
-            villageCoordinator.say(villageId, user, "${it}回目の発言", "NORMAL_SAY", "NORMAL")
+            villageCoordinator.say(villageId, user, "${it}回目の発言", "NORMAL_SAY", false)
         }
+    }
+
+    @PostMapping("/admin/village/{villageId}/all-rollcall")
+    fun allRollcall(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: LastwolfUser
+    ) {
+        if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
+        val village = villageService.findVillage(villageId)
+        val changedVillage = village.copy(
+            participants = village.participants.copy(
+                list = village.participants.list.map { it.rollCall(true) }
+            )
+        )
+        villageService.updateVillageDifference(village, changedVillage)
     }
 
     // ===================================================================================
