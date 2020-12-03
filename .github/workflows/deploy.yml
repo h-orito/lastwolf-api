@@ -22,20 +22,20 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build with Maven
         run: mvn -B -Dmaven.test.skip=true package --file pom.xml
-#      - name: Copy to remote server
-#        uses: garygrossgarten/github-action-scp@release
-#        with:
-#          local: target/lastwolf-0.0.1-SNAPSHOT.jar
-#          remote: ${{ secrets.SSH_APP_PATH }}/lastwolf.jar
-#          host: ${{ secrets.HOST }}
-#          port: ${{ secrets.PORT }}
-#          username: ${{ secrets.SSH_USER }}
-#          password: ${{ secrets.PASSWORD }}
-#      - name: Deploy
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.SSH_USER }}
-#          password: ${{ secrets.PASSWORD }}
-#          port: ${{ secrets.PORT }}
-#          script: sudo sh deploy/deploy_last.sh
+      - name: Copy to remote server
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: target/lastwolf-0.0.1-SNAPSHOT.jar
+          remote: ${{ secrets.SSH_APP_PATH }}/lastwolf.jar
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.PASSWORD }}
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: sudo sh deploy/deploy_last.sh
