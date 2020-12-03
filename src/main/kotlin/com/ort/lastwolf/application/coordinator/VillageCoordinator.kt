@@ -381,7 +381,6 @@ class VillageCoordinator(
         val villageAbility = VillageAbility(village.days.latestDay().id, participant!!.id, targetId, abilityType)
         abilityService.updateAbility(village, villageAbility)
         messageService.registerAbilitySetMessage(village, participant, villageAbility)
-        // TODO 夜コミット
     }
 
     /**
@@ -423,8 +422,8 @@ class VillageCoordinator(
         commitDomainService.assertCommit(village, participant)
         // コミット
         val commit = Commit(village.days.latestDay().id, participant!!.id, doCommit)
-        commitService.updateCommit(commit)
-        messageService.registerCommitMessage(village, participant.chara, doCommit)
+        commitService.updateCommit(village, commit)
+        // messageService.registerCommitMessage(village, participant.chara, doCommit)
         // 日付更新
         if (doCommit) dayChangeCoordinator.dayChangeIfNeeded(village.id)
     }

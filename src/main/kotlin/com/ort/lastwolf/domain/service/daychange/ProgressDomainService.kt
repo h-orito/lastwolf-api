@@ -54,6 +54,7 @@ class ProgressDomainService(
         return when {
             latestDay.isNoonTime() -> allCommitted(village, commits) // 全員コミットしている
             latestDay.isVoteTime() -> allVoted(village, votes) // 全員投票している
+            latestDay.isNightTime() -> allCommitted(village, commits) // 全員コミットしている
             else -> false
         }
     }

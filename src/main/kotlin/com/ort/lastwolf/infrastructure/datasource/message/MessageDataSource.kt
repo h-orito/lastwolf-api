@@ -4,7 +4,6 @@ import com.ort.dbflute.allcommon.CDef
 import com.ort.dbflute.cbean.MessageCB
 import com.ort.dbflute.exbhv.MessageBhv
 import com.ort.dbflute.exentity.Message
-import com.ort.lastwolf.api.controller.VillageController
 import com.ort.lastwolf.domain.model.message.MessageContent
 import com.ort.lastwolf.domain.model.message.MessageQuery
 import com.ort.lastwolf.domain.model.message.MessageTime
@@ -14,7 +13,6 @@ import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 import com.ort.lastwolf.fw.LastwolfDateUtil
 import com.ort.lastwolf.infrastructure.datasource.firebase.FirebaseDataSource
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset
 
@@ -23,11 +21,6 @@ class MessageDataSource(
     val messageBhv: MessageBhv,
     val firebaseDataSource: FirebaseDataSource
 ) {
-
-    // ===================================================================================
-    //                                                                          Definition
-    //                                                                          ==========
-    private val logger = LoggerFactory.getLogger(VillageController::class.java)
 
     // ===================================================================================
     //                                                                             Execute
@@ -137,7 +130,8 @@ class MessageDataSource(
         village: Village,
         message: com.ort.lastwolf.domain.model.message.Message
     ): com.ort.lastwolf.domain.model.message.Message {
-        if (!village.days.first(message.time.villageDayId).isNightTime()) {
+        val villageDay = village.days.first(message.time.villageDayId)
+        if (villageDay.isEpilogue || !villageDay.isNightTime()) {
             firebaseDataSource.registerMessage(village, message)
             return message
         }

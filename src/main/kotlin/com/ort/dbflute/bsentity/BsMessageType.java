@@ -134,6 +134,14 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
     }
 
     /**
+     * Set the value of messageTypeCode as 共有発言 (MASON_SAY). <br>
+     * 共有発言
+     */
+    public void setMessageTypeCode_共有発言() {
+        setMessageTypeCodeAsMessageType(CDef.MessageType.共有発言);
+    }
+
+    /**
      * Set the value of messageTypeCode as 独り言 (MONOLOGUE_SAY). <br>
      * 独り言
      */
@@ -236,6 +244,17 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
     public boolean isMessageTypeCode死者の呻き() {
         CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
         return cdef != null ? cdef.equals(CDef.MessageType.死者の呻き) : false;
+    }
+
+    /**
+     * Is the value of messageTypeCode 共有発言? <br>
+     * 共有発言
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isMessageTypeCode共有発言() {
+        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
+        return cdef != null ? cdef.equals(CDef.MessageType.共有発言) : false;
     }
 
     /**

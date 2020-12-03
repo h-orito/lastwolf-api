@@ -207,7 +207,8 @@ data class Village(
         if (!setting.rules.availableCommit) return false
         // 進行中以外はNG
         if (!status.isProgress()) return false
-
+        // 投票中はNG
+        if (days.latestDay().isVoteTime()) return false
         return true
     }
 
@@ -231,6 +232,17 @@ data class Village(
 
     /** 村として囁き発言できるか */
     fun isSayableWerewolfSay(): Boolean {
+        // 夜以外は不可
+        if (!days.latestDay().isNightTime()) return false
+        // 進行中以外は不可
+        return status.isProgress()
+    }
+
+    /** 村として共有発言を見られるか */
+    fun isViewableMasonSay(): Boolean = status.isSolved()
+
+    /** 村として共有発言できるか */
+    fun isSayableMasonSay(): Boolean {
         // 夜以外は不可
         if (!days.latestDay().isNightTime()) return false
         // 進行中以外は不可

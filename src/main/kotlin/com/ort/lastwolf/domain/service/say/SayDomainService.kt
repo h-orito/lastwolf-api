@@ -17,11 +17,13 @@ class SayDomainService(
     private val normalSayDomainService: NormalSayDomainService,
     private val graveSayDomainService: GraveSayDomainService,
     private val monologueSayDomainService: MonologueSayDomainService,
-    private val werewolfSayDomainService: WerewolfSayDomainService
+    private val werewolfSayDomainService: WerewolfSayDomainService,
+    private val masonSayDomainService: MasonSayDomainService
 ) {
 
     private val defaultMessageTypeOrder = listOf(
         CDef.MessageType.人狼の囁き,
+        CDef.MessageType.共有発言,
         CDef.MessageType.通常発言,
         CDef.MessageType.死者の呻き,
         CDef.MessageType.独り言
@@ -54,6 +56,7 @@ class SayDomainService(
         when (messageContent.type.toCdef()) {
             CDef.MessageType.通常発言 -> normalSayDomainService.assertSay(village, participant!!)
             CDef.MessageType.人狼の囁き -> werewolfSayDomainService.assertSay(village, participant!!)
+            CDef.MessageType.共有発言 -> masonSayDomainService.assertSay(village, participant!!)
             CDef.MessageType.死者の呻き -> graveSayDomainService.assertSay(village, participant!!)
             CDef.MessageType.独り言 -> monologueSayDomainService.assertSay(village, participant!!)
             else -> throw LastwolfBadRequestException("不正な発言種別です")
@@ -108,6 +111,9 @@ class SayDomainService(
         )
         if (werewolfSayDomainService.isSayable(village, participant)) list.add(
             MessageType(CDef.MessageType.人狼の囁き)
+        )
+        if (masonSayDomainService.isSayable(village, participant)) list.add(
+            MessageType(CDef.MessageType.共有発言)
         )
         if (graveSayDomainService.isSayable(village, participant)) list.add(
             MessageType(CDef.MessageType.死者の呻き)

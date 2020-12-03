@@ -744,6 +744,26 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     }
 
     /**
+     * 共有発言を見られる <br>
+     * The group elements:[共有者]
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode_ViewableMasonSay() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null && cdef.isViewableMasonSay();
+    }
+
+    /**
+     * 共有発言可能 <br>
+     * The group elements:[共有者]
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode_AvailableMasonSay() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null && cdef.isAvailableMasonSay();
+    }
+
+    /**
      * 襲撃対象に選べない <br>
      * The group elements:[人狼]
      * @return The determination, true or false.
@@ -1015,6 +1035,26 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     }
 
     /**
+     * 共有発言を見られる <br>
+     * The group elements:[共有者]
+     * @return The determination, true or false.
+     */
+    public boolean isRequestSkillCode_ViewableMasonSay() {
+        CDef.Skill cdef = getRequestSkillCodeAsSkill();
+        return cdef != null && cdef.isViewableMasonSay();
+    }
+
+    /**
+     * 共有発言可能 <br>
+     * The group elements:[共有者]
+     * @return The determination, true or false.
+     */
+    public boolean isRequestSkillCode_AvailableMasonSay() {
+        CDef.Skill cdef = getRequestSkillCodeAsSkill();
+        return cdef != null && cdef.isAvailableMasonSay();
+    }
+
+    /**
      * 襲撃対象に選べない <br>
      * The group elements:[人狼]
      * @return The determination, true or false.
@@ -1283,6 +1323,26 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     public boolean isSecondRequestSkillCode_AvailableWerewolfSay() {
         CDef.Skill cdef = getSecondRequestSkillCodeAsSkill();
         return cdef != null && cdef.isAvailableWerewolfSay();
+    }
+
+    /**
+     * 共有発言を見られる <br>
+     * The group elements:[共有者]
+     * @return The determination, true or false.
+     */
+    public boolean isSecondRequestSkillCode_ViewableMasonSay() {
+        CDef.Skill cdef = getSecondRequestSkillCodeAsSkill();
+        return cdef != null && cdef.isViewableMasonSay();
+    }
+
+    /**
+     * 共有発言可能 <br>
+     * The group elements:[共有者]
+     * @return The determination, true or false.
+     */
+    public boolean isSecondRequestSkillCode_AvailableMasonSay() {
+        CDef.Skill cdef = getSecondRequestSkillCodeAsSkill();
+        return cdef != null && cdef.isAvailableMasonSay();
     }
 
     /**

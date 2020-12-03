@@ -3,12 +3,15 @@ package com.ort.lastwolf.infrastructure.datasource.commit
 import com.ort.dbflute.exbhv.CommitBhv
 import com.ort.dbflute.exentity.Commit
 import com.ort.lastwolf.domain.model.commit.Commits
+import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
+import com.ort.lastwolf.infrastructure.datasource.firebase.FirebaseDataSource
 import org.springframework.stereotype.Repository
 
 @Repository
 class CommitDataSource(
-    val commitBhv: CommitBhv
+    val commitBhv: CommitBhv,
+    val firebaseDataSource: FirebaseDataSource
 ) {
 
     // ===================================================================================
@@ -60,11 +63,13 @@ class CommitDataSource(
     /**
      * コミット/取り消し
      *
+     * @param village village
      * @param commit commit
      */
-    fun updateCommit(commit: com.ort.lastwolf.domain.model.commit.Commit) {
+    fun updateCommit(village: Village, commit: com.ort.lastwolf.domain.model.commit.Commit) {
         deleteCommit(commit)
         if (commit.isCommitting) insertCommit(commit)
+        firebaseDataSource.registerSituationLatest(village, commit)
     }
 
     private fun deleteCommit(commit: com.ort.lastwolf.domain.model.commit.Commit) {

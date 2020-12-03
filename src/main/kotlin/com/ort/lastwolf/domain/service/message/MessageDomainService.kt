@@ -8,6 +8,7 @@ import com.ort.lastwolf.domain.model.player.Players
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 import com.ort.lastwolf.domain.service.say.GraveSayDomainService
+import com.ort.lastwolf.domain.service.say.MasonSayDomainService
 import com.ort.lastwolf.domain.service.say.MonologueSayDomainService
 import com.ort.lastwolf.domain.service.say.NormalSayDomainService
 import com.ort.lastwolf.domain.service.say.WerewolfSayDomainService
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service
 class MessageDomainService(
     private val normalSayDomainService: NormalSayDomainService,
     private val werewolfSayDomainService: WerewolfSayDomainService,
+    private val masonSayDomainService: MasonSayDomainService,
     private val graveSayDomainService: GraveSayDomainService,
     private val monologueSayDomainService: MonologueSayDomainService,
     private val psychicMessageDomainService: PsychicMessageDomainService,
@@ -50,6 +52,7 @@ class MessageDomainService(
         listOf(
             CDef.MessageType.死者の呻き,
             CDef.MessageType.人狼の囁き,
+            CDef.MessageType.共有発言,
             CDef.MessageType.白黒霊視結果,
             CDef.MessageType.襲撃結果,
             CDef.MessageType.共有相互確認メッセージ
@@ -75,6 +78,7 @@ class MessageDomainService(
         return when (CDef.MessageType.codeOf(messageType) ?: return false) {
             CDef.MessageType.通常発言 -> normalSayDomainService.isViewable(village, participant)
             CDef.MessageType.人狼の囁き -> werewolfSayDomainService.isViewable(village, participant)
+            CDef.MessageType.共有発言 -> masonSayDomainService.isViewable(village, participant)
             CDef.MessageType.死者の呻き -> graveSayDomainService.isViewable(village, participant)
             CDef.MessageType.独り言 -> monologueSayDomainService.isViewable(village, participant)
             CDef.MessageType.白黒霊視結果 -> psychicMessageDomainService.isViewable(village, participant)

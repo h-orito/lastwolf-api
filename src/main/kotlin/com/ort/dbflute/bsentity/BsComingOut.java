@@ -353,6 +353,26 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     }
 
     /**
+     * 共有発言を見られる <br>
+     * The group elements:[共有者]
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode_ViewableMasonSay() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null && cdef.isViewableMasonSay();
+    }
+
+    /**
+     * 共有発言可能 <br>
+     * The group elements:[共有者]
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode_AvailableMasonSay() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null && cdef.isAvailableMasonSay();
+    }
+
+    /**
      * 襲撃対象に選べない <br>
      * The group elements:[人狼]
      * @return The determination, true or false.

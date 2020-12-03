@@ -42,6 +42,7 @@ data class VillageParticipant(
         if (skillRequest.first.code != participant.skillRequest.first.code) return true
         if (skillRequest.second.code != participant.skillRequest.second.code) return true
         if (doneRollCall != participant.doneRollCall) return true
+        if (winlose?.code != participant.winlose?.code) return true
         return false
     }
 
@@ -74,10 +75,8 @@ data class VillageParticipant(
     fun winLose(winCamp: Camp?): VillageParticipant {
         if (dead?.toCdef() == CDef.DeadReason.突然) return this.copy(winlose = WinLose(CDef.WinLose.敗北))
         winCamp ?: return this.copy(winlose = WinLose(CDef.WinLose.引分))
-        return this.copy(
-            winlose = if (skill?.toCdef()?.campCode() == winCamp.code) WinLose(CDef.WinLose.勝利)
-            else WinLose(CDef.WinLose.敗北)
-        )
+        val isWin = skill?.toCdef()?.campCode() == winCamp.code
+        return this.copy(winlose = if (isWin) WinLose(CDef.WinLose.勝利) else WinLose(CDef.WinLose.敗北))
     }
 
     // 点呼
@@ -158,6 +157,19 @@ data class VillageParticipant(
         if (!isAlive()) return false
         // 囁ける役職でなければ不可
         return skill?.toCdef()?.isAvailableWerewolfSay ?: false
+    }
+
+    fun isViewableMasonSay(): Boolean {
+        return skill?.toCdef()?.isViewableMasonSay ?: false
+    }
+
+    fun isSayableMasonSay(): Boolean {
+        // ダミーはOK
+        if (player.id == 1) return true
+        // 死亡していたら不可
+        if (!isAlive()) return false
+        // 共有発言できる役職でなければ不可
+        return skill?.toCdef()?.isAvailableMasonSay ?: false
     }
 
     fun isViewableGraveSay(): Boolean {

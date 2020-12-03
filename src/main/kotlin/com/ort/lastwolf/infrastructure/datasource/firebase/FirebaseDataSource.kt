@@ -5,6 +5,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.api.view.message.MessageView
+import com.ort.lastwolf.domain.model.commit.Commit
 import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.ability.VillageAbility
@@ -67,6 +68,14 @@ class FirebaseDataSource {
     fun registerSituationLatest(village: Village, vote: VillageVote) {
         val epocTimeMilli = LastwolfDateUtil.currentLocalDateTime().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
         village.participants.first(vote.myselfId).let {
+            val ref: DatabaseReference = getSituationLatestDatabaseReference(village.id, it.player.uid)
+            ref.setValueAsync(epocTimeMilli)
+        }
+    }
+
+    fun registerSituationLatest(village: Village, commit: Commit) {
+        val epocTimeMilli = LastwolfDateUtil.currentLocalDateTime().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
+        village.participants.first(commit.myselfId).let {
             val ref: DatabaseReference = getSituationLatestDatabaseReference(village.id, it.player.uid)
             ref.setValueAsync(epocTimeMilli)
         }

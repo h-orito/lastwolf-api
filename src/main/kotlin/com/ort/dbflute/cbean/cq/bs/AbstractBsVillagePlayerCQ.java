@@ -1225,6 +1225,26 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 共有発言を見られる <br>
+     * The group elements:[共有者]
+     */
+    public void setSkillCode_InScope_ViewableMasonSay() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableMasonSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 共有発言可能 <br>
+     * The group elements:[共有者]
+     */
+    public void setSkillCode_InScope_AvailableMasonSay() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableMasonSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 襲撃対象に選べない <br>
      * The group elements:[人狼]
      */
@@ -1664,6 +1684,26 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 共有発言を見られる <br>
+     * The group elements:[共有者]
+     */
+    public void setRequestSkillCode_InScope_ViewableMasonSay() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableMasonSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 共有発言可能 <br>
+     * The group elements:[共有者]
+     */
+    public void setRequestSkillCode_InScope_AvailableMasonSay() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableMasonSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 襲撃対象に選べない <br>
      * The group elements:[人狼]
      */
@@ -2080,6 +2120,26 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSecondRequestSkillCode_InScope_AvailableWerewolfSay() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableWerewolfSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 共有発言を見られる <br>
+     * The group elements:[共有者]
+     */
+    public void setSecondRequestSkillCode_InScope_ViewableMasonSay() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableMasonSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 共有発言可能 <br>
+     * The group elements:[共有者]
+     */
+    public void setSecondRequestSkillCode_InScope_AvailableMasonSay() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableMasonSay());
     }
 
     /**

@@ -436,6 +436,26 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 共有発言を見られる <br>
+     * The group elements:[共有者]
+     */
+    public void setSkillCode_InScope_ViewableMasonSay() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableMasonSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 共有発言可能 <br>
+     * The group elements:[共有者]
+     */
+    public void setSkillCode_InScope_AvailableMasonSay() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableMasonSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 襲撃対象に選べない <br>
      * The group elements:[人狼]
      */

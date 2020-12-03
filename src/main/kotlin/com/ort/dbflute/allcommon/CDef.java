@@ -648,6 +648,26 @@ public interface CDef extends Classification {
 
         /**
          * Is the classification in the group? <br>
+         * 共有発言を見られる <br>
+         * The group elements:[共有者]
+         * @return The determination, true or false.
+         */
+        public boolean isViewableMasonSay() {
+            return 共有者.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
+         * 共有発言可能 <br>
+         * The group elements:[共有者]
+         * @return The determination, true or false.
+         */
+        public boolean isAvailableMasonSay() {
+            return 共有者.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
          * 襲撃対象に選べない <br>
          * The group elements:[人狼]
          * @return The determination, true or false.
@@ -779,6 +799,8 @@ public interface CDef extends Classification {
         public boolean inGroup(String groupName) {
             if ("viewableWerewolfSay".equals(groupName)) { return isViewableWerewolfSay(); }
             if ("availableWerewolfSay".equals(groupName)) { return isAvailableWerewolfSay(); }
+            if ("viewableMasonSay".equals(groupName)) { return isViewableMasonSay(); }
+            if ("availableMasonSay".equals(groupName)) { return isAvailableMasonSay(); }
             if ("notSelectableAttack".equals(groupName)) { return isNotSelectableAttack(); }
             if ("divineResultWolf".equals(groupName)) { return isDivineResultWolf(); }
             if ("psychicResultWolf".equals(groupName)) { return isPsychicResultWolf(); }
@@ -861,6 +883,8 @@ public interface CDef extends Classification {
             if (groupName == null) { throw new IllegalArgumentException("The argument 'groupName' should not be null."); }
             if ("viewableWerewolfSay".equalsIgnoreCase(groupName)) { return listOfViewableWerewolfSay(); }
             if ("availableWerewolfSay".equalsIgnoreCase(groupName)) { return listOfAvailableWerewolfSay(); }
+            if ("viewableMasonSay".equalsIgnoreCase(groupName)) { return listOfViewableMasonSay(); }
+            if ("availableMasonSay".equalsIgnoreCase(groupName)) { return listOfAvailableMasonSay(); }
             if ("notSelectableAttack".equalsIgnoreCase(groupName)) { return listOfNotSelectableAttack(); }
             if ("divineResultWolf".equalsIgnoreCase(groupName)) { return listOfDivineResultWolf(); }
             if ("psychicResultWolf".equalsIgnoreCase(groupName)) { return listOfPsychicResultWolf(); }
@@ -907,6 +931,26 @@ public interface CDef extends Classification {
          */
         public static List<Skill> listOfAvailableWerewolfSay() {
             return new ArrayList<Skill>(Arrays.asList(人狼));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
+         * 共有発言を見られる <br>
+         * The group elements:[共有者]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfViewableMasonSay() {
+            return new ArrayList<Skill>(Arrays.asList(共有者));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
+         * 共有発言可能 <br>
+         * The group elements:[共有者]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfAvailableMasonSay() {
+            return new ArrayList<Skill>(Arrays.asList(共有者));
         }
 
         /**
@@ -1047,6 +1091,8 @@ public interface CDef extends Classification {
         public static List<Skill> groupOf(String groupName) {
             if ("viewableWerewolfSay".equals(groupName)) { return listOfViewableWerewolfSay(); }
             if ("availableWerewolfSay".equals(groupName)) { return listOfAvailableWerewolfSay(); }
+            if ("viewableMasonSay".equals(groupName)) { return listOfViewableMasonSay(); }
+            if ("availableMasonSay".equals(groupName)) { return listOfAvailableMasonSay(); }
             if ("notSelectableAttack".equals(groupName)) { return listOfNotSelectableAttack(); }
             if ("divineResultWolf".equals(groupName)) { return listOfDivineResultWolf(); }
             if ("psychicResultWolf".equals(groupName)) { return listOfPsychicResultWolf(); }
@@ -1075,6 +1121,9 @@ public interface CDef extends Classification {
         ,
         /** 死者の呻き */
         死者の呻き("GRAVE_SAY", "死者の呻き", emptyStrings())
+        ,
+        /** 共有発言 */
+        共有発言("MASON_SAY", "共有発言", emptyStrings())
         ,
         /** 独り言 */
         独り言("MONOLOGUE_SAY", "独り言", emptyStrings())

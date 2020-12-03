@@ -85,6 +85,14 @@ map:{
         			; groupComment=囁き可能
         			; elementList= list:{人狼}
         		}
+        		; viewableMasonSay = map:{
+        			; groupComment=共有発言を見られる
+        			; elementList= list:{共有者}
+        		}
+        		; availableMasonSay = map:{
+        			; groupComment=共有発言可能
+        			; elementList= list:{共有者}
+        		}
         		; notSelectableAttack = map:{
 					; groupComment=襲撃対象に選べない
 					; elementList= list:{人狼}

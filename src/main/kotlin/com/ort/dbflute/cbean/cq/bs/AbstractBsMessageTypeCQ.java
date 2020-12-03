@@ -79,6 +79,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 共有発言 (MASON_SAY). And OnlyOnceRegistered. <br>
+     * 共有発言
+     */
+    public void setMessageTypeCode_Equal_共有発言() {
+        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.共有発言);
+    }
+
+    /**
      * Equal(=). As 独り言 (MONOLOGUE_SAY). And OnlyOnceRegistered. <br>
      * 独り言
      */
@@ -195,6 +203,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
      */
     public void setMessageTypeCode_NotEqual_死者の呻き() {
         setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.死者の呻き);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 共有発言 (MASON_SAY). And OnlyOnceRegistered. <br>
+     * 共有発言
+     */
+    public void setMessageTypeCode_NotEqual_共有発言() {
+        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.共有発言);
     }
 
     /**

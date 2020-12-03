@@ -10,7 +10,6 @@ import com.ort.lastwolf.application.service.VillageService
 import com.ort.lastwolf.domain.model.player.Player
 import com.ort.lastwolf.domain.model.village.Villages
 import com.ort.lastwolf.fw.security.LastwolfUser
-import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
@@ -58,7 +57,6 @@ class PlayerController(
         playerService.updateNickname(user, body.nickname!!, body.twitterUserName!!)
     }
 
-    private val logger = LoggerFactory.getLogger(PlayerController::class.java)
     @GetMapping("/player/{playerId}/record")
     fun stats(
         @PathVariable("playerId") playerId: Int

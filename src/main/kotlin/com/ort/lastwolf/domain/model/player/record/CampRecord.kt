@@ -10,7 +10,9 @@ data class CampRecord(
     val participateCount: Int,
     val winCount: Int,
     val winRate: Float,
+    val loseCount: Int,
     val loseRate: Float,
+    val drawCount: Int,
     val drawRate: Float
 ) {
     constructor(
@@ -23,8 +25,10 @@ data class CampRecord(
         winCount = sumWinCount(villages, player),
         winRate = if (villages.list.isEmpty()) 0F
         else sumWinCount(villages, player).toFloat() / villages.list.size.toFloat(),
+        loseCount = sumLoseCount(villages, player),
         loseRate = if (villages.list.isEmpty()) 0F
         else sumLoseCount(villages, player).toFloat() / villages.list.size.toFloat(),
+        drawCount = sumDrawCount(villages, player),
         drawRate = if (villages.list.isEmpty()) 0F
         else sumDrawCount(villages, player).toFloat() / villages.list.size.toFloat()
     )

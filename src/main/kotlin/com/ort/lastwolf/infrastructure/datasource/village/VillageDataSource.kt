@@ -177,6 +177,7 @@ class VillageDataSource(
                 if (excludeGonePlayer) {
                     vpCB.query().setIsGone_Equal(false)
                 }
+                vpCB.query().addOrderBy_VillagePlayerId_Asc()
             }.withNestedReferrer {
                 it.loadComingOut { }
             }
@@ -384,6 +385,7 @@ class VillageDataSource(
         villagePlayer.requestSkillCodeAsSkill = villagePlayerModel.skillRequest.first.toCdef()
         villagePlayer.secondRequestSkillCodeAsSkill = villagePlayerModel.skillRequest.second.toCdef()
         villagePlayer.doneRollcall = villagePlayerModel.doneRollCall
+        villagePlayer.winloseCodeAsWinLose = villagePlayerModel.winlose?.toCdef()
         villagePlayerBhv.update(villagePlayer)
     }
 

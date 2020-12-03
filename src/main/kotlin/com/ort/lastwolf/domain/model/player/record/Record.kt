@@ -8,7 +8,9 @@ data class Record(
     val participateCount: Int,
     val winCount: Int,
     val winRate: Float,
+    val loseCount: Int,
     val loseRate: Float,
+    val drawCount: Int,
     val drawRate: Float
 ) {
     constructor(
@@ -19,8 +21,10 @@ data class Record(
         winCount = sumWinCount(villages, player),
         winRate = if (participantCount(villages) == 0) 0F
         else sumWinCount(villages, player).toFloat() / participantCount(villages).toFloat(),
+        loseCount = sumLoseCount(villages, player),
         loseRate = if (participantCount(villages) == 0) 0F
         else sumLoseCount(villages, player).toFloat() / participantCount(villages).toFloat(),
+        drawCount = sumDrawCount(villages, player),
         drawRate = if (participantCount(villages) == 0) 0F
         else sumDrawCount(villages, player).toFloat() / participantCount(villages).toFloat()
     )
