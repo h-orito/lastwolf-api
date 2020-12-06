@@ -42,6 +42,11 @@ data class MessageContent(
     fun assertMessageLength() {
         // 文字数
         if (text.isEmpty()) throw LastwolfBadRequestException("発言内容がありません")
-        if (defaultLengthMax < text.length) throw LastwolfBadRequestException("文字数オーバーです")
+        if (type.toCdef() == CDef.MessageType.村建て発言) {
+            if (400 < text.replace("\r\n", "").replace("\n", "").length)
+                throw LastwolfBadRequestException("文字数オーバーです")
+        } else {
+            if (defaultLengthMax < text.length) throw LastwolfBadRequestException("文字数オーバーです")
+        }
     }
 }
