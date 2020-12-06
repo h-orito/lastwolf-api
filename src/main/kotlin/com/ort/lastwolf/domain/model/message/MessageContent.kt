@@ -12,7 +12,7 @@ data class MessageContent(
 ) {
     companion object {
 
-        const val defaultLengthMax = 100
+        const val defaultLengthMax = 200
 
         operator fun invoke(
             messageType: String,
