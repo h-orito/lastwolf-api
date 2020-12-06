@@ -74,6 +74,8 @@ data class Skill(
             val list = mutableListOf<MessageType>()
             // 囁き
             if (cdefSkill.isAvailableWerewolfSay) list.add(MessageType(CDef.MessageType.人狼の囁き))
+            // 共有発言
+            if (cdefSkill.isAvailableMasonSay) list.add(MessageType(CDef.MessageType.共有発言))
 
             return list
         }

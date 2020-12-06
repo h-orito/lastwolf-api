@@ -550,7 +550,7 @@ public interface CDef extends Classification {
                 subItemMap.put("shortName", "共");
                 subItemMap.put("order", "5");
                 subItemMap.put("campCode", "VILLAGER");
-                subItemMap.put("description", "あなたは共有者です。他の共有者が誰であるかを知ることができます。");
+                subItemMap.put("description", "あなたは共有者です。他の共有者が誰であるかを知ることができます。また、夜時間に共有者同士にしか聞こえない会話が可能です。");
                 _subItemMapMap.put(共有者.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
@@ -590,7 +590,7 @@ public interface CDef extends Classification {
                 subItemMap.put("shortName", "狼");
                 subItemMap.put("order", "6");
                 subItemMap.put("campCode", "WEREWOLF");
-                subItemMap.put("description", "あなたは人狼です。人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。");
+                subItemMap.put("description", "あなたは人狼です。夜時間に人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。");
                 _subItemMapMap.put(人狼.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
