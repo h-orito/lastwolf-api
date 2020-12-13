@@ -10,10 +10,11 @@ import com.ort.lastwolf.api.body.AdminDummyLoginBody
 import com.ort.lastwolf.api.body.AdminParticipateBody
 import com.ort.lastwolf.api.view.debug.DebugVillageView
 import com.ort.lastwolf.application.coordinator.VillageCoordinator
-import com.ort.lastwolf.application.service.CharachipService
 import com.ort.lastwolf.application.service.PlayerService
 import com.ort.lastwolf.application.service.VillageService
+import com.ort.lastwolf.application.service.VoteService
 import com.ort.lastwolf.domain.model.village.Village
+import com.ort.lastwolf.domain.model.village.vote.VillageVote
 import com.ort.lastwolf.fw.LastwolfDateUtil
 import com.ort.lastwolf.fw.exception.LastwolfBusinessException
 import com.ort.lastwolf.fw.security.LastwolfUser
@@ -40,8 +41,8 @@ class DebugController(
     val villageCoordinator: VillageCoordinator,
 
     val villageService: VillageService,
-    val charachipService: CharachipService,
-    val playerService: PlayerService
+    val playerService: PlayerService,
+    val voteService: VoteService
 ) {
 
     // ===================================================================================
@@ -205,6 +206,63 @@ class DebugController(
             )
         )
         villageService.updateVillageDifference(village, changedVillage)
+    }
+
+    /**
+     * 全員1票投票
+     *
+     * @param villageId villageId
+     * @param user user
+     */
+    @PostMapping("/admin/village/{villageId}/all-draw-vote")
+    fun allDrawVote(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: LastwolfUser
+    ) {
+        if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
+        val village = villageService.findVillage(villageId)
+        val participants = village.participants.filterAlive()
+        participants.list.forEachIndexed { index, participant ->
+            if (participant.id == participants.list.last().id) {
+                val villageVote = VillageVote(
+                    village.days.latestDay(),
+                    participant.id,
+                    participants.list.first().id
+                )
+                voteService.updateVote(village, villageVote)
+            } else {
+                val villageVote = VillageVote(
+                    village.days.latestDay(),
+                    participant.id,
+                    participants.list[index + 1].id
+                )
+                voteService.updateVote(village, villageVote)
+            }
+        }
+    }
+
+    /**
+     * 全員ランダム投票
+     *
+     * @param villageId villageId
+     * @param user user
+     */
+    @PostMapping("/admin/village/{villageId}/all-random-vote")
+    fun allRandomVote(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: LastwolfUser
+    ) {
+        if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
+        val village = villageService.findVillage(villageId)
+        val participants = village.participants.filterAlive()
+        participants.list.forEach { participant ->
+            val villageVote = VillageVote(
+                village.days.latestDay(),
+                participant.id,
+                participants.list.filterNot { p -> p.id == participant.id }.random().id
+            )
+            voteService.updateVote(village, villageVote)
+        }
     }
 
     // ===================================================================================
