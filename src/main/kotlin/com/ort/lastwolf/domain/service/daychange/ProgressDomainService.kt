@@ -140,9 +140,10 @@ class ProgressDomainService(
     private fun toNightTime(beforeDayChange: DayChange): DayChange {
         // 突然死
         var dayChange = suddenlyDeathDomainService.voteSuddenlyDeath(beforeDayChange)
-
         // 最新日がエピローグだったら引き分け処理
         if (dayChange.village.days.latestDay().isEpilogue) {
+            // 前回の投票結果メッセージ追加
+            dayChange = addVoteResultMessageIfNeeded(dayChange)
             return epilogueDomainService.transitionToDrawEpilogue(dayChange).setIsChange(beforeDayChange)
         }
 
