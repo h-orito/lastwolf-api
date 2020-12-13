@@ -55,7 +55,7 @@ data class VillageDays(
 
     fun toLatestDayEpilogue(): VillageDays {
         return this.copy(list = list.map {
-            if (it.id == latestDay().id) {
+            if (it.day == latestDay().day && it.noonNight.code == latestDay().noonNight.code) {
                 latestDay().copy(
                     endDatetime = yesterday().endDatetime.plusHours(extendHours),
                     isEpilogue = true

@@ -22,7 +22,7 @@ data class VillageDay(
     fun createNextDay(toNextVote: Boolean = false, isEpilogue: Boolean = false): VillageDay {
         if (day == 1 && noonNight.toCdef() == CDef.Noonnight.昼) {
             return VillageDay(
-                id = 1,
+                id = 0,
                 day = 1,
                 noonNight = NoonNight(CDef.Noonnight.夜),
                 isEpilogue = isEpilogue,
@@ -32,7 +32,7 @@ data class VillageDay(
         }
         val nextNoonNight = noonNight.next(toNextVote)
         return VillageDay(
-            id = 1,
+            id = 0,
             day = if (nextNoonNight.toCdef() == CDef.Noonnight.昼) day + 1 else day,
             noonNight = nextNoonNight,
             isEpilogue = isEpilogue,
