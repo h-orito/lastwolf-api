@@ -104,6 +104,7 @@ object VillageDataConverter {
                 max = detectItemText(settingList, CDef.VillageSettingItem.最大人数)?.toInt()
             ),
             time = VillageTime.invoke(
+                createDatetime = village.registerDatetime,
                 startDatetime = detectItemText(settingList, CDef.VillageSettingItem.開始予定日時)?.let {
                     LocalDateTime.parse(
                         it,

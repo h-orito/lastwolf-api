@@ -5,28 +5,28 @@ import com.ort.lastwolf.domain.model.noonnight.NoonNight
 import java.time.LocalDateTime
 
 data class VillageTime(
+    val createDatetime: LocalDateTime,
     val startDatetime: LocalDateTime,
     val noonSeconds: Int,
     val voteSeconds: Int,
     val nightSeconds: Int
 ) {
     companion object {
-        private const val DEFAULT_NOON_SECONDS = 60 * 5
         private const val NOON_SECONDS_MAX = 60 * 60
         private const val NOON_SECONDS_MIN = 60 * 3
-        private const val DEFAULT_VOTE_SECONDS = 60 * 2
         private const val VOTE_SECONDS_MAX = 60 * 10
         private const val VOTE_SECONDS_MIN = 60 * 1
-        private const val DEFAULT_NIGHT_SECONDS = 60 * 3
         private const val NIGHT_SECONDS_MAX = 60 * 20
         private const val NIGHT_SECONDS_MIN = 60 * 2
 
         operator fun invoke(
+            createDatetime: LocalDateTime?,
             startDatetime: LocalDateTime?,
             noonSeconds: Int?,
             voteSeconds: Int?,
             nightSeconds: Int?
         ): VillageTime {
+            requireNotNull(createDatetime)
             requireNotNull(startDatetime)
             requireNotNull(noonSeconds)
             require(NOON_SECONDS_MIN <= noonSeconds && noonSeconds <= NOON_SECONDS_MAX)
@@ -35,6 +35,7 @@ data class VillageTime(
             requireNotNull(nightSeconds)
             require(NIGHT_SECONDS_MIN <= nightSeconds && nightSeconds <= NIGHT_SECONDS_MAX)
             return VillageTime(
+                createDatetime = createDatetime,
                 startDatetime = startDatetime,
                 noonSeconds = noonSeconds,
                 voteSeconds = voteSeconds,

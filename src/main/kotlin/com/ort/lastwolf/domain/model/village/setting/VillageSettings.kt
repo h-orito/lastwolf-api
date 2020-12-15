@@ -1,6 +1,7 @@
 package com.ort.lastwolf.domain.model.village.setting
 
 import com.ort.lastwolf.domain.model.village.VillageSettingCreateResource
+import java.time.LocalDateTime
 
 data class VillageSettings(
     val capacity: PersonCapacity,
@@ -23,6 +24,7 @@ data class VillageSettings(
                     max = org.organization.keys.max()
                 ),
                 time = VillageTime(
+                    createDatetime = LocalDateTime.now(),
                     startDatetime = resource.time.startDatetime,
                     noonSeconds = resource.time.noonSeconds,
                     voteSeconds = resource.time.voteSeconds,

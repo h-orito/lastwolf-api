@@ -21,7 +21,6 @@ import com.ort.lastwolf.api.form.VillageMessageForm
 import com.ort.lastwolf.api.view.message.MessageView
 import com.ort.lastwolf.api.view.message.MessagesView
 import com.ort.lastwolf.api.view.myself.participant.SituationAsParticipantView
-import com.ort.lastwolf.api.view.village.VillageLatestView
 import com.ort.lastwolf.api.view.village.VillageRegisterView
 import com.ort.lastwolf.api.view.village.VillageView
 import com.ort.lastwolf.api.view.village.VillagesView
@@ -139,24 +138,6 @@ class VillageController(
         return MessagesView(
             messages = messages,
             village = village
-        )
-    }
-
-    /**
-     * 最新発言時間、村日付取得
-     * @param villageId villageId
-     * @param user user
-     */
-    @GetMapping("/village/{villageId}/latest")
-    fun findLatest(
-        @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: LastwolfUser?
-    ): VillageLatestView {
-        val village: Village = villageService.findVillage(villageId, false)
-        val unixTimeMilli = messageCoordinator.findLatestMessagesUnixTimeMilli(village, user)
-        return VillageLatestView(
-            unixTimeMilli = unixTimeMilli,
-            villageDayId = village.days.latestDay().id
         )
     }
 

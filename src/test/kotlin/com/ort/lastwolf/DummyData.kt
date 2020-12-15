@@ -63,6 +63,7 @@ object DummyData {
     )
 
     private fun villageTime(): VillageTime = VillageTime(
+        createDatetime = LocalDateTime.now(),
         startDatetime = LocalDateTime.now().plusHours(1L),
         noonSeconds = 240,
         voteSeconds = 120,
