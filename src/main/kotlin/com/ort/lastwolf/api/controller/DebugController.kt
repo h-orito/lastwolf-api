@@ -14,6 +14,7 @@ import com.ort.lastwolf.application.service.PlayerService
 import com.ort.lastwolf.application.service.VillageService
 import com.ort.lastwolf.application.service.VoteService
 import com.ort.lastwolf.domain.model.village.Village
+import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 import com.ort.lastwolf.domain.model.village.vote.VillageVote
 import com.ort.lastwolf.fw.LastwolfDateUtil
 import com.ort.lastwolf.fw.exception.LastwolfBusinessException
@@ -125,7 +126,7 @@ class DebugController(
     }
 
     /**
-     * 最新日の残り時間を30秒にする
+     * 最新日の残り時間を10秒にする
      * @param villageId villageId
      * @param user user
      */
@@ -142,7 +143,7 @@ class DebugController(
             it.query().queryNoonnight().addOrderBy_DispOrder_Desc()
             it.fetchFirst(1)
         }
-        latestDay.endDatetime = LastwolfDateUtil.currentLocalDateTime().plusSeconds(30L)
+        latestDay.endDatetime = LastwolfDateUtil.currentLocalDateTime().plusSeconds(10L)
         villageDayBhv.update(latestDay)
     }
 
@@ -260,6 +261,34 @@ class DebugController(
                 village.days.latestDay(),
                 participant.id,
                 participants.list.filterNot { p -> p.id == participant.id }.random().id
+            )
+            voteService.updateVote(village, villageVote)
+        }
+    }
+
+    /**
+     * 全員投票
+     *
+     * @param villageId villageId
+     * @param user user
+     */
+    @PostMapping("/admin/village/{villageId}/all-vote/{participantId}")
+    fun allRandomVote(
+        @PathVariable("villageId") villageId: Int,
+        @PathVariable("participantId") participantId: Int,
+        @AuthenticationPrincipal user: LastwolfUser
+    ) {
+        if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
+        val village = villageService.findVillage(villageId)
+        val participants = village.participants.filterAlive()
+        participants.list.forEach { participant ->
+            val target: VillageParticipant = if (participant.id == participantId) {
+                participants.list.first { it.id != participantId }
+            } else participants.list.first { it.id == participantId }
+            val villageVote = VillageVote(
+                village.days.latestDay(),
+                participant.id,
+                target.id
             )
             voteService.updateVote(village, villageVote)
         }

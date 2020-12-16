@@ -38,5 +38,7 @@ data class VillageRuleCreateResource(
     val isAvailableSuddenlyDeath: Boolean,
     val isAvailableCommit: Boolean,
     val isAvailableDummySkill: Boolean,
+    val isAvailableSameTargetGuard: Boolean,
+    val isFirstDivineNowolf: Boolean,
     val joinPassword: String?
 )

@@ -5,6 +5,7 @@ import com.ort.lastwolf.domain.model.daychange.DayChange
 import com.ort.lastwolf.domain.model.player.Player
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.service.ability.AbilityDomainService
+import com.ort.lastwolf.domain.service.ability.DivineDomainService
 import com.ort.lastwolf.domain.service.skill.SkillAssignDomainService
 import com.ort.lastwolf.fw.LastwolfDateUtil
 import com.ort.lastwolf.fw.exception.LastwolfBusinessException
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Service
 @Service
 class RollCallingDomainService(
     private val skillAssignDomainService: SkillAssignDomainService,
-    private val abilityDomainService: AbilityDomainService
+    private val abilityDomainService: AbilityDomainService,
+    private val divineDomainService: DivineDomainService
 ) {
 
     fun assertStartRollCall(village: Village, player: Player) {
@@ -76,6 +78,8 @@ class RollCallingDomainService(
         dayChange = dayChange.copy(village = dayChange.village.changeStatus(CDef.VillageStatus.進行中))
         // ダミーが役職を引いていたら能力行使
         dayChange = addDummyAbilityIfNeeded(dayChange)
+        // 初日白通知だったらラン白
+        dayChange = addRandomNowolfAbilityIfNeeded(dayChange)
 
         return dayChange.setIsChange(beforeDayChange)
     }
@@ -133,6 +137,18 @@ class RollCallingDomainService(
                 .processDummyAbility(dayChange)
         }
 
+        return dayChange
+    }
+
+    // 初日白通知の場合ランダム白
+    private fun addRandomNowolfAbilityIfNeeded(beforeDayChange: DayChange): DayChange {
+        val village = beforeDayChange.village
+        if (!village.setting.rules.firstDivineNowolf) return beforeDayChange
+
+        var dayChange = beforeDayChange.copy()
+        village.participants.list.filter { it.skill!!.toCdef().isHasDivineAbility }.forEach {
+            dayChange = divineDomainService.divineRandomNowolf(dayChange, it)
+        }
         return dayChange
     }
 }

@@ -179,6 +179,14 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
     }
 
     /**
+     * Set the value of villageSettingItemCode as 連続護衛ありか (is_available_same_target_guard). <br>
+     * 連続護衛ありか
+     */
+    public void setVillageSettingItemCode_連続護衛ありか() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.連続護衛ありか);
+    }
+
+    /**
      * Set the value of villageSettingItemCode as 役職希望可能か (is_available_skill_request). <br>
      * 役職希望可能か
      */
@@ -192,6 +200,14 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
      */
     public void setVillageSettingItemCode_突然死ありか() {
         setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.突然死ありか);
+    }
+
+    /**
+     * Set the value of villageSettingItemCode as 初日白通知か (is_first_divine_nowolf). <br>
+     * 初日白通知か
+     */
+    public void setVillageSettingItemCode_初日白通知か() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.初日白通知か);
     }
 
     /**
@@ -314,6 +330,17 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
     }
 
     /**
+     * Is the value of villageSettingItemCode 連続護衛ありか? <br>
+     * 連続護衛ありか
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCode連続護衛ありか() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.連続護衛ありか) : false;
+    }
+
+    /**
      * Is the value of villageSettingItemCode 役職希望可能か? <br>
      * 役職希望可能か
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -333,6 +360,17 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
     public boolean isVillageSettingItemCode突然死ありか() {
         CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
         return cdef != null ? cdef.equals(CDef.VillageSettingItem.突然死ありか) : false;
+    }
+
+    /**
+     * Is the value of villageSettingItemCode 初日白通知か? <br>
+     * 初日白通知か
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCode初日白通知か() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.初日白通知か) : false;
     }
 
     /**

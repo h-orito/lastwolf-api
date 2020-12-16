@@ -14,3 +14,5 @@ character_group_id	キャラクターグループID	13
 join_password	入村パスワード	14
 organize	構成	15
 is_available_dummy_skill	役欠けありか	17
+is_available_same_target_guard	連続護衛ありか	18
+is_first_divine_nowolf	初日白通知か	19

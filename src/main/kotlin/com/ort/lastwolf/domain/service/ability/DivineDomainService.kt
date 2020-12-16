@@ -64,6 +64,34 @@ class DivineDomainService : IAbilityDomainService {
         )
     }
 
+    fun divineRandomNowolf(dayChange: DayChange, seer: VillageParticipant): DayChange {
+        val village = dayChange.village
+        // 進行中のみ
+        if (!village.status.isProgress()) return dayChange
+        // 対象（黒が出ない、占いで死なない、ダミーでない）
+        val target = getSelectableTargetList(village, seer, dayChange.abilities)
+            .filterNot {
+                village.dummyParticipant()!!.id == it.id
+            }.filterNot {
+                val cdefSkill = it.skill!!.toCdef()
+                cdefSkill.isDivineResultWolf || cdefSkill.isDeadByDivine
+            }.random()
+        // 能力
+        val ability = VillageAbility(
+            villageDayId = village.days.latestDay().id,
+            myselfId = seer.id,
+            targetId = target.id,
+            abilityType = getAbilityType()
+        )
+        // メッセージ
+        val message = createDivineMessage(village, ability, seer)
+
+        return dayChange.copy(
+            messages = dayChange.messages.add(message),
+            abilities = dayChange.abilities.add(ability)
+        )
+    }
+
     override fun createAbilityMessage(
         village: Village,
         participant: VillageParticipant,

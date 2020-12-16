@@ -15,7 +15,7 @@ data-directory: playsql/data/common/tsv/UTF-8
 07-ABILITY_TYPE.tsv (3)
 08-DESIGNER.tsv (1)
 09-CHARA_GROUP.tsv (1)
-10-VILLAGE_SETTING_ITEM.tsv (15)
+10-VILLAGE_SETTING_ITEM.tsv (17)
 11-CHARA.tsv (56)
 12-NOONNIGHT.tsv (5)
 13-APP_VERSION.tsv (1)

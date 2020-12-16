@@ -7,7 +7,9 @@ data class VillageRules(
     val openSkillInGrave: Boolean = false,
     val availableSuddenlyDeath: Boolean = true,
     val availableCommit: Boolean = false,
-    val availableDummySkill: Boolean = false
+    val availableDummySkill: Boolean = false,
+    val availableSameTargetGuard: Boolean = false,
+    val firstDivineNowolf: Boolean = false
 ) {
     companion object {
         operator fun invoke(
@@ -15,7 +17,9 @@ data class VillageRules(
             openSkillInGrave: Boolean?,
             availableSuddenlyDeath: Boolean?,
             availableCommit: Boolean?,
-            availableDummySkill: Boolean?
+            availableDummySkill: Boolean?,
+            availableSameTargetGuard: Boolean?,
+            firstDivineNowolf: Boolean?
         ): VillageRules {
             val defaultRules = VillageRules()
             return VillageRules(
@@ -23,7 +27,9 @@ data class VillageRules(
                 openSkillInGrave = openSkillInGrave ?: defaultRules.openSkillInGrave,
                 availableSuddenlyDeath = availableSuddenlyDeath ?: defaultRules.availableSuddenlyDeath,
                 availableCommit = availableCommit ?: defaultRules.availableCommit,
-                availableDummySkill = availableDummySkill ?: defaultRules.availableDummySkill
+                availableDummySkill = availableDummySkill ?: defaultRules.availableDummySkill,
+                availableSameTargetGuard = availableSameTargetGuard ?: defaultRules.availableSameTargetGuard,
+                firstDivineNowolf = firstDivineNowolf ?: defaultRules.firstDivineNowolf
             )
         }
     }
@@ -39,5 +45,7 @@ data class VillageRules(
             || availableSuddenlyDeath != rules.availableSuddenlyDeath
             || availableCommit != rules.availableCommit
             || availableDummySkill != rules.availableDummySkill
+            || availableSameTargetGuard != rules.availableSameTargetGuard
+            || firstDivineNowolf != rules.firstDivineNowolf
     }
 }

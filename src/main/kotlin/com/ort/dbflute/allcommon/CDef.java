@@ -590,7 +590,7 @@ public interface CDef extends Classification {
                 subItemMap.put("shortName", "狼");
                 subItemMap.put("order", "6");
                 subItemMap.put("campCode", "WEREWOLF");
-                subItemMap.put("description", "あなたは人狼です。夜時間に人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。");
+                subItemMap.put("description", "あなたは人狼です。夜時間に人狼同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。");
                 _subItemMapMap.put(人狼.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
@@ -1582,11 +1582,17 @@ public interface CDef extends Classification {
         /** 役欠けありか */
         役欠けありか("is_available_dummy_skill", "役欠けありか", emptyStrings())
         ,
+        /** 連続護衛ありか */
+        連続護衛ありか("is_available_same_target_guard", "連続護衛ありか", emptyStrings())
+        ,
         /** 役職希望可能か */
         役職希望可能か("is_available_skill_request", "役職希望可能か", emptyStrings())
         ,
         /** 突然死ありか */
         突然死ありか("is_available_suddenly_death", "突然死ありか", emptyStrings())
+        ,
+        /** 初日白通知か */
+        初日白通知か("is_first_divine_nowolf", "初日白通知か", emptyStrings())
         ,
         /** 墓下役職公開ありか */
         墓下役職公開ありか("is_open_skill_in_grave", "墓下役職公開ありか", emptyStrings())

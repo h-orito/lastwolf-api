@@ -306,6 +306,8 @@ class VillageDataSource(
             updateVillageSetting(villageId, CDef.VillageSettingItem.突然死ありか, toFlg(afterRules.availableSuddenlyDeath))
             updateVillageSetting(villageId, CDef.VillageSettingItem.コミット可能か, toFlg(afterRules.availableCommit))
             updateVillageSetting(villageId, CDef.VillageSettingItem.役欠けありか, toFlg(afterRules.availableDummySkill))
+            updateVillageSetting(villageId, CDef.VillageSettingItem.連続護衛ありか, toFlg(afterRules.availableSameTargetGuard))
+            updateVillageSetting(villageId, CDef.VillageSettingItem.初日白通知か, toFlg(afterRules.firstDivineNowolf))
         })
         after.setting.password.let(fun(afterPassword) {
             if (!before.setting.password.existsDifference(afterPassword)) return
@@ -451,6 +453,8 @@ class VillageDataSource(
         insertVillageSetting(villageId, CDef.VillageSettingItem.コミット可能か, toFlg(settings.rules.availableCommit))
         insertVillageSetting(villageId, CDef.VillageSettingItem.入村パスワード, settings.password.joinPassword ?: "")
         insertVillageSetting(villageId, CDef.VillageSettingItem.役欠けありか, toFlg(settings.rules.availableDummySkill))
+        insertVillageSetting(villageId, CDef.VillageSettingItem.連続護衛ありか, toFlg(settings.rules.availableSameTargetGuard))
+        insertVillageSetting(villageId, CDef.VillageSettingItem.初日白通知か, toFlg(settings.rules.firstDivineNowolf))
     }
 
     private fun insertVillageSetting(villageId: Int, item: CDef.VillageSettingItem, value: String) {

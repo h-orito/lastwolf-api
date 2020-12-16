@@ -40,7 +40,9 @@ data class VillageSettings(
                     openSkillInGrave = resource.rule.isOpenSkillInGrave,
                     availableSuddenlyDeath = resource.rule.isAvailableSuddenlyDeath,
                     availableCommit = resource.rule.isAvailableCommit,
-                    availableDummySkill = resource.rule.isAvailableDummySkill
+                    availableDummySkill = resource.rule.isAvailableDummySkill,
+                    availableSameTargetGuard = resource.rule.isAvailableSameTargetGuard,
+                    firstDivineNowolf = resource.rule.isFirstDivineNowolf
                 ),
                 password = VillagePassword(
                     joinPasswordRequired = !resource.rule.joinPassword.isNullOrEmpty(),
