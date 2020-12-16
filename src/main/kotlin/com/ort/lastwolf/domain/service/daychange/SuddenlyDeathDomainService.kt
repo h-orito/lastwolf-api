@@ -23,7 +23,7 @@ class SuddenlyDeathDomainService(
         // 突然死あり設定でなければ何もしない
         if (!village.setting.rules.availableSuddenlyDeath) return dayChange
 
-        dayChange.village.notDummyParticipants().list.filter { participant ->
+        dayChange.village.notDummyParticipants().filterAlive().list.filter { participant ->
             participant.skill!!.abilityList.any { abilityType ->
                 // 襲撃は誰かがセットしていればOK
                 // 他は自分がセットしていなければだめ
