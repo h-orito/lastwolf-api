@@ -495,7 +495,7 @@ data class Village(
                 participants = village.participants,
                 days = village.days.copy(
                     list = village.days.list.map {
-                        if (it.day == 0) it.copy(endDatetime = resource.setting.time.startDatetime)
+                        if (it.day == 1 && it.isNoonTime()) it.copy(endDatetime = resource.setting.time.startDatetime)
                         else it
                     }
                 ),
