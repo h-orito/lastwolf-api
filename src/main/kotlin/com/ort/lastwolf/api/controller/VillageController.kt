@@ -517,6 +517,8 @@ class VillageController(
         isAvailableSuddenlyDeath = body.availableSuddenlyDeath!!,
         isAvailableCommit = body.availableCommit!!,
         isAvailableDummySkill = body.availableDummySkill!!,
+        isAvailableSameTargetGuard = body.availableSameTargetGuard!!,
+        isFirstDivineNowolf = body.firstDivineNowolf!!,
         joinPassword = body.joinPassword
     )
 }

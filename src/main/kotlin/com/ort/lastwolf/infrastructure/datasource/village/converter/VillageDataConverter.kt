@@ -125,7 +125,9 @@ object VillageDataConverter {
                 openSkillInGrave = detectItemText(settingList, CDef.VillageSettingItem.墓下役職公開ありか)?.let { it == FLG_TRUE },
                 availableSuddenlyDeath = detectItemText(settingList, CDef.VillageSettingItem.突然死ありか)?.let { it == FLG_TRUE },
                 availableCommit = detectItemText(settingList, CDef.VillageSettingItem.コミット可能か)?.let { it == FLG_TRUE },
-                availableDummySkill = detectItemText(settingList, CDef.VillageSettingItem.役欠けありか)?.let { it == FLG_TRUE }
+                availableDummySkill = detectItemText(settingList, CDef.VillageSettingItem.役欠けありか)?.let { it == FLG_TRUE },
+                availableSameTargetGuard = detectItemText(settingList, CDef.VillageSettingItem.連続護衛ありか)?.let { it == FLG_TRUE },
+                firstDivineNowolf = detectItemText(settingList, CDef.VillageSettingItem.初日白通知か)?.let { it == FLG_TRUE }
             ),
             password = VillagePassword(
                 joinPassword = detectItemText(settingList, CDef.VillageSettingItem.入村パスワード)

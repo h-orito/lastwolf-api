@@ -77,6 +77,8 @@ class VillageSettingDomainService {
         if (rules.availableSuddenlyDeath != resourceRules.isAvailableSuddenlyDeath) list.add("突然死有無")
         if (rules.availableCommit != resourceRules.isAvailableCommit) list.add("時短希望有無")
         if (rules.availableDummySkill != resourceRules.isAvailableDummySkill) list.add("ダミー役欠け有無")
+        if (rules.availableSameTargetGuard != resourceRules.isAvailableSameTargetGuard) list.add("連続護衛有無")
+        if (rules.firstDivineNowolf != resourceRules.isFirstDivineNowolf) list.add("初日白通知有無")
     }
 
     private fun addPasswordModifyMessage(

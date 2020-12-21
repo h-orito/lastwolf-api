@@ -95,6 +95,14 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
+     * Equal(=). As 連続護衛ありか (is_available_same_target_guard). And OnlyOnceRegistered. <br>
+     * 連続護衛ありか
+     */
+    public void setVillageSettingItemCode_Equal_連続護衛ありか() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.連続護衛ありか);
+    }
+
+    /**
      * Equal(=). As 役職希望可能か (is_available_skill_request). And OnlyOnceRegistered. <br>
      * 役職希望可能か
      */
@@ -108,6 +116,14 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
      */
     public void setVillageSettingItemCode_Equal_突然死ありか() {
         setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.突然死ありか);
+    }
+
+    /**
+     * Equal(=). As 初日白通知か (is_first_divine_nowolf). And OnlyOnceRegistered. <br>
+     * 初日白通知か
+     */
+    public void setVillageSettingItemCode_Equal_初日白通知か() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.初日白通知か);
     }
 
     /**
@@ -238,6 +254,14 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
+     * NotEqual(&lt;&gt;). As 連続護衛ありか (is_available_same_target_guard). And OnlyOnceRegistered. <br>
+     * 連続護衛ありか
+     */
+    public void setVillageSettingItemCode_NotEqual_連続護衛ありか() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.連続護衛ありか);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As 役職希望可能か (is_available_skill_request). And OnlyOnceRegistered. <br>
      * 役職希望可能か
      */
@@ -251,6 +275,14 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
      */
     public void setVillageSettingItemCode_NotEqual_突然死ありか() {
         setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.突然死ありか);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 初日白通知か (is_first_divine_nowolf). And OnlyOnceRegistered. <br>
+     * 初日白通知か
+     */
+    public void setVillageSettingItemCode_NotEqual_初日白通知か() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.初日白通知か);
     }
 
     /**

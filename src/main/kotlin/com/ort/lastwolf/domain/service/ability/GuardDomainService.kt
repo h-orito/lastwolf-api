@@ -36,10 +36,15 @@ class GuardDomainService : IAbilityDomainService {
         if (village.days.latestDay().day <= 1) return listOf()
 
         // 連続護衛可能なら自分以外の生存者全員
-        // TODO 連続護衛なし
-        return village.participants.list.filter {
-            it.id != participant.id && it.isAlive()
+        val targets = village.participants.filterAlive().list.filter {
+            it.id != participant.id
         }
+        if (village.setting.rules.availableSameTargetGuard) return targets
+        // 前日護衛した人
+        val yesterdayAbility = abilities.filterByType(getAbilityType()).list.lastOrNull {
+            it.myselfId == participant.id
+        } ?: return targets
+        return targets.filterNot { it.id == yesterdayAbility.targetId }
     }
 
     override fun processDummyAbility(
