@@ -156,7 +156,7 @@ class VillageCoordinator(
         // メッセージ
         messageService.registerMessage(
             village,
-            Message.createPublicSystemMessage("点呼が開始されました。", village.days.latestDay().id, true)
+            Message.createPublicSystemMessage("点呼が開始されました。\n参加者は進行欄の「準備完了」ボタンを押してください。", village.days.latestDay().id, true)
         )
     }
 
@@ -172,7 +172,7 @@ class VillageCoordinator(
         // メッセージ
         messageService.registerMessage(
             village,
-            Message.createPublicSystemMessage("点呼が中止されました。", village.days.latestDay().id, true)
+            Message.createPublicSystemMessage("点呼が中止され、全員の準備完了状態が解除されました。", village.days.latestDay().id, true)
         )
     }
 

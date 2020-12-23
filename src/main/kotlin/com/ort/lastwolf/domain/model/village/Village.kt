@@ -28,7 +28,7 @@ data class Village(
     //                                                                          ==========
     private val initialMessage: String = "村が作成されました。"
 
-    private val firstNightMessage: String = "村が開始されました。"
+    private val firstNightMessage: String = "村が開始されました。\n能力者は進行欄で能力を行使してください。\n行使せずに朝を迎えた場合、突然死してしまいます。"
 
     private val creatorCancelMessage: String = "村建ての操作により廃村しました。"
 
@@ -71,9 +71,11 @@ data class Village(
         val text = CDef.Skill.listOfAvailableWerewolfSay().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
             val memberList = participants.list.filter { it.skill!!.toCdef() == cdefSkill }
             if (memberList.isEmpty()) null
-            else "${Skill(cdefSkill).name}は${memberList.joinToString(separator = "、") {
-                it.chara.name.name
-            }}"
+            else "${Skill(cdefSkill).name}は${
+                memberList.joinToString(separator = "、") {
+                    it.chara.name.name
+                }
+            }"
         }.joinToString(
             separator = "、\n",
             prefix = "この村の",
@@ -90,9 +92,11 @@ data class Village(
         val text = CDef.Skill.listOfRecognizableEachMason().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
             val memberList = participants.list.filter { it.skill!!.toCdef() == cdefSkill }
             if (memberList.isEmpty()) null
-            else "${Skill(cdefSkill).name}は${memberList.joinToString(separator = "、") {
-                it.chara.name.name
-            }}"
+            else "${Skill(cdefSkill).name}は${
+                memberList.joinToString(separator = "、") {
+                    it.chara.name.name
+                }
+            }"
         }.joinToString(
             separator = "、\n",
             prefix = "この村の",
