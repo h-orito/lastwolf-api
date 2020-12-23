@@ -138,8 +138,6 @@ data class VillageParticipant(
     }
 
     fun isSayableNormalSay(isEpilogue: Boolean): Boolean {
-        // ダミーはOK
-        if (player.id == 1) return true
         // エピローグ以外で死亡している場合は不可
         if (!isAlive() && !isEpilogue) return false
 
@@ -151,8 +149,6 @@ data class VillageParticipant(
     }
 
     fun isSayableWerewolfSay(): Boolean {
-        // ダミーはOK
-        if (player.id == 1) return true
         // 死亡していたら不可
         if (!isAlive()) return false
         // 囁ける役職でなければ不可
@@ -164,8 +160,6 @@ data class VillageParticipant(
     }
 
     fun isSayableMasonSay(): Boolean {
-        // ダミーはOK
-        if (player.id == 1) return true
         // 死亡していたら不可
         if (!isAlive()) return false
         // 共有発言できる役職でなければ不可
@@ -178,8 +172,6 @@ data class VillageParticipant(
     }
 
     fun isSayableGraveSay(): Boolean {
-        // ダミーはOK
-        if (player.id == 1) return true
         // 死亡していなかったら不可
         if (isAlive()) return false
         // 突然死は不可
