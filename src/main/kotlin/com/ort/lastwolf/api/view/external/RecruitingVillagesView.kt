@@ -40,7 +40,7 @@ data class RecruitingVillageView(
         dayChangeTime = village.days.latestDay().endDatetime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")),
         startDatetime = village.setting.time.startDatetime.format(DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm")),
         charachipName = charachips.list.first { it.id == village.setting.charachip.charachipId }.name,
-        url = "https://howling-wolf.com/village?id=${village.id}",
+        url = "https://lastwolf.netlify.app/village?id=${village.id}",
         organization = village.setting.organizations.organization[village.setting.capacity.max] ?: ""
     )
 }
