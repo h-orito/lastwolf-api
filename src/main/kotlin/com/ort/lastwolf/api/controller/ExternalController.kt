@@ -19,6 +19,7 @@ class ExternalController(
         val villageList = villageService.findVillages(
             villageStatusList = listOf(
                 VillageStatus(CDef.VillageStatus.募集中),
+                VillageStatus(CDef.VillageStatus.点呼中),
                 VillageStatus(CDef.VillageStatus.進行中),
                 VillageStatus(CDef.VillageStatus.決着)
             )
