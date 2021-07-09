@@ -78,7 +78,7 @@ jib {
         }
     }
     to {
-        image = "ghcr.io/h-orito/howling-wolf"
+        image = "ghcr.io/h-orito/lastwolf"
     }
     container {
         jvmFlags = listOf(
