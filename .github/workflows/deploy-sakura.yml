@@ -1,36 +1,41 @@
-name: Java CD
+name: delivery_sakura
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ master ]
+    branches:
+      - master
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  delivery:
+    runs-on: [ ubuntu-latest ]
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 1.8
+      - name: clone repository
+        uses: actions/checkout@v2
+        with:
+          ref: master
+
+      - name: set up JDK 1.8
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Cache Maven packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Build with Maven
-        run: mvn -B -Dmaven.test.skip=true package --file pom.xml
+
+      - name: build
+        env:
+          MYSQL_CONNECTOR_VERSION: ${{ secrets.MYSQL_CONNECTOR_VERSION }}
+        run: |
+          ./gradlew build -x test
+
       - name: Copy to remote server
         uses: garygrossgarten/github-action-scp@release
         with:
-          local: target/lastwolf-0.0.1-SNAPSHOT.jar
+          local: build/libs/lastwolf-api-0.0.1-SNAPSHOT.jar
           remote: ${{ secrets.SSH_APP_PATH }}/lastwolf.jar
           host: ${{ secrets.HOST }}
           port: ${{ secrets.PORT }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.PASSWORD }}
+
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:

@@ -80,6 +80,14 @@ data class Message(
                 isStrong = isStrong
             )
 
+        fun createFoxPrivateMessage(text: String, villageDayId: Int, isStrong: Boolean = false): Message =
+            createSystemMessage(
+                messageType = MessageType(CDef.MessageType.妖狐メッセージ),
+                text = text,
+                villageDayId = villageDayId,
+                isStrong = isStrong
+            )
+
         fun createCreatorSayMessage(text: String, villageDayId: Int, isStrong: Boolean = false): Message =
             createSystemMessage(
                 messageType = MessageType(CDef.MessageType.村建て発言),

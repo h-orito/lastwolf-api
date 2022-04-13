@@ -77,6 +77,13 @@ class MessageService(
     }
 
     /**
+     * 村作成時のシステムメッセージ登録
+     */
+    fun registerInitialMessage(village: Village) {
+        registerMessage(village, village.createVillagePrologueMessage())
+    }
+
+    /**
      * 発言登録
      *
      * @param village village
@@ -90,13 +97,6 @@ class MessageService(
         messageDomainService.getViewableUserAndMessageLatestTime(village, registeredMessage).forEach {
             firebaseDataSource.registerMessageLatest(village.id, it.uid, it.time)
         }
-    }
-
-    /**
-     * 村作成時のシステムメッセージ登録
-     */
-    fun registerInitialMessage(village: Village) {
-        registerMessage(village, village.createVillagePrologueMessage())
     }
 
     /**

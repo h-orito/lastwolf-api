@@ -39,7 +39,7 @@ class SuddenlyDeathDomainService(
             }
         }.forEach { participant ->
             // 突然死
-            village = village.suddenlyDeathParticipant(participant.id, village.days.latestDay())
+            village = village.suddenlyDeathParticipant(participant.id)
             // 入村制限
             players = players.restrictParticipation(participant.player.id)
             // 突然死メッセージ
@@ -72,7 +72,7 @@ class SuddenlyDeathDomainService(
             }
         }.forEach { member ->
             // 突然死
-            village = village.suddenlyDeathParticipant(member.id, village.days.latestDay())
+            village = village.suddenlyDeathParticipant(member.id)
             // 入村制限
             players = players.restrictParticipation(member.player.id)
             // 突然死メッセージ

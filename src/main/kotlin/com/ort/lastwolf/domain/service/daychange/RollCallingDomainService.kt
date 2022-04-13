@@ -74,6 +74,8 @@ class RollCallingDomainService(
         dayChange = addWolfsConfirmMessage(dayChange)
         // 共有がいれば役職メッセージ追加
         dayChange = addMasonsConfirmMessageIfNeeded(dayChange)
+        // 妖狐相互メッセージ追加
+        dayChange = addFoxsConfirmMessageIfNeeded(dayChange)
         // ステータス変更
         dayChange = dayChange.copy(village = dayChange.village.changeStatus(CDef.VillageStatus.進行中))
         // ダミーが役職を引いていたら能力行使
@@ -122,6 +124,14 @@ class RollCallingDomainService(
 
     private fun addMasonsConfirmMessageIfNeeded(dayChange: DayChange): DayChange {
         return dayChange.village.createMasonsConfirmMessage()?.let {
+            dayChange.copy(
+                messages = dayChange.messages.add(it)
+            )
+        } ?: dayChange
+    }
+
+    private fun addFoxsConfirmMessageIfNeeded(dayChange: DayChange): DayChange {
+        return dayChange.village.createFoxsConfirmMessage()?.let {
             dayChange.copy(
                 messages = dayChange.messages.add(it)
             )

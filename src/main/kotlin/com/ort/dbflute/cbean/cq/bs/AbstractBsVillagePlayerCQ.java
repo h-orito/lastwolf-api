@@ -997,6 +997,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 背徳者 (IMMORAL). And OnlyOnceRegistered. <br>
+     * 背徳者
+     */
+    public void setSkillCode_Equal_背徳者() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.背徳者);
+    }
+
+    /**
      * Equal(=). As おまかせ (LEFTOVER). And OnlyOnceRegistered. <br>
      * おまかせ
      */
@@ -1026,6 +1034,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_Equal_霊能者() {
         setSkillCode_Equal_AsSkill(CDef.Skill.霊能者);
+    }
+
+    /**
+     * Equal(=). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
+     * 猫又
+     */
+    public void setSkillCode_Equal_猫又() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.猫又);
     }
 
     /**
@@ -1108,6 +1124,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
+     * NotEqual(&lt;&gt;). As 背徳者 (IMMORAL). And OnlyOnceRegistered. <br>
+     * 背徳者
+     */
+    public void setSkillCode_NotEqual_背徳者() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.背徳者);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As おまかせ (LEFTOVER). And OnlyOnceRegistered. <br>
      * おまかせ
      */
@@ -1137,6 +1161,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_NotEqual_霊能者() {
         setSkillCode_NotEqual_AsSkill(CDef.Skill.霊能者);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
+     * 猫又
+     */
+    public void setSkillCode_NotEqual_猫又() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.猫又);
     }
 
     /**
@@ -1355,6 +1387,16 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 妖狐を認知できる <br>
+     * The group elements:[妖狐, 背徳者]
+     */
+    public void setSkillCode_InScope_RecognizableEachFox() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableEachFox());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 襲撃耐性を持つ <br>
      * The group elements:[妖狐]
      */
@@ -1370,6 +1412,16 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_InScope_DeadByDivine() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfDeadByDivine());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 死亡時道連れにする <br>
+     * The group elements:[猫又]
+     */
+    public void setSkillCode_InScope_ForceDoubleSuicide() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfForceDoubleSuicide());
     }
 
     protected void doSetSkillCode_InScope(Collection<String> skillCodeList) {
@@ -1456,6 +1508,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 背徳者 (IMMORAL). And OnlyOnceRegistered. <br>
+     * 背徳者
+     */
+    public void setRequestSkillCode_Equal_背徳者() {
+        setRequestSkillCode_Equal_AsSkill(CDef.Skill.背徳者);
+    }
+
+    /**
      * Equal(=). As おまかせ (LEFTOVER). And OnlyOnceRegistered. <br>
      * おまかせ
      */
@@ -1485,6 +1545,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setRequestSkillCode_Equal_霊能者() {
         setRequestSkillCode_Equal_AsSkill(CDef.Skill.霊能者);
+    }
+
+    /**
+     * Equal(=). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
+     * 猫又
+     */
+    public void setRequestSkillCode_Equal_猫又() {
+        setRequestSkillCode_Equal_AsSkill(CDef.Skill.猫又);
     }
 
     /**
@@ -1567,6 +1635,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
+     * NotEqual(&lt;&gt;). As 背徳者 (IMMORAL). And OnlyOnceRegistered. <br>
+     * 背徳者
+     */
+    public void setRequestSkillCode_NotEqual_背徳者() {
+        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.背徳者);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As おまかせ (LEFTOVER). And OnlyOnceRegistered. <br>
      * おまかせ
      */
@@ -1596,6 +1672,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setRequestSkillCode_NotEqual_霊能者() {
         setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.霊能者);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
+     * 猫又
+     */
+    public void setRequestSkillCode_NotEqual_猫又() {
+        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.猫又);
     }
 
     /**
@@ -1814,6 +1898,16 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 妖狐を認知できる <br>
+     * The group elements:[妖狐, 背徳者]
+     */
+    public void setRequestSkillCode_InScope_RecognizableEachFox() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableEachFox());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 襲撃耐性を持つ <br>
      * The group elements:[妖狐]
      */
@@ -1829,6 +1923,16 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setRequestSkillCode_InScope_DeadByDivine() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfDeadByDivine());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 死亡時道連れにする <br>
+     * The group elements:[猫又]
+     */
+    public void setRequestSkillCode_InScope_ForceDoubleSuicide() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfForceDoubleSuicide());
     }
 
     protected void doSetRequestSkillCode_InScope(Collection<String> requestSkillCodeList) {
@@ -1897,6 +2001,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 背徳者 (IMMORAL). And OnlyOnceRegistered. <br>
+     * 背徳者
+     */
+    public void setSecondRequestSkillCode_Equal_背徳者() {
+        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.背徳者);
+    }
+
+    /**
      * Equal(=). As おまかせ (LEFTOVER). And OnlyOnceRegistered. <br>
      * おまかせ
      */
@@ -1926,6 +2038,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSecondRequestSkillCode_Equal_霊能者() {
         setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.霊能者);
+    }
+
+    /**
+     * Equal(=). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
+     * 猫又
+     */
+    public void setSecondRequestSkillCode_Equal_猫又() {
+        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.猫又);
     }
 
     /**
@@ -2008,6 +2128,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
+     * NotEqual(&lt;&gt;). As 背徳者 (IMMORAL). And OnlyOnceRegistered. <br>
+     * 背徳者
+     */
+    public void setSecondRequestSkillCode_NotEqual_背徳者() {
+        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.背徳者);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As おまかせ (LEFTOVER). And OnlyOnceRegistered. <br>
      * おまかせ
      */
@@ -2037,6 +2165,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSecondRequestSkillCode_NotEqual_霊能者() {
         setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.霊能者);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
+     * 猫又
+     */
+    public void setSecondRequestSkillCode_NotEqual_猫又() {
+        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.猫又);
     }
 
     /**
@@ -2255,6 +2391,16 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 妖狐を認知できる <br>
+     * The group elements:[妖狐, 背徳者]
+     */
+    public void setSecondRequestSkillCode_InScope_RecognizableEachFox() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableEachFox());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 襲撃耐性を持つ <br>
      * The group elements:[妖狐]
      */
@@ -2270,6 +2416,16 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSecondRequestSkillCode_InScope_DeadByDivine() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfDeadByDivine());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 死亡時道連れにする <br>
+     * The group elements:[猫又]
+     */
+    public void setSecondRequestSkillCode_InScope_ForceDoubleSuicide() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfForceDoubleSuicide());
     }
 
     protected void doSetSecondRequestSkillCode_InScope(Collection<String> secondRequestSkillCodeList) {
@@ -2365,6 +2521,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
         setDeadReasonCode_Equal_AsDeadReason(CDef.DeadReason.突然);
     }
 
+    /**
+     * Equal(=). As 後追 (SUICIDE). And OnlyOnceRegistered. <br>
+     * 後追
+     */
+    public void setDeadReasonCode_Equal_後追() {
+        setDeadReasonCode_Equal_AsDeadReason(CDef.DeadReason.後追);
+    }
+
     protected void doSetDeadReasonCode_Equal(String deadReasonCode) {
         regDeadReasonCode(CK_EQ, deadReasonCode);
     }
@@ -2418,6 +2582,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setDeadReasonCode_NotEqual_突然() {
         setDeadReasonCode_NotEqual_AsDeadReason(CDef.DeadReason.突然);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 後追 (SUICIDE). And OnlyOnceRegistered. <br>
+     * 後追
+     */
+    public void setDeadReasonCode_NotEqual_後追() {
+        setDeadReasonCode_NotEqual_AsDeadReason(CDef.DeadReason.後追);
     }
 
     protected void doSetDeadReasonCode_NotEqual(String deadReasonCode) {

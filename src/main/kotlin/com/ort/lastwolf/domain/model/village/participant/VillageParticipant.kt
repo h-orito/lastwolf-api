@@ -30,6 +30,7 @@ data class VillageParticipant(
     //                                                                           =========
     // 生存しているか
     fun isAlive(): Boolean = dead == null
+    fun isDead(): Boolean = !isAlive()
 
     // 差分有無
     fun existsDifference(participant: VillageParticipant): Boolean {
@@ -63,6 +64,9 @@ data class VillageParticipant(
 
     // 呪殺
     fun divineKill(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.呪殺, villageDay))
+
+    // 後追い
+    fun suicide(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.後追, villageDay))
 
     // 役職割り当て
     fun assignSkill(skill: Skill): VillageParticipant = this.copy(skill = skill)
@@ -191,6 +195,12 @@ data class VillageParticipant(
         // 生存していて共有職なら開放
         if (!isAlive()) return false
         return skill?.toCdef()?.isRecognizableEachMason ?: false
+    }
+
+    fun isViewableFoxMessage(): Boolean {
+        // 生存していて妖狐職なら開放
+        if (!isAlive()) return false
+        return skill?.toCdef()?.isRecognizableEachFox ?: false
     }
 
     fun isViewablePsychicMessage(): Boolean {

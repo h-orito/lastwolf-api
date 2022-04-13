@@ -1,5 +1,6 @@
 package com.ort.lastwolf.api.view.player
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.ort.lastwolf.api.view.village.VillagesView
 import com.ort.lastwolf.domain.model.player.Player
 import com.ort.lastwolf.domain.model.village.Villages
@@ -9,6 +10,7 @@ data class MyselfPlayerView(
     val id: Int,
     val nickname: String,
     val twitterUserName: String,
+    @JsonProperty("available_create_village")
     val isAvailableCreateVillage: Boolean,
     val participateProgressVillages: VillagesView,
     val participateFinishedVillages: VillagesView,

@@ -119,6 +119,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 妖狐メッセージ (PRIVATE_FOX). And OnlyOnceRegistered. <br>
+     * 妖狐メッセージ
+     */
+    public void setMessageTypeCode_Equal_妖狐メッセージ() {
+        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.妖狐メッセージ);
+    }
+
+    /**
      * Equal(=). As 共有相互確認メッセージ (PRIVATE_MASON). And OnlyOnceRegistered. <br>
      * 共有相互確認メッセージ
      */
@@ -243,6 +251,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
      */
     public void setMessageTypeCode_NotEqual_個別能力行使結果() {
         setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.個別能力行使結果);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 妖狐メッセージ (PRIVATE_FOX). And OnlyOnceRegistered. <br>
+     * 妖狐メッセージ
+     */
+    public void setMessageTypeCode_NotEqual_妖狐メッセージ() {
+        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.妖狐メッセージ);
     }
 
     /**

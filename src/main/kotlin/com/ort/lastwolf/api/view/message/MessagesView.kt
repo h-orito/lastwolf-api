@@ -1,5 +1,6 @@
 package com.ort.lastwolf.api.view.message
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.ort.lastwolf.domain.model.message.Messages
 import com.ort.lastwolf.domain.model.village.Village
 
@@ -7,7 +8,9 @@ data class MessagesView(
     val list: List<MessageView>,
     val allRecordCount: Int?,
     val allPageCount: Int?,
+    @JsonProperty("exist_pre_page")
     val isExistPrePage: Boolean?,
+    @JsonProperty("exist_next_page")
     val isExistNextPage: Boolean?,
     val currentPageNum: Int?
 ) {

@@ -137,6 +137,10 @@ map:{
 					; groupComment=共有者としてお互いに認知できる
 					; elementList= list:{共有者}
 				}
+				; recognizableEachFox = map:{
+					; groupComment=妖狐を認知できる
+					; elementList= list:{妖狐;背徳者}
+				}
 				; noDeadByAttack= map:{
 					; groupComment=襲撃耐性を持つ
 					; elementList= list:{妖狐}
@@ -144,6 +148,10 @@ map:{
 				; deadByDivine= map:{
 					; groupComment=占いにより死亡する
 					; elementList= list:{妖狐}
+				}
+				; forceDoubleSuicide = map:{
+					; groupComment=死亡時道連れにする
+					; elementList= list:{猫又}
 				}
         	}
         }

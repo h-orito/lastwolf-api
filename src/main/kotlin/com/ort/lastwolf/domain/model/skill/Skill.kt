@@ -1,5 +1,6 @@
 package com.ort.lastwolf.domain.model.skill
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.domain.model.ability.AbilityType
 import com.ort.lastwolf.domain.model.ability.AbilityTypes
@@ -13,7 +14,9 @@ data class Skill(
     val winJudgeCamp: Camp,
     val abilityList: List<AbilityType>,
     val manualAbilityList: List<AbilityType>,
+    @JsonProperty("divine_result_wolf")
     val isDivineResultWolf: Boolean,
+    @JsonProperty("psychic_result_wolf")
     val isPsychicResultWolf: Boolean,
     val sayableSkillMessageTypeList: List<MessageType>,
     val viewableSkillMessageTypeList: List<MessageType>,
@@ -51,7 +54,9 @@ data class Skill(
             CDef.Skill.占い師 to listOf(AbilityType(CDef.AbilityType.占い)),
             CDef.Skill.狩人 to listOf(AbilityType(CDef.AbilityType.護衛)),
             CDef.Skill.霊能者 to listOf(AbilityType("PSYCHIC", "霊視")),
-            CDef.Skill.人狼 to listOf(AbilityType(CDef.AbilityType.襲撃))
+            CDef.Skill.猫又 to listOf(AbilityType("FORCESUICIDE", "道連れ")),
+            CDef.Skill.人狼 to listOf(AbilityType(CDef.AbilityType.襲撃)),
+            CDef.Skill.背徳者 to listOf(AbilityType("FOXSUICIDE", "後追い（背徳者）"))
         )
 
         fun skillByShortName(shortName: String): Skill? {
@@ -102,5 +107,9 @@ data class Skill(
         return Companion.getAbilities(cdefSkill)
     }
 
+    fun isFoxCount(): Boolean = Skills.foxs.list.any { it.code == code }
+
     fun toCdef(): CDef.Skill = CDef.Skill.codeOf(code)
 }
+
+fun CDef.Skill.toModel(): Skill = Skill(this)

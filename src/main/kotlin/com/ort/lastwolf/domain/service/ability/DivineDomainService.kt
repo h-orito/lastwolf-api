@@ -99,7 +99,6 @@ class DivineDomainService : IAbilityDomainService {
     ) = createDivineMessage(village, ability, participant)
 
     fun divineKill(dayChange: DayChange): DayChange {
-        val latestDay = dayChange.village.days.latestDay()
         var village = dayChange.village.copy()
 
         dayChange.village.participants.list.filter {
@@ -110,7 +109,9 @@ class DivineDomainService : IAbilityDomainService {
             }?.let { ability ->
                 // 占いメッセージは実行時に追加するのでここでは何もしない
                 // 呪殺対象なら死亡
-                if (isDivineKill(dayChange, ability.targetId!!)) village = village.divineKillParticipant(ability.targetId, latestDay)
+                if (isDivineKill(dayChange, ability.targetId!!)) {
+                    village = village.divineKillParticipant(ability.targetId)
+                }
             }
         }
 

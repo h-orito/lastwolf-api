@@ -137,6 +137,14 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     }
 
     /**
+     * Set the value of skillCode as 背徳者 (IMMORAL). <br>
+     * 背徳者
+     */
+    public void setSkillCode_背徳者() {
+        setSkillCodeAsSkill(CDef.Skill.背徳者);
+    }
+
+    /**
      * Set the value of skillCode as おまかせ (LEFTOVER). <br>
      * おまかせ
      */
@@ -166,6 +174,14 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
      */
     public void setSkillCode_霊能者() {
         setSkillCodeAsSkill(CDef.Skill.霊能者);
+    }
+
+    /**
+     * Set the value of skillCode as 猫又 (MONSTERCAT). <br>
+     * 猫又
+     */
+    public void setSkillCode_猫又() {
+        setSkillCodeAsSkill(CDef.Skill.猫又);
     }
 
     /**
@@ -234,6 +250,17 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     }
 
     /**
+     * Is the value of skillCode 背徳者? <br>
+     * 背徳者
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode背徳者() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.背徳者) : false;
+    }
+
+    /**
      * Is the value of skillCode おまかせ? <br>
      * おまかせ
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -275,6 +302,17 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     public boolean isSkillCode霊能者() {
         CDef.Skill cdef = getSkillCodeAsSkill();
         return cdef != null ? cdef.equals(CDef.Skill.霊能者) : false;
+    }
+
+    /**
+     * Is the value of skillCode 猫又? <br>
+     * 猫又
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode猫又() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.猫又) : false;
     }
 
     /**
@@ -483,6 +521,16 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     }
 
     /**
+     * 妖狐を認知できる <br>
+     * The group elements:[妖狐, 背徳者]
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode_RecognizableEachFox() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null && cdef.isRecognizableEachFox();
+    }
+
+    /**
      * 襲撃耐性を持つ <br>
      * The group elements:[妖狐]
      * @return The determination, true or false.
@@ -500,6 +548,16 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     public boolean isSkillCode_DeadByDivine() {
         CDef.Skill cdef = getSkillCodeAsSkill();
         return cdef != null && cdef.isDeadByDivine();
+    }
+
+    /**
+     * 死亡時道連れにする <br>
+     * The group elements:[猫又]
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode_ForceDoubleSuicide() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null && cdef.isForceDoubleSuicide();
     }
 
     // ===================================================================================

@@ -6,6 +6,7 @@ import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.player.Player
 import com.ort.lastwolf.domain.model.skill.Skill
 import com.ort.lastwolf.domain.model.skill.SkillRequest
+import com.ort.lastwolf.domain.model.skill.Skills
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipants
 import com.ort.lastwolf.domain.model.village.setting.VillageSettings
@@ -68,19 +69,7 @@ data class Village(
 
     /** 人狼系の役職相互確認メッセージ */
     fun createWolfsConfirmMessage(): Message {
-        val text = CDef.Skill.listOfAvailableWerewolfSay().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
-            val memberList = participants.list.filter { it.skill!!.toCdef() == cdefSkill }
-            if (memberList.isEmpty()) null
-            else "${Skill(cdefSkill).name}は${
-                memberList.joinToString(separator = "、") {
-                    it.chara.name.name
-                }
-            }"
-        }.joinToString(
-            separator = "、\n",
-            prefix = "この村の",
-            postfix = "のようだ。"
-        )
+        val text = createRecognizeSkillMessageText(Skills.wolfs.list)
         return Message.createAttackPrivateMessage(text, days.latestDay().id)
     }
 
@@ -89,20 +78,29 @@ data class Village(
         // 共有がいなければなし
         if (participants.list.none { it.skill!!.toCdef().isRecognizableEachMason }) return null
         // 共有が存在する
-        val text = CDef.Skill.listOfRecognizableEachMason().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
-            val memberList = participants.list.filter { it.skill!!.toCdef() == cdefSkill }
-            if (memberList.isEmpty()) null
-            else "${Skill(cdefSkill).name}は${
-                memberList.joinToString(separator = "、") {
-                    it.chara.name.name
-                }
-            }"
+        val text = createRecognizeSkillMessageText(Skills.masons.list)
+        return Message.createMasonPrivateMessage(text, days.latestDay().id)
+    }
+
+    /** 妖狐の役職相互確認メッセージ */
+    fun createFoxsConfirmMessage(): Message? {
+        // 妖狐がいなければなし
+        if (participants.list.none { it.skill!!.toCdef().isRecognizableEachFox }) return null
+        // 妖狐が存在する
+        val text = createRecognizeSkillMessageText(Skills.foxs.list)
+        return Message.createFoxPrivateMessage(text, days.latestDay().id)
+    }
+
+    private fun createRecognizeSkillMessageText(skills: List<Skill>): String {
+        return skills.mapNotNull { skill ->
+            val list = participants.filterBySkill(skill).list
+            if (list.isEmpty()) null
+            else "${skill.name}は${list.joinToString(separator = "、") { it.chara.name.fullName() }}"
         }.joinToString(
             separator = "、\n",
             prefix = "この村の",
             postfix = "のようだ。"
         )
-        return Message.createMasonPrivateMessage(text, days.latestDay().id)
     }
 
     fun createExtendPrologueMessage(): Message =
@@ -281,6 +279,9 @@ data class Village(
     /** 村として共有メッセージを見られるか */
     fun isViewableMasonMessage(): Boolean = status.isSolved() // 終了していたら全て見られる
 
+    /** 村として妖狐メッセージを見られるか */
+    fun isViewableFoxMessage(): Boolean = status.isSolved() // 終了していたら全て見られる
+
     /** 村として白黒霊能結果を見られるか */
     fun isViewablePsychicMessage(): Boolean = status.isSolved()// 終了していたら全て見られる
 
@@ -352,21 +353,24 @@ data class Village(
         this.copy(participants = this.participants.leave(participantId))
 
     // 突然死
-    fun suddenlyDeathParticipant(participantId: Int, latestDay: VillageDay): Village =
-        this.copy(participants = this.participants.suddenlyDeath(participantId, latestDay))
+    fun suddenlyDeathParticipant(participantId: Int): Village =
+        this.copy(participants = this.participants.suddenlyDeath(participantId, days.latestDay()))
 
     // 処刑
-    fun executeParticipant(participantId: Int, latestDay: VillageDay): Village =
-        this.copy(participants = this.participants.execute(participantId, latestDay))
+    fun executeParticipant(participantId: Int): Village =
+        this.copy(participants = this.participants.execute(participantId, days.latestDay()))
 
     // 襲撃
-    fun attackParticipant(participantId: Int, latestDay: VillageDay): Village =
-        this.copy(participants = this.participants.attack(participantId, latestDay))
+    fun attackParticipant(participantId: Int): Village =
+        this.copy(participants = this.participants.attack(participantId, days.latestDay()))
 
     // 呪殺
-    fun divineKillParticipant(participantId: Int, latestDay: VillageDay): Village =
-        this.copy(participants = this.participants.divineKill(participantId, latestDay))
+    fun divineKillParticipant(participantId: Int): Village =
+        this.copy(participants = this.participants.divineKill(participantId, days.latestDay()))
 
+    // 後追い
+    fun suicideParticipant(participantId: Int): Village =
+        this.copy(participants = this.participants.suicide(participantId, days.latestDay()))
 
     // 役職割り当て
     fun assignSkill(participants: VillageParticipants): Village {

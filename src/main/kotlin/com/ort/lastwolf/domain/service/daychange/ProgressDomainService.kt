@@ -22,7 +22,8 @@ class ProgressDomainService(
     private val miserableDeathDomainService: MiserableDeathDomainService,
     private val suddenlyDeathDomainService: SuddenlyDeathDomainService,
     private val epilogueDomainService: EpilogueDomainService,
-    private val voteDomainService: VoteDomainService
+    private val voteDomainService: VoteDomainService,
+    private val suicideDomainService: SuicideDomainService
 ) {
 
     fun addDayIfNeeded(dayChange: DayChange, commits: Commits): DayChange {
@@ -118,6 +119,9 @@ class ProgressDomainService(
         // 無惨メッセージ
         dayChange = miserableDeathDomainService.processDayChangeAction(dayChange)
 
+        // 背徳者の後追い
+        dayChange = suicideDomainService.suicide(dayChange)
+
         // 勝敗
         dayChange = epilogueDomainService.transitionToEpilogueIfNeeded(dayChange)
 
@@ -149,6 +153,9 @@ class ProgressDomainService(
 
         // 処刑
         dayChange = executeDomainService.processDayChangeAction(dayChange)
+
+        // 背徳者の後追い
+        dayChange = suicideDomainService.suicide(dayChange)
 
         // 霊能
         dayChange = psychicDomainService.processDayChangeAction(dayChange)

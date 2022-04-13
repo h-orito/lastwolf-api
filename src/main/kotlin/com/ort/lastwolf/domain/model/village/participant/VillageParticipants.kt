@@ -85,6 +85,15 @@ data class VillageParticipants(
         )
     }
 
+    // 後追い
+    fun suicide(participantId: Int, villageDay: VillageDay): VillageParticipants {
+        return this.copy(
+            list = this.list.map {
+                if (it.id == participantId) it.suicide(villageDay) else it.copy()
+            }
+        )
+    }
+
     // 点呼
     fun rollCall(participantId: Int, done: Boolean): VillageParticipants {
         return this.copy(
@@ -110,6 +119,14 @@ data class VillageParticipants(
         return VillageParticipants(
             count = aliveMembers.size,
             list = aliveMembers
+        )
+    }
+
+    fun filterBySkill(skill: Skill): VillageParticipants {
+        val list = list.filter { it.skill?.toCdef() == skill.toCdef() }
+        return copy(
+            count = list.size,
+            list = list
         )
     }
 

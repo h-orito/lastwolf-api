@@ -23,7 +23,8 @@ class MessageDomainService(
     private val monologueSayDomainService: MonologueSayDomainService,
     private val psychicMessageDomainService: PsychicMessageDomainService,
     private val attackMessageDomainService: AttackMessageDomainService,
-    private val masonMessageDomainService: MasonMessageDomainService
+    private val masonMessageDomainService: MasonMessageDomainService,
+    private val foxMessageDomainService: FoxMessageDomainService
 ) {
 
     private val everyoneAllowedMessageTypeList = listOf(CDef.MessageType.公開システムメッセージ, CDef.MessageType.通常発言, CDef.MessageType.村建て発言)
@@ -55,7 +56,8 @@ class MessageDomainService(
             CDef.MessageType.共有発言,
             CDef.MessageType.白黒霊視結果,
             CDef.MessageType.襲撃結果,
-            CDef.MessageType.共有相互確認メッセージ
+            CDef.MessageType.共有相互確認メッセージ,
+            CDef.MessageType.妖狐メッセージ,
         ).forEach {
             if (isViewableMessage(village, participant, it.code())) allowedTypeList.add(it)
         }
@@ -84,6 +86,7 @@ class MessageDomainService(
             CDef.MessageType.白黒霊視結果 -> psychicMessageDomainService.isViewable(village, participant)
             CDef.MessageType.襲撃結果 -> attackMessageDomainService.isViewable(village, participant)
             CDef.MessageType.共有相互確認メッセージ -> masonMessageDomainService.isViewable(village, participant)
+            CDef.MessageType.妖狐メッセージ -> foxMessageDomainService.isViewable(village, participant)
             CDef.MessageType.村建て発言 -> true
             else -> return false
         }

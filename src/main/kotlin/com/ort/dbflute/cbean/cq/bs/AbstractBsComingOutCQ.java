@@ -208,6 +208,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 背徳者 (IMMORAL). And OnlyOnceRegistered. <br>
+     * 背徳者
+     */
+    public void setSkillCode_Equal_背徳者() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.背徳者);
+    }
+
+    /**
      * Equal(=). As おまかせ (LEFTOVER). And OnlyOnceRegistered. <br>
      * おまかせ
      */
@@ -237,6 +245,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_Equal_霊能者() {
         setSkillCode_Equal_AsSkill(CDef.Skill.霊能者);
+    }
+
+    /**
+     * Equal(=). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
+     * 猫又
+     */
+    public void setSkillCode_Equal_猫又() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.猫又);
     }
 
     /**
@@ -319,6 +335,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * NotEqual(&lt;&gt;). As 背徳者 (IMMORAL). And OnlyOnceRegistered. <br>
+     * 背徳者
+     */
+    public void setSkillCode_NotEqual_背徳者() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.背徳者);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As おまかせ (LEFTOVER). And OnlyOnceRegistered. <br>
      * おまかせ
      */
@@ -348,6 +372,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_NotEqual_霊能者() {
         setSkillCode_NotEqual_AsSkill(CDef.Skill.霊能者);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
+     * 猫又
+     */
+    public void setSkillCode_NotEqual_猫又() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.猫又);
     }
 
     /**
@@ -566,6 +598,16 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 妖狐を認知できる <br>
+     * The group elements:[妖狐, 背徳者]
+     */
+    public void setSkillCode_InScope_RecognizableEachFox() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableEachFox());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 襲撃耐性を持つ <br>
      * The group elements:[妖狐]
      */
@@ -581,6 +623,16 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_InScope_DeadByDivine() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfDeadByDivine());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 死亡時道連れにする <br>
+     * The group elements:[猫又]
+     */
+    public void setSkillCode_InScope_ForceDoubleSuicide() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfForceDoubleSuicide());
     }
 
     protected void doSetSkillCode_InScope(Collection<String> skillCodeList) {
