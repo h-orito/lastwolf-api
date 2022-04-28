@@ -15,7 +15,7 @@ security:
   corsClientUrls:
     - https://lastwolf.netlify.app
 server:
-  port: 8087
+  port: 8088
   servlet:
     context-path: /lastwolf
     session:
