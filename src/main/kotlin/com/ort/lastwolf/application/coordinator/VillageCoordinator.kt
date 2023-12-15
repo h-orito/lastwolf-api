@@ -1,14 +1,7 @@
 package com.ort.lastwolf.application.coordinator
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.lastwolf.application.service.AbilityService
-import com.ort.lastwolf.application.service.CharachipService
-import com.ort.lastwolf.application.service.ComingOutService
-import com.ort.lastwolf.application.service.CommitService
-import com.ort.lastwolf.application.service.MessageService
-import com.ort.lastwolf.application.service.PlayerService
-import com.ort.lastwolf.application.service.VillageService
-import com.ort.lastwolf.application.service.VoteService
+import com.ort.lastwolf.application.service.*
 import com.ort.lastwolf.domain.model.ability.AbilityType
 import com.ort.lastwolf.domain.model.charachip.Chara
 import com.ort.lastwolf.domain.model.charachip.Charas
@@ -156,7 +149,11 @@ class VillageCoordinator(
         // メッセージ
         messageService.registerMessage(
             village,
-            Message.createPublicSystemMessage("点呼が開始されました。\n参加者は進行欄の「準備完了」ボタンを押してください。", village.days.latestDay().id, true)
+            Message.createPublicSystemMessage(
+                "点呼が開始されました。\n参加者は進行欄の「準備完了」ボタンを押してください。",
+                village.days.latestDay().id,
+                true
+            )
         )
     }
 
@@ -172,7 +169,11 @@ class VillageCoordinator(
         // メッセージ
         messageService.registerMessage(
             village,
-            Message.createPublicSystemMessage("点呼が中止され、全員の準備完了状態が解除されました。", village.days.latestDay().id, true)
+            Message.createPublicSystemMessage(
+                "点呼が中止され、全員の準備完了状態が解除されました。",
+                village.days.latestDay().id,
+                true
+            )
         )
     }
 
@@ -325,7 +326,8 @@ class VillageCoordinator(
     }
 
     fun confirmToCreatorSay(village: Village, messageText: String) {
-        val messageContent: MessageContent = MessageContent.invoke(CDef.MessageType.村建て発言.code(), messageText, false)
+        val messageContent: MessageContent =
+            MessageContent.invoke(CDef.MessageType.村建て発言.code(), messageText, false)
         // 発言できない状況ならエラー
         sayDomainService.assertCreatorSay(village, messageContent)
     }
@@ -353,11 +355,16 @@ class VillageCoordinator(
 
     @Transactional(rollbackFor = [Exception::class, LastwolfBusinessException::class])
     fun creatorSay(village: Village, messageText: String) {
-        val messageContent: MessageContent = MessageContent.invoke(CDef.MessageType.村建て発言.code(), messageText, false)
+        val messageContent: MessageContent =
+            MessageContent.invoke(CDef.MessageType.村建て発言.code(), messageText, false)
         // 発言できない状況ならエラー
         sayDomainService.assertCreatorSay(village, messageContent)
         // 発言
-        val message: Message = Message.createCreatorSayMessage(messageText, village.days.latestDay().id)
+        val dayId = when {
+            village.days.latestDay().isVoteTime() -> village.days.latestNoonDay().id
+            else -> village.days.latestDay().id
+        }
+        val message: Message = Message.createCreatorSayMessage(messageText, dayId)
         messageService.registerMessage(village, message)
     }
 
