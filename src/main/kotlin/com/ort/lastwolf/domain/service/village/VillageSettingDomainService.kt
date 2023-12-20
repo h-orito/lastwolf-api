@@ -79,6 +79,7 @@ class VillageSettingDomainService {
         if (rules.availableDummySkill != resourceRules.isAvailableDummySkill) list.add("ダミー役欠け有無")
         if (rules.availableSameTargetGuard != resourceRules.isAvailableSameTargetGuard) list.add("連続護衛有無")
         if (rules.firstDivineNowolf != resourceRules.isFirstDivineNowolf) list.add("初日白通知有無")
+        if (rules.silentSeconds != resourceRules.silentSeconds) list.add("昼沈黙時間")
     }
 
     private fun addPasswordModifyMessage(

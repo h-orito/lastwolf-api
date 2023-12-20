@@ -1737,6 +1737,9 @@ public interface CDef extends Classification {
         /** 最低人数 */
         最低人数("person_min", "最低人数", emptyStrings())
         ,
+        /** 沈黙時間 */
+        沈黙時間("silent_seconds", "沈黙時間", emptyStrings())
+        ,
         /** 開始予定日時 */
         開始予定日時("start_datetime", "開始予定日時", emptyStrings())
         ,

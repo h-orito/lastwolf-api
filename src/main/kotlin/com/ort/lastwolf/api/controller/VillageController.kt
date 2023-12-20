@@ -519,6 +519,7 @@ class VillageController(
         isAvailableDummySkill = body.availableDummySkill!!,
         isAvailableSameTargetGuard = body.availableSameTargetGuard!!,
         isFirstDivineNowolf = body.firstDivineNowolf!!,
+        silentSeconds = body.silentSeconds,
         joinPassword = body.joinPassword
     )
 }

@@ -95,10 +95,13 @@ data class VillageRuleCreateBody(
     @field:NotNull
     val firstDivineNowolf: Boolean?,
 
+    val silentSeconds: Int?,
+
     @get:Size(max = 20)
     val joinPassword: String?
 ) {
     constructor() : this(
+        null,
         null,
         null,
         null,

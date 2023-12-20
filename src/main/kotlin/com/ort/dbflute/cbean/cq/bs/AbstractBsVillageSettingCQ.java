@@ -312,6 +312,14 @@ public abstract class AbstractBsVillageSettingCQ extends AbstractConditionQuery 
     }
 
     /**
+     * Equal(=). As 沈黙時間 (silent_seconds). And OnlyOnceRegistered. <br>
+     * 沈黙時間
+     */
+    public void setVillageSettingItemCode_Equal_沈黙時間() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.沈黙時間);
+    }
+
+    /**
      * Equal(=). As 開始予定日時 (start_datetime). And OnlyOnceRegistered. <br>
      * 開始予定日時
      */
@@ -468,6 +476,14 @@ public abstract class AbstractBsVillageSettingCQ extends AbstractConditionQuery 
      */
     public void setVillageSettingItemCode_NotEqual_最低人数() {
         setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.最低人数);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 沈黙時間 (silent_seconds). And OnlyOnceRegistered. <br>
+     * 沈黙時間
+     */
+    public void setVillageSettingItemCode_NotEqual_沈黙時間() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.沈黙時間);
     }
 
     /**

@@ -42,7 +42,8 @@ data class VillageSettings(
                     availableCommit = resource.rule.isAvailableCommit,
                     availableDummySkill = resource.rule.isAvailableDummySkill,
                     availableSameTargetGuard = resource.rule.isAvailableSameTargetGuard,
-                    firstDivineNowolf = resource.rule.isFirstDivineNowolf
+                    firstDivineNowolf = resource.rule.isFirstDivineNowolf,
+                    silentSeconds = resource.rule.silentSeconds
                 ),
                 password = VillagePassword(
                     joinPasswordRequired = !resource.rule.joinPassword.isNullOrEmpty(),
@@ -54,10 +55,10 @@ data class VillageSettings(
 
     fun existsDifference(setting: VillageSettings): Boolean {
         return capacity.existsDifference(setting.capacity)
-            || time.existsDifference(setting.time)
-            || organizations.existsDifference(setting.organizations)
-            || rules.existsDifference(setting.rules)
-            || password.existsDifference(setting.password)
+                || time.existsDifference(setting.time)
+                || organizations.existsDifference(setting.organizations)
+                || rules.existsDifference(setting.rules)
+                || password.existsDifference(setting.password)
     }
 
     fun extendPrologue(): VillageSettings {

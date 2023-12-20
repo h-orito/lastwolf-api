@@ -9,7 +9,8 @@ data class VillageRules(
     val availableCommit: Boolean = false,
     val availableDummySkill: Boolean = false,
     val availableSameTargetGuard: Boolean = false,
-    val firstDivineNowolf: Boolean = false
+    val firstDivineNowolf: Boolean = false,
+    val silentSeconds: Int? = null
 ) {
     companion object {
         operator fun invoke(
@@ -19,7 +20,8 @@ data class VillageRules(
             availableCommit: Boolean?,
             availableDummySkill: Boolean?,
             availableSameTargetGuard: Boolean?,
-            firstDivineNowolf: Boolean?
+            firstDivineNowolf: Boolean?,
+            silentSeconds: Int?
         ): VillageRules {
             val defaultRules = VillageRules()
             return VillageRules(
@@ -29,7 +31,8 @@ data class VillageRules(
                 availableCommit = availableCommit ?: defaultRules.availableCommit,
                 availableDummySkill = availableDummySkill ?: defaultRules.availableDummySkill,
                 availableSameTargetGuard = availableSameTargetGuard ?: defaultRules.availableSameTargetGuard,
-                firstDivineNowolf = firstDivineNowolf ?: defaultRules.firstDivineNowolf
+                firstDivineNowolf = firstDivineNowolf ?: defaultRules.firstDivineNowolf,
+                silentSeconds = silentSeconds
             )
         }
     }
@@ -41,11 +44,12 @@ data class VillageRules(
 
     fun existsDifference(rules: VillageRules): Boolean {
         return availableSkillRequest != rules.availableSkillRequest
-            || openSkillInGrave != rules.openSkillInGrave
-            || availableSuddenlyDeath != rules.availableSuddenlyDeath
-            || availableCommit != rules.availableCommit
-            || availableDummySkill != rules.availableDummySkill
-            || availableSameTargetGuard != rules.availableSameTargetGuard
-            || firstDivineNowolf != rules.firstDivineNowolf
+                || openSkillInGrave != rules.openSkillInGrave
+                || availableSuddenlyDeath != rules.availableSuddenlyDeath
+                || availableCommit != rules.availableCommit
+                || availableDummySkill != rules.availableDummySkill
+                || availableSameTargetGuard != rules.availableSameTargetGuard
+                || firstDivineNowolf != rules.firstDivineNowolf
+                || silentSeconds != rules.silentSeconds
     }
 }
