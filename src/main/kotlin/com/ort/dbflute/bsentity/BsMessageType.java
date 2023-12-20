@@ -78,7 +78,7 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "message_type";
+        return "MESSAGE_TYPE";
     }
 
     // ===================================================================================
@@ -171,6 +171,14 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
      */
     public void setMessageTypeCode_個別能力行使結果() {
         setMessageTypeCodeAsMessageType(CDef.MessageType.個別能力行使結果);
+    }
+
+    /**
+     * Set the value of messageTypeCode as 狂信者人狼確認メッセージ (PRIVATE_FANATIC). <br>
+     * 狂信者人狼確認メッセージ
+     */
+    public void setMessageTypeCode_狂信者人狼確認メッセージ() {
+        setMessageTypeCodeAsMessageType(CDef.MessageType.狂信者人狼確認メッセージ);
     }
 
     /**
@@ -307,6 +315,17 @@ public abstract class BsMessageType extends AbstractEntity implements DomainEnti
     public boolean isMessageTypeCode個別能力行使結果() {
         CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
         return cdef != null ? cdef.equals(CDef.MessageType.個別能力行使結果) : false;
+    }
+
+    /**
+     * Is the value of messageTypeCode 狂信者人狼確認メッセージ? <br>
+     * 狂信者人狼確認メッセージ
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isMessageTypeCode狂信者人狼確認メッセージ() {
+        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
+        return cdef != null ? cdef.equals(CDef.MessageType.狂信者人狼確認メッセージ) : false;
     }
 
     /**

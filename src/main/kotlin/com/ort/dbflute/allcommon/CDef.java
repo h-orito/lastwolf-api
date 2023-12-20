@@ -469,6 +469,12 @@ public interface CDef extends Classification {
      * 役職
      */
     public enum Skill implements CDef {
+        /** C国狂人 */
+        C国狂人("CMADMAN", "C国狂人", emptyStrings())
+        ,
+        /** 狂信者 */
+        狂信者("FANATIC", "狂信者", emptyStrings())
+        ,
         /** 妖狐 */
         妖狐("FOX", "妖狐", emptyStrings())
         ,
@@ -519,6 +525,22 @@ public interface CDef extends Classification {
         }
         private static final Map<String, Map<String, Object>> _subItemMapMap = new HashMap<String, Map<String, Object>>();
         static {
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "C");
+                subItemMap.put("order", "201");
+                subItemMap.put("campCode", "WEREWOLF");
+                subItemMap.put("description", "あなたはC国狂人です。人狼系役職とC国狂人同士にしか聞こえない会話が可能で、人狼の勝利があなたの勝利となります。");
+                _subItemMapMap.put(C国狂人.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "信");
+                subItemMap.put("order", "202");
+                subItemMap.put("campCode", "WEREWOLF");
+                subItemMap.put("description", "あなたは狂信者です。人狼が誰かを知ることができます（人狼からはあなたが狂信者であることはわかりません）。特別な能力はありませんが、人狼の勝利があなたの勝利となります。");
+                _subItemMapMap.put(狂信者.code(), Collections.unmodifiableMap(subItemMap));
+            }
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "狐");
@@ -651,21 +673,21 @@ public interface CDef extends Classification {
         /**
          * Is the classification in the group? <br>
          * 囁きを見られる <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, C国狂人]
          * @return The determination, true or false.
          */
         public boolean isViewableWerewolfSay() {
-            return 人狼.equals(this);
+            return 人狼.equals(this) || C国狂人.equals(this);
         }
 
         /**
          * Is the classification in the group? <br>
          * 囁き可能 <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, C国狂人]
          * @return The determination, true or false.
          */
         public boolean isAvailableWerewolfSay() {
-            return 人狼.equals(this);
+            return 人狼.equals(this) || C国狂人.equals(this);
         }
 
         /**
@@ -800,6 +822,16 @@ public interface CDef extends Classification {
 
         /**
          * Is the classification in the group? <br>
+         * 人狼を認知できる <br>
+         * The group elements:[狂信者]
+         * @return The determination, true or false.
+         */
+        public boolean isRecognizableWolf() {
+            return 狂信者.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
          * 妖狐を認知できる <br>
          * The group elements:[妖狐, 背徳者]
          * @return The determination, true or false.
@@ -854,6 +886,7 @@ public interface CDef extends Classification {
             if ("noCount".equals(groupName)) { return isNoCount(); }
             if ("someoneSkill".equals(groupName)) { return isSomeoneSkill(); }
             if ("recognizableEachMason".equals(groupName)) { return isRecognizableEachMason(); }
+            if ("recognizableWolf".equals(groupName)) { return isRecognizableWolf(); }
             if ("recognizableEachFox".equals(groupName)) { return isRecognizableEachFox(); }
             if ("noDeadByAttack".equals(groupName)) { return isNoDeadByAttack(); }
             if ("deadByDivine".equals(groupName)) { return isDeadByDivine(); }
@@ -940,6 +973,7 @@ public interface CDef extends Classification {
             if ("noCount".equalsIgnoreCase(groupName)) { return listOfNoCount(); }
             if ("someoneSkill".equalsIgnoreCase(groupName)) { return listOfSomeoneSkill(); }
             if ("recognizableEachMason".equalsIgnoreCase(groupName)) { return listOfRecognizableEachMason(); }
+            if ("recognizableWolf".equalsIgnoreCase(groupName)) { return listOfRecognizableWolf(); }
             if ("recognizableEachFox".equalsIgnoreCase(groupName)) { return listOfRecognizableEachFox(); }
             if ("noDeadByAttack".equalsIgnoreCase(groupName)) { return listOfNoDeadByAttack(); }
             if ("deadByDivine".equalsIgnoreCase(groupName)) { return listOfDeadByDivine(); }
@@ -962,21 +996,21 @@ public interface CDef extends Classification {
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
          * 囁きを見られる <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, C国狂人]
          * @return The snapshot list of classification elements in the group. (NotNull)
          */
         public static List<Skill> listOfViewableWerewolfSay() {
-            return new ArrayList<Skill>(Arrays.asList(人狼));
+            return new ArrayList<Skill>(Arrays.asList(人狼, C国狂人));
         }
 
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
          * 囁き可能 <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, C国狂人]
          * @return The snapshot list of classification elements in the group. (NotNull)
          */
         public static List<Skill> listOfAvailableWerewolfSay() {
-            return new ArrayList<Skill>(Arrays.asList(人狼));
+            return new ArrayList<Skill>(Arrays.asList(人狼, C国狂人));
         }
 
         /**
@@ -1111,6 +1145,16 @@ public interface CDef extends Classification {
 
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
+         * 人狼を認知できる <br>
+         * The group elements:[狂信者]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfRecognizableWolf() {
+            return new ArrayList<Skill>(Arrays.asList(狂信者));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
          * 妖狐を認知できる <br>
          * The group elements:[妖狐, 背徳者]
          * @return The snapshot list of classification elements in the group. (NotNull)
@@ -1170,6 +1214,7 @@ public interface CDef extends Classification {
             if ("noCount".equals(groupName)) { return listOfNoCount(); }
             if ("someoneSkill".equals(groupName)) { return listOfSomeoneSkill(); }
             if ("recognizableEachMason".equals(groupName)) { return listOfRecognizableEachMason(); }
+            if ("recognizableWolf".equals(groupName)) { return listOfRecognizableWolf(); }
             if ("recognizableEachFox".equals(groupName)) { return listOfRecognizableEachFox(); }
             if ("noDeadByAttack".equals(groupName)) { return listOfNoDeadByAttack(); }
             if ("deadByDivine".equals(groupName)) { return listOfDeadByDivine(); }
@@ -1204,6 +1249,9 @@ public interface CDef extends Classification {
         ,
         /** 個別能力行使結果 */
         個別能力行使結果("PRIVATE_ABILITY", "個別能力行使結果", emptyStrings())
+        ,
+        /** 狂信者人狼確認メッセージ */
+        狂信者人狼確認メッセージ("PRIVATE_FANATIC", "狂信者人狼確認メッセージ", emptyStrings())
         ,
         /** 妖狐メッセージ */
         妖狐メッセージ("PRIVATE_FOX", "妖狐メッセージ", emptyStrings())

@@ -107,9 +107,10 @@ data class Skill(
         return Companion.getAbilities(cdefSkill)
     }
 
-    fun isFoxCount(): Boolean = Skills.foxs.list.any { it.code == code }
-
     fun toCdef(): CDef.Skill = CDef.Skill.codeOf(code)
+    fun hasAttackAbility(): Boolean = toCdef().isHasAttackAbility
+    fun canRecognizeWolf(): Boolean = toCdef().isRecognizableWolf
+    fun isFoxCount(): Boolean = Skills.foxs.list.any { it.code == code }
 }
 
 fun CDef.Skill.toModel(): Skill = Skill(this)

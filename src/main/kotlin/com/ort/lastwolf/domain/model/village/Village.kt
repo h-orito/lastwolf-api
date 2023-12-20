@@ -29,7 +29,8 @@ data class Village(
     //                                                                          ==========
     private val initialMessage: String = "村が作成されました。"
 
-    private val firstNightMessage: String = "村が開始されました。\n能力者は進行欄で能力を行使してください。\n行使せずに朝を迎えた場合、突然死してしまいます。"
+    private val firstNightMessage: String =
+        "村が開始されました。\n能力者は進行欄で能力を行使してください。\n行使せずに朝を迎えた場合、突然死してしまいます。"
 
     private val creatorCancelMessage: String = "村建ての操作により廃村しました。"
 
@@ -82,6 +83,21 @@ data class Village(
         return Message.createMasonPrivateMessage(text, days.latestDay().id)
     }
 
+    /** 狂信者の役職確認メッセージ */
+    fun createFanaticConfirmMessage(): Message? {
+        // 狂信者がいなければなし
+        if (participants.list.none { it.skill!!.canRecognizeWolf() }) return null
+        // 襲撃役職を一括りにして人狼とする
+        val text = participants.list.filter { it.skill!!.hasAttackAbility() }.joinToString(
+            separator = "、",
+            prefix = "この村の人狼は",
+            postfix = "のようだ。"
+        ) {
+            it.chara.name.fullName()
+        }
+        return Message.createFanaticPrivateMessage(text, days.latestDay().id)
+    }
+
     /** 妖狐の役職相互確認メッセージ */
     fun createFoxsConfirmMessage(): Message? {
         // 妖狐がいなければなし
@@ -112,7 +128,8 @@ data class Village(
     // ===================================================================================
     //                                                                                read
     //                                                                           =========
-    fun dummyParticipant(): VillageParticipant? = participants.list.firstOrNull { it.chara.id == setting.charachip.dummyCharaId }
+    fun dummyParticipant(): VillageParticipant? =
+        participants.list.firstOrNull { it.chara.id == setting.charachip.dummyCharaId }
 
     fun notDummyParticipants(): VillageParticipants {
         val notDummyMembers = participants.list.filter { it.chara.id != setting.charachip.dummyCharaId }
@@ -135,10 +152,10 @@ data class Village(
     // 差分があるか
     fun existsDifference(village: Village): Boolean {
         return status.code != village.status.code
-            || winCamp?.code != village.winCamp?.code
-            || participants.existsDifference(village.participants)
-            || days.existsDifference(village.days)
-            || setting.existsDifference(village.setting)
+                || winCamp?.code != village.winCamp?.code
+                || participants.existsDifference(village.participants)
+                || days.existsDifference(village.days)
+                || setting.existsDifference(village.setting)
     }
 
     // 決着がついたか
@@ -190,7 +207,7 @@ data class Village(
 
     fun isAvailableStart(): Boolean {
         return status.isRollCalling()
-            && participants.list.count { it.doneRollCall } >= participants.count - 1
+                && participants.list.count { it.doneRollCall } >= participants.count - 1
     }
 
     /**
@@ -199,8 +216,12 @@ data class Village(
      * @param second 第2役職希望
      */
     fun assertSkillRequest(first: CDef.Skill, second: CDef.Skill) {
-        if (setting.organizations.allRequestableSkillList().none { it.code == first.code() }) throw LastwolfBusinessException("役職希望変更できません")
-        if (setting.organizations.allRequestableSkillList().none { it.code == second.code() }) throw LastwolfBusinessException("役職希望変更できません")
+        if (setting.organizations.allRequestableSkillList()
+                .none { it.code == first.code() }
+        ) throw LastwolfBusinessException("役職希望変更できません")
+        if (setting.organizations.allRequestableSkillList()
+                .none { it.code == second.code() }
+        ) throw LastwolfBusinessException("役職希望変更できません")
     }
 
     /** 村としてコミットできるか */
@@ -281,6 +302,9 @@ data class Village(
 
     /** 村として妖狐メッセージを見られるか */
     fun isViewableFoxMessage(): Boolean = status.isSolved() // 終了していたら全て見られる
+
+    /** 村として狂信者メッセージを見られるか */
+    fun isViewableFanaticMessage(): Boolean = status.isSolved()
 
     /** 村として白黒霊能結果を見られるか */
     fun isViewablePsychicMessage(): Boolean = status.isSolved()// 終了していたら全て見られる
@@ -378,7 +402,8 @@ data class Village(
     }
 
     // ステータス変更
-    fun changeStatus(cdefVillageStatus: CDef.VillageStatus): Village = this.copy(status = VillageStatus(cdefVillageStatus))
+    fun changeStatus(cdefVillageStatus: CDef.VillageStatus): Village =
+        this.copy(status = VillageStatus(cdefVillageStatus))
 
     private fun judgeWinCamp(): Camp? {
         if (!this.isSettled()) return null

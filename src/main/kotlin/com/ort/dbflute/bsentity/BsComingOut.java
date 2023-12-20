@@ -64,10 +64,10 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    /** VILLAGE_PLAYER_ID: {PK, NotNull, INT UNSIGNED(10), FK to village_player} */
+    /** VILLAGE_PLAYER_ID: {PK, NotNull, INT UNSIGNED(10), FK to VILLAGE_PLAYER} */
     protected Integer _villagePlayerId;
 
-    /** SKILL_CODE: {PK, IX, NotNull, VARCHAR(20), FK to skill, classification=Skill} */
+    /** SKILL_CODE: {PK, IX, NotNull, VARCHAR(20), FK to SKILL, classification=Skill} */
     protected String _skillCode;
 
     // ===================================================================================
@@ -80,7 +80,7 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "coming_out";
+        return "COMING_OUT";
     }
 
     // ===================================================================================
@@ -98,7 +98,7 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     //                                                             =======================
     /**
      * Get the value of skillCode as the classification of Skill. <br>
-     * SKILL_CODE: {PK, IX, NotNull, VARCHAR(20), FK to skill, classification=Skill} <br>
+     * SKILL_CODE: {PK, IX, NotNull, VARCHAR(20), FK to SKILL, classification=Skill} <br>
      * 役職
      * <p>It's treated as case insensitive and if the code value is null, it returns null.</p>
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
@@ -109,7 +109,7 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
 
     /**
      * Set the value of skillCode as the classification of Skill. <br>
-     * SKILL_CODE: {PK, IX, NotNull, VARCHAR(20), FK to skill, classification=Skill} <br>
+     * SKILL_CODE: {PK, IX, NotNull, VARCHAR(20), FK to SKILL, classification=Skill} <br>
      * 役職
      * @param cdef The instance of classification definition (as ENUM type). (NullAllowed: if null, null value is set to the column)
      */
@@ -120,6 +120,22 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     // ===================================================================================
     //                                                              Classification Setting
     //                                                              ======================
+    /**
+     * Set the value of skillCode as C国狂人 (CMADMAN). <br>
+     * C国狂人
+     */
+    public void setSkillCode_C国狂人() {
+        setSkillCodeAsSkill(CDef.Skill.C国狂人);
+    }
+
+    /**
+     * Set the value of skillCode as 狂信者 (FANATIC). <br>
+     * 狂信者
+     */
+    public void setSkillCode_狂信者() {
+        setSkillCodeAsSkill(CDef.Skill.狂信者);
+    }
+
     /**
      * Set the value of skillCode as 妖狐 (FOX). <br>
      * 妖狐
@@ -227,6 +243,28 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     // ===================================================================================
     //                                                        Classification Determination
     //                                                        ============================
+    /**
+     * Is the value of skillCode C国狂人? <br>
+     * C国狂人
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCodeC国狂人() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.C国狂人) : false;
+    }
+
+    /**
+     * Is the value of skillCode 狂信者? <br>
+     * 狂信者
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode狂信者() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.狂信者) : false;
+    }
+
     /**
      * Is the value of skillCode 妖狐? <br>
      * 妖狐
@@ -372,7 +410,7 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
 
     /**
      * 囁きを見られる <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, C国狂人]
      * @return The determination, true or false.
      */
     public boolean isSkillCode_ViewableWerewolfSay() {
@@ -382,7 +420,7 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
 
     /**
      * 囁き可能 <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, C国狂人]
      * @return The determination, true or false.
      */
     public boolean isSkillCode_AvailableWerewolfSay() {
@@ -518,6 +556,16 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     public boolean isSkillCode_RecognizableEachMason() {
         CDef.Skill cdef = getSkillCodeAsSkill();
         return cdef != null && cdef.isRecognizableEachMason();
+    }
+
+    /**
+     * 人狼を認知できる <br>
+     * The group elements:[狂信者]
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode_RecognizableWolf() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null && cdef.isRecognizableWolf();
     }
 
     /**
@@ -683,7 +731,7 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     //                                                                            Accessor
     //                                                                            ========
     /**
-     * [get] VILLAGE_PLAYER_ID: {PK, NotNull, INT UNSIGNED(10), FK to village_player} <br>
+     * [get] VILLAGE_PLAYER_ID: {PK, NotNull, INT UNSIGNED(10), FK to VILLAGE_PLAYER} <br>
      * 村参加者ID
      * @return The value of the column 'VILLAGE_PLAYER_ID'. (basically NotNull if selected: for the constraint)
      */
@@ -693,7 +741,7 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     }
 
     /**
-     * [set] VILLAGE_PLAYER_ID: {PK, NotNull, INT UNSIGNED(10), FK to village_player} <br>
+     * [set] VILLAGE_PLAYER_ID: {PK, NotNull, INT UNSIGNED(10), FK to VILLAGE_PLAYER} <br>
      * 村参加者ID
      * @param villagePlayerId The value of the column 'VILLAGE_PLAYER_ID'. (basically NotNull if update: for the constraint)
      */
@@ -703,7 +751,7 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     }
 
     /**
-     * [get] SKILL_CODE: {PK, IX, NotNull, VARCHAR(20), FK to skill, classification=Skill} <br>
+     * [get] SKILL_CODE: {PK, IX, NotNull, VARCHAR(20), FK to SKILL, classification=Skill} <br>
      * 役職コード
      * @return The value of the column 'SKILL_CODE'. (basically NotNull if selected: for the constraint)
      */
@@ -713,7 +761,7 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     }
 
     /**
-     * [set] SKILL_CODE: {PK, IX, NotNull, VARCHAR(20), FK to skill, classification=Skill} <br>
+     * [set] SKILL_CODE: {PK, IX, NotNull, VARCHAR(20), FK to SKILL, classification=Skill} <br>
      * 役職コード
      * @param skillCode The value of the column 'SKILL_CODE'. (basically NotNull if update: for the constraint)
      */

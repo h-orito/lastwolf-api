@@ -16,7 +16,7 @@ import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The abstract condition-query of message_type.
+ * The abstract condition-query of MESSAGE_TYPE.
  * @author DBFlute(AutoGenerator)
  */
 public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
@@ -37,7 +37,7 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     public String asTableDbName() {
-        return "message_type";
+        return "MESSAGE_TYPE";
     }
 
     // ===================================================================================
@@ -116,6 +116,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
      */
     public void setMessageTypeCode_Equal_個別能力行使結果() {
         setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.個別能力行使結果);
+    }
+
+    /**
+     * Equal(=). As 狂信者人狼確認メッセージ (PRIVATE_FANATIC). And OnlyOnceRegistered. <br>
+     * 狂信者人狼確認メッセージ
+     */
+    public void setMessageTypeCode_Equal_狂信者人狼確認メッセージ() {
+        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.狂信者人狼確認メッセージ);
     }
 
     /**
@@ -251,6 +259,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
      */
     public void setMessageTypeCode_NotEqual_個別能力行使結果() {
         setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.個別能力行使結果);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 狂信者人狼確認メッセージ (PRIVATE_FANATIC). And OnlyOnceRegistered. <br>
+     * 狂信者人狼確認メッセージ
+     */
+    public void setMessageTypeCode_NotEqual_狂信者人狼確認メッセージ() {
+        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.狂信者人狼確認メッセージ);
     }
 
     /**

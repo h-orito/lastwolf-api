@@ -13,7 +13,7 @@ import com.ort.dbflute.allcommon.*;
 import com.ort.dbflute.exentity.*;
 
 /**
- * The DB meta of winlose. (Singleton)
+ * The DB meta of WINLOSE. (Singleton)
  * @author DBFlute(AutoGenerator)
  */
 public class WinloseDbm extends AbstractDBMeta {
@@ -59,7 +59,7 @@ public class WinloseDbm extends AbstractDBMeta {
     // ===================================================================================
     //                                                                          Table Info
     //                                                                          ==========
-    protected final String _tableDbName = "winlose";
+    protected final String _tableDbName = "WINLOSE";
     protected final String _tableDispName = "WINLOSE";
     protected final String _tablePropertyName = "winlose";
     protected final TableSqlName _tableSqlName = new TableSqlName("WINLOSE", _tableDbName);

@@ -4,6 +4,7 @@ PRIVATE_SYSTEM	非公開システムメッセージ
 PRIVATE_ABILITY	個別能力行使結果
 PRIVATE_PSYCHIC	白黒霊視結果
 PRIVATE_WEREWOLF	襲撃結果
+PRIVATE_FANATIC	狂信者人狼確認メッセージ
 PRIVATE_MASON	共有相互確認メッセージ
 PRIVATE_FOX	妖狐メッセージ
 NORMAL_SAY	通常発言

@@ -24,10 +24,12 @@ class MessageDomainService(
     private val psychicMessageDomainService: PsychicMessageDomainService,
     private val attackMessageDomainService: AttackMessageDomainService,
     private val masonMessageDomainService: MasonMessageDomainService,
+    private val fanaticMessageDomainService: FanaticMessageDomainService,
     private val foxMessageDomainService: FoxMessageDomainService
 ) {
 
-    private val everyoneAllowedMessageTypeList = listOf(CDef.MessageType.公開システムメッセージ, CDef.MessageType.通常発言, CDef.MessageType.村建て発言)
+    private val everyoneAllowedMessageTypeList =
+        listOf(CDef.MessageType.公開システムメッセージ, CDef.MessageType.通常発言, CDef.MessageType.村建て発言)
 
     /**
      * 閲覧できる発言種別リスト
@@ -56,6 +58,7 @@ class MessageDomainService(
             CDef.MessageType.共有発言,
             CDef.MessageType.白黒霊視結果,
             CDef.MessageType.襲撃結果,
+            CDef.MessageType.狂信者人狼確認メッセージ,
             CDef.MessageType.共有相互確認メッセージ,
             CDef.MessageType.妖狐メッセージ,
         ).forEach {
@@ -86,6 +89,7 @@ class MessageDomainService(
             CDef.MessageType.白黒霊視結果 -> psychicMessageDomainService.isViewable(village, participant)
             CDef.MessageType.襲撃結果 -> attackMessageDomainService.isViewable(village, participant)
             CDef.MessageType.共有相互確認メッセージ -> masonMessageDomainService.isViewable(village, participant)
+            CDef.MessageType.狂信者人狼確認メッセージ -> fanaticMessageDomainService.isViewable(village, participant)
             CDef.MessageType.妖狐メッセージ -> foxMessageDomainService.isViewable(village, participant)
             CDef.MessageType.村建て発言 -> true
             else -> return false
@@ -104,7 +108,8 @@ class MessageDomainService(
         participantIdList: List<Int>?
     ): MessageQuery {
         val availableMessageTypeList = viewableMessageTypeList(village, participant, authority)
-        val requestMessageTypeList = if (messageTypeList.isNullOrEmpty()) CDef.MessageType.listAll() else messageTypeList
+        val requestMessageTypeList =
+            if (messageTypeList.isNullOrEmpty()) CDef.MessageType.listAll() else messageTypeList
         val queryMessageTypeList = requestMessageTypeList.filter { availableMessageTypeList.contains(it) }
         return MessageQuery(
             from = from,
@@ -114,7 +119,12 @@ class MessageDomainService(
             participant = participant,
             messageTypeList = queryMessageTypeList,
             participantIdList = participantIdList,
-            includeMonologue = isIncludeMonologue(participant, participantIdList, requestMessageTypeList, queryMessageTypeList),
+            includeMonologue = isIncludeMonologue(
+                participant,
+                participantIdList,
+                requestMessageTypeList,
+                queryMessageTypeList
+            ),
             includePrivateAbility = isIncludePrivateAbility(participant, requestMessageTypeList)
         )
     }
@@ -181,11 +191,15 @@ class MessageDomainService(
 
     data class UserViewableMessageLatestTime(val uid: String?, val time: Long)
 
-    private fun isEveryoneViewable(message: Message): Boolean = everyoneAllowedMessageTypeList.any { it == message.content.type.toCdef() }
+    private fun isEveryoneViewable(message: Message): Boolean =
+        everyoneAllowedMessageTypeList.any { it == message.content.type.toCdef() }
 
     private fun isMessageForMe(participant: VillageParticipant, message: Message): Boolean {
-        return listOf(CDef.MessageType.個別能力行使結果, CDef.MessageType.独り言).any { it == message.content.type.toCdef() }
-            && message.fromParticipantId == participant.id
+        return listOf(
+            CDef.MessageType.個別能力行使結果,
+            CDef.MessageType.独り言
+        ).any { it == message.content.type.toCdef() }
+                && message.fromParticipantId == participant.id
     }
 
     private fun isIncludeMonologue(

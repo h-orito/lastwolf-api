@@ -54,7 +54,8 @@ data class VillageParticipant(
     fun gone(): VillageParticipant = this.copy(isGone = true)
 
     // 突然死
-    fun suddenlyDeath(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.突然, villageDay))
+    fun suddenlyDeath(villageDay: VillageDay): VillageParticipant =
+        this.copy(dead = Dead(CDef.DeadReason.突然, villageDay))
 
     // 処刑
     fun execute(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.処刑, villageDay))
@@ -63,7 +64,8 @@ data class VillageParticipant(
     fun attack(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.襲撃, villageDay))
 
     // 呪殺
-    fun divineKill(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.呪殺, villageDay))
+    fun divineKill(villageDay: VillageDay): VillageParticipant =
+        this.copy(dead = Dead(CDef.DeadReason.呪殺, villageDay))
 
     // 後追い
     fun suicide(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.後追, villageDay))
@@ -201,6 +203,12 @@ data class VillageParticipant(
         // 生存していて妖狐職なら開放
         if (!isAlive()) return false
         return skill?.toCdef()?.isRecognizableEachFox ?: false
+    }
+
+    fun isViewableFanaticMessage(): Boolean {
+        // 生存していて妖狐職なら開放
+        if (!isAlive()) return false
+        return skill?.canRecognizeWolf() ?: false
     }
 
     fun isViewablePsychicMessage(): Boolean {

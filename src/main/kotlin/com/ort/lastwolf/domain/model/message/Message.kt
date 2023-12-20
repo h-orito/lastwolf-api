@@ -72,6 +72,15 @@ data class Message(
                 isStrong = isStrong
             )
 
+
+        fun createFanaticPrivateMessage(text: String, villageDayId: Int, isStrong: Boolean = false): Message =
+            createSystemMessage(
+                messageType = MessageType(CDef.MessageType.狂信者人狼確認メッセージ),
+                text = text,
+                villageDayId = villageDayId,
+                isStrong = isStrong
+            )
+
         fun createMasonPrivateMessage(text: String, villageDayId: Int, isStrong: Boolean = false): Message =
             createSystemMessage(
                 messageType = MessageType(CDef.MessageType.共有相互確認メッセージ),
