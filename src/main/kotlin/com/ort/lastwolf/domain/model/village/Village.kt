@@ -164,15 +164,22 @@ data class Village(
         return wolfCount <= 0 || villagerCount() <= wolfCount
     }
 
+    // ゲームマスター制で、ゲームマスターか
+    fun isGameMaster(player: Player?): Boolean {
+        return setting.rules.creatorGameMaster && creatorPlayer.id == player?.id
+    }
+
     // ===================================================================================
     //                                                                                 権限
     //                                                                           =========
     /** 村として参加可能か */
-    fun isAvailableParticipate(): Boolean {
+    fun isAvailableParticipate(player: Player): Boolean {
         // プロローグでない
         if (!status.isRecruiting()) return false
         // 既に最大人数まで参加している
         if (participants.count >= setting.capacity.max) return false
+        // GM制で参加しようとしているのがGM
+        if (setting.rules.creatorGameMaster && creatorPlayer.id == player.id) return false
 
         return true
     }

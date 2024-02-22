@@ -24,7 +24,8 @@ class CreatorDomainService(
             isAvailableKick = isAvailableKick(village, player),
             isAvailableModifySetting = isAvailableModifySetting(village, player),
             isAvailableStartRollCall = rollCallingDomainService.canStartRollCall(village, player),
-            isAvailableCancelRollCall = rollCallingDomainService.canCancelRollCall(village, player)
+            isAvailableCancelRollCall = rollCallingDomainService.canCancelRollCall(village, player),
+            isViewableSpoiler = isViewableSpoiler(village, player)
         )
     }
 
@@ -44,6 +45,14 @@ class CreatorDomainService(
         if (village.status.isFinished()) return false
         // 管理者か村建てならok
         if (village.creatorPlayer.id == player.id) return true
+        if (village.dummyParticipant()!!.player.id == player.id) return true
+        return false
+    }
+
+    private fun isViewableSpoiler(village: Village, player: Player?): Boolean {
+        player ?: return false
+        // GMか村建てならok
+        if (village.isGameMaster(player)) return true
         if (village.dummyParticipant()!!.player.id == player.id) return true
         return false
     }

@@ -68,7 +68,7 @@ public abstract class BsWinloseBhv extends AbstractBehaviorWritable<Winlose, Win
     /** {@inheritDoc} */
     public WinloseDbm asDBMeta() { return WinloseDbm.getInstance(); }
     /** {@inheritDoc} */
-    public String asTableDbName() { return "WINLOSE"; }
+    public String asTableDbName() { return "winlose"; }
 
     // ===================================================================================
     //                                                                        New Instance

@@ -18,7 +18,8 @@ data class VillageView(
 ) {
 
     constructor(
-        village: Village
+        village: Village,
+        isGameMaster: Boolean = false
     ) : this(
         id = village.id,
         name = village.name,
@@ -29,7 +30,7 @@ data class VillageView(
         participants = VillageParticipantsView(
             village = village,
             participants = village.participants,
-            shouldHidePlayer = !village.status.isSolved()
+            shouldHidePlayer = !isGameMaster && !village.status.isSolved()
         ),
         days = village.days
     )

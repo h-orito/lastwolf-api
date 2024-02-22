@@ -43,6 +43,7 @@ data class VillageSettings(
                     availableDummySkill = resource.rule.isAvailableDummySkill,
                     availableSameTargetGuard = resource.rule.isAvailableSameTargetGuard,
                     firstDivineNowolf = resource.rule.isFirstDivineNowolf,
+                    creatorGameMaster = resource.rule.isCreatorGameMaster,
                     silentSeconds = resource.rule.silentSeconds
                 ),
                 password = VillagePassword(

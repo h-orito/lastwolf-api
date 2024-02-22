@@ -1,20 +1,7 @@
 package com.ort.lastwolf.api.controller
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.lastwolf.api.body.VillageAbilityBody
-import com.ort.lastwolf.api.body.VillageChangeSkillBody
-import com.ort.lastwolf.api.body.VillageCharachipCreateBody
-import com.ort.lastwolf.api.body.VillageComingOutBody
-import com.ort.lastwolf.api.body.VillageCommitBody
-import com.ort.lastwolf.api.body.VillageOrganizationCreateBody
-import com.ort.lastwolf.api.body.VillageParticipateBody
-import com.ort.lastwolf.api.body.VillageRegisterBody
-import com.ort.lastwolf.api.body.VillageRollcallBody
-import com.ort.lastwolf.api.body.VillageRuleCreateBody
-import com.ort.lastwolf.api.body.VillageSayBody
-import com.ort.lastwolf.api.body.VillageSettingRegisterBody
-import com.ort.lastwolf.api.body.VillageTimeCreateBody
-import com.ort.lastwolf.api.body.VillageVoteBody
+import com.ort.lastwolf.api.body.*
 import com.ort.lastwolf.api.body.validator.VillageRegisterBodyValidator
 import com.ort.lastwolf.api.form.VillageListForm
 import com.ort.lastwolf.api.form.VillageMessageForm
@@ -37,27 +24,13 @@ import com.ort.lastwolf.domain.model.message.MessageTime
 import com.ort.lastwolf.domain.model.message.Messages
 import com.ort.lastwolf.domain.model.player.Player
 import com.ort.lastwolf.domain.model.skill.Skill
-import com.ort.lastwolf.domain.model.village.Village
-import com.ort.lastwolf.domain.model.village.VillageCharachipCreateResource
-import com.ort.lastwolf.domain.model.village.VillageCreateResource
-import com.ort.lastwolf.domain.model.village.VillageOrganizationCreateResource
-import com.ort.lastwolf.domain.model.village.VillageRuleCreateResource
-import com.ort.lastwolf.domain.model.village.VillageSettingCreateResource
-import com.ort.lastwolf.domain.model.village.VillageStatus
-import com.ort.lastwolf.domain.model.village.VillageTimeCreateResource
-import com.ort.lastwolf.domain.model.village.Villages
+import com.ort.lastwolf.domain.model.village.*
 import com.ort.lastwolf.fw.exception.LastwolfBusinessException
 import com.ort.lastwolf.fw.security.LastwolfUser
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.WebDataBinder
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.InitBinder
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
@@ -105,9 +78,14 @@ class VillageController(
      * @param villageId villageId
      */
     @GetMapping("/village/{villageId}")
-    fun village(@PathVariable("villageId") villageId: Int): VillageView {
+    fun village(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: LastwolfUser?,
+    ): VillageView {
         val village: Village = villageService.findVillage(villageId)
-        return VillageView(village)
+        val player: Player? = user?.let { playerService.findPlayer(it) }
+        val isGameMaster = village.isGameMaster(player) || user?.authority == CDef.Authority.管理者
+        return VillageView(village, isGameMaster)
     }
 
     /**
@@ -482,7 +460,6 @@ class VillageController(
             organization = convertToVillageOrganizationCreateResource(body.organization!!),
             charachip = convertToVillageCharachipCreateResource(body.charachip!!),
             rule = convertToVillageRuleCreateResource(body.rule!!)
-
         )
     }
 
@@ -520,6 +497,7 @@ class VillageController(
         isAvailableSameTargetGuard = body.availableSameTargetGuard!!,
         isFirstDivineNowolf = body.firstDivineNowolf!!,
         silentSeconds = body.silentSeconds,
+        isCreatorGameMaster = body.creatorGameMaster!!,
         joinPassword = body.joinPassword
     )
 }

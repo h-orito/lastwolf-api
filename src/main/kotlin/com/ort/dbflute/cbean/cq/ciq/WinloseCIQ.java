@@ -12,7 +12,7 @@ import com.ort.dbflute.cbean.cq.bs.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The condition-query for in-line of WINLOSE.
+ * The condition-query for in-line of winlose.
  * @author DBFlute(AutoGenerator)
  */
 public class WinloseCIQ extends AbstractBsWinloseCQ {

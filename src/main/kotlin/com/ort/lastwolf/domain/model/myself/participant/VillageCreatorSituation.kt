@@ -18,5 +18,7 @@ data class VillageCreatorSituation(
     @JsonProperty("available_start_roll_call")
     val isAvailableStartRollCall: Boolean,
     @JsonProperty("available_cancel_roll_call")
-    val isAvailableCancelRollCall: Boolean
+    val isAvailableCancelRollCall: Boolean,
+    @JsonProperty("viewable_spoiler")
+    val isViewableSpoiler: Boolean
 )

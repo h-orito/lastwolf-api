@@ -83,7 +83,7 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "VILLAGE_SETTING_ITEM";
+        return "village_setting_item";
     }
 
     // ===================================================================================
@@ -184,6 +184,14 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
      */
     public void setVillageSettingItemCode_初日白通知か() {
         setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.初日白通知か);
+    }
+
+    /**
+     * Set the value of villageSettingItemCode as ゲームマスター制か (is_gm). <br>
+     * ゲームマスター制か
+     */
+    public void setVillageSettingItemCode_ゲームマスター制か() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.ゲームマスター制か);
     }
 
     /**
@@ -355,6 +363,17 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     public boolean isVillageSettingItemCode初日白通知か() {
         CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
         return cdef != null ? cdef.equals(CDef.VillageSettingItem.初日白通知か) : false;
+    }
+
+    /**
+     * Is the value of villageSettingItemCode ゲームマスター制か? <br>
+     * ゲームマスター制か
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCodeゲームマスター制か() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.ゲームマスター制か) : false;
     }
 
     /**

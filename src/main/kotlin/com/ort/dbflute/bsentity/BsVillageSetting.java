@@ -75,10 +75,10 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    /** VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10), FK to VILLAGE} */
+    /** VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10), FK to village} */
     protected Integer _villageId;
 
-    /** VILLAGE_SETTING_ITEM_CODE: {PK, IX, NotNull, VARCHAR(100), FK to VILLAGE_SETTING_ITEM, classification=VillageSettingItem} */
+    /** VILLAGE_SETTING_ITEM_CODE: {PK, IX, NotNull, VARCHAR(100), FK to village_setting_item, classification=VillageSettingItem} */
     protected String _villageSettingItemCode;
 
     /** VILLAGE_SETTING_TEXT: {VARCHAR(1000)} */
@@ -106,7 +106,7 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "VILLAGE_SETTING";
+        return "village_setting";
     }
 
     // ===================================================================================
@@ -124,7 +124,7 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
     //                                                             =======================
     /**
      * Get the value of villageSettingItemCode as the classification of VillageSettingItem. <br>
-     * VILLAGE_SETTING_ITEM_CODE: {PK, IX, NotNull, VARCHAR(100), FK to VILLAGE_SETTING_ITEM, classification=VillageSettingItem} <br>
+     * VILLAGE_SETTING_ITEM_CODE: {PK, IX, NotNull, VARCHAR(100), FK to village_setting_item, classification=VillageSettingItem} <br>
      * 村設定項目
      * <p>It's treated as case insensitive and if the code value is null, it returns null.</p>
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
@@ -135,7 +135,7 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
 
     /**
      * Set the value of villageSettingItemCode as the classification of VillageSettingItem. <br>
-     * VILLAGE_SETTING_ITEM_CODE: {PK, IX, NotNull, VARCHAR(100), FK to VILLAGE_SETTING_ITEM, classification=VillageSettingItem} <br>
+     * VILLAGE_SETTING_ITEM_CODE: {PK, IX, NotNull, VARCHAR(100), FK to village_setting_item, classification=VillageSettingItem} <br>
      * 村設定項目
      * @param cdef The instance of classification definition (as ENUM type). (NullAllowed: if null, null value is set to the column)
      */
@@ -208,6 +208,14 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
      */
     public void setVillageSettingItemCode_初日白通知か() {
         setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.初日白通知か);
+    }
+
+    /**
+     * Set the value of villageSettingItemCode as ゲームマスター制か (is_gm). <br>
+     * ゲームマスター制か
+     */
+    public void setVillageSettingItemCode_ゲームマスター制か() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.ゲームマスター制か);
     }
 
     /**
@@ -379,6 +387,17 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
     public boolean isVillageSettingItemCode初日白通知か() {
         CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
         return cdef != null ? cdef.equals(CDef.VillageSettingItem.初日白通知か) : false;
+    }
+
+    /**
+     * Is the value of villageSettingItemCode ゲームマスター制か? <br>
+     * ゲームマスター制か
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCodeゲームマスター制か() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.ゲームマスター制か) : false;
     }
 
     /**
@@ -619,7 +638,7 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
     //                                                                            Accessor
     //                                                                            ========
     /**
-     * [get] VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10), FK to VILLAGE} <br>
+     * [get] VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10), FK to village} <br>
      * 村ID
      * @return The value of the column 'VILLAGE_ID'. (basically NotNull if selected: for the constraint)
      */
@@ -629,7 +648,7 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
     }
 
     /**
-     * [set] VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10), FK to VILLAGE} <br>
+     * [set] VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10), FK to village} <br>
      * 村ID
      * @param villageId The value of the column 'VILLAGE_ID'. (basically NotNull if update: for the constraint)
      */
@@ -639,7 +658,7 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
     }
 
     /**
-     * [get] VILLAGE_SETTING_ITEM_CODE: {PK, IX, NotNull, VARCHAR(100), FK to VILLAGE_SETTING_ITEM, classification=VillageSettingItem} <br>
+     * [get] VILLAGE_SETTING_ITEM_CODE: {PK, IX, NotNull, VARCHAR(100), FK to village_setting_item, classification=VillageSettingItem} <br>
      * 村設定項目コード
      * @return The value of the column 'VILLAGE_SETTING_ITEM_CODE'. (basically NotNull if selected: for the constraint)
      */
@@ -649,7 +668,7 @@ public abstract class BsVillageSetting extends AbstractEntity implements DomainE
     }
 
     /**
-     * [set] VILLAGE_SETTING_ITEM_CODE: {PK, IX, NotNull, VARCHAR(100), FK to VILLAGE_SETTING_ITEM, classification=VillageSettingItem} <br>
+     * [set] VILLAGE_SETTING_ITEM_CODE: {PK, IX, NotNull, VARCHAR(100), FK to village_setting_item, classification=VillageSettingItem} <br>
      * 村設定項目コード
      * @param villageSettingItemCode The value of the column 'VILLAGE_SETTING_ITEM_CODE'. (basically NotNull if update: for the constraint)
      */

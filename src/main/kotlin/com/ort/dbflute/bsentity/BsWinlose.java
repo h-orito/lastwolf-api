@@ -83,7 +83,7 @@ public abstract class BsWinlose extends AbstractEntity implements DomainEntity {
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "WINLOSE";
+        return "winlose";
     }
 
     // ===================================================================================

@@ -97,10 +97,14 @@ data class VillageRuleCreateBody(
 
     val silentSeconds: Int?,
 
+    @field:NotNull
+    val creatorGameMaster: Boolean?,
+
     @get:Size(max = 20)
     val joinPassword: String?
 ) {
     constructor() : this(
+        null,
         null,
         null,
         null,

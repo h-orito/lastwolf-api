@@ -2,6 +2,7 @@ package com.ort.lastwolf.application.coordinator
 
 import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.application.service.MessageService
+import com.ort.lastwolf.application.service.PlayerService
 import com.ort.lastwolf.domain.model.message.Messages
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
@@ -14,6 +15,7 @@ class MessageCoordinator(
     val dayChangeCoordinator: DayChangeCoordinator,
     val villageCoordinator: VillageCoordinator,
     val messageService: MessageService,
+    val playerService: PlayerService,
     val messageDomainService: MessageDomainService
 ) {
 
@@ -30,9 +32,11 @@ class MessageCoordinator(
         messageTypeList: List<CDef.MessageType>?,
         participantIdList: List<Int>?
     ): Messages {
+        val player = user?.let { playerService.findPlayer(it) }
         val participant: VillageParticipant? = villageCoordinator.findParticipant(village, user)
         val query = messageDomainService.createQuery(
             village = village,
+            player = player,
             participant = participant,
             authority = user?.authority,
             messageTypeList = messageTypeList,
@@ -54,9 +58,10 @@ class MessageCoordinator(
         village: Village,
         user: LastwolfUser?
     ): Long {
+        val player = user?.let { playerService.findPlayer(it) }
         val participant: VillageParticipant? = villageCoordinator.findParticipant(village, user)
         val messageTypeList: List<CDef.MessageType> =
-            messageDomainService.viewableMessageTypeList(village, participant, user?.authority)
+            messageDomainService.viewableMessageTypeList(village, player, participant, user?.authority)
         return messageService.findLatestMessagesUnixTimeMilli(village.id, messageTypeList, participant)
     }
 }

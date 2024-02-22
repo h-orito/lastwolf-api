@@ -10,7 +10,8 @@ data class VillageRules(
     val availableDummySkill: Boolean = false,
     val availableSameTargetGuard: Boolean = false,
     val firstDivineNowolf: Boolean = false,
-    val silentSeconds: Int? = null
+    val silentSeconds: Int? = null,
+    val creatorGameMaster: Boolean = false,
 ) {
     companion object {
         operator fun invoke(
@@ -21,7 +22,8 @@ data class VillageRules(
             availableDummySkill: Boolean?,
             availableSameTargetGuard: Boolean?,
             firstDivineNowolf: Boolean?,
-            silentSeconds: Int?
+            silentSeconds: Int?,
+            creatorGameMaster: Boolean?
         ): VillageRules {
             val defaultRules = VillageRules()
             return VillageRules(
@@ -32,7 +34,8 @@ data class VillageRules(
                 availableDummySkill = availableDummySkill ?: defaultRules.availableDummySkill,
                 availableSameTargetGuard = availableSameTargetGuard ?: defaultRules.availableSameTargetGuard,
                 firstDivineNowolf = firstDivineNowolf ?: defaultRules.firstDivineNowolf,
-                silentSeconds = silentSeconds
+                silentSeconds = silentSeconds,
+                creatorGameMaster = creatorGameMaster ?: defaultRules.creatorGameMaster
             )
         }
     }
@@ -51,5 +54,6 @@ data class VillageRules(
                 || availableSameTargetGuard != rules.availableSameTargetGuard
                 || firstDivineNowolf != rules.firstDivineNowolf
                 || silentSeconds != rules.silentSeconds
+                || creatorGameMaster != rules.creatorGameMaster
     }
 }

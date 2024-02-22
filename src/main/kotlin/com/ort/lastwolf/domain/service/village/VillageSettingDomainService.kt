@@ -1,12 +1,8 @@
 package com.ort.lastwolf.domain.service.village
 
 import com.ort.lastwolf.domain.model.message.Message
-import com.ort.lastwolf.domain.model.village.Village
-import com.ort.lastwolf.domain.model.village.VillageCharachipCreateResource
-import com.ort.lastwolf.domain.model.village.VillageCreateResource
-import com.ort.lastwolf.domain.model.village.VillageOrganizationCreateResource
-import com.ort.lastwolf.domain.model.village.VillageRuleCreateResource
-import com.ort.lastwolf.domain.model.village.VillageTimeCreateResource
+import com.ort.lastwolf.domain.model.player.Player
+import com.ort.lastwolf.domain.model.village.*
 import com.ort.lastwolf.domain.model.village.setting.VillageCharachip
 import com.ort.lastwolf.domain.model.village.setting.VillageOrganizations
 import com.ort.lastwolf.domain.model.village.setting.VillageRules
@@ -19,10 +15,12 @@ class VillageSettingDomainService {
 
     fun assertModify(
         village: Village,
+        player: Player,
         resource: VillageCreateResource
     ) {
         assertOrganization(village.participants.count, resource.setting.organization)
         assertCharachip(village.setting.charachip, resource.setting.charachip)
+        assertGameMaster(village, player, resource)
     }
 
     fun createModifyMessage(village: Village, resource: VillageCreateResource): Message? {
@@ -80,6 +78,7 @@ class VillageSettingDomainService {
         if (rules.availableSameTargetGuard != resourceRules.isAvailableSameTargetGuard) list.add("連続護衛有無")
         if (rules.firstDivineNowolf != resourceRules.isFirstDivineNowolf) list.add("初日白通知有無")
         if (rules.silentSeconds != resourceRules.silentSeconds) list.add("昼沈黙時間")
+        if (rules.creatorGameMaster != resourceRules.isCreatorGameMaster) list.add("GM制")
     }
 
     private fun addPasswordModifyMessage(
@@ -108,6 +107,13 @@ class VillageSettingDomainService {
             || charachip.dummyCharaId != resourceCharachip.dummyCharaId
         ) {
             throw LastwolfBusinessException("キャラチップとダミーキャラは変更できません")
+        }
+    }
+
+    private fun assertGameMaster(village: Village, player: Player, resource: VillageCreateResource) {
+        // GM制かつ村建てが参加してたらNG
+        if (resource.setting.rule.isCreatorGameMaster && village.participants.list.any { it.player.id == player.id }) {
+            throw LastwolfBusinessException("村建てはGM制村に参加できません")
         }
     }
 }

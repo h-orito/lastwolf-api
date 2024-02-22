@@ -321,6 +321,7 @@ class VillageDataSource(
                 CDef.VillageSettingItem.沈黙時間,
                 afterRules.silentSeconds?.toString() ?: ""
             )
+            updateVillageSetting(villageId, CDef.VillageSettingItem.ゲームマスター制か, toFlg(afterRules.creatorGameMaster))
         })
         after.setting.password.let(fun(afterPassword) {
             if (!before.setting.password.existsDifference(afterPassword)) return
@@ -481,6 +482,7 @@ class VillageDataSource(
             CDef.VillageSettingItem.沈黙時間,
             settings.rules.silentSeconds?.toString() ?: ""
         )
+        insertVillageSetting(villageId, CDef.VillageSettingItem.ゲームマスター制か, toFlg(settings.rules.creatorGameMaster))
     }
 
     private fun insertVillageSetting(villageId: Int, item: CDef.VillageSettingItem, value: String) {

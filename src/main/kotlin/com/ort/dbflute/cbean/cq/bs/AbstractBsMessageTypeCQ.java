@@ -16,7 +16,7 @@ import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The abstract condition-query of MESSAGE_TYPE.
+ * The abstract condition-query of message_type.
  * @author DBFlute(AutoGenerator)
  */
 public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
@@ -37,7 +37,7 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     public String asTableDbName() {
-        return "MESSAGE_TYPE";
+        return "message_type";
     }
 
     // ===================================================================================

@@ -1716,6 +1716,9 @@ public interface CDef extends Classification {
         /** 初日白通知か */
         初日白通知か("is_first_divine_nowolf", "初日白通知か", emptyStrings())
         ,
+        /** ゲームマスター制か */
+        ゲームマスター制か("is_gm", "ゲームマスター制か", emptyStrings())
+        ,
         /** 墓下役職公開ありか */
         墓下役職公開ありか("is_open_skill_in_grave", "墓下役職公開ありか", emptyStrings())
         ,

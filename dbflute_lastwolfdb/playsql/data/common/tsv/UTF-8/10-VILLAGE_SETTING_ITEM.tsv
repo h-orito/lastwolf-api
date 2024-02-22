@@ -17,3 +17,4 @@ is_available_dummy_skill	役欠けありか	17
 is_available_same_target_guard	連続護衛ありか	18
 is_first_divine_nowolf	初日白通知か	19
 silent_seconds	沈黙時間	20
+is_gm	ゲームマスター制か	21

@@ -4,14 +4,11 @@ import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.message.MessageQuery
 import com.ort.lastwolf.domain.model.message.Messages
+import com.ort.lastwolf.domain.model.player.Player
 import com.ort.lastwolf.domain.model.player.Players
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
-import com.ort.lastwolf.domain.service.say.GraveSayDomainService
-import com.ort.lastwolf.domain.service.say.MasonSayDomainService
-import com.ort.lastwolf.domain.service.say.MonologueSayDomainService
-import com.ort.lastwolf.domain.service.say.NormalSayDomainService
-import com.ort.lastwolf.domain.service.say.WerewolfSayDomainService
+import com.ort.lastwolf.domain.service.say.*
 import org.springframework.stereotype.Service
 
 @Service
@@ -41,11 +38,12 @@ class MessageDomainService(
      */
     fun viewableMessageTypeList(
         village: Village,
+        player: Player?,
         participant: VillageParticipant?,
         authority: CDef.Authority?
     ): List<CDef.MessageType> {
-        // 管理者は全て見られる
-        if (authority == CDef.Authority.管理者) return CDef.MessageType.listAll()
+        // 管理者やGMは全て見られる
+        if (authority == CDef.Authority.管理者 || village.isGameMaster(player)) return CDef.MessageType.listAll()
         // 村が終了していたら全て見られる
         if (village.status.isSolved()) return CDef.MessageType.listAll()
 
@@ -98,6 +96,7 @@ class MessageDomainService(
 
     fun createQuery(
         village: Village,
+        player: Player?,
         participant: VillageParticipant?,
         authority: CDef.Authority?,
         messageTypeList: List<CDef.MessageType>?,
@@ -107,7 +106,7 @@ class MessageDomainService(
         keyword: String?,
         participantIdList: List<Int>?
     ): MessageQuery {
-        val availableMessageTypeList = viewableMessageTypeList(village, participant, authority)
+        val availableMessageTypeList = viewableMessageTypeList(village, player, participant, authority)
         val requestMessageTypeList =
             if (messageTypeList.isNullOrEmpty()) CDef.MessageType.listAll() else messageTypeList
         val queryMessageTypeList = requestMessageTypeList.filter { availableMessageTypeList.contains(it) }

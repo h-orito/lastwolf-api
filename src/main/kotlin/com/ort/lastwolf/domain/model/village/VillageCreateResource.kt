@@ -41,5 +41,6 @@ data class VillageRuleCreateResource(
     val isAvailableSameTargetGuard: Boolean,
     val isFirstDivineNowolf: Boolean,
     val silentSeconds: Int?,
+    val isCreatorGameMaster: Boolean,
     val joinPassword: String?
 )

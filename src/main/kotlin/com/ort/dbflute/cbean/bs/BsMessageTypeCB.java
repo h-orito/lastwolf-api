@@ -21,7 +21,7 @@ import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The base condition-bean of MESSAGE_TYPE.
+ * The base condition-bean of message_type.
  * @author DBFlute(AutoGenerator)
  */
 public class BsMessageTypeCB extends AbstractConditionBean {
@@ -77,7 +77,7 @@ public class BsMessageTypeCB extends AbstractConditionBean {
     }
 
     public String asTableDbName() {
-        return "MESSAGE_TYPE";
+        return "message_type";
     }
 
     // ===================================================================================
@@ -304,7 +304,7 @@ public class BsMessageTypeCB extends AbstractConditionBean {
             columnMessageTypeCode(); // PK
         }
         @Override
-        protected String getTableDbName() { return "MESSAGE_TYPE"; }
+        protected String getTableDbName() { return "message_type"; }
         /**
          * Prepare for (Specify)MyselfDerived (SubQuery).
          * @return The object to set up a function for myself table. (NotNull)

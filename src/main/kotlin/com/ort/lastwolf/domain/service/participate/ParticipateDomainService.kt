@@ -136,7 +136,7 @@ class ParticipateDomainService {
         player ?: return false
         if (!player.isAvailableParticipate()) return false
         // 村として参加可能か
-        return village.isAvailableParticipate()
+        return village.isAvailableParticipate(player)
     }
 
     private fun createLeaveMessageString(chara: Chara): String =

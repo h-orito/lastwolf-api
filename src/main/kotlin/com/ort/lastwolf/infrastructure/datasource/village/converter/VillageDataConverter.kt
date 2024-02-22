@@ -1,12 +1,7 @@
 package com.ort.lastwolf.infrastructure.datasource.village.converter
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.dbflute.exentity.Chara
-import com.ort.dbflute.exentity.Player
-import com.ort.dbflute.exentity.Village
-import com.ort.dbflute.exentity.VillageDay
-import com.ort.dbflute.exentity.VillagePlayer
-import com.ort.dbflute.exentity.VillageSetting
+import com.ort.dbflute.exentity.*
 import com.ort.lastwolf.domain.model.charachip.CharaImage
 import com.ort.lastwolf.domain.model.charachip.CharaName
 import com.ort.lastwolf.domain.model.dead.Dead
@@ -19,13 +14,7 @@ import com.ort.lastwolf.domain.model.village.Villages
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipants
 import com.ort.lastwolf.domain.model.village.participant.coming_out.ComingOut
-import com.ort.lastwolf.domain.model.village.setting.PersonCapacity
-import com.ort.lastwolf.domain.model.village.setting.VillageCharachip
-import com.ort.lastwolf.domain.model.village.setting.VillageOrganizations
-import com.ort.lastwolf.domain.model.village.setting.VillagePassword
-import com.ort.lastwolf.domain.model.village.setting.VillageRules
-import com.ort.lastwolf.domain.model.village.setting.VillageSettings
-import com.ort.lastwolf.domain.model.village.setting.VillageTime
+import com.ort.lastwolf.domain.model.village.setting.*
 import com.ort.lastwolf.domain.model.winlose.WinLose
 import org.dbflute.cbean.result.ListResultBean
 import java.time.LocalDateTime
@@ -148,6 +137,10 @@ object VillageDataConverter {
                 firstDivineNowolf = detectItemText(
                     settingList,
                     CDef.VillageSettingItem.初日白通知か
+                )?.let { it == FLG_TRUE },
+                creatorGameMaster = detectItemText(
+                    settingList,
+                    CDef.VillageSettingItem.ゲームマスター制か
                 )?.let { it == FLG_TRUE },
                 silentSeconds = detectItemText(settingList, CDef.VillageSettingItem.沈黙時間)?.ifBlank { null }?.toInt()
             ),
