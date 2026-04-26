@@ -3,8 +3,7 @@ spring:
     url: jdbc:mysql://127.0.0.1:4306/lastwolfdb?characterEncoding=UTF-8
     username: lastwolfuser # 本番は起動引数で与える
     password: lastwolfpass # 本番は起動引数で与える
-    driverClassName: com.mysql.jdbc.Driver
-    type: org.apache.tomcat.jdbc.pool.DataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
   messages:
     basename: messages
     cache-duration: -1
@@ -22,21 +21,13 @@ server:
       timeout: 86400
   compression:
     enabled: true
+  forward-headers-strategy: native
   tomcat:
-#    basedir: /var/log/lastwolf
-#    accesslog:
-#      enabled: true
-#      directory: access
-#      suffix: .log
-#      prefix: access_log
-#      file-date-format: .yyyy-MM-dd
-#      max-days: 30
-#      pattern: '%t "%r" %s %b "%{Referer}i" "%{User-Agent}i" %{X-Forwarded-For}i %D %S %I'
-    remote-ip-header: true
-  use-forward-headers: true
+    remote-ip-header: x-forwarded-for
 logging:
   level:
     org.springframework: INFO
     root: INFO
     org.seasar.dbflute: ERROR
-  file: /var/log/lastwolf/tomcat.log
+  file:
+    name: /var/log/lastwolf/tomcat.log

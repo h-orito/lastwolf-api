@@ -1,14 +1,14 @@
 package com.ort.lastwolf
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.whenever
 import com.ort.lastwolf.fw.LastwolfDateUtil
 import com.ort.lastwolf.fw.LastwolfUserInfoUtil
 import com.ort.lastwolf.fw.config.FirebaseConfig
 import com.ort.lastwolf.fw.security.LastwolfUser
 import com.ort.lastwolf.infrastructure.datasource.firebase.FirebaseDataSource
 import org.dbflute.hook.AccessContext
-import org.junit.Before
+import org.junit.jupiter.api.BeforeEach
+import org.mockito.kotlin.any
+import org.mockito.kotlin.whenever
 import org.springframework.boot.test.mock.mockito.MockBean
 
 
@@ -19,31 +19,21 @@ open class LastwolfTest {
     @MockBean
     lateinit var firebaseDataSource: FirebaseDataSource
 
-    @Before
+    @BeforeEach
     fun setUp() {
-        // firebase関連はmockにする
         whenever(firebaseConfig.init()).then { }
         whenever(firebaseConfig.firebaseDatabase()).thenReturn(null)
         whenever(firebaseDataSource.registerMessageLatest(any(), any(), any())).then { }
         whenever(firebaseDataSource.registerVillageLatest(any())).then { }
 
-        // set access context
         setAccessContext()
     }
 
-    // ===================================================================================
-    //                                                                        Assist Logic
-    //                                                                        ============
     private fun setAccessContext() {
         if (AccessContext.isExistAccessContextOnThread()) {
-            // 既に設定されていたら何もしないで次へ
-            // (二度呼び出しされたときのために念のため)
             return
         }
-        // [アクセス日時]
         val accessLocalDateTime = LastwolfDateUtil.currentLocalDateTime()
-
-        // [アクセスユーザ]
         val userInfo: LastwolfUser? = LastwolfUserInfoUtil.getUserInfo()
         val accessUser = userInfo?.username ?: "not login user"
 

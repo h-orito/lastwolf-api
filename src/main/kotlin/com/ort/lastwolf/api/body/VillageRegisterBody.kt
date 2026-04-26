@@ -1,9 +1,9 @@
 package com.ort.lastwolf.api.body
 
 import java.time.LocalDateTime
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
-import javax.validation.constraints.Size
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Size
 
 data class VillageRegisterBody(
     @field:NotNull

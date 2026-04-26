@@ -13,64 +13,6 @@ import com.ort.dbflute.exentity.*;
 /**
  * The entity of MESSAGE as TABLE. <br>
  * メッセージ
- * <pre>
- * [primary-key]
- *     MESSAGE_ID, VILLAGE_ID
- *
- * [column]
- *     MESSAGE_ID, VILLAGE_ID, MESSAGE_TYPE_CODE, VILLAGE_DAY_ID, VILLAGE_PLAYER_ID, MESSAGE_CONTENT, MESSAGE_DATETIME, MESSAGE_UNIXTIMESTAMP_MILLI, IS_STRONG, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
- *
- * [sequence]
- *     
- *
- * [identity]
- *     MESSAGE_ID
- *
- * [version-no]
- *     
- *
- * [foreign table]
- *     
- *
- * [referrer table]
- *     
- *
- * [foreign property]
- *     
- *
- * [referrer property]
- *     
- *
- * [get/set template]
- * /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
- * Long messageId = entity.getMessageId();
- * Integer villageId = entity.getVillageId();
- * String messageTypeCode = entity.getMessageTypeCode();
- * Integer villageDayId = entity.getVillageDayId();
- * Integer villagePlayerId = entity.getVillagePlayerId();
- * String messageContent = entity.getMessageContent();
- * java.time.LocalDateTime messageDatetime = entity.getMessageDatetime();
- * Long messageUnixtimestampMilli = entity.getMessageUnixtimestampMilli();
- * Boolean isStrong = entity.getIsStrong();
- * java.time.LocalDateTime registerDatetime = entity.getRegisterDatetime();
- * String registerTrace = entity.getRegisterTrace();
- * java.time.LocalDateTime updateDatetime = entity.getUpdateDatetime();
- * String updateTrace = entity.getUpdateTrace();
- * entity.setMessageId(messageId);
- * entity.setVillageId(villageId);
- * entity.setMessageTypeCode(messageTypeCode);
- * entity.setVillageDayId(villageDayId);
- * entity.setVillagePlayerId(villagePlayerId);
- * entity.setMessageContent(messageContent);
- * entity.setMessageDatetime(messageDatetime);
- * entity.setMessageUnixtimestampMilli(messageUnixtimestampMilli);
- * entity.setIsStrong(isStrong);
- * entity.setRegisterDatetime(registerDatetime);
- * entity.setRegisterTrace(registerTrace);
- * entity.setUpdateDatetime(updateDatetime);
- * entity.setUpdateTrace(updateTrace);
- * = = = = = = = = = =/
- * </pre>
  * @author DBFlute(AutoGenerator)
  */
 public abstract class BsMessage extends AbstractEntity implements DomainEntity, EntityDefinedCommonColumn {

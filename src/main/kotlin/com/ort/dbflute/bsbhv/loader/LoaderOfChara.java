@@ -9,35 +9,7 @@ import com.ort.dbflute.exentity.*;
 import com.ort.dbflute.cbean.*;
 
 /**
- * The referrer loader of CHARA as TABLE. <br>
- * <pre>
- * [primary key]
- *     CHARA_ID
- *
- * [column]
- *     CHARA_ID, CHARA_NAME, CHARA_SHORT_NAME, CHARA_GROUP_ID, DISPLAY_WIDTH, DISPLAY_HEIGHT, CHARA_IMG_URL, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
- *
- * [sequence]
- *     
- *
- * [identity]
- *     CHARA_ID
- *
- * [version-no]
- *     
- *
- * [foreign table]
- *     CHARA_GROUP
- *
- * [referrer table]
- *     VILLAGE_PLAYER
- *
- * [foreign property]
- *     charaGroup
- *
- * [referrer property]
- *     villagePlayerList
- * </pre>
+ * The referrer loader of CHARA as TABLE.
  * @author DBFlute(AutoGenerator)
  */
 public class LoaderOfChara {

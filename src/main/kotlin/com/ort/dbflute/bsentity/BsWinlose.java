@@ -13,44 +13,6 @@ import com.ort.dbflute.exentity.*;
 /**
  * The entity of WINLOSE as TABLE. <br>
  * 勝敗
- * <pre>
- * [primary-key]
- *     WINLOSE_CODE
- *
- * [column]
- *     WINLOSE_CODE, WINLOSE_NAME, DISP_ORDER
- *
- * [sequence]
- *     
- *
- * [identity]
- *     
- *
- * [version-no]
- *     
- *
- * [foreign table]
- *     
- *
- * [referrer table]
- *     VILLAGE_PLAYER
- *
- * [foreign property]
- *     
- *
- * [referrer property]
- *     villagePlayerList
- *
- * [get/set template]
- * /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
- * String winloseCode = entity.getWinloseCode();
- * String winloseName = entity.getWinloseName();
- * Integer dispOrder = entity.getDispOrder();
- * entity.setWinloseCode(winloseCode);
- * entity.setWinloseName(winloseName);
- * entity.setDispOrder(dispOrder);
- * = = = = = = = = = =/
- * </pre>
  * @author DBFlute(AutoGenerator)
  */
 public abstract class BsWinlose extends AbstractEntity implements DomainEntity {
@@ -106,7 +68,7 @@ public abstract class BsWinlose extends AbstractEntity implements DomainEntity {
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
      */
     public CDef.WinLose getWinloseCodeAsWinLose() {
-        return CDef.WinLose.codeOf(getWinloseCode());
+        return CDef.WinLose.of(getWinloseCode()).orElse(null);
     }
 
     /**

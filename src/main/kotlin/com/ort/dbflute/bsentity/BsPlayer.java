@@ -16,58 +16,6 @@ import com.ort.dbflute.exentity.*;
 /**
  * The entity of PLAYER as TABLE. <br>
  * プレイヤー
- * <pre>
- * [primary-key]
- *     PLAYER_ID
- *
- * [column]
- *     PLAYER_ID, UID, NICKNAME, TWITTER_USER_NAME, AUTHORITY_CODE, IS_RESTRICTED_PARTICIPATION, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
- *
- * [sequence]
- *     
- *
- * [identity]
- *     PLAYER_ID
- *
- * [version-no]
- *     
- *
- * [foreign table]
- *     AUTHORITY
- *
- * [referrer table]
- *     VILLAGE, VILLAGE_PLAYER
- *
- * [foreign property]
- *     authority
- *
- * [referrer property]
- *     villageList, villagePlayerList
- *
- * [get/set template]
- * /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
- * Integer playerId = entity.getPlayerId();
- * String uid = entity.getUid();
- * String nickname = entity.getNickname();
- * String twitterUserName = entity.getTwitterUserName();
- * String authorityCode = entity.getAuthorityCode();
- * Boolean isRestrictedParticipation = entity.getIsRestrictedParticipation();
- * java.time.LocalDateTime registerDatetime = entity.getRegisterDatetime();
- * String registerTrace = entity.getRegisterTrace();
- * java.time.LocalDateTime updateDatetime = entity.getUpdateDatetime();
- * String updateTrace = entity.getUpdateTrace();
- * entity.setPlayerId(playerId);
- * entity.setUid(uid);
- * entity.setNickname(nickname);
- * entity.setTwitterUserName(twitterUserName);
- * entity.setAuthorityCode(authorityCode);
- * entity.setIsRestrictedParticipation(isRestrictedParticipation);
- * entity.setRegisterDatetime(registerDatetime);
- * entity.setRegisterTrace(registerTrace);
- * entity.setUpdateDatetime(updateDatetime);
- * entity.setUpdateTrace(updateTrace);
- * = = = = = = = = = =/
- * </pre>
  * @author DBFlute(AutoGenerator)
  */
 public abstract class BsPlayer extends AbstractEntity implements DomainEntity, EntityDefinedCommonColumn {
@@ -155,7 +103,7 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
      */
     public CDef.Authority getAuthorityCodeAsAuthority() {
-        return CDef.Authority.codeOf(getAuthorityCode());
+        return CDef.Authority.of(getAuthorityCode()).orElse(null);
     }
 
     /**

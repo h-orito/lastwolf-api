@@ -1,88 +1,51 @@
 package com.ort.lastwolf.fw.security
 
+import com.ort.lastwolf.fw.filter.LoginFilter
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.web.AuthenticationEntryPoint
-import org.springframework.security.web.access.AccessDeniedHandler
+import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
-
-/**
- * see https://qiita.com/rubytomato@github/items/6c6318c948398fa62275
- */
+@Configuration
 @EnableWebSecurity
 @ConfigurationProperties(prefix = "security")
-class LastwolfSecurityConfig() : WebSecurityConfigurerAdapter() {
+class LastwolfSecurityConfig(
+    private val loginFilter: LoginFilter
+) {
 
-    // ===================================================================================
-    //                                                                           Attribute
-    //                                                                           =========
     // CORSを許可するドメイン
     lateinit var corsClientUrls: List<String>
 
-    // ===================================================================================
-    //                                                                             Execute
-    //                                                                           =========
-    @Throws(Exception::class)
-    override fun configure(http: HttpSecurity) {
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            // AUTHORIZE
-            .authorizeRequests()
-            // TODO うまく動作させられていないので調査
-            // LoginFilterあたり？
-//            .antMatchers("/admin/**")
-//            .hasRole("ADMIN")
-            .anyRequest()
-            .permitAll()
-            .and()
-            // EXCEPTION
-            .exceptionHandling()
-            .authenticationEntryPoint(authenticationEntryPoint())
-            .accessDeniedHandler(accessDeniedHandler())
-            .and()
-            // CSRF
-            .csrf()
-            .disable()
-            // CORS
-            .cors()
-            .configurationSource(getCorsConfigurationSource())
+            .authorizeHttpRequests { auth ->
+                auth.anyRequest().permitAll()
+            }
+            .exceptionHandling { ex ->
+                ex.authenticationEntryPoint(LastwolfAuthenticationEntryPoint())
+                ex.accessDeniedHandler(LastwolfAccessDeniedHandler())
+            }
+            .csrf { it.disable() }
+            .cors { it.configurationSource(getCorsConfigurationSource()) }
+            .addFilterBefore(loginFilter, UsernamePasswordAuthenticationFilter::class.java)
+        return http.build()
     }
 
-    internal fun authenticationEntryPoint(): AuthenticationEntryPoint {
-        return LastwolfAuthenticationEntryPoint()
-    }
-
-    internal fun accessDeniedHandler(): AccessDeniedHandler {
-        return LastwolfAccessDeniedHandler()
-    }
-
-    /**
-     * see https://rennnosukesann.hatenablog.com/entry/2019/09/18/235731
-     */
     private fun getCorsConfigurationSource(): CorsConfigurationSource {
         val corsConfiguration = CorsConfiguration()
-
-        // CORSを許可するURLの登録(Access-Control-Allow-Origin)
         this.corsClientUrls.forEach { corsConfiguration.addAllowedOrigin(it) }
-
-        // 許可するHeaderの登録(Access-Control-Allow-Headers)
         corsConfiguration.addAllowedHeader(CorsConfiguration.ALL)
-
-        // 許可するMethodの登録(Access-Control-AllowMethods)
         corsConfiguration.addAllowedMethod(CorsConfiguration.ALL)
-
-        // 認証情報送信許可の登録(Access-Control-Allow-Credentials)
         corsConfiguration.allowCredentials = true
-
         val corsSource = UrlBasedCorsConfigurationSource()
-
-        // どのパスに上記ルールを適用するか
         corsSource.registerCorsConfiguration("/**", corsConfiguration)
-
         return corsSource
     }
 }

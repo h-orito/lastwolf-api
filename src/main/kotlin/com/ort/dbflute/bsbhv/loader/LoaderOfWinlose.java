@@ -9,35 +9,7 @@ import com.ort.dbflute.exentity.*;
 import com.ort.dbflute.cbean.*;
 
 /**
- * The referrer loader of WINLOSE as TABLE. <br>
- * <pre>
- * [primary key]
- *     WINLOSE_CODE
- *
- * [column]
- *     WINLOSE_CODE, WINLOSE_NAME, DISP_ORDER
- *
- * [sequence]
- *     
- *
- * [identity]
- *     
- *
- * [version-no]
- *     
- *
- * [foreign table]
- *     
- *
- * [referrer table]
- *     VILLAGE_PLAYER
- *
- * [foreign property]
- *     
- *
- * [referrer property]
- *     villagePlayerList
- * </pre>
+ * The referrer loader of WINLOSE as TABLE.
  * @author DBFlute(AutoGenerator)
  */
 public class LoaderOfWinlose {

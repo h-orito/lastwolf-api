@@ -16,72 +16,6 @@ import com.ort.dbflute.exentity.*;
 /**
  * The entity of VILLAGE_PLAYER as TABLE. <br>
  * 村参加者
- * <pre>
- * [primary-key]
- *     VILLAGE_PLAYER_ID
- *
- * [column]
- *     VILLAGE_PLAYER_ID, VILLAGE_ID, PLAYER_ID, CHARA_ID, SKILL_CODE, REQUEST_SKILL_CODE, SECOND_REQUEST_SKILL_CODE, IS_DEAD, DEAD_REASON_CODE, DEAD_VILLAGE_DAY_ID, IS_GONE, DONE_ROLLCALL, WINLOSE_CODE, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
- *
- * [sequence]
- *     
- *
- * [identity]
- *     VILLAGE_PLAYER_ID
- *
- * [version-no]
- *     
- *
- * [foreign table]
- *     CHARA, DEAD_REASON, VILLAGE_DAY, PLAYER, SKILL, VILLAGE, WINLOSE
- *
- * [referrer table]
- *     ABILITY, COMING_OUT, COMMIT, VOTE
- *
- * [foreign property]
- *     chara, deadReason, villageDay, player, skillByRequestSkillCode, skillBySecondRequestSkillCode, skillBySkillCode, village, winlose
- *
- * [referrer property]
- *     abilityByTargetVillagePlayerIdList, abilityByVillagePlayerIdList, comingOutList, commitList, voteByTargetVillagePlayerIdList, voteByVillagePlayerIdList
- *
- * [get/set template]
- * /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
- * Integer villagePlayerId = entity.getVillagePlayerId();
- * Integer villageId = entity.getVillageId();
- * Integer playerId = entity.getPlayerId();
- * Integer charaId = entity.getCharaId();
- * String skillCode = entity.getSkillCode();
- * String requestSkillCode = entity.getRequestSkillCode();
- * String secondRequestSkillCode = entity.getSecondRequestSkillCode();
- * Boolean isDead = entity.getIsDead();
- * String deadReasonCode = entity.getDeadReasonCode();
- * Integer deadVillageDayId = entity.getDeadVillageDayId();
- * Boolean isGone = entity.getIsGone();
- * Boolean doneRollcall = entity.getDoneRollcall();
- * String winloseCode = entity.getWinloseCode();
- * java.time.LocalDateTime registerDatetime = entity.getRegisterDatetime();
- * String registerTrace = entity.getRegisterTrace();
- * java.time.LocalDateTime updateDatetime = entity.getUpdateDatetime();
- * String updateTrace = entity.getUpdateTrace();
- * entity.setVillagePlayerId(villagePlayerId);
- * entity.setVillageId(villageId);
- * entity.setPlayerId(playerId);
- * entity.setCharaId(charaId);
- * entity.setSkillCode(skillCode);
- * entity.setRequestSkillCode(requestSkillCode);
- * entity.setSecondRequestSkillCode(secondRequestSkillCode);
- * entity.setIsDead(isDead);
- * entity.setDeadReasonCode(deadReasonCode);
- * entity.setDeadVillageDayId(deadVillageDayId);
- * entity.setIsGone(isGone);
- * entity.setDoneRollcall(doneRollcall);
- * entity.setWinloseCode(winloseCode);
- * entity.setRegisterDatetime(registerDatetime);
- * entity.setRegisterTrace(registerTrace);
- * entity.setUpdateDatetime(updateDatetime);
- * entity.setUpdateTrace(updateTrace);
- * = = = = = = = = = =/
- * </pre>
  * @author DBFlute(AutoGenerator)
  */
 public abstract class BsVillagePlayer extends AbstractEntity implements DomainEntity, EntityDefinedCommonColumn {
@@ -179,7 +113,7 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
      */
     public CDef.Skill getSkillCodeAsSkill() {
-        return CDef.Skill.codeOf(getSkillCode());
+        return CDef.Skill.of(getSkillCode()).orElse(null);
     }
 
     /**
@@ -200,7 +134,7 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
      */
     public CDef.Skill getRequestSkillCodeAsSkill() {
-        return CDef.Skill.codeOf(getRequestSkillCode());
+        return CDef.Skill.of(getRequestSkillCode()).orElse(null);
     }
 
     /**
@@ -221,7 +155,7 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
      */
     public CDef.Skill getSecondRequestSkillCodeAsSkill() {
-        return CDef.Skill.codeOf(getSecondRequestSkillCode());
+        return CDef.Skill.of(getSecondRequestSkillCode()).orElse(null);
     }
 
     /**
@@ -242,7 +176,7 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
      */
     public CDef.DeadReason getDeadReasonCodeAsDeadReason() {
-        return CDef.DeadReason.codeOf(getDeadReasonCode());
+        return CDef.DeadReason.of(getDeadReasonCode()).orElse(null);
     }
 
     /**
@@ -263,7 +197,7 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
      */
     public CDef.WinLose getWinloseCodeAsWinLose() {
-        return CDef.WinLose.codeOf(getWinloseCode());
+        return CDef.WinLose.of(getWinloseCode()).orElse(null);
     }
 
     /**
