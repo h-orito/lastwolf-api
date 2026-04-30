@@ -5,6 +5,5 @@ data class Charachip(
     val name: String,
     val designer: Designer,
     val descriptionUrl: String,
-    val charaIdList: List<Int>
-) {
-}
+    val charaIdList: List<Int>,
+)

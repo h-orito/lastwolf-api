@@ -18,11 +18,11 @@ data class VillageParticipantView(
     val skillRequest: SkillRequest?,
     val winlose: WinLose?,
     val comingOut: ComingOut?,
-    val doneRollCall: Boolean
+    val doneRollCall: Boolean,
 ) {
     constructor(
         participant: VillageParticipant,
-        shouldHidePlayer: Boolean
+        shouldHidePlayer: Boolean,
     ) : this(
         id = participant.id,
         chara = CharaView(participant.chara),
@@ -32,6 +32,6 @@ data class VillageParticipantView(
         skillRequest = if (shouldHidePlayer) null else participant.skillRequest,
         winlose = participant.winlose,
         comingOut = participant.comingOut,
-        doneRollCall = participant.doneRollCall
+        doneRollCall = participant.doneRollCall,
     )
 }

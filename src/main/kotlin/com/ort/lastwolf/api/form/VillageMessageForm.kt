@@ -6,7 +6,7 @@ data class VillageMessageForm(
     val from: Long?,
     val keyword: String?,
     val page_size: Int?,
-    val page_num: Int?
+    val page_num: Int?,
 ) {
     constructor() : this(null, null, null, null, null, null)
 }

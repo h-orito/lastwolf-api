@@ -16,9 +16,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableWebSecurity
 @ConfigurationProperties(prefix = "security")
 class LastwolfSecurityConfig(
-    private val loginFilter: LoginFilter
+    private val loginFilter: LoginFilter,
 ) {
-
     // CORSを許可するドメイン
     lateinit var corsClientUrls: List<String>
 
@@ -27,12 +26,10 @@ class LastwolfSecurityConfig(
         http
             .authorizeHttpRequests { auth ->
                 auth.anyRequest().permitAll()
-            }
-            .exceptionHandling { ex ->
+            }.exceptionHandling { ex ->
                 ex.authenticationEntryPoint(LastwolfAuthenticationEntryPoint())
                 ex.accessDeniedHandler(LastwolfAccessDeniedHandler())
-            }
-            .csrf { it.disable() }
+            }.csrf { it.disable() }
             .cors { it.configurationSource(getCorsConfigurationSource()) }
             .addFilterBefore(loginFilter, UsernamePasswordAuthenticationFilter::class.java)
         return http.build()

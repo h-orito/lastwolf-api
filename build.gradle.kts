@@ -7,6 +7,7 @@ plugins {
     kotlin("jvm") version "2.1.21"
     kotlin("plugin.spring") version "2.1.21"
     id("com.google.cloud.tools.jib") version "3.4.4"
+    id("org.jlleitschuh.gradle.ktlint") version "12.2.0"
 }
 
 group = "com.ort"
@@ -62,6 +63,13 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+ktlint {
+    version.set("1.5.0")
+    filter {
+        exclude { element -> element.file.path.contains("/com/ort/dbflute/") }
+    }
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
@@ -82,11 +90,12 @@ jib {
         image = "ghcr.io/h-orito/lastwolf"
     }
     container {
-        jvmFlags = listOf(
-            "-server",
-            "-Djava.awt.headless=true",
-            "-Dspring.profiles.active=production"
-        )
+        jvmFlags =
+            listOf(
+                "-server",
+                "-Djava.awt.headless=true",
+                "-Dspring.profiles.active=production",
+            )
         creationTime = "USE_CURRENT_TIMESTAMP"
     }
 }

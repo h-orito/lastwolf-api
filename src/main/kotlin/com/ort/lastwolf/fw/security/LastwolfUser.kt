@@ -6,35 +6,20 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 data class LastwolfUser(
-        val uid: String,
-        val authority: CDef.Authority
+    val uid: String,
+    val authority: CDef.Authority,
 ) : UserDetails {
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> = mutableListOf(SimpleGrantedAuthority(this.authority.code()))
 
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return mutableListOf(SimpleGrantedAuthority(this.authority.code()))
-    }
+    override fun isEnabled(): Boolean = true
 
-    override fun isEnabled(): Boolean {
-        return true
-    }
+    override fun getUsername(): String = this.uid
 
-    override fun getUsername(): String {
-        return this.uid
-    }
+    override fun isCredentialsNonExpired(): Boolean = true
 
-    override fun isCredentialsNonExpired(): Boolean {
-        return true
-    }
+    override fun getPassword(): String = ""
 
-    override fun getPassword(): String {
-        return ""
-    }
+    override fun isAccountNonExpired(): Boolean = true
 
-    override fun isAccountNonExpired(): Boolean {
-        return true
-    }
-
-    override fun isAccountNonLocked(): Boolean {
-        return true
-    }
+    override fun isAccountNonLocked(): Boolean = true
 }

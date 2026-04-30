@@ -1,7 +1,14 @@
 package com.ort.lastwolf.application.coordinator
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.lastwolf.application.service.*
+import com.ort.lastwolf.application.service.AbilityService
+import com.ort.lastwolf.application.service.CharachipService
+import com.ort.lastwolf.application.service.ComingOutService
+import com.ort.lastwolf.application.service.CommitService
+import com.ort.lastwolf.application.service.MessageService
+import com.ort.lastwolf.application.service.PlayerService
+import com.ort.lastwolf.application.service.VillageService
+import com.ort.lastwolf.application.service.VoteService
 import com.ort.lastwolf.domain.model.ability.AbilityType
 import com.ort.lastwolf.domain.model.charachip.Chara
 import com.ort.lastwolf.domain.model.charachip.Charas
@@ -35,7 +42,6 @@ import com.ort.lastwolf.fw.security.LastwolfUser
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-
 @Service
 class VillageCoordinator(
     // application service
@@ -59,16 +65,18 @@ class VillageCoordinator(
     private val voteDomainService: VoteDomainService,
     private val creatorDomainService: CreatorDomainService,
     private val villageSettingDomainService: VillageSettingDomainService,
-    private val comingOutDomainService: ComingOutDomainService
+    private val comingOutDomainService: ComingOutDomainService,
 ) {
-
     /**
      * 村参加者取得
      * @param village village
      * @param user user
      * @return 村参加者
      */
-    fun findParticipant(village: Village, user: LastwolfUser?): VillageParticipant? {
+    fun findParticipant(
+        village: Village,
+        user: LastwolfUser?,
+    ): VillageParticipant? {
         user ?: return null
         val player: Player = playerService.findPlayer(user)
         return village.participants.findByPlayerId(player.id)
@@ -79,7 +87,10 @@ class VillageCoordinator(
      * @param paramVillage village
      * @param user user
      */
-    fun confirmVillage(paramVillage: Village, user: LastwolfUser) {
+    fun confirmVillage(
+        paramVillage: Village,
+        user: LastwolfUser,
+    ) {
         // 作成できない状況ならエラー
         val player: Player = playerService.findPlayer(user)
         player.assertCreateVillage(user)
@@ -92,7 +103,10 @@ class VillageCoordinator(
      * @return 村ID
      */
     @Transactional(rollbackFor = [Exception::class, LastwolfBusinessException::class])
-    fun registerVillage(paramVillage: Village, user: LastwolfUser): Int {
+    fun registerVillage(
+        paramVillage: Village,
+        user: LastwolfUser,
+    ): Int {
         // 作成できない状況ならエラー
         val player: Player = playerService.findPlayer(user)
         player.assertCreateVillage(user)
@@ -108,7 +122,7 @@ class VillageCoordinator(
     fun assertModifySetting(
         village: Village,
         player: Player,
-        resource: VillageCreateResource
+        resource: VillageCreateResource,
     ) {
         if (!creatorDomainService.convertToSituation(village, player).isAvailableModifySetting) {
             throw LastwolfBusinessException("設定を変更できません")
@@ -123,7 +137,7 @@ class VillageCoordinator(
     fun modifySetting(
         village: Village,
         player: Player,
-        resource: VillageCreateResource
+        resource: VillageCreateResource,
     ) {
         assertModifySetting(village, player, resource)
         // 変更なしの場合もある
@@ -138,7 +152,10 @@ class VillageCoordinator(
     }
 
     /** 点呼開始 */
-    fun startRollCall(villageId: Int, user: LastwolfUser) {
+    fun startRollCall(
+        villageId: Int,
+        user: LastwolfUser,
+    ) {
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
         // 開始できない状況ならエラー
@@ -152,13 +169,16 @@ class VillageCoordinator(
             Message.createPublicSystemMessage(
                 "点呼が開始されました。\n参加者は進行欄の「準備完了」ボタンを押してください。",
                 village.days.latestDay().id,
-                true
-            )
+                true,
+            ),
         )
     }
 
     /** 点呼をやめる */
-    fun cancelRollCall(villageId: Int, user: LastwolfUser) {
+    fun cancelRollCall(
+        villageId: Int,
+        user: LastwolfUser,
+    ) {
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
         // 中止できない状況ならエラー
@@ -172,11 +192,10 @@ class VillageCoordinator(
             Message.createPublicSystemMessage(
                 "点呼が中止され、全員の準備完了状態が解除されました。",
                 village.days.latestDay().id,
-                true
-            )
+                true,
+            ),
         )
     }
-
 
     /**
      * 村に参加できるかチェック
@@ -193,7 +212,7 @@ class VillageCoordinator(
         charaId: Int,
         firstRequestSkill: CDef.Skill = CDef.Skill.おまかせ,
         secondRequestSkill: CDef.Skill = CDef.Skill.おまかせ,
-        password: String?
+        password: String?,
     ) {
         // 参加できない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
@@ -205,7 +224,7 @@ class VillageCoordinator(
             charaId,
             firstRequestSkill,
             secondRequestSkill,
-            password
+            password,
         )
     }
 
@@ -223,16 +242,17 @@ class VillageCoordinator(
         playerId: Int,
         charaId: Int,
         firstRequestSkill: CDef.Skill = CDef.Skill.おまかせ,
-        secondRequestSkill: CDef.Skill = CDef.Skill.おまかせ
+        secondRequestSkill: CDef.Skill = CDef.Skill.おまかせ,
     ) {
         // 村参加者登録
         var village: Village = villageService.findVillage(villageId)
-        val changedVillage: Village = village.participate(
-            playerId = playerId,
-            charaId = charaId,
-            firstRequestSkill = firstRequestSkill,
-            secondRequestSkill = secondRequestSkill
-        )
+        val changedVillage: Village =
+            village.participate(
+                playerId = playerId,
+                charaId = charaId,
+                firstRequestSkill = firstRequestSkill,
+                secondRequestSkill = secondRequestSkill,
+            )
         village = villageService.updateVillageDifference(village, changedVillage)
         val participant: VillageParticipant = village.participants.firstByPlayerId(playerId)
         val chara: Chara = charachipService.findChara(charaId)
@@ -240,7 +260,7 @@ class VillageCoordinator(
         messageService.registerParticipateMessage(
             village = village,
             participant = participant,
-            chara = chara
+            chara = chara,
         )
     }
 
@@ -251,17 +271,23 @@ class VillageCoordinator(
      * @param firstRequestSkill 第1希望
      * @param secondRequestSkill 第2希望
      */
-    fun changeSkillRequest(villageId: Int, user: LastwolfUser, firstRequestSkill: String, secondRequestSkill: String) {
+    fun changeSkillRequest(
+        villageId: Int,
+        user: LastwolfUser,
+        firstRequestSkill: String,
+        secondRequestSkill: String,
+    ) {
         // 役職希望変更できない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant? = findParticipant(village, user)
         skillRequestDomainService.assertSkillRequest(village, participant, firstRequestSkill, secondRequestSkill)
         // 役職希望変更
-        val changedVillage: Village = village.changeSkillRequest(
-            participant!!.id,
-            CDef.Skill.codeOf(firstRequestSkill)!!,
-            CDef.Skill.codeOf(secondRequestSkill)!!
-        )
+        val changedVillage: Village =
+            village.changeSkillRequest(
+                participant!!.id,
+                CDef.Skill.codeOf(firstRequestSkill)!!,
+                CDef.Skill.codeOf(secondRequestSkill)!!,
+            )
         villageService.updateVillageDifference(village, changedVillage)
     }
 
@@ -269,7 +295,11 @@ class VillageCoordinator(
      * 点呼
      */
     @Transactional(rollbackFor = [Exception::class, LastwolfBusinessException::class])
-    fun rollCall(villageId: Int, user: LastwolfUser, doRollcall: Boolean) {
+    fun rollCall(
+        villageId: Int,
+        user: LastwolfUser,
+        doRollcall: Boolean,
+    ) {
         // 点呼できない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant? = findParticipant(village, user)
@@ -277,7 +307,7 @@ class VillageCoordinator(
         // 点呼
         villageService.updateVillageDifference(
             village,
-            village.rollCall(participant!!.id, doRollcall)
+            village.rollCall(participant!!.id, doRollcall),
         )
     }
 
@@ -287,16 +317,20 @@ class VillageCoordinator(
      * @param user user
      */
     @Transactional(rollbackFor = [Exception::class, LastwolfBusinessException::class])
-    fun leave(villageId: Int, user: LastwolfUser) {
+    fun leave(
+        villageId: Int,
+        user: LastwolfUser,
+    ) {
         // 退村できない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant? = findParticipant(village, user)
         participateDomainService.assertLeave(village, participant)
         // 退村
-        val updatedVillage: Village = villageService.updateVillageDifference(
-            village,
-            village.leaveParticipant(participant!!.id)
-        )
+        val updatedVillage: Village =
+            villageService.updateVillageDifference(
+                village,
+                village.leaveParticipant(participant!!.id),
+            )
         // 退村メッセージ
         messageService.registerLeaveMessage(updatedVillage, participant.chara)
     }
@@ -307,7 +341,10 @@ class VillageCoordinator(
      * @param user user
      */
     @Transactional(rollbackFor = [Exception::class, LastwolfBusinessException::class])
-    fun startVillage(villageId: Int, user: LastwolfUser) {
+    fun startVillage(
+        villageId: Int,
+        user: LastwolfUser,
+    ) {
         // 開始できない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
@@ -319,13 +356,22 @@ class VillageCoordinator(
     /**
      * 発言できるか確認
      */
-    fun confirmToSay(villageId: Int, user: LastwolfUser, messageText: String, messageType: String, isStrong: Boolean) {
+    fun confirmToSay(
+        villageId: Int,
+        user: LastwolfUser,
+        messageText: String,
+        messageType: String,
+        isStrong: Boolean,
+    ) {
         val messageContent: MessageContent = MessageContent.invoke(messageType, messageText, isStrong)
         // 発言できない状況ならエラー
         assertSay(villageId, user, messageContent)
     }
 
-    fun confirmToCreatorSay(village: Village, messageText: String) {
+    fun confirmToCreatorSay(
+        village: Village,
+        messageText: String,
+    ) {
         val messageContent: MessageContent =
             MessageContent.invoke(CDef.MessageType.村建て発言.code(), messageText, false)
         // 発言できない状況ならエラー
@@ -341,7 +387,7 @@ class VillageCoordinator(
         user: LastwolfUser,
         messageText: String,
         messageType: String,
-        isStrong: Boolean
+        isStrong: Boolean,
     ) {
         val messageContent: MessageContent = MessageContent.invoke(messageType, messageText, isStrong)
         // 発言できない状況ならエラー
@@ -354,16 +400,20 @@ class VillageCoordinator(
     }
 
     @Transactional(rollbackFor = [Exception::class, LastwolfBusinessException::class])
-    fun creatorSay(village: Village, messageText: String) {
+    fun creatorSay(
+        village: Village,
+        messageText: String,
+    ) {
         val messageContent: MessageContent =
             MessageContent.invoke(CDef.MessageType.村建て発言.code(), messageText, false)
         // 発言できない状況ならエラー
         sayDomainService.assertCreatorSay(village, messageContent)
         // 発言
-        val dayId = when {
-            village.days.latestDay().isVoteTime() -> village.days.latestNoonDay().id
-            else -> village.days.latestDay().id
-        }
+        val dayId =
+            when {
+                village.days.latestDay().isVoteTime() -> village.days.latestNoonDay().id
+                else -> village.days.latestDay().id
+            }
         val message: Message = Message.createCreatorSayMessage(messageText, dayId)
         messageService.registerMessage(village, message)
     }
@@ -377,7 +427,12 @@ class VillageCoordinator(
      * @param abilityTypeCode 能力種別
      */
     @Transactional(rollbackFor = [Exception::class, LastwolfBusinessException::class])
-    fun setAbility(villageId: Int, user: LastwolfUser, targetId: Int?, abilityTypeCode: String) {
+    fun setAbility(
+        villageId: Int,
+        user: LastwolfUser,
+        targetId: Int?,
+        abilityTypeCode: String,
+    ) {
         // 能力セットできない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant? = findParticipant(village, user)
@@ -398,17 +453,22 @@ class VillageCoordinator(
      * @param targetId 対象村参加者ID
      */
     @Transactional(rollbackFor = [Exception::class, LastwolfBusinessException::class])
-    fun setVote(villageId: Int, user: LastwolfUser, targetId: Int) {
+    fun setVote(
+        villageId: Int,
+        user: LastwolfUser,
+        targetId: Int,
+    ) {
         // 投票セットできない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant? = findParticipant(village, user)
         voteDomainService.assertVote(village, participant, targetId)
         // 投票
-        val villageVote = VillageVote(
-            village.days.latestDay(),
-            participant!!.id,
-            targetId
-        )
+        val villageVote =
+            VillageVote(
+                village.days.latestDay(),
+                participant!!.id,
+                targetId,
+            )
         voteService.updateVote(village, villageVote)
         // 投票コミット
         dayChangeCoordinator.dayChangeIfNeeded(villageId)
@@ -422,7 +482,11 @@ class VillageCoordinator(
      * @param doCommit コミットするか
      */
     @Transactional(rollbackFor = [Exception::class, LastwolfBusinessException::class])
-    fun setCommit(villageId: Int, user: LastwolfUser, doCommit: Boolean) {
+    fun setCommit(
+        villageId: Int,
+        user: LastwolfUser,
+        doCommit: Boolean,
+    ) {
         // コミットできない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant? = findParticipant(village, user)
@@ -443,7 +507,11 @@ class VillageCoordinator(
      * @param skill skill
      */
     @Transactional(rollbackFor = [Exception::class, LastwolfBusinessException::class])
-    fun setComingOut(villageId: Int, user: LastwolfUser, skill: Skill?) {
+    fun setComingOut(
+        villageId: Int,
+        user: LastwolfUser,
+        skill: Skill?,
+    ) {
         // カミングアウトできない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant? = findParticipant(village, user)
@@ -451,10 +519,12 @@ class VillageCoordinator(
         // カミングアウト
         if (skill == null) {
             comingOutService.deleteComingOut(participant!!.id)
-        } else comingOutService.registerComingOut(
-            participant!!.id,
-            skill
-        )
+        } else {
+            comingOutService.registerComingOut(
+                participant!!.id,
+                skill,
+            )
+        }
         messageService.registerComingOutMessage(village, participant.chara, skill)
     }
 
@@ -467,7 +537,7 @@ class VillageCoordinator(
     fun findActionSituation(
         village: Village,
         user: LastwolfUser?,
-        charas: Charas
+        charas: Charas,
     ): SituationAsParticipant {
         val player: Player? = if (user == null) null else playerService.findPlayer(user)
         val participant: VillageParticipant? = findParticipant(village, user)
@@ -477,9 +547,13 @@ class VillageCoordinator(
         val abilities: VillageAbilities = abilityService.findVillageAbilities(village.id)
 
         return SituationAsParticipant(
-            participate = participateDomainService.convertToSituation(
-                village, participant, player, charas
-            ),
+            participate =
+                participateDomainService.convertToSituation(
+                    village,
+                    participant,
+                    player,
+                    charas,
+                ),
             rollCall = rollCallDomainService.convertToSituation(village, participant),
             skillRequest = skillRequestDomainService.convertToSituation(village, participant, skillRequest),
             commit = commitDomainService.convertToSituation(village, participant, commit),
@@ -487,7 +561,7 @@ class VillageCoordinator(
             say = sayDomainService.convertToSituation(village, participant),
             ability = abilityDomainService.convertToSituationList(village, participant, abilities),
             vote = voteDomainService.convertToSituation(village, participant, votes),
-            creator = creatorDomainService.convertToSituation(village, player)
+            creator = creatorDomainService.convertToSituation(village, player),
         )
     }
 
@@ -505,16 +579,23 @@ class VillageCoordinator(
         return village
     }
 
-    private fun participateDummyChara(villageId: Int, village: Village) {
+    private fun participateDummyChara(
+        villageId: Int,
+        village: Village,
+    ) {
         val dummyPlayerId = 1 // 固定
         this.participate(
             villageId = villageId,
             playerId = dummyPlayerId,
-            charaId = village.setting.charachip.dummyCharaId
+            charaId = village.setting.charachip.dummyCharaId,
         )
     }
 
-    private fun assertSay(villageId: Int, user: LastwolfUser?, messageContent: MessageContent) {
+    private fun assertSay(
+        villageId: Int,
+        user: LastwolfUser?,
+        messageContent: MessageContent,
+    ) {
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant? = findParticipant(village, user)
         val latestDayMessageList: List<Message> =

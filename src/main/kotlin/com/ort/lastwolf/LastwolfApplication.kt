@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Import
     DBFluteBeansJavaConfig::class,
     LastwolfAppConfig::class,
     LastwolfWebMvcConfigurer::class,
-    FirebaseConfig::class
+    FirebaseConfig::class,
 )
 class LastwolfApplication
 

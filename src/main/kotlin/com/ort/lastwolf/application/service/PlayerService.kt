@@ -8,9 +8,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class PlayerService(
-    private val playerDataSource: PlayerDataSource
+    private val playerDataSource: PlayerDataSource,
 ) {
-
     fun findPlayer(id: Int): Player = playerDataSource.findPlayer(id)
 
     fun findPlayer(user: LastwolfUser): Player = playerDataSource.findPlayer(user.uid)
@@ -19,9 +18,16 @@ class PlayerService(
 
     fun findPlayers(playerIdList: List<Int>): Players = playerDataSource.findPlayers(playerIdList)
 
-    fun updateNickname(user: LastwolfUser, nickname: String, twitterUserName: String) {
+    fun updateNickname(
+        user: LastwolfUser,
+        nickname: String,
+        twitterUserName: String,
+    ) {
         playerDataSource.update(user.uid, nickname, twitterUserName)
     }
 
-    fun updateDifference(before: Players, after: Players) = playerDataSource.updateDifference(before, after)
+    fun updateDifference(
+        before: Players,
+        after: Players,
+    ) = playerDataSource.updateDifference(before, after)
 }

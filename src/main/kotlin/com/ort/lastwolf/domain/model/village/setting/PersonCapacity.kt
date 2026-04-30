@@ -2,11 +2,9 @@ package com.ort.lastwolf.domain.model.village.setting
 
 data class PersonCapacity(
     val min: Int,
-    val max: Int
+    val max: Int,
 ) {
-
     companion object {
-
         private const val DEFAULT_MIN = 10
         private const val DEFAULT_MAX = 16
         private const val MIN_MIN: Int = 1
@@ -14,7 +12,7 @@ data class PersonCapacity(
 
         operator fun invoke(
             min: Int?,
-            max: Int?
+            max: Int?,
         ): PersonCapacity {
             val minimum = min ?: DEFAULT_MIN
             val maximum = max ?: DEFAULT_MAX
@@ -25,7 +23,5 @@ data class PersonCapacity(
         }
     }
 
-    fun existsDifference(capacity: PersonCapacity): Boolean {
-        return min != capacity.min || max != capacity.max
-    }
+    fun existsDifference(capacity: PersonCapacity): Boolean = min != capacity.min || max != capacity.max
 }

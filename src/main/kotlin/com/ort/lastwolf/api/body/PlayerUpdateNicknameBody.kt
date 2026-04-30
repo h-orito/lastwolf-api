@@ -5,11 +5,11 @@ import jakarta.validation.constraints.NotNull
 data class PlayerUpdateNicknameBody(
     @field:NotNull(message = "nicknameは必須")
     val nickname: String?,
-
     @field:NotNull(message = "twitterUserNameは必須")
-    val twitterUserName: String?
+    val twitterUserName: String?,
 ) {
     constructor() : this(
-        null, null
+        null,
+        null,
     )
 }

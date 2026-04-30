@@ -1,7 +1,6 @@
 package com.ort.lastwolf.domain.service.daychange
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.lastwolf.domain.model.charachip.Charas
 import com.ort.lastwolf.domain.model.daychange.DayChange
 import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.skill.toModel
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class SuicideDomainService {
-
     fun suicide(daychange: DayChange): DayChange {
         var village = daychange.village.copy()
         var messages = daychange.messages.copy()
@@ -34,7 +32,11 @@ class SuicideDomainService {
 
     private fun findImmoralSuicideTarget(village: Village): VillageParticipant? {
         // 妖狐系が生存していたら後追いしない
-        if (village.participants.filterAlive().list.any { it.skill!!.isFoxCount() }) {
+        if (village.participants
+                .filterAlive()
+                .list
+                .any { it.skill!!.isFoxCount() }
+        ) {
             return null
         }
         // 生存している背徳者が後追い対象
@@ -45,10 +47,12 @@ class SuicideDomainService {
             .firstOrNull()
     }
 
-    private fun createImmoralSuicideMessage(village: Village, target: VillageParticipant): Message {
-        return Message.createPublicSystemMessage(
+    private fun createImmoralSuicideMessage(
+        village: Village,
+        target: VillageParticipant,
+    ): Message =
+        Message.createPublicSystemMessage(
             text = "${target.chara.name.fullName()}は、妖狐の後を追い、いなくなってしまった。",
-            villageDayId = village.days.latestDay().id
+            villageDayId = village.days.latestDay().id,
         )
-    }
 }

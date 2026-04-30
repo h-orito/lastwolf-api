@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class MasonSayDomainService {
-
-    fun isViewable(village: Village, participant: VillageParticipant?): Boolean {
+    fun isViewable(
+        village: Village,
+        participant: VillageParticipant?,
+    ): Boolean {
         // いずれかを満たせばok
         // 村として可能か
         if (village.isViewableMasonSay()) return true
@@ -17,14 +19,20 @@ class MasonSayDomainService {
         return participant.isViewableMasonSay()
     }
 
-    fun isSayable(village: Village, participant: VillageParticipant): Boolean {
+    fun isSayable(
+        village: Village,
+        participant: VillageParticipant,
+    ): Boolean {
         // 参加者として可能か
         if (!participant.isSayableMasonSay()) return false
         // 村として可能か
         return village.isSayableMasonSay()
     }
 
-    fun assertSay(village: Village, participant: VillageParticipant) {
+    fun assertSay(
+        village: Village,
+        participant: VillageParticipant,
+    ) {
         if (!isSayable(village, participant)) throw LastwolfBusinessException("発言できません")
     }
 }

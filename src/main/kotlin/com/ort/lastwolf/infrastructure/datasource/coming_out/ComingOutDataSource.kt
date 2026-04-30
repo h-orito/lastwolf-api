@@ -6,12 +6,11 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class ComingOutDataSource(
-    private val comingOutBhv: ComingOutBhv
+    private val comingOutBhv: ComingOutBhv,
 ) {
-
     fun register(
         villageParticipantId: Int,
-        comingOut: com.ort.lastwolf.domain.model.village.participant.coming_out.ComingOut
+        comingOut: com.ort.lastwolf.domain.model.village.participant.coming_out.ComingOut,
     ) {
         delete(villageParticipantId)
         val entity = ComingOut()

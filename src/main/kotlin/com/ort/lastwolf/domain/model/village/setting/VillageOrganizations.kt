@@ -4,24 +4,23 @@ import com.ort.dbflute.allcommon.CDef
 import com.ort.lastwolf.domain.model.skill.Skill
 
 data class VillageOrganizations(
-    val organization: Map<Int, String> = defaultOrganization()
+    val organization: Map<Int, String> = defaultOrganization(),
 ) {
     companion object {
-        operator fun invoke(
-            organization: String?
-        ): VillageOrganizations {
+        operator fun invoke(organization: String?): VillageOrganizations {
             requireNotNull(organization)
             return VillageOrganizations(
-                organization = organization
-                    .replace("\r\n", "\n")
-                    .split("\n")
-                    .map { it.length to it }
-                    .toMap()
+                organization =
+                    organization
+                        .replace("\r\n", "\n")
+                        .split("\n")
+                        .map { it.length to it }
+                        .toMap(),
             )
         }
 
-        private fun defaultOrganization(): Map<Int, String> {
-            return mapOf(
+        private fun defaultOrganization(): Map<Int, String> =
+            mapOf(
                 5 to "狼占村村村",
                 6 to "狼占村村村村",
                 7 to "狼狼占村村村村",
@@ -33,9 +32,8 @@ data class VillageOrganizations(
                 13 to "狼狼狼狂占霊狩村村村村村村",
                 14 to "狼狼狼狂占霊狩村村村村村村村",
                 15 to "狼狼狼狂占霊狩村村村村村村村村",
-                16 to "狼狼狼狂占霊狩村村村村村村村村村"
+                16 to "狼狼狼狂占霊狩村村村村村村村村村",
             )
-        }
     }
 
     fun mapToSkillCount(personNum: Int): Map<CDef.Skill, Int> {
@@ -50,12 +48,13 @@ data class VillageOrganizations(
     }
 
     fun allRequestableSkillList(): List<Skill> {
-        val skillList: MutableList<Skill> = organization
-            .map { org -> org.value } // 人数ごとの編成を
-            .flatMap { org -> org.split("") } // 全部まとめて1文字ずつに
-            .distinct()
-            .mapNotNull { orgChar -> Skill.skillByShortName(orgChar) } // 略称から役職を取得して
-            .toMutableList() // 重複削除
+        val skillList: MutableList<Skill> =
+            organization
+                .map { org -> org.value } // 人数ごとの編成を
+                .flatMap { org -> org.split("") } // 全部まとめて1文字ずつに
+                .distinct()
+                .mapNotNull { orgChar -> Skill.skillByShortName(orgChar) } // 略称から役職を取得して
+                .toMutableList() // 重複削除
         skillList.addAll(CDef.Skill.listOfSomeoneSkill().map { Skill(it) })
         return skillList.sortedBy { it.toCdef().order() }
     }

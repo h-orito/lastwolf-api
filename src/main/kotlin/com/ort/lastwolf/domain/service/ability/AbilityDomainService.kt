@@ -17,15 +17,14 @@ import org.springframework.stereotype.Service
 class AbilityDomainService(
     private val attackDomainService: AttackDomainService,
     private val divineDomainService: DivineDomainService,
-    private val guardDomainService: GuardDomainService
+    private val guardDomainService: GuardDomainService,
 ) {
-
     // 選択可能な対象
     fun getSelectableTargetList(
         village: Village,
         participant: VillageParticipant?,
         abilityType: AbilityType,
-        abilities: VillageAbilities
+        abilities: VillageAbilities,
     ): List<VillageParticipant> {
         if (!canUseAbility(village, participant)) return listOf()
         return detectDomainService(abilityType)?.getSelectableTargetList(village, participant, abilities) ?: listOf()
@@ -36,7 +35,7 @@ class AbilityDomainService(
         participant: VillageParticipant?,
         targetId: Int?,
         abilityType: AbilityType,
-        abilities: VillageAbilities
+        abilities: VillageAbilities,
     ) {
         participant?.skill ?: throw LastwolfBadRequestException("役職なし")
         // その能力を持っていない
@@ -56,7 +55,7 @@ class AbilityDomainService(
         village: Village,
         participant: VillageParticipant?,
         abilityType: AbilityType,
-        abilities: VillageAbilities
+        abilities: VillageAbilities,
     ): Boolean {
         participant ?: return false
         // 夜でないと使えない
@@ -66,40 +65,44 @@ class AbilityDomainService(
         return detectDomainService(abilityType)?.isUsable(village, participant, abilities) ?: false
     }
 
-    fun canNoTarget(village: Village, abilityType: AbilityType): Boolean =
-        detectDomainService(abilityType)?.isAvailableNoTarget(village) ?: false
+    fun canNoTarget(
+        village: Village,
+        abilityType: AbilityType,
+    ): Boolean = detectDomainService(abilityType)?.isAvailableNoTarget(village) ?: false
 
     fun convertToSituationList(
         village: Village,
         participant: VillageParticipant?,
-        abilities: VillageAbilities
+        abilities: VillageAbilities,
     ): VillageAbilitySituations {
         participant?.skill ?: return VillageAbilitySituations(listOf())
         val abilityTypes = AbilityTypes(participant.skill)
         return VillageAbilitySituations(
-            list = abilityTypes.list.map { convertToSituation(village, participant, it, abilities) }
+            list = abilityTypes.list.map { convertToSituation(village, participant, it, abilities) },
         )
     }
 
     fun createAbilityMessage(
         village: Village,
         participant: VillageParticipant,
-        ability: VillageAbility
+        ability: VillageAbility,
     ) = detectDomainService(ability.abilityType)!!.createAbilityMessage(village, participant, ability)
 
-    fun detectDomainService(abilityType: AbilityType): IAbilityDomainService? {
-        return when (abilityType.code) {
+    fun detectDomainService(abilityType: AbilityType): IAbilityDomainService? =
+        when (abilityType.code) {
             CDef.AbilityType.襲撃.code() -> attackDomainService
             CDef.AbilityType.占い.code() -> divineDomainService
             CDef.AbilityType.護衛.code() -> guardDomainService
             else -> null
         }
-    }
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun canUseAbility(village: Village, participant: VillageParticipant?): Boolean {
+    private fun canUseAbility(
+        village: Village,
+        participant: VillageParticipant?,
+    ): Boolean {
         // 村として可能か
         if (!village.canUseAbility()) return false
         // 参加者として可能か
@@ -111,13 +114,12 @@ class AbilityDomainService(
         village: Village,
         participant: VillageParticipant?,
         abilityType: AbilityType,
-        abilities: VillageAbilities
-    ): VillageAbilitySituation {
-        return VillageAbilitySituation(
+        abilities: VillageAbilities,
+    ): VillageAbilitySituation =
+        VillageAbilitySituation(
             type = abilityType,
             targetList = this.getSelectableTargetList(village, participant, abilityType, abilities),
             usable = this.isUsable(village, participant, abilityType, abilities),
-            isAvailableNoTarget = this.canNoTarget(village, abilityType)
+            isAvailableNoTarget = this.canNoTarget(village, abilityType),
         )
-    }
 }

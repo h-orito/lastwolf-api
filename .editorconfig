@@ -1,0 +1,6 @@
+root = true
+
+[*.{kt,kts}]
+ktlint_standard_package-name = disabled
+ktlint_standard_value-argument-comment = disabled
+ktlint_standard_value-parameter-comment = disabled

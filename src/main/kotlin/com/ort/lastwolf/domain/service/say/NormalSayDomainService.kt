@@ -7,19 +7,25 @@ import org.springframework.stereotype.Service
 
 @Service
 class NormalSayDomainService {
+    fun isViewable(
+        village: Village,
+        participant: VillageParticipant?,
+    ): Boolean = true
 
-    fun isViewable(village: Village, participant: VillageParticipant?): Boolean {
-        return true
-    }
-
-    fun isSayable(village: Village, participant: VillageParticipant): Boolean {
+    fun isSayable(
+        village: Village,
+        participant: VillageParticipant,
+    ): Boolean {
         // 参加者として可能か
         if (!participant.isSayableNormalSay(village.status.isSettled())) return false
         // 村として可能か
         return village.isSayableNormalSay()
     }
 
-    fun assertSay(village: Village, participant: VillageParticipant) {
+    fun assertSay(
+        village: Village,
+        participant: VillageParticipant,
+    ) {
         if (!isSayable(village, participant)) throw LastwolfBusinessException("発言できません")
     }
 }

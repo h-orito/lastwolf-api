@@ -23,13 +23,14 @@ data class VillageParticipant(
     val skillRequest: SkillRequest,
     val winlose: WinLose?,
     val comingOut: ComingOut?,
-    val doneRollCall: Boolean
+    val doneRollCall: Boolean,
 ) {
     // ===================================================================================
     //                                                                                read
     //                                                                           =========
     // 生存しているか
     fun isAlive(): Boolean = dead == null
+
     fun isDead(): Boolean = !isAlive()
 
     // 差分有無
@@ -54,8 +55,7 @@ data class VillageParticipant(
     fun gone(): VillageParticipant = this.copy(isGone = true)
 
     // 突然死
-    fun suddenlyDeath(villageDay: VillageDay): VillageParticipant =
-        this.copy(dead = Dead(CDef.DeadReason.突然, villageDay))
+    fun suddenlyDeath(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.突然, villageDay))
 
     // 処刑
     fun execute(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.処刑, villageDay))
@@ -64,8 +64,7 @@ data class VillageParticipant(
     fun attack(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.襲撃, villageDay))
 
     // 呪殺
-    fun divineKill(villageDay: VillageDay): VillageParticipant =
-        this.copy(dead = Dead(CDef.DeadReason.呪殺, villageDay))
+    fun divineKill(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.呪殺, villageDay))
 
     // 後追い
     fun suicide(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.後追, villageDay))
@@ -74,8 +73,10 @@ data class VillageParticipant(
     fun assignSkill(skill: Skill): VillageParticipant = this.copy(skill = skill)
 
     // 希望役職
-    fun changeSkillRequest(first: CDef.Skill, second: CDef.Skill): VillageParticipant =
-        this.copy(skillRequest = SkillRequest(Skill(first), Skill(second)))
+    fun changeSkillRequest(
+        first: CDef.Skill,
+        second: CDef.Skill,
+    ): VillageParticipant = this.copy(skillRequest = SkillRequest(Skill(first), Skill(second)))
 
     // 勝敗
     fun winLose(winCamp: Camp?): VillageParticipant {
@@ -92,30 +93,33 @@ data class VillageParticipant(
         fun createForRegister(
             charaId: Int,
             playerId: Int,
-            skillRequest: SkillRequest
-        ): VillageParticipant = VillageParticipant(
-            id = -1, // dummy
-            chara = Chara(
-                id = charaId,
-                name = CharaName("", ""), // dummy
-                charachipId = 0, // dummy
-                image = CharaImage(0, 0, "") // dummy
-            ),
-            player = Player(
-                id = playerId,
-                nickname = "",
-                uid = "",
-                twitterUserName = "",
-                isRestrictedParticipation = false
-            ),
-            dead = null,
-            isGone = false,
-            skill = null,
-            skillRequest = skillRequest,
-            winlose = null,
-            comingOut = null,
-            doneRollCall = false
-        )
+            skillRequest: SkillRequest,
+        ): VillageParticipant =
+            VillageParticipant(
+                id = -1, // dummy
+                chara =
+                    Chara(
+                        id = charaId,
+                        name = CharaName("", ""), // dummy
+                        charachipId = 0, // dummy
+                        image = CharaImage(0, 0, ""), // dummy
+                    ),
+                player =
+                    Player(
+                        id = playerId,
+                        nickname = "",
+                        uid = "",
+                        twitterUserName = "",
+                        isRestrictedParticipation = false,
+                    ),
+                dead = null,
+                isGone = false,
+                skill = null,
+                skillRequest = skillRequest,
+                winlose = null,
+                comingOut = null,
+                doneRollCall = false,
+            )
     }
 
     // ===================================================================================
@@ -150,9 +154,7 @@ data class VillageParticipant(
         return true
     }
 
-    fun isViewableWerewolfSay(): Boolean {
-        return skill?.toCdef()?.isViewableWerewolfSay ?: false
-    }
+    fun isViewableWerewolfSay(): Boolean = skill?.toCdef()?.isViewableWerewolfSay ?: false
 
     fun isSayableWerewolfSay(): Boolean {
         // 死亡していたら不可
@@ -161,9 +163,7 @@ data class VillageParticipant(
         return skill?.toCdef()?.isAvailableWerewolfSay ?: false
     }
 
-    fun isViewableMasonSay(): Boolean {
-        return skill?.toCdef()?.isViewableMasonSay ?: false
-    }
+    fun isViewableMasonSay(): Boolean = skill?.toCdef()?.isViewableMasonSay ?: false
 
     fun isSayableMasonSay(): Boolean {
         // 死亡していたら不可

@@ -3,7 +3,7 @@ package com.ort.lastwolf.domain.model.village
 import com.ort.dbflute.allcommon.CDef
 
 data class VillageDays(
-    val list: List<VillageDay>
+    val list: List<VillageDay>,
 ) {
     // ===================================================================================
     //                                                                          Definition
@@ -15,22 +15,16 @@ data class VillageDays(
     //                                                                           =========
     fun first(id: Int): VillageDay = list.first { it.id == id }
 
-    fun latestDay(): VillageDay {
-        return list.last()
-    }
+    fun latestDay(): VillageDay = list.last()
 
     fun yesterday(): VillageDay {
         check(list.size >= 2) { "no exists yesterday" }
         return list[list.size - 2]
     }
 
-    fun latestNoonDay(): VillageDay {
-        return list.last { it.isNoonTime() }
-    }
+    fun latestNoonDay(): VillageDay = list.last { it.isNoonTime() }
 
-    fun prologueDay(): VillageDay {
-        return list.find { it.day == 1 && it.noonNight.code == CDef.Noonnight.昼.code() }!!
-    }
+    fun prologueDay(): VillageDay = list.find { it.day == 1 && it.noonNight.code == CDef.Noonnight.昼.code() }!!
 
     fun existsDifference(villageDays: VillageDays): Boolean {
         if (list.size != villageDays.list.size) return true
@@ -39,30 +33,42 @@ data class VillageDays(
         }
     }
 
-    fun extendPrologue(): VillageDays {
-        return this.copy(list = list.map {
-            if (it.id == latestDay().id) latestDay().copy(endDatetime = latestDay().endDatetime.plusHours(1L))
-            else it
-        })
-    }
+    fun extendPrologue(): VillageDays =
+        this.copy(
+            list =
+                list.map {
+                    if (it.id == latestDay().id) {
+                        latestDay().copy(endDatetime = latestDay().endDatetime.plusHours(1L))
+                    } else {
+                        it
+                    }
+                },
+        )
 
-    fun extendRollCall(): VillageDays {
-        return this.copy(list = list.map {
-            if (it.id == latestDay().id) latestDay().copy(endDatetime = latestDay().endDatetime.plusMinutes(10L))
-            else it
-        })
-    }
+    fun extendRollCall(): VillageDays =
+        this.copy(
+            list =
+                list.map {
+                    if (it.id == latestDay().id) {
+                        latestDay().copy(endDatetime = latestDay().endDatetime.plusMinutes(10L))
+                    } else {
+                        it
+                    }
+                },
+        )
 
-    fun toLatestDayEpilogue(): VillageDays {
-        return this.copy(list = list.map {
-            if (it.day == latestDay().day && it.noonNight.code == latestDay().noonNight.code) {
-                latestDay().copy(
-                    endDatetime = yesterday().endDatetime.plusHours(extendHours),
-                    isEpilogue = true
-                )
-            } else {
-                it
-            }
-        })
-    }
+    fun toLatestDayEpilogue(): VillageDays =
+        this.copy(
+            list =
+                list.map {
+                    if (it.day == latestDay().day && it.noonNight.code == latestDay().noonNight.code) {
+                        latestDay().copy(
+                            endDatetime = yesterday().endDatetime.plusHours(extendHours),
+                            isEpilogue = true,
+                        )
+                    } else {
+                        it
+                    }
+                },
+        )
 }

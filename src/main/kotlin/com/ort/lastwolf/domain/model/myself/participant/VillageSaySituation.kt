@@ -7,5 +7,5 @@ data class VillageSaySituation(
     @JsonProperty("available_say")
     val isAvailableSay: Boolean,
     val selectableMessageTypeList: List<MessageType> = listOf(),
-    val defaultMessageType: MessageType?
+    val defaultMessageType: MessageType?,
 )

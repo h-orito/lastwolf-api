@@ -8,5 +8,5 @@ data class VillageParticipateSituation(
     val isAvailableParticipate: Boolean,
     val selectableCharaList: List<Chara>,
     val isAvailableLeave: Boolean,
-    val myself: VillageParticipant?
+    val myself: VillageParticipant?,
 )

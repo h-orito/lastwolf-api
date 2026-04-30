@@ -10,20 +10,21 @@ data class PlayerRecordsView(
     val wholeRecord: Record,
     val campRecordList: List<CampRecord>,
     val skillRecordList: List<SkillRecord>,
-    val participateVillageList: List<ParticipateVillageView>
+    val participateVillageList: List<ParticipateVillageView>,
 ) {
     constructor(
-        playerRecords: PlayerRecords
+        playerRecords: PlayerRecords,
     ) : this(
         player = PlayerView(playerRecords.player),
         wholeRecord = playerRecords.wholeRecord,
         campRecordList = playerRecords.campRecordList,
         skillRecordList = playerRecords.skillRecordList,
-        participateVillageList = playerRecords.participateVillageList.map { participateVillage ->
-            ParticipateVillageView(
-                participateVillage.village,
-                participateVillage.participant
-            )
-        }
+        participateVillageList =
+            playerRecords.participateVillageList.map { participateVillage ->
+                ParticipateVillageView(
+                    participateVillage.village,
+                    participateVillage.participant,
+                )
+            },
     )
 }

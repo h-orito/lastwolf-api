@@ -11,17 +11,18 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 @Transactional
 class VillageTest : LastwolfTest() {
-
     @Test
     fun test_createOrganizationMessage() {
         // ## Arrange ##
         var village = DummyData.prologueVillage()
-        village = village.copy(
-            participants = VillageParticipants(
-                count = 10,
-                list = listOf(village.participants.list.first()) + (1..9).map { DummyData.villageParticipant() }
+        village =
+            village.copy(
+                participants =
+                    VillageParticipants(
+                        count = 10,
+                        list = listOf(village.participants.list.first()) + (1..9).map { DummyData.villageParticipant() },
+                    ),
             )
-        )
 
         // ## Act ##
         val message = village.createOrganizationMessage()

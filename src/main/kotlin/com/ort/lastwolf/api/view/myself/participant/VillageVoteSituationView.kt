@@ -9,25 +9,27 @@ data class VillageVoteSituationView(
     @JsonProperty("available_vote")
     val isAvailableVote: Boolean,
     val targetList: List<VillageParticipantView>,
-    val target: VillageParticipantView?
+    val target: VillageParticipantView?,
 ) {
     constructor(
         situation: VillageVoteSituation,
         village: Village,
-        shouldHidePlayer: Boolean
+        shouldHidePlayer: Boolean,
     ) : this(
         isAvailableVote = situation.isAvailableVote,
-        targetList = situation.targetList.map {
-            VillageParticipantView(
-                participant = village.participants.first(it.id),
-                shouldHidePlayer = shouldHidePlayer
-            )
-        },
-        target = situation.target?.let {
-            VillageParticipantView(
-                participant = village.participants.first(it.id),
-                shouldHidePlayer = shouldHidePlayer
-            )
-        }
+        targetList =
+            situation.targetList.map {
+                VillageParticipantView(
+                    participant = village.participants.first(it.id),
+                    shouldHidePlayer = shouldHidePlayer,
+                )
+            },
+        target =
+            situation.target?.let {
+                VillageParticipantView(
+                    participant = village.participants.first(it.id),
+                    shouldHidePlayer = shouldHidePlayer,
+                )
+            },
     )
 }

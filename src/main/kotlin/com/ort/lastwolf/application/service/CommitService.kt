@@ -9,11 +9,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class CommitService(
-    val commitDataSource: CommitDataSource
+    val commitDataSource: CommitDataSource,
 ) {
     fun findCommits(villageId: Int): Commits = commitDataSource.findCommits(villageId)
 
-    fun findCommit(village: Village, participant: VillageParticipant?): Commit? {
+    fun findCommit(
+        village: Village,
+        participant: VillageParticipant?,
+    ): Commit? {
         participant ?: return null
         return commitDataSource.findCommit(village, participant)
     }
@@ -23,5 +26,8 @@ class CommitService(
      * @param village village
      * @param commit commit
      */
-    fun updateCommit(village: Village, commit: Commit) = commitDataSource.updateCommit(village, commit)
+    fun updateCommit(
+        village: Village,
+        commit: Commit,
+    ) = commitDataSource.updateCommit(village, commit)
 }

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew compileKotlin)",
+      "Bash(./gradlew test *)",
+      "Bash(./gradlew ktlintMainSourceSetCheck)",
+      "Bash(./gradlew ktlintFormat)",
+      "Bash(./gradlew compileKotlin ktlintCheck)"
+    ]
+  }
+}

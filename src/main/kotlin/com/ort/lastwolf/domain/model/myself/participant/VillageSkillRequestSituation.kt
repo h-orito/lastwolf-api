@@ -8,5 +8,5 @@ data class VillageSkillRequestSituation(
     @JsonProperty("available_skill_request")
     val isAvailableSkillRequest: Boolean,
     val selectableSkillList: List<Skill> = listOf(),
-    val skillRequest: SkillRequest?
+    val skillRequest: SkillRequest?,
 )

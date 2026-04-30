@@ -3,11 +3,11 @@ package com.ort.lastwolf.api.view.village
 import com.ort.lastwolf.domain.model.village.Villages
 
 data class VillagesView(
-    val list: List<SimpleVillageView>
+    val list: List<SimpleVillageView>,
 ) {
     constructor(
-        villages: Villages
+        villages: Villages,
     ) : this(
-        list = villages.list.map { SimpleVillageView(it) }
+        list = villages.list.map { SimpleVillageView(it) },
     )
 }

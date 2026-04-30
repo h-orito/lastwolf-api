@@ -2,21 +2,15 @@ package com.ort.lastwolf.domain.model.village.setting
 
 data class VillagePassword(
     val joinPasswordRequired: Boolean,
-    val joinPassword: String?
+    val joinPassword: String?,
 ) {
     companion object {
-
-        operator fun invoke(
-            joinPassword: String?
-        ): VillagePassword {
-            return VillagePassword(
+        operator fun invoke(joinPassword: String?): VillagePassword =
+            VillagePassword(
                 joinPasswordRequired = !joinPassword.isNullOrEmpty(),
-                joinPassword = joinPassword
+                joinPassword = joinPassword,
             )
-        }
     }
 
-    fun existsDifference(password: VillagePassword): Boolean {
-        return joinPassword != password.joinPassword
-    }
+    fun existsDifference(password: VillagePassword): Boolean = joinPassword != password.joinPassword
 }

@@ -23,17 +23,14 @@ class VillageDataSource(
     val villageBhv: VillageBhv,
     val villageSettingBhv: VillageSettingBhv,
     val villageDayBhv: VillageDayBhv,
-    val villagePlayerBhv: VillagePlayerBhv
+    val villagePlayerBhv: VillagePlayerBhv,
 ) {
-
     /**
      * 村登録
      * @param paramVillage village
      * @return 村ID
      */
-    fun registerVillage(
-        paramVillage: com.ort.lastwolf.domain.model.village.Village
-    ): com.ort.lastwolf.domain.model.village.Village {
+    fun registerVillage(paramVillage: com.ort.lastwolf.domain.model.village.Village): com.ort.lastwolf.domain.model.village.Village {
         // 村
         val villageId = insertVillage(paramVillage)
         // 村設定
@@ -47,8 +44,8 @@ class VillageDataSource(
                 noonNight = NoonNight(CDef.Noonnight.昼),
                 isEpilogue = false,
                 startDatetime = LastwolfDateUtil.currentLocalDateTime(),
-                endDatetime = paramVillage.setting.time.startDatetime
-            )
+                endDatetime = paramVillage.setting.time.startDatetime,
+            ),
         )
         return findVillage(villageId)
     }
@@ -61,30 +58,31 @@ class VillageDataSource(
      */
     fun findVillages(
         user: LastwolfUser? = null,
-        villageStatusList: List<com.ort.lastwolf.domain.model.village.VillageStatus>? = listOf()
+        villageStatusList: List<com.ort.lastwolf.domain.model.village.VillageStatus>? = listOf(),
     ): Villages {
-        val villageList = villageBhv.selectList {
-            it.setupSelect_Player()
+        val villageList =
+            villageBhv.selectList {
+                it.setupSelect_Player()
 
-            it.specify().derivedVillagePlayer().count({ vpCB ->
-                vpCB.specify().columnVillagePlayerId()
-                vpCB.query().setIsGone_Equal(false)
-            }, Village.ALIAS_participantCount)
-
-            if (user != null) {
-                it.query().existsVillagePlayer { vpCB ->
+                it.specify().derivedVillagePlayer().count({ vpCB ->
+                    vpCB.specify().columnVillagePlayerId()
                     vpCB.query().setIsGone_Equal(false)
-                    vpCB.query().queryPlayer().setUid_Equal(user.uid)
-                }
-            }
-            if (villageStatusList != null && villageStatusList.isNotEmpty()) {
-                it.query().setVillageStatusCode_InScope_AsVillageStatus(
-                    villageStatusList.map { status -> status.toCdef() }
-                )
-            }
+                }, Village.ALIAS_participantCount)
 
-            it.query().addOrderBy_VillageId_Desc()
-        }
+                if (user != null) {
+                    it.query().existsVillagePlayer { vpCB ->
+                        vpCB.query().setIsGone_Equal(false)
+                        vpCB.query().queryPlayer().setUid_Equal(user.uid)
+                    }
+                }
+                if (villageStatusList != null && villageStatusList.isNotEmpty()) {
+                    it.query().setVillageStatusCode_InScope_AsVillageStatus(
+                        villageStatusList.map { status -> status.toCdef() },
+                    )
+                }
+
+                it.query().addOrderBy_VillageId_Desc()
+            }
         villageBhv.load(villageList) { loader ->
             loader.loadVillageSetting { }
             loader.loadVillageDay {
@@ -102,17 +100,18 @@ class VillageDataSource(
      */
     fun findVillages(villageIdList: List<Int>): Villages {
         if (villageIdList.isEmpty()) return Villages(listOf())
-        val villageList = villageBhv.selectList {
-            it.setupSelect_Player()
+        val villageList =
+            villageBhv.selectList {
+                it.setupSelect_Player()
 
-            it.specify().derivedVillagePlayer().count({ vpCB ->
-                vpCB.specify().columnVillagePlayerId()
-                vpCB.query().setIsGone_Equal(false)
-            }, Village.ALIAS_participantCount)
+                it.specify().derivedVillagePlayer().count({ vpCB ->
+                    vpCB.specify().columnVillagePlayerId()
+                    vpCB.query().setIsGone_Equal(false)
+                }, Village.ALIAS_participantCount)
 
-            it.query().setVillageId_InScope(villageIdList)
-            it.query().addOrderBy_VillageId_Desc()
-        }
+                it.query().setVillageId_InScope(villageIdList)
+                it.query().addOrderBy_VillageId_Desc()
+            }
         villageBhv.load(villageList) { loader ->
             loader.loadVillageSetting { }
             loader.loadVillageDay {
@@ -131,17 +130,18 @@ class VillageDataSource(
      */
     fun findVillagesAsDetail(villageIdList: List<Int>): Villages {
         if (villageIdList.isEmpty()) return Villages(listOf())
-        val villageList = villageBhv.selectList {
-            it.setupSelect_Player()
+        val villageList =
+            villageBhv.selectList {
+                it.setupSelect_Player()
 
-            it.specify().derivedVillagePlayer().count({ vpCB ->
-                vpCB.specify().columnVillagePlayerId()
-                vpCB.query().setIsGone_Equal(false)
-            }, Village.ALIAS_participantCount)
+                it.specify().derivedVillagePlayer().count({ vpCB ->
+                    vpCB.specify().columnVillagePlayerId()
+                    vpCB.query().setIsGone_Equal(false)
+                }, Village.ALIAS_participantCount)
 
-            it.query().setVillageId_InScope(villageIdList)
-            it.query().addOrderBy_VillageId_Desc()
-        }
+                it.query().setVillageId_InScope(villageIdList)
+                it.query().addOrderBy_VillageId_Desc()
+            }
         villageBhv.load(villageList) { loader ->
             loader.loadVillagePlayer { vpCB ->
                 vpCB.setupSelect_Player()
@@ -164,23 +164,28 @@ class VillageDataSource(
      * @param villageId villageId
      * @return 村情報
      */
-    fun findVillage(villageId: Int, excludeGonePlayer: Boolean = true): com.ort.lastwolf.domain.model.village.Village {
-        val village = villageBhv.selectEntityWithDeletedCheck {
-            it.setupSelect_Player()
-            it.query().setVillageId_Equal(villageId)
-        }
-        villageBhv.load(village) { loader ->
-            loader.loadVillagePlayer { vpCB ->
-                vpCB.setupSelect_Player()
-                vpCB.setupSelect_Chara()
-                vpCB.setupSelect_VillageDay()
-                if (excludeGonePlayer) {
-                    vpCB.query().setIsGone_Equal(false)
-                }
-                vpCB.query().addOrderBy_VillagePlayerId_Asc()
-            }.withNestedReferrer {
-                it.loadComingOut { }
+    fun findVillage(
+        villageId: Int,
+        excludeGonePlayer: Boolean = true,
+    ): com.ort.lastwolf.domain.model.village.Village {
+        val village =
+            villageBhv.selectEntityWithDeletedCheck {
+                it.setupSelect_Player()
+                it.query().setVillageId_Equal(villageId)
             }
+        villageBhv.load(village) { loader ->
+            loader
+                .loadVillagePlayer { vpCB ->
+                    vpCB.setupSelect_Player()
+                    vpCB.setupSelect_Chara()
+                    vpCB.setupSelect_VillageDay()
+                    if (excludeGonePlayer) {
+                        vpCB.query().setIsGone_Equal(false)
+                    }
+                    vpCB.query().addOrderBy_VillagePlayerId_Asc()
+                }.withNestedReferrer {
+                    it.loadComingOut { }
+                }
             loader.loadVillageSetting { }
             loader.loadVillageDay {
                 it.query().addOrderBy_Day_Asc()
@@ -198,7 +203,7 @@ class VillageDataSource(
      */
     fun updateDifference(
         before: com.ort.lastwolf.domain.model.village.Village,
-        after: com.ort.lastwolf.domain.model.village.Village
+        after: com.ort.lastwolf.domain.model.village.Village,
     ): com.ort.lastwolf.domain.model.village.Village {
         // village
         updateVillageDifference(before, after)
@@ -217,11 +222,11 @@ class VillageDataSource(
     //                                                                              ======
     private fun updateVillageDifference(
         before: com.ort.lastwolf.domain.model.village.Village,
-        after: com.ort.lastwolf.domain.model.village.Village
+        after: com.ort.lastwolf.domain.model.village.Village,
     ) {
-        if (before.status.code != after.status.code
-            || before.winCamp?.code != after.winCamp?.code
-            || before.name != after.name
+        if (before.status.code != after.status.code ||
+            before.winCamp?.code != after.winCamp?.code ||
+            before.name != after.name
         ) {
             updateVillage(after)
         }
@@ -229,7 +234,7 @@ class VillageDataSource(
 
     private fun updateVillageDayDifference(
         before: com.ort.lastwolf.domain.model.village.Village,
-        after: com.ort.lastwolf.domain.model.village.Village
+        after: com.ort.lastwolf.domain.model.village.Village,
     ) {
         if (!before.days.existsDifference(after.days)) return
         after.days.list
@@ -237,8 +242,7 @@ class VillageDataSource(
                 before.days.list.any {
                     it.day == afterDay.day && it.noonNight.code == afterDay.noonNight.code
                 }
-            }
-            .forEach {
+            }.forEach {
                 insertVillageDay(after.id, it)
             }
         after.days.list
@@ -252,29 +256,31 @@ class VillageDataSource(
 
     private fun updateVillagePlayerDifference(
         before: com.ort.lastwolf.domain.model.village.Village,
-        after: com.ort.lastwolf.domain.model.village.Village
+        after: com.ort.lastwolf.domain.model.village.Village,
     ) {
         val villageId = after.id
         if (!before.participants.existsDifference(after.participants)) return
         // 新規
-        after.participants.list.filterNot { member ->
-            before.participants.list.any { it.id == member.id }
-        }.forEach {
-            insertVillagePlayer(villageId, it)
-        }
+        after.participants.list
+            .filterNot { member ->
+                before.participants.list.any { it.id == member.id }
+            }.forEach {
+                insertVillagePlayer(villageId, it)
+            }
 
         // 更新
-        after.participants.list.filter { member ->
-            before.participants.list.any { it.id == member.id }
-        }.forEach {
-            val beforeMember = before.participants.first(it.id)
-            if (it.existsDifference(beforeMember)) updateVillagePlayer(villageId, it)
-        }
+        after.participants.list
+            .filter { member ->
+                before.participants.list.any { it.id == member.id }
+            }.forEach {
+                val beforeMember = before.participants.first(it.id)
+                if (it.existsDifference(beforeMember)) updateVillagePlayer(villageId, it)
+            }
     }
 
     private fun updateVillageSettingDifference(
         before: com.ort.lastwolf.domain.model.village.Village,
-        after: com.ort.lastwolf.domain.model.village.Village
+        after: com.ort.lastwolf.domain.model.village.Village,
     ) {
         val villageId = after.id
         if (!before.setting.existsDifference(after.setting)) return
@@ -289,7 +295,7 @@ class VillageDataSource(
             updateVillageSetting(
                 villageId,
                 CDef.VillageSettingItem.開始予定日時,
-                afterTime.startDatetime.format(VillageDataConverter.DATETIME_FORMATTER)
+                afterTime.startDatetime.format(VillageDataConverter.DATETIME_FORMATTER),
             )
             updateVillageSetting(villageId, CDef.VillageSettingItem.昼時間秒, afterTime.noonSeconds.toString())
             updateVillageSetting(villageId, CDef.VillageSettingItem.投票時間秒, afterTime.voteSeconds.toString())
@@ -304,7 +310,7 @@ class VillageDataSource(
             updateVillageSetting(
                 villageId,
                 CDef.VillageSettingItem.役職希望可能か,
-                toFlg(afterRules.availableSkillRequest)
+                toFlg(afterRules.availableSkillRequest),
             )
             updateVillageSetting(villageId, CDef.VillageSettingItem.墓下役職公開ありか, toFlg(afterRules.openSkillInGrave))
             updateVillageSetting(villageId, CDef.VillageSettingItem.突然死ありか, toFlg(afterRules.availableSuddenlyDeath))
@@ -313,13 +319,13 @@ class VillageDataSource(
             updateVillageSetting(
                 villageId,
                 CDef.VillageSettingItem.連続護衛ありか,
-                toFlg(afterRules.availableSameTargetGuard)
+                toFlg(afterRules.availableSameTargetGuard),
             )
             updateVillageSetting(villageId, CDef.VillageSettingItem.初日白通知か, toFlg(afterRules.firstDivineNowolf))
             updateVillageSetting(
                 villageId,
                 CDef.VillageSettingItem.沈黙時間,
-                afterRules.silentSeconds?.toString() ?: ""
+                afterRules.silentSeconds?.toString() ?: "",
             )
             updateVillageSetting(villageId, CDef.VillageSettingItem.ゲームマスター制か, toFlg(afterRules.creatorGameMaster))
         })
@@ -332,6 +338,7 @@ class VillageDataSource(
     // ===================================================================================
     //                                                                             village
     //                                                                        ============
+
     /**
      * 村登録
      * @param villageModel 村
@@ -362,6 +369,7 @@ class VillageDataSource(
     // ===================================================================================
     //                                                                      village_player
     //                                                                        ============
+
     /**
      * 村参加者登録
      * @param villageId villageId
@@ -370,7 +378,7 @@ class VillageDataSource(
      */
     private fun insertVillagePlayer(
         villageId: Int,
-        participant: VillageParticipant
+        participant: VillageParticipant,
     ): Int {
         val vp = VillagePlayer()
         vp.villageId = villageId
@@ -387,7 +395,7 @@ class VillageDataSource(
 
     private fun updateVillagePlayer(
         villageId: Int,
-        villagePlayerModel: VillageParticipant
+        villagePlayerModel: VillageParticipant,
     ) {
         val villagePlayer = VillagePlayer()
         villagePlayer.villageId = villageId
@@ -407,6 +415,7 @@ class VillageDataSource(
     // ===================================================================================
     //                                                                         village_day
     //                                                                        ============
+
     /**
      * 村日付登録
      * @param villageId villageId
@@ -415,7 +424,7 @@ class VillageDataSource(
      */
     private fun insertVillageDay(
         villageId: Int,
-        day: com.ort.lastwolf.domain.model.village.VillageDay
+        day: com.ort.lastwolf.domain.model.village.VillageDay,
     ): com.ort.lastwolf.domain.model.village.VillageDay {
         val villageDay = VillageDay()
         villageDay.villageId = villageId
@@ -428,9 +437,7 @@ class VillageDataSource(
         return VillageDataConverter.convertVillageDayToVillageDay(villageDay)
     }
 
-    private fun updateVillageDay(
-        day: com.ort.lastwolf.domain.model.village.VillageDay
-    ) {
+    private fun updateVillageDay(day: com.ort.lastwolf.domain.model.village.VillageDay) {
         val villageDay = VillageDay()
         villageDay.villageDayId = day.id
         villageDay.isEpilogue = day.isEpilogue
@@ -442,18 +449,22 @@ class VillageDataSource(
     // ===================================================================================
     //                                                                     village_setting
     //                                                                        ============
+
     /**
      * 村設定登録
      * @param villageId villageId
      * @param settings model settings
      */
-    private fun insertVillageSettings(villageId: Int, settings: VillageSettings) {
+    private fun insertVillageSettings(
+        villageId: Int,
+        settings: VillageSettings,
+    ) {
         insertVillageSetting(villageId, CDef.VillageSettingItem.最低人数, settings.capacity.min.toString())
         insertVillageSetting(villageId, CDef.VillageSettingItem.最大人数, settings.capacity.max.toString())
         insertVillageSetting(
             villageId,
             CDef.VillageSettingItem.開始予定日時,
-            settings.time.startDatetime.format(VillageDataConverter.DATETIME_FORMATTER)
+            settings.time.startDatetime.format(VillageDataConverter.DATETIME_FORMATTER),
         )
         insertVillageSetting(villageId, CDef.VillageSettingItem.昼時間秒, settings.time.noonSeconds.toString())
         insertVillageSetting(villageId, CDef.VillageSettingItem.投票時間秒, settings.time.voteSeconds.toString())
@@ -464,7 +475,7 @@ class VillageDataSource(
         insertVillageSetting(
             villageId,
             CDef.VillageSettingItem.役職希望可能か,
-            toFlg(settings.rules.availableSkillRequest)
+            toFlg(settings.rules.availableSkillRequest),
         )
         insertVillageSetting(villageId, CDef.VillageSettingItem.墓下役職公開ありか, toFlg(settings.rules.openSkillInGrave))
         insertVillageSetting(villageId, CDef.VillageSettingItem.突然死ありか, toFlg(settings.rules.availableSuddenlyDeath))
@@ -474,18 +485,22 @@ class VillageDataSource(
         insertVillageSetting(
             villageId,
             CDef.VillageSettingItem.連続護衛ありか,
-            toFlg(settings.rules.availableSameTargetGuard)
+            toFlg(settings.rules.availableSameTargetGuard),
         )
         insertVillageSetting(villageId, CDef.VillageSettingItem.初日白通知か, toFlg(settings.rules.firstDivineNowolf))
         insertVillageSetting(
             villageId,
             CDef.VillageSettingItem.沈黙時間,
-            settings.rules.silentSeconds?.toString() ?: ""
+            settings.rules.silentSeconds?.toString() ?: "",
         )
         insertVillageSetting(villageId, CDef.VillageSettingItem.ゲームマスター制か, toFlg(settings.rules.creatorGameMaster))
     }
 
-    private fun insertVillageSetting(villageId: Int, item: CDef.VillageSettingItem, value: String) {
+    private fun insertVillageSetting(
+        villageId: Int,
+        item: CDef.VillageSettingItem,
+        value: String,
+    ) {
         val setting = VillageSetting()
         setting.villageId = villageId
         setting.villageSettingItemCodeAsVillageSettingItem = item
@@ -493,7 +508,11 @@ class VillageDataSource(
         villageSettingBhv.insert(setting)
     }
 
-    private fun updateVillageSetting(villageId: Int, item: CDef.VillageSettingItem, value: String) {
+    private fun updateVillageSetting(
+        villageId: Int,
+        item: CDef.VillageSettingItem,
+        value: String,
+    ) {
         val setting = VillageSetting()
         setting.villageSettingText = value
         villageSettingBhv.queryUpdate(setting) {
@@ -505,7 +524,5 @@ class VillageDataSource(
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun toFlg(bool: Boolean): String {
-        return if (bool) VillageDataConverter.FLG_TRUE else VillageDataConverter.FLG_FALSE
-    }
+    private fun toFlg(bool: Boolean): String = if (bool) VillageDataConverter.FLG_TRUE else VillageDataConverter.FLG_FALSE
 }

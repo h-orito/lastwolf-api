@@ -18,37 +18,37 @@ class SayDomainService(
     private val graveSayDomainService: GraveSayDomainService,
     private val monologueSayDomainService: MonologueSayDomainService,
     private val werewolfSayDomainService: WerewolfSayDomainService,
-    private val masonSayDomainService: MasonSayDomainService
+    private val masonSayDomainService: MasonSayDomainService,
 ) {
-
-    private val defaultMessageTypeOrder = listOf(
-        CDef.MessageType.人狼の囁き,
-        CDef.MessageType.共有発言,
-        CDef.MessageType.通常発言,
-        CDef.MessageType.死者の呻き,
-        CDef.MessageType.独り言
-    )
+    private val defaultMessageTypeOrder =
+        listOf(
+            CDef.MessageType.人狼の囁き,
+            CDef.MessageType.共有発言,
+            CDef.MessageType.通常発言,
+            CDef.MessageType.死者の呻き,
+            CDef.MessageType.独り言,
+        )
 
     fun convertToSituation(
         village: Village,
-        participant: VillageParticipant?
-    ): VillageSaySituation {
-        return VillageSaySituation(
+        participant: VillageParticipant?,
+    ): VillageSaySituation =
+        VillageSaySituation(
             isAvailableSay = isAvailableSay(village, participant),
             selectableMessageTypeList = getSelectableMessageTypeList(village, participant),
-            defaultMessageType = detectDefaultMessageType(
-                isAvailableSay(village, participant),
-                getSelectableMessageTypeList(village, participant)
-            )
+            defaultMessageType =
+                detectDefaultMessageType(
+                    isAvailableSay(village, participant),
+                    getSelectableMessageTypeList(village, participant),
+                ),
         )
-    }
 
     fun assertSay(
         village: Village,
         participant: VillageParticipant?,
         chara: Chara?,
         latestDayMessageList: List<Message>,
-        messageContent: MessageContent
+        messageContent: MessageContent,
     ) {
         // 事前チェック
         if (!isAvailableSay(village, participant)) throw LastwolfBusinessException("発言できません")
@@ -67,7 +67,7 @@ class SayDomainService(
 
     fun assertCreatorSay(
         village: Village,
-        messageContent: MessageContent
+        messageContent: MessageContent,
     ) {
         // 事前チェック
         if (!village.isAvailableSay()) throw LastwolfBusinessException("発言できません")
@@ -78,7 +78,7 @@ class SayDomainService(
     fun assertParticipateSay(
         village: Village,
         chara: Chara?,
-        messageContent: MessageContent
+        messageContent: MessageContent,
     ) {
         // 事前チェック
         if (!village.isAvailableSay()) throw LastwolfBusinessException("入村発言できません")
@@ -89,7 +89,10 @@ class SayDomainService(
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun isAvailableSay(village: Village, participant: VillageParticipant?): Boolean {
+    private fun isAvailableSay(
+        village: Village,
+        participant: VillageParticipant?,
+    ): Boolean {
         // 参加者として可能か
         participant ?: return false
         if (!participant.isAvailableSay(village.status.isSettled())) return false
@@ -100,34 +103,44 @@ class SayDomainService(
 
     private fun getSelectableMessageTypeList(
         village: Village,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
     ): List<MessageType> {
         if (!isAvailableSay(village, participant)) return listOf()
 
         val list: MutableList<MessageType> = mutableListOf()
 
-        if (normalSayDomainService.isSayable(village, participant!!)) list.add(
-            MessageType(CDef.MessageType.通常発言)
-        )
-        if (werewolfSayDomainService.isSayable(village, participant)) list.add(
-            MessageType(CDef.MessageType.人狼の囁き)
-        )
-        if (masonSayDomainService.isSayable(village, participant)) list.add(
-            MessageType(CDef.MessageType.共有発言)
-        )
-        if (graveSayDomainService.isSayable(village, participant)) list.add(
-            MessageType(CDef.MessageType.死者の呻き)
-        )
-        if (monologueSayDomainService.isSayable(village, participant)) list.add(
-            MessageType(CDef.MessageType.独り言)
-        )
+        if (normalSayDomainService.isSayable(village, participant!!)) {
+            list.add(
+                MessageType(CDef.MessageType.通常発言),
+            )
+        }
+        if (werewolfSayDomainService.isSayable(village, participant)) {
+            list.add(
+                MessageType(CDef.MessageType.人狼の囁き),
+            )
+        }
+        if (masonSayDomainService.isSayable(village, participant)) {
+            list.add(
+                MessageType(CDef.MessageType.共有発言),
+            )
+        }
+        if (graveSayDomainService.isSayable(village, participant)) {
+            list.add(
+                MessageType(CDef.MessageType.死者の呻き),
+            )
+        }
+        if (monologueSayDomainService.isSayable(village, participant)) {
+            list.add(
+                MessageType(CDef.MessageType.独り言),
+            )
+        }
 
         return list
     }
 
     private fun detectDefaultMessageType(
         availableSay: Boolean,
-        selectableMessageTypeList: List<MessageType>
+        selectableMessageTypeList: List<MessageType>,
     ): MessageType? {
         if (!availableSay || selectableMessageTypeList.isEmpty()) return null
         val selectableMessageTypeCdefList = selectableMessageTypeList.map { it.toCdef() }

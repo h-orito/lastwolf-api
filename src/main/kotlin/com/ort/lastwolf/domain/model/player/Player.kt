@@ -13,11 +13,9 @@ data class Player(
     val participateProgressVillageIdList: List<Int> = listOf(),
     val participateFinishedVillageIdList: List<Int> = listOf(),
     val createProgressVillageIdList: List<Int> = listOf(),
-    val createFinishedVillageIdList: List<Int> = listOf()
+    val createFinishedVillageIdList: List<Int> = listOf(),
 ) {
-    fun restrictParticipation(): Player {
-        return this.copy(isRestrictedParticipation = true)
-    }
+    fun restrictParticipation(): Player = this.copy(isRestrictedParticipation = true)
 
     /**
      * 村作成チェック
@@ -58,7 +56,5 @@ data class Player(
     // 作成した村の勝敗が決していないか
     private fun isProgressCreateVillage(): Boolean = createProgressVillageIdList.isNotEmpty()
 
-    fun existsDifference(player: Player): Boolean {
-        return id != player.id || isRestrictedParticipation != player.isRestrictedParticipation
-    }
+    fun existsDifference(player: Player): Boolean = id != player.id || isRestrictedParticipation != player.isRestrictedParticipation
 }

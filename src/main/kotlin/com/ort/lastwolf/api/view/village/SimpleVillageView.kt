@@ -15,10 +15,10 @@ data class SimpleVillageView(
     val winCamp: Camp?,
     val setting: VillageSettingsView,
     val participants: VillageParticipants,
-    val days: VillageDays
+    val days: VillageDays,
 ) {
     constructor(
-        village: Village
+        village: Village,
     ) : this(
         id = village.id,
         name = village.name,
@@ -26,10 +26,11 @@ data class SimpleVillageView(
         status = village.status,
         winCamp = village.winCamp,
         setting = VillageSettingsView(village.setting),
-        participants = VillageParticipants(
-            count = village.participants.count,
-            list = listOf()
-        ),
-        days = village.days
+        participants =
+            VillageParticipants(
+                count = village.participants.count,
+                list = listOf(),
+            ),
+        days = village.days,
     )
 }

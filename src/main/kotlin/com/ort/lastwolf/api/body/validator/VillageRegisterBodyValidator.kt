@@ -9,17 +9,22 @@ import org.springframework.validation.Validator
 
 @Component
 class VillageRegisterBodyValidator : Validator {
-    override fun supports(clazz: Class<*>): Boolean {
-        return VillageRegisterBody::class.java.isAssignableFrom(clazz)
-    }
+    override fun supports(clazz: Class<*>): Boolean = VillageRegisterBody::class.java.isAssignableFrom(clazz)
 
-    override fun validate(target: Any, errors: Errors) {
+    override fun validate(
+        target: Any,
+        errors: Errors,
+    ) {
         if (errors.hasErrors()) return
 
         val body = target as VillageRegisterBody
 
         // 開始日時
-        if (body.setting!!.time!!.startDatetime!!.isBefore(LastwolfDateUtil.currentLocalDateTime())) {
+        if (body.setting!!
+                .time!!
+                .startDatetime!!
+                .isBefore(LastwolfDateUtil.currentLocalDateTime())
+        ) {
             errors.reject("", "開始日時に過去日は指定できません")
             return
         }
@@ -28,8 +33,16 @@ class VillageRegisterBodyValidator : Validator {
         validateOrganization(body, errors)
     }
 
-    private fun validateOrganization(body: VillageRegisterBody, errors: Errors) {
-        val organizationList = body.setting!!.organization!!.organization!!.replace("\r\n", "\n").split("\n")
+    private fun validateOrganization(
+        body: VillageRegisterBody,
+        errors: Errors,
+    ) {
+        val organizationList =
+            body.setting!!
+                .organization!!
+                .organization!!
+                .replace("\r\n", "\n")
+                .split("\n")
         val min = organizationList.map { it.length }.min() ?: 0
         val max = organizationList.map { it.length }.max() ?: 0
         // 歯抜け
@@ -45,19 +58,20 @@ class VillageRegisterBodyValidator : Validator {
         // 存在しない役職がいる
         if (organizationList.any { org ->
                 org.toCharArray().any { Skill.skillByShortName(it.toString()) == null }
-            }) {
+            }
+        ) {
             errors.reject("", "存在しない役職があります")
             return
         }
 
         // 役欠けありだが噛まれることができる役職が存在しない
         val isAvailableDummySkill = body.setting.rule!!.availableDummySkill!!
-        if (isAvailableDummySkill
-            && organizationList.any { org ->
+        if (isAvailableDummySkill &&
+            organizationList.any { org ->
                 org.toCharArray().map { it.toString() }.none {
                     val cdefSkill = Skill.skillByShortName(it)!!.toCdef()
-                    !cdefSkill.isNoDeadByAttack
-                        && !cdefSkill.isNotSelectableAttack
+                    !cdefSkill.isNoDeadByAttack &&
+                        !cdefSkill.isNotSelectableAttack
                 }
             }
         ) {
@@ -68,7 +82,8 @@ class VillageRegisterBodyValidator : Validator {
         // 人狼がいない
         if (organizationList.any { org ->
                 org.toCharArray().map { it.toString() }.none { Skill.skillByShortName(it)!!.toCdef().isHasAttackAbility }
-            }) {
+            }
+        ) {
             errors.reject("", "襲撃役職が必要です")
             return
         }

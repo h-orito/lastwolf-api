@@ -5,30 +5,30 @@ import java.time.LocalDateTime
 data class VillageCreateResource(
     val villageName: String,
     val createPlayerId: Int,
-    val setting: VillageSettingCreateResource
+    val setting: VillageSettingCreateResource,
 )
 
 data class VillageSettingCreateResource(
     val time: VillageTimeCreateResource,
     val organization: VillageOrganizationCreateResource,
     val charachip: VillageCharachipCreateResource,
-    val rule: VillageRuleCreateResource
+    val rule: VillageRuleCreateResource,
 )
 
 data class VillageTimeCreateResource(
     val startDatetime: LocalDateTime,
     val noonSeconds: Int,
     val voteSeconds: Int,
-    val nightSeconds: Int
+    val nightSeconds: Int,
 )
 
 data class VillageOrganizationCreateResource(
-    val organization: String
+    val organization: String,
 )
 
 data class VillageCharachipCreateResource(
     val dummyCharaId: Int,
-    val charachipId: Int
+    val charachipId: Int,
 )
 
 data class VillageRuleCreateResource(
@@ -42,5 +42,5 @@ data class VillageRuleCreateResource(
     val isFirstDivineNowolf: Boolean,
     val silentSeconds: Int?,
     val isCreatorGameMaster: Boolean,
-    val joinPassword: String?
+    val joinPassword: String?,
 )

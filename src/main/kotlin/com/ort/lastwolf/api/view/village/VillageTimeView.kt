@@ -7,14 +7,14 @@ data class VillageTimeView(
     val startDatetime: LocalDateTime,
     val noonSeconds: Int,
     val voteSeconds: Int,
-    val nightSeconds: Int
+    val nightSeconds: Int,
 ) {
     constructor(
-        villageTime: VillageTime
+        villageTime: VillageTime,
     ) : this(
         startDatetime = villageTime.startDatetime,
         noonSeconds = villageTime.noonSeconds,
         voteSeconds = villageTime.voteSeconds,
-        nightSeconds = villageTime.nightSeconds
+        nightSeconds = villageTime.nightSeconds,
     )
 }

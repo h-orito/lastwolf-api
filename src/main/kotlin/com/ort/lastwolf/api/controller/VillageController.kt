@@ -1,7 +1,20 @@
 package com.ort.lastwolf.api.controller
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.lastwolf.api.body.*
+import com.ort.lastwolf.api.body.VillageAbilityBody
+import com.ort.lastwolf.api.body.VillageChangeSkillBody
+import com.ort.lastwolf.api.body.VillageCharachipCreateBody
+import com.ort.lastwolf.api.body.VillageComingOutBody
+import com.ort.lastwolf.api.body.VillageCommitBody
+import com.ort.lastwolf.api.body.VillageOrganizationCreateBody
+import com.ort.lastwolf.api.body.VillageParticipateBody
+import com.ort.lastwolf.api.body.VillageRegisterBody
+import com.ort.lastwolf.api.body.VillageRollcallBody
+import com.ort.lastwolf.api.body.VillageRuleCreateBody
+import com.ort.lastwolf.api.body.VillageSayBody
+import com.ort.lastwolf.api.body.VillageSettingRegisterBody
+import com.ort.lastwolf.api.body.VillageTimeCreateBody
+import com.ort.lastwolf.api.body.VillageVoteBody
 import com.ort.lastwolf.api.body.validator.VillageRegisterBodyValidator
 import com.ort.lastwolf.api.form.VillageListForm
 import com.ort.lastwolf.api.form.VillageMessageForm
@@ -24,30 +37,40 @@ import com.ort.lastwolf.domain.model.message.MessageTime
 import com.ort.lastwolf.domain.model.message.Messages
 import com.ort.lastwolf.domain.model.player.Player
 import com.ort.lastwolf.domain.model.skill.Skill
-import com.ort.lastwolf.domain.model.village.*
+import com.ort.lastwolf.domain.model.village.Village
+import com.ort.lastwolf.domain.model.village.VillageCharachipCreateResource
+import com.ort.lastwolf.domain.model.village.VillageCreateResource
+import com.ort.lastwolf.domain.model.village.VillageOrganizationCreateResource
+import com.ort.lastwolf.domain.model.village.VillageRuleCreateResource
+import com.ort.lastwolf.domain.model.village.VillageSettingCreateResource
+import com.ort.lastwolf.domain.model.village.VillageStatus
+import com.ort.lastwolf.domain.model.village.VillageTimeCreateResource
+import com.ort.lastwolf.domain.model.village.Villages
 import com.ort.lastwolf.fw.exception.LastwolfBusinessException
 import com.ort.lastwolf.fw.security.LastwolfUser
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.WebDataBinder
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.InitBinder
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-
 
 @RestController
 class VillageController(
     val villageRegisterBodyValidator: VillageRegisterBodyValidator,
-
     val villageCoordinator: VillageCoordinator,
     val messageCoordinator: MessageCoordinator,
     val daychangeCoordinator: DayChangeCoordinator,
-
     val villageService: VillageService,
     val playerService: PlayerService,
-    val charachipService: CharachipService
+    val charachipService: CharachipService,
 ) {
-
     @InitBinder("villageRegisterBody")
     fun initBinder(binder: WebDataBinder) {
         binder.addValidators(villageRegisterBodyValidator)
@@ -56,6 +79,7 @@ class VillageController(
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
+
     /**
      * 村一覧取得
      * @param user user
@@ -64,12 +88,14 @@ class VillageController(
     @GetMapping("/village/list")
     fun villageList(
         @AuthenticationPrincipal user: LastwolfUser?,
-        @Validated form: VillageListForm
+        @Validated form: VillageListForm,
     ): VillagesView {
-        val villageStatusList = form.village_status?.map { VillageStatus(CDef.VillageStatus.codeOf(it)) } ?: listOf()
-        val villages: Villages = villageService.findVillages(
-            villageStatusList = villageStatusList
-        )
+        val villageStatusList =
+            form.village_status?.mapNotNull { CDef.VillageStatus.codeOf(it)?.let { cdef -> VillageStatus(cdef) } } ?: listOf()
+        val villages: Villages =
+            villageService.findVillages(
+                villageStatusList = villageStatusList,
+            )
         return VillagesView(villages)
     }
 
@@ -99,23 +125,24 @@ class VillageController(
     fun message(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser?,
-        @Validated form: VillageMessageForm
+        @Validated form: VillageMessageForm,
     ): MessagesView {
         val village: Village = villageService.findVillage(villageId, false)
         val messageTypeList = form.message_type_list?.mapNotNull { CDef.MessageType.codeOf(it) }
-        val messages: Messages = messageCoordinator.findMessageList(
-            village = village,
-            user = user,
-            from = form.from,
-            pageSize = form.page_size,
-            pageNum = form.page_num,
-            keyword = form.keyword,
-            messageTypeList = messageTypeList,
-            participantIdList = form.participant_id_list?.filterNotNull() // [null]で来る問題に対応
-        )
+        val messages: Messages =
+            messageCoordinator.findMessageList(
+                village = village,
+                user = user,
+                from = form.from,
+                pageSize = form.page_size,
+                pageNum = form.page_num,
+                keyword = form.keyword,
+                messageTypeList = messageTypeList,
+                participantIdList = form.participant_id_list?.filterNotNull(), // [null]で来る問題に対応
+            )
         return MessagesView(
             messages = messages,
-            village = village
+            village = village,
         )
     }
 
@@ -127,12 +154,13 @@ class VillageController(
     @PostMapping("/village")
     fun registerVillage(
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated villageRegisterBody: VillageRegisterBody
+        @RequestBody @Validated villageRegisterBody: VillageRegisterBody,
     ): VillageRegisterView {
         val player: Player = playerService.findPlayer(user)
-        val village: Village = Village.createForRegister(
-            resource = convertToVillageCreateResource(villageRegisterBody, player)
-        )
+        val village: Village =
+            Village.createForRegister(
+                resource = convertToVillageCreateResource(villageRegisterBody, player),
+            )
         val villageId: Int = villageCoordinator.registerVillage(village, user)
         return VillageRegisterView(villageId = villageId)
     }
@@ -145,12 +173,13 @@ class VillageController(
     @PostMapping("/village/confirm")
     fun confirmRegisterVillage(
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated villageRegisterBody: VillageRegisterBody
+        @RequestBody @Validated villageRegisterBody: VillageRegisterBody,
     ) {
         val player: Player = playerService.findPlayer(user)
-        val village: Village = Village.createForRegister(
-            resource = convertToVillageCreateResource(villageRegisterBody, player)
-        )
+        val village: Village =
+            Village.createForRegister(
+                resource = convertToVillageCreateResource(villageRegisterBody, player),
+            )
         villageCoordinator.confirmVillage(village, user)
     }
 
@@ -163,13 +192,13 @@ class VillageController(
     @GetMapping("/village/{villageId}/situation")
     fun getParticipateSituation(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: LastwolfUser?
+        @AuthenticationPrincipal user: LastwolfUser?,
     ): SituationAsParticipantView {
         val village: Village = villageService.findVillage(villageId)
         val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
         return SituationAsParticipantView(
             situation = villageCoordinator.findActionSituation(village, user, charas),
-            village = village
+            village = village,
         )
     }
 
@@ -183,7 +212,7 @@ class VillageController(
     fun participateConfirm(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: VillageParticipateBody
+        @RequestBody @Validated body: VillageParticipateBody,
     ) {
         villageCoordinator.assertParticipate(
             villageId = villageId,
@@ -191,7 +220,7 @@ class VillageController(
             charaId = body.charaId!!,
             firstRequestSkill = CDef.Skill.codeOf(body.firstRequestSkill),
             secondRequestSkill = CDef.Skill.codeOf(body.secondRequestSkill),
-            password = body.joinPassword
+            password = body.joinPassword,
         )
     }
 
@@ -205,7 +234,7 @@ class VillageController(
     fun participateVillage(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: VillageParticipateBody
+        @RequestBody @Validated body: VillageParticipateBody,
     ) {
         villageCoordinator.assertParticipate(
             villageId = villageId,
@@ -213,7 +242,7 @@ class VillageController(
             charaId = body.charaId!!,
             firstRequestSkill = CDef.Skill.codeOf(body.firstRequestSkill),
             secondRequestSkill = CDef.Skill.codeOf(body.secondRequestSkill),
-            password = body.joinPassword
+            password = body.joinPassword,
         )
         val player = playerService.findPlayer(user)
         villageCoordinator.participate(
@@ -221,7 +250,7 @@ class VillageController(
             playerId = player.id,
             charaId = body.charaId,
             firstRequestSkill = CDef.Skill.codeOf(body.firstRequestSkill),
-            secondRequestSkill = CDef.Skill.codeOf(body.secondRequestSkill)
+            secondRequestSkill = CDef.Skill.codeOf(body.secondRequestSkill),
         )
     }
 
@@ -235,7 +264,7 @@ class VillageController(
     fun changeSkill(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: VillageChangeSkillBody
+        @RequestBody @Validated body: VillageChangeSkillBody,
     ) {
         villageCoordinator.changeSkillRequest(villageId, user, body.firstRequestSkill!!, body.secondRequestSkill!!)
     }
@@ -248,7 +277,7 @@ class VillageController(
     @PostMapping("/village/{villageId}/leave")
     fun leave(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: LastwolfUser
+        @AuthenticationPrincipal user: LastwolfUser,
     ) {
         villageCoordinator.leave(villageId, user)
     }
@@ -264,27 +293,30 @@ class VillageController(
     fun sayConfirm(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: VillageSayBody
+        @RequestBody @Validated body: VillageSayBody,
     ): MessageView {
         villageCoordinator.confirmToSay(villageId, user, body.message!!, body.messageType!!, body.strong!!)
         val village = villageService.findVillage(villageId)
         val participant = villageCoordinator.findParticipant(village, user)
         return MessageView(
-            message = Message(
-                fromParticipantId = participant!!.id,
-                time = MessageTime(
-                    villageDayId = village.days.latestDay().id,
-                    datetime = LocalDateTime.now(),
-                    unixTimeMilli = LocalDateTime.now().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
+            message =
+                Message(
+                    fromParticipantId = participant!!.id,
+                    time =
+                        MessageTime(
+                            villageDayId = village.days.latestDay().id,
+                            datetime = LocalDateTime.now(),
+                            unixTimeMilli = LocalDateTime.now().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli(),
+                        ),
+                    content =
+                        MessageContent.invoke(
+                            messageType = body.messageType,
+                            text = body.message,
+                            isStrong = false,
+                        ),
                 ),
-                content = MessageContent.invoke(
-                    messageType = body.messageType,
-                    text = body.message,
-                    isStrong = false
-                )
-            ),
             village = village,
-            shouldHidePlayer = true
+            shouldHidePlayer = true,
         )
     }
 
@@ -298,7 +330,7 @@ class VillageController(
     fun rollcall(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: VillageRollcallBody
+        @RequestBody @Validated body: VillageRollcallBody,
     ) {
         villageCoordinator.rollCall(villageId, user, body.rollcall!!)
     }
@@ -313,7 +345,7 @@ class VillageController(
     fun say(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: VillageSayBody
+        @RequestBody @Validated body: VillageSayBody,
     ) {
         villageCoordinator.say(villageId, user, body.message!!, body.messageType!!, body.strong!!)
     }
@@ -329,7 +361,7 @@ class VillageController(
     fun ability(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: VillageAbilityBody
+        @RequestBody @Validated body: VillageAbilityBody,
     ) {
         villageCoordinator.setAbility(villageId, user, body.targetId, body.abilityType!!)
     }
@@ -344,7 +376,7 @@ class VillageController(
     fun vote(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: VillageVoteBody
+        @RequestBody @Validated body: VillageVoteBody,
     ) {
         villageCoordinator.setVote(villageId, user, body.targetId!!)
     }
@@ -359,7 +391,7 @@ class VillageController(
     fun commit(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: VillageCommitBody
+        @RequestBody @Validated body: VillageCommitBody,
     ) {
         villageCoordinator.setCommit(villageId, user, body.commit!!)
     }
@@ -374,14 +406,18 @@ class VillageController(
     fun comingout(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: VillageComingOutBody
+        @RequestBody @Validated body: VillageComingOutBody,
     ) {
-        val skill = if (body.skillCode.isNullOrEmpty()) null
-        else Skill(CDef.Skill.codeOf(body.skillCode))
+        val skill =
+            if (body.skillCode.isNullOrEmpty()) {
+                null
+            } else {
+                Skill(CDef.Skill.codeOf(body.skillCode))
+            }
         villageCoordinator.setComingOut(
             villageId,
             user,
-            skill
+            skill,
         )
     }
 
@@ -395,17 +431,19 @@ class VillageController(
     fun settingConfirm(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated villageRegisterBody: VillageRegisterBody
+        @RequestBody @Validated villageRegisterBody: VillageRegisterBody,
     ) {
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
 
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayer.id != player.id)
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayer.id != player.id) {
             throw LastwolfBusinessException("村建てか管理者しか使えません")
+        }
 
-        val createResource = convertToVillageCreateResource(villageRegisterBody, player).copy(
-            createPlayerId = village.creatorPlayer.id // 管理者に上書きされるのを防ぐ
-        )
+        val createResource =
+            convertToVillageCreateResource(villageRegisterBody, player).copy(
+                createPlayerId = village.creatorPlayer.id, // 管理者に上書きされるのを防ぐ
+            )
         villageCoordinator.assertModifySetting(village, player, createResource)
     }
 
@@ -419,13 +457,14 @@ class VillageController(
     fun setting(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated villageRegisterBody: VillageRegisterBody
+        @RequestBody @Validated villageRegisterBody: VillageRegisterBody,
     ) {
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
 
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayer.id != player.id)
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayer.id != player.id) {
             throw LastwolfBusinessException("村建てか管理者しか使えません")
+        }
 
         val createResource = convertToVillageCreateResource(villageRegisterBody, player)
         villageCoordinator.modifySetting(village, player, createResource)
@@ -433,7 +472,7 @@ class VillageController(
 
     @PostMapping("/village/{villageId}/daychange-check")
     fun checkDaychange(
-        @PathVariable("villageId") villageId: Int
+        @PathVariable("villageId") villageId: Int,
     ) {
         daychangeCoordinator.dayChangeIfNeeded(villageId)
     }
@@ -443,61 +482,53 @@ class VillageController(
     //                                                                        ============
     private fun convertToVillageCreateResource(
         body: VillageRegisterBody,
-        player: Player
-    ): VillageCreateResource {
-        return VillageCreateResource(
+        player: Player,
+    ): VillageCreateResource =
+        VillageCreateResource(
             villageName = body.villageName!!,
             createPlayerId = player.id,
-            setting = convertToVillageSettingCreateResource(body.setting!!)
+            setting = convertToVillageSettingCreateResource(body.setting!!),
         )
-    }
 
-    private fun convertToVillageSettingCreateResource(
-        body: VillageSettingRegisterBody
-    ): VillageSettingCreateResource {
-        return VillageSettingCreateResource(
+    private fun convertToVillageSettingCreateResource(body: VillageSettingRegisterBody): VillageSettingCreateResource =
+        VillageSettingCreateResource(
             time = convertToVillageTimeCreateResource(body.time!!),
             organization = convertToVillageOrganizationCreateResource(body.organization!!),
             charachip = convertToVillageCharachipCreateResource(body.charachip!!),
-            rule = convertToVillageRuleCreateResource(body.rule!!)
+            rule = convertToVillageRuleCreateResource(body.rule!!),
         )
-    }
 
-    private fun convertToVillageTimeCreateResource(
-        body: VillageTimeCreateBody
-    ): VillageTimeCreateResource = VillageTimeCreateResource(
-        startDatetime = body.startDatetime!!,
-        noonSeconds = body.noonSeconds!!,
-        voteSeconds = body.voteSeconds!!,
-        nightSeconds = body.nightSeconds!!
-    )
+    private fun convertToVillageTimeCreateResource(body: VillageTimeCreateBody): VillageTimeCreateResource =
+        VillageTimeCreateResource(
+            startDatetime = body.startDatetime!!,
+            noonSeconds = body.noonSeconds!!,
+            voteSeconds = body.voteSeconds!!,
+            nightSeconds = body.nightSeconds!!,
+        )
 
-    private fun convertToVillageOrganizationCreateResource(
-        body: VillageOrganizationCreateBody
-    ): VillageOrganizationCreateResource = VillageOrganizationCreateResource(
-        organization = body.organization!!
-    )
+    private fun convertToVillageOrganizationCreateResource(body: VillageOrganizationCreateBody): VillageOrganizationCreateResource =
+        VillageOrganizationCreateResource(
+            organization = body.organization!!,
+        )
 
-    private fun convertToVillageCharachipCreateResource(
-        body: VillageCharachipCreateBody
-    ): VillageCharachipCreateResource = VillageCharachipCreateResource(
-        charachipId = body.charachipId!!,
-        dummyCharaId = body.dummyCharaId!!
-    )
+    private fun convertToVillageCharachipCreateResource(body: VillageCharachipCreateBody): VillageCharachipCreateResource =
+        VillageCharachipCreateResource(
+            charachipId = body.charachipId!!,
+            dummyCharaId = body.dummyCharaId!!,
+        )
 
-    private fun convertToVillageRuleCreateResource(
-        body: VillageRuleCreateBody
-    ): VillageRuleCreateResource = VillageRuleCreateResource(
-        isAvailableSkillRequest = body.availableSkillRequest!!,
-        isOpenSkillInGrave = body.openSkillInGrave!!,
-        isVisibleGraveMessage = body.visibleGraveMessage!!,
-        isAvailableSuddenlyDeath = body.availableSuddenlyDeath!!,
-        isAvailableCommit = body.availableCommit!!,
-        isAvailableDummySkill = body.availableDummySkill!!,
-        isAvailableSameTargetGuard = body.availableSameTargetGuard!!,
-        isFirstDivineNowolf = body.firstDivineNowolf!!,
-        silentSeconds = body.silentSeconds,
-        isCreatorGameMaster = body.creatorGameMaster!!,
-        joinPassword = body.joinPassword
-    )
+    private fun convertToVillageRuleCreateResource(body: VillageRuleCreateBody): VillageRuleCreateResource =
+        VillageRuleCreateResource(
+            isAvailableSkillRequest = body.availableSkillRequest!!,
+            isOpenSkillInGrave = body.openSkillInGrave!!,
+            isVisibleGraveMessage = body.visibleGraveMessage!!,
+            isAvailableSuddenlyDeath = body.availableSuddenlyDeath!!,
+            isAvailableCommit = body.availableCommit!!,
+            isAvailableDummySkill = body.availableDummySkill!!,
+            isAvailableSameTargetGuard = body.availableSameTargetGuard!!,
+            isFirstDivineNowolf = body.firstDivineNowolf!!,
+            silentSeconds = body.silentSeconds,
+            isCreatorGameMaster = body.creatorGameMaster!!,
+            joinPassword = body.joinPassword,
+        )
 }

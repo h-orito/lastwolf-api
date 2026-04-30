@@ -13,45 +13,72 @@ data class SkillRecord(
     val loseCount: Int,
     val loseRate: Float,
     val drawCount: Int,
-    val drawRate: Float
+    val drawRate: Float,
 ) {
     constructor(
         skill: Skill,
         player: Player,
-        villages: Villages
+        villages: Villages,
     ) : this(
         skill = skill,
         participateCount = participantCount(villages),
         winCount = sumWinCount(villages, player),
-        winRate = if (participantCount(villages) == 0) 0F
-        else sumWinCount(villages, player).toFloat() / participantCount(villages).toFloat(),
+        winRate =
+            if (participantCount(villages) == 0) {
+                0F
+            } else {
+                sumWinCount(villages, player).toFloat() / participantCount(villages).toFloat()
+            },
         loseCount = sumLoseCount(villages, player),
-        loseRate = if (participantCount(villages) == 0) 0F
-        else sumLoseCount(villages, player).toFloat() / participantCount(villages).toFloat(),
+        loseRate =
+            if (participantCount(villages) == 0) {
+                0F
+            } else {
+                sumLoseCount(villages, player).toFloat() / participantCount(villages).toFloat()
+            },
         drawCount = sumDrawCount(villages, player),
-        drawRate = if (participantCount(villages) == 0) 0F
-        else sumDrawCount(villages, player).toFloat() / participantCount(villages).toFloat()
+        drawRate =
+            if (participantCount(villages) == 0) {
+                0F
+            } else {
+                sumDrawCount(villages, player).toFloat() / participantCount(villages).toFloat()
+            },
     )
 
     companion object {
         private fun participantCount(villages: Villages): Int = villages.list.size
 
-        private fun sumWinCount(villages: Villages, player: Player): Int {
-            return villages.list.count { village ->
-                village.participants.findByPlayerId(player.id)?.winlose?.toCdef() == CDef.WinLose.勝利
+        private fun sumWinCount(
+            villages: Villages,
+            player: Player,
+        ): Int =
+            villages.list.count { village ->
+                village.participants
+                    .findByPlayerId(player.id)
+                    ?.winlose
+                    ?.toCdef() == CDef.WinLose.勝利
             }
-        }
 
-        private fun sumLoseCount(villages: Villages, player: Player): Int {
-            return villages.list.count { village ->
-                village.participants.findByPlayerId(player.id)?.winlose?.toCdef() == CDef.WinLose.敗北
+        private fun sumLoseCount(
+            villages: Villages,
+            player: Player,
+        ): Int =
+            villages.list.count { village ->
+                village.participants
+                    .findByPlayerId(player.id)
+                    ?.winlose
+                    ?.toCdef() == CDef.WinLose.敗北
             }
-        }
 
-        private fun sumDrawCount(villages: Villages, player: Player): Int {
-            return villages.list.count { village ->
-                village.participants.findByPlayerId(player.id)?.winlose?.toCdef() == CDef.WinLose.引分
+        private fun sumDrawCount(
+            villages: Villages,
+            player: Player,
+        ): Int =
+            villages.list.count { village ->
+                village.participants
+                    .findByPlayerId(player.id)
+                    ?.winlose
+                    ?.toCdef() == CDef.WinLose.引分
             }
-        }
     }
 }

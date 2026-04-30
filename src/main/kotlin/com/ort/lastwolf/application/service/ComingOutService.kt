@@ -7,15 +7,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class ComingOutService(
-    private val comingOutDataSource: ComingOutDataSource
+    private val comingOutDataSource: ComingOutDataSource,
 ) {
-
     fun registerComingOut(
         participantId: Int,
-        skill: Skill
+        skill: Skill,
     ) = comingOutDataSource.register(
         participantId,
-        ComingOut(skill)
+        ComingOut(skill),
     )
 
     fun deleteComingOut(participantId: Int) = comingOutDataSource.delete(participantId)

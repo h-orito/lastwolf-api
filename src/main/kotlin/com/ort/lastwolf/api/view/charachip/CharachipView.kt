@@ -10,17 +10,16 @@ data class CharachipView(
     val name: String,
     val designer: Designer,
     val descriptionUrl: String,
-    val charaList: List<Chara> // domainとの違い
+    val charaList: List<Chara>, // domainとの違い
 ) {
-
     constructor(
         charachip: Charachip,
-        charas: Charas
+        charas: Charas,
     ) : this(
         id = charachip.id,
         name = charachip.name,
         designer = charachip.designer,
         descriptionUrl = charachip.descriptionUrl,
-        charaList = charas.list.filter { it.charachipId == charachip.id }
+        charaList = charas.list.filter { it.charachipId == charachip.id },
     )
 }

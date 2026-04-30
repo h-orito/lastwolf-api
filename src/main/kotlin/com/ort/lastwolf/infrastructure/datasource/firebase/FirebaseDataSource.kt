@@ -17,30 +17,39 @@ import java.time.ZoneOffset
 
 @Repository
 class FirebaseDataSource {
-
     @Autowired
     lateinit var objectMapper: ObjectMapper
 
     // 夜メッセージの最新
-    fun registerMessageLatest(villageId: Int, uid: String?, epocMilli: Long) {
+    fun registerMessageLatest(
+        villageId: Int,
+        uid: String?,
+        epocMilli: Long,
+    ) {
         val ref: DatabaseReference = getMessageLatestDatabaseReference(villageId, uid)
         ref.setValueAsync(epocMilli)
     }
 
     // 昼と投票はfirebaseに登録する
-    fun registerMessage(village: Village, message: Message) {
-        val ref: DatabaseReference = getMessagesDatabaseReference(
-            villageId = village.id
-        )
+    fun registerMessage(
+        village: Village,
+        message: Message,
+    ) {
+        val ref: DatabaseReference =
+            getMessagesDatabaseReference(
+                villageId = village.id,
+            )
         val now = LastwolfDateUtil.currentLocalDateTime()
         val epocTimeMilli = now.toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
         var messageView = MessageView(message, village, false)
-        messageView = messageView.copy(
-            time = messageView.time.copy(
-                datetime = now,
-                unixTimeMilli = epocTimeMilli
+        messageView =
+            messageView.copy(
+                time =
+                    messageView.time.copy(
+                        datetime = now,
+                        unixTimeMilli = epocTimeMilli,
+                    ),
             )
-        )
         ref.push().setValueAsync(messageView)
     }
 
@@ -50,7 +59,10 @@ class FirebaseDataSource {
         ref.setValueAsync(epocMilli)
     }
 
-    fun registerSituationLatest(village: Village, ability: VillageAbility) {
+    fun registerSituationLatest(
+        village: Village,
+        ability: VillageAbility,
+    ) {
         val epocTimeMilli = LastwolfDateUtil.currentLocalDateTime().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
         if (ability.abilityType.toCdef() == CDef.AbilityType.襲撃) {
             village.participants.list.filter { it.isAlive() && it.skill!!.toCdef().isHasAttackAbility }.forEach {
@@ -65,7 +77,10 @@ class FirebaseDataSource {
         }
     }
 
-    fun registerSituationLatest(village: Village, vote: VillageVote) {
+    fun registerSituationLatest(
+        village: Village,
+        vote: VillageVote,
+    ) {
         val epocTimeMilli = LastwolfDateUtil.currentLocalDateTime().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
         village.participants.first(vote.myselfId).let {
             val ref: DatabaseReference = getSituationLatestDatabaseReference(village.id, it.player.uid)
@@ -73,7 +88,10 @@ class FirebaseDataSource {
         }
     }
 
-    fun registerSituationLatest(village: Village, commit: Commit) {
+    fun registerSituationLatest(
+        village: Village,
+        commit: Commit,
+    ) {
         val epocTimeMilli = LastwolfDateUtil.currentLocalDateTime().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
         village.participants.first(commit.myselfId).let {
             val ref: DatabaseReference = getSituationLatestDatabaseReference(village.id, it.player.uid)
@@ -87,28 +105,32 @@ class FirebaseDataSource {
     private fun getVillageLatestDatabaseReference(villageId: Int): DatabaseReference {
         val database: FirebaseDatabase = FirebaseDatabase.getInstance()
         val vid = getVillageIdString(villageId)
-        return database.getReference("${vid}/village_latest")
+        return database.getReference("$vid/village_latest")
     }
 
-    private fun getMessageLatestDatabaseReference(villageId: Int, uid: String?): DatabaseReference {
+    private fun getMessageLatestDatabaseReference(
+        villageId: Int,
+        uid: String?,
+    ): DatabaseReference {
         val database: FirebaseDatabase = FirebaseDatabase.getInstance()
         val vid = getVillageIdString(villageId)
-        return database.getReference("${vid}/message_latest/${uid ?: "not_login"}")
+        return database.getReference("$vid/message_latest/${uid ?: "not_login"}")
     }
 
-    private fun getSituationLatestDatabaseReference(villageId: Int, uid: String?): DatabaseReference {
+    private fun getSituationLatestDatabaseReference(
+        villageId: Int,
+        uid: String?,
+    ): DatabaseReference {
         val database: FirebaseDatabase = FirebaseDatabase.getInstance()
         val vid = getVillageIdString(villageId)
-        return database.getReference("${vid}/situation_latest/${uid ?: "not_login"}")
+        return database.getReference("$vid/situation_latest/${uid ?: "not_login"}")
     }
 
     private fun getMessagesDatabaseReference(villageId: Int): DatabaseReference {
         val database: FirebaseDatabase = FirebaseDatabase.getInstance()
         val vid = getVillageIdString(villageId)
-        return database.getReference("${vid}/messages/")
+        return database.getReference("$vid/messages/")
     }
 
-    private fun getVillageIdString(villageId: Int): String {
-        return String.format("v%05d", villageId)
-    }
+    private fun getVillageIdString(villageId: Int): String = String.format("v%05d", villageId)
 }

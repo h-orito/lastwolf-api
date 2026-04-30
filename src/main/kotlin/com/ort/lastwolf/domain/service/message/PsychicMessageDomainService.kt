@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class PsychicMessageDomainService {
-
-    fun isViewable(village: Village, participant: VillageParticipant?): Boolean {
+    fun isViewable(
+        village: Village,
+        participant: VillageParticipant?,
+    ): Boolean {
         // いずれかを満たせばok
         // 村として可能か
         if (village.isViewablePsychicMessage()) return true

@@ -8,20 +8,21 @@ import com.ort.lastwolf.domain.model.village.Village
 data class MessageView(
     val from: VillageParticipantView?,
     val time: MessageTimeView,
-    val content: MessageContent
+    val content: MessageContent,
 ) {
     constructor(
         message: Message,
         village: Village,
-        shouldHidePlayer: Boolean
+        shouldHidePlayer: Boolean,
     ) : this(
-        from = message.fromParticipantId?.let {
-            VillageParticipantView(
-                village.participants.first(it),
-                shouldHidePlayer
-            )
-        },
+        from =
+            message.fromParticipantId?.let {
+                VillageParticipantView(
+                    village.participants.first(it),
+                    shouldHidePlayer,
+                )
+            },
         time = MessageTimeView(message.time, village.days.list.first { it.id == message.time.villageDayId }),
-        content = message.content
+        content = message.content,
     )
 }

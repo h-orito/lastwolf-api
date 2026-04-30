@@ -19,12 +19,12 @@ import java.time.ZoneOffset
 @Repository
 class MessageDataSource(
     val messageBhv: MessageBhv,
-    val firebaseDataSource: FirebaseDataSource
+    val firebaseDataSource: FirebaseDataSource,
 ) {
-
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
+
     /**
      * 発言取得
      *
@@ -34,42 +34,43 @@ class MessageDataSource(
      */
     fun findMessages(
         villageId: Int,
-        query: MessageQuery
+        query: MessageQuery,
     ): Messages {
         if (query.messageTypeList.isEmpty() && !query.includeMonologue) {
             return Messages(listOf())
         }
 
         return if (query.isPaging()) {
-            val messageList = messageBhv.selectPage {
-                queryMessage(
-                    cb = it,
-                    villageId = villageId,
-                    query = query
-                )
-                it.query().addOrderBy_MessageUnixtimestampMilli_Asc()
-                it.paging(query.pageSize!!, query.pageNum!!)
-            }
+            val messageList =
+                messageBhv.selectPage {
+                    queryMessage(
+                        cb = it,
+                        villageId = villageId,
+                        query = query,
+                    )
+                    it.query().addOrderBy_MessageUnixtimestampMilli_Asc()
+                    it.paging(query.pageSize!!, query.pageNum!!)
+                }
             Messages(
                 list = messageList.map { convertMessageToMessage(it) },
                 allRecordCount = messageList.allRecordCount,
                 allPageCount = messageList.allPageCount,
                 isExistPrePage = messageList.existsPreviousPage(),
                 isExistNextPage = messageList.existsNextPage(),
-                currentPageNum = messageList.currentPageNumber
+                currentPageNum = messageList.currentPageNumber,
             )
-
         } else {
-            val messageList = messageBhv.selectList {
-                queryMessage(
-                    cb = it,
-                    villageId = villageId,
-                    query = query
-                )
-                it.query().addOrderBy_MessageUnixtimestampMilli_Asc()
-            }
+            val messageList =
+                messageBhv.selectList {
+                    queryMessage(
+                        cb = it,
+                        villageId = villageId,
+                        query = query,
+                    )
+                    it.query().addOrderBy_MessageUnixtimestampMilli_Asc()
+                }
             Messages(
-                list = messageList.map { convertMessageToMessage(it) }
+                list = messageList.map { convertMessageToMessage(it) },
             )
         }
     }
@@ -85,24 +86,26 @@ class MessageDataSource(
     fun findLatestMessagesUnixTimeMilli(
         villageId: Int,
         messageTypeList: List<CDef.MessageType>,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
     ): Long {
-        val query = MessageQuery(
-            from = null,
-            pageSize = null,
-            pageNum = null,
-            keyword = null,
-            participant = participant,
-            messageTypeList = messageTypeList,
-            participantIdList = null,
-            includeMonologue = false,
-            includePrivateAbility = false
-        )
-        return messageBhv.selectEntityWithDeletedCheck() {
-            queryMessage(it, villageId, query)
-            it.query().addOrderBy_MessageUnixtimestampMilli_Desc()
-            it.fetchFirst(1)
-        }.messageUnixtimestampMilli
+        val query =
+            MessageQuery(
+                from = null,
+                pageSize = null,
+                pageNum = null,
+                keyword = null,
+                participant = participant,
+                messageTypeList = messageTypeList,
+                participantIdList = null,
+                includeMonologue = false,
+                includePrivateAbility = false,
+            )
+        return messageBhv
+            .selectEntityWithDeletedCheck {
+                queryMessage(it, villageId, query)
+                it.query().addOrderBy_MessageUnixtimestampMilli_Desc()
+                it.fetchFirst(1)
+            }.messageUnixtimestampMilli
     }
 
     /**
@@ -116,19 +119,20 @@ class MessageDataSource(
     fun selectParticipateDayMessageList(
         villageId: Int,
         villageDayId: Int,
-        participant: VillageParticipant
+        participant: VillageParticipant,
     ): List<com.ort.lastwolf.domain.model.message.Message> {
-        val messageList = messageBhv.selectList {
-            it.query().setVillageId_Equal(villageId)
-            it.query().setVillagePlayerId_Equal(participant.id)
-            it.query().setVillageDayId_Equal(villageDayId)
-        }
+        val messageList =
+            messageBhv.selectList {
+                it.query().setVillageId_Equal(villageId)
+                it.query().setVillagePlayerId_Equal(participant.id)
+                it.query().setVillageDayId_Equal(villageDayId)
+            }
         return messageList.map { convertMessageToMessage(it) }
     }
 
     fun registerMessage(
         village: Village,
-        message: com.ort.lastwolf.domain.model.message.Message
+        message: com.ort.lastwolf.domain.model.message.Message,
     ): com.ort.lastwolf.domain.model.message.Message {
         val villageDay = village.days.first(message.time.villageDayId)
         if (villageDay.isEpilogue || !villageDay.isNightTime()) {
@@ -152,47 +156,53 @@ class MessageDataSource(
         return convertMessageToMessage(mes)
     }
 
-
     /**
      * 差分更新
      * @param village village
      * @param before messages
      * @param after messages
      */
-    fun updateDifference(village: Village, before: Messages, after: Messages): Messages {
+    fun updateDifference(
+        village: Village,
+        before: Messages,
+        after: Messages,
+    ): Messages {
         // 追加しかないのでbeforeにないindexから追加していく
-        val messageList = after.list.drop(before.list.size).map {
-            registerMessage(village, it)
-        }
+        val messageList =
+            after.list.drop(before.list.size).map {
+                registerMessage(village, it)
+            }
         return Messages(list = messageList)
     }
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun convertMessageToMessage(message: Message): com.ort.lastwolf.domain.model.message.Message {
-        return com.ort.lastwolf.domain.model.message.Message(
+    private fun convertMessageToMessage(message: Message): com.ort.lastwolf.domain.model.message.Message =
+        com.ort.lastwolf.domain.model.message.Message(
             fromParticipantId = message.villagePlayerId,
-            time = MessageTime(
-                villageDayId = message.villageDayId,
-                datetime = message.messageDatetime,
-                unixTimeMilli = message.messageUnixtimestampMilli
-            ),
-            content = MessageContent(
-                type = MessageType(
-                    code = message.messageTypeCode,
-                    name = CDef.MessageType.codeOf(message.messageTypeCode).alias()
+            time =
+                MessageTime(
+                    villageDayId = message.villageDayId,
+                    datetime = message.messageDatetime,
+                    unixTimeMilli = message.messageUnixtimestampMilli,
                 ),
-                text = message.messageContent,
-                isStrong = message.isStrong
-            )
+            content =
+                MessageContent(
+                    type =
+                        MessageType(
+                            code = message.messageTypeCode,
+                            name = CDef.MessageType.codeOf(message.messageTypeCode).alias(),
+                        ),
+                    text = message.messageContent,
+                    isStrong = message.isStrong,
+                ),
         )
-    }
 
     private fun queryMessage(
         cb: MessageCB,
         villageId: Int,
-        query: MessageQuery
+        query: MessageQuery,
     ) {
         cb.query().setVillageId_Equal(villageId)
         // 参加していない場合は特に考慮不要
@@ -210,13 +220,11 @@ class MessageDataSource(
                         if (query.includePrivateAbility) orCB.orScopeQueryAndPart { andCB -> queryMyPrivateAbility(andCB, participantId) }
                     }
                 }
-            }
-            // エピローグなど、全部見える状況の場合はorでなくて良い
-            else if (!query.includeMonologue && !query.includePrivateAbility) {
+            } else if (!query.includeMonologue && !query.includePrivateAbility) {
+                // エピローグなど、全部見える状況の場合はorでなくて良い
                 cb.query().setMessageTypeCode_InScope(query.messageTypeList.map { type -> type.code() })
-            }
-            // その他
-            else {
+            } else {
+                // その他
                 cb.orScopeQuery { orCB ->
                     orCB.query().setMessageTypeCode_InScope(query.messageTypeList.map { type -> type.code() })
                     if (query.includeMonologue) orCB.orScopeQueryAndPart { andCB -> queryMyMonologue(andCB, participantId) }
@@ -229,12 +237,18 @@ class MessageDataSource(
         if (!query.participantIdList.isNullOrEmpty()) cb.query().setVillagePlayerId_InScope(query.participantIdList)
     }
 
-    private fun queryMyMonologue(cb: MessageCB, id: Int) {
+    private fun queryMyMonologue(
+        cb: MessageCB,
+        id: Int,
+    ) {
         cb.query().setVillagePlayerId_Equal(id)
         cb.query().setMessageTypeCode_Equal(CDef.MessageType.独り言.code())
     }
 
-    private fun queryMyPrivateAbility(cb: MessageCB, id: Int) {
+    private fun queryMyPrivateAbility(
+        cb: MessageCB,
+        id: Int,
+    ) {
         cb.query().setVillagePlayerId_Equal(id)
         cb.query().setMessageTypeCode_InScope(MessageQuery.personalPrivateAbilityList.map { it.code() })
     }

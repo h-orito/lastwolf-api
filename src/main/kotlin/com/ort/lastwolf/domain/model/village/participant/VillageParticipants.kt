@@ -8,100 +8,136 @@ import com.ort.lastwolf.domain.model.village.VillageDay
 
 data class VillageParticipants(
     val count: Int, // 退村した人は含まない
-    val list: List<VillageParticipant> = listOf()
+    val list: List<VillageParticipant> = listOf(),
 ) {
-    fun assignSkill(villageParticipantId: Int, skill: Skill): VillageParticipants {
-        return this.copy(
-            list = this.list.map {
-                if (it.id == villageParticipantId) it.assignSkill(skill)
-                else it.copy()
-            }
+    fun assignSkill(
+        villageParticipantId: Int,
+        skill: Skill,
+    ): VillageParticipants =
+        this.copy(
+            list =
+                this.list.map {
+                    if (it.id == villageParticipantId) {
+                        it.assignSkill(skill)
+                    } else {
+                        it.copy()
+                    }
+                },
         )
-    }
 
-    fun addParticipant(charaId: Int, playerId: Int, skillRequest: SkillRequest): VillageParticipants {
-        return this.copy(
+    fun addParticipant(
+        charaId: Int,
+        playerId: Int,
+        skillRequest: SkillRequest,
+    ): VillageParticipants =
+        this.copy(
             count = count + 1,
-            list = list + VillageParticipant.createForRegister(
-                charaId = charaId,
-                playerId = playerId,
-                skillRequest = skillRequest
-            )
+            list =
+                list +
+                    VillageParticipant.createForRegister(
+                        charaId = charaId,
+                        playerId = playerId,
+                        skillRequest = skillRequest,
+                    ),
         )
-    }
 
-    fun changeSkillRequest(participantId: Int, first: CDef.Skill, second: CDef.Skill): VillageParticipants {
-        return this.copy(
-            list = this.list.map {
-                if (it.id == participantId) it.changeSkillRequest(first, second)
-                else it.copy()
-            }
+    fun changeSkillRequest(
+        participantId: Int,
+        first: CDef.Skill,
+        second: CDef.Skill,
+    ): VillageParticipants =
+        this.copy(
+            list =
+                this.list.map {
+                    if (it.id == participantId) {
+                        it.changeSkillRequest(first, second)
+                    } else {
+                        it.copy()
+                    }
+                },
         )
-    }
 
     // 退村
-    fun leave(participantId: Int): VillageParticipants {
-        return this.copy(
+    fun leave(participantId: Int): VillageParticipants =
+        this.copy(
             count = this.count - 1,
-            list = this.list.map {
-                if (it.id == participantId) it.gone() else it.copy()
-            }
+            list =
+                this.list.map {
+                    if (it.id == participantId) it.gone() else it.copy()
+                },
         )
-    }
 
     // 突然死
-    fun suddenlyDeath(participantId: Int, villageDay: VillageDay): VillageParticipants {
-        return this.copy(
-            list = this.list.map {
-                if (it.id == participantId) it.suddenlyDeath(villageDay) else it.copy()
-            }
+    fun suddenlyDeath(
+        participantId: Int,
+        villageDay: VillageDay,
+    ): VillageParticipants =
+        this.copy(
+            list =
+                this.list.map {
+                    if (it.id == participantId) it.suddenlyDeath(villageDay) else it.copy()
+                },
         )
-    }
 
     // 処刑
-    fun execute(participantId: Int, villageDay: VillageDay): VillageParticipants {
-        return this.copy(
-            list = this.list.map {
-                if (it.id == participantId) it.execute(villageDay) else it.copy()
-            }
+    fun execute(
+        participantId: Int,
+        villageDay: VillageDay,
+    ): VillageParticipants =
+        this.copy(
+            list =
+                this.list.map {
+                    if (it.id == participantId) it.execute(villageDay) else it.copy()
+                },
         )
-    }
 
     // 襲撃
-    fun attack(participantId: Int, villageDay: VillageDay): VillageParticipants {
-        return this.copy(
-            list = this.list.map {
-                if (it.id == participantId) it.attack(villageDay) else it.copy()
-            }
+    fun attack(
+        participantId: Int,
+        villageDay: VillageDay,
+    ): VillageParticipants =
+        this.copy(
+            list =
+                this.list.map {
+                    if (it.id == participantId) it.attack(villageDay) else it.copy()
+                },
         )
-    }
 
     // 呪殺
-    fun divineKill(participantId: Int, villageDay: VillageDay): VillageParticipants {
-        return this.copy(
-            list = this.list.map {
-                if (it.id == participantId) it.divineKill(villageDay) else it.copy()
-            }
+    fun divineKill(
+        participantId: Int,
+        villageDay: VillageDay,
+    ): VillageParticipants =
+        this.copy(
+            list =
+                this.list.map {
+                    if (it.id == participantId) it.divineKill(villageDay) else it.copy()
+                },
         )
-    }
 
     // 後追い
-    fun suicide(participantId: Int, villageDay: VillageDay): VillageParticipants {
-        return this.copy(
-            list = this.list.map {
-                if (it.id == participantId) it.suicide(villageDay) else it.copy()
-            }
+    fun suicide(
+        participantId: Int,
+        villageDay: VillageDay,
+    ): VillageParticipants =
+        this.copy(
+            list =
+                this.list.map {
+                    if (it.id == participantId) it.suicide(villageDay) else it.copy()
+                },
         )
-    }
 
     // 点呼
-    fun rollCall(participantId: Int, done: Boolean): VillageParticipants {
-        return this.copy(
-            list = this.list.map {
-                if (it.id == participantId) it.rollCall(done) else it.copy()
-            }
+    fun rollCall(
+        participantId: Int,
+        done: Boolean,
+    ): VillageParticipants =
+        this.copy(
+            list =
+                this.list.map {
+                    if (it.id == participantId) it.rollCall(done) else it.copy()
+                },
         )
-    }
 
     // 勝敗設定
     fun winLose(winCamp: Camp?): VillageParticipants = this.copy(list = this.list.map { it.winLose(winCamp) })
@@ -118,7 +154,7 @@ data class VillageParticipants(
         val aliveMembers = list.filter { it.isAlive() }
         return VillageParticipants(
             count = aliveMembers.size,
-            list = aliveMembers
+            list = aliveMembers,
         )
     }
 
@@ -126,13 +162,11 @@ data class VillageParticipants(
         val list = list.filter { it.skill?.toCdef() == skill.toCdef() }
         return copy(
             count = list.size,
-            list = list
+            list = list,
         )
     }
 
-    fun findRandom(predicate: (VillageParticipant) -> Boolean): VillageParticipant? {
-        return list.filter { predicate(it) }.shuffled().firstOrNull()
-    }
+    fun findRandom(predicate: (VillageParticipant) -> Boolean): VillageParticipant? = list.filter { predicate(it) }.shuffled().firstOrNull()
 
     fun existsDifference(participant: VillageParticipants): Boolean {
         if (count != participant.count) return true

@@ -15,16 +15,18 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class LoginFilter(
-    val userService: LastwolfUserDetailService
+    val userService: LastwolfUserDetailService,
 ) : OncePerRequestFilter() {
-
     override fun doFilterInternal(
-        request: HttpServletRequest, response: HttpServletResponse,
-        filterChain: FilterChain
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain,
     ) {
-        SecurityContextHolder.getContext().authentication = PreAuthenticatedAuthenticationToken(
-            auth(request), null
-        )
+        SecurityContextHolder.getContext().authentication =
+            PreAuthenticatedAuthenticationToken(
+                auth(request),
+                null,
+            )
         filterChain.doFilter(request, response)
     }
 

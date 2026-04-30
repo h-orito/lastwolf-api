@@ -33,3 +33,6 @@
 /dbflute_lastwolfdb/schema/project-history-lastwolfdb.diffmap
 /bin/
 .gradle
+
+### Claude Code ###
+.context/

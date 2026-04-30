@@ -6,21 +6,18 @@ import com.ort.lastwolf.domain.model.village.VillageDay
 data class Dead(
     val code: String,
     val reason: String,
-    val villageDay: VillageDay
+    val villageDay: VillageDay,
 ) {
-
     constructor(
         cdefDeadReason: CDef.DeadReason,
-        villageDay: VillageDay
+        villageDay: VillageDay,
     ) : this(
         code = cdefDeadReason.code(),
         reason = cdefDeadReason.alias(),
-        villageDay = villageDay
+        villageDay = villageDay,
     )
 
-    fun toCdef(): CDef.DeadReason {
-        return CDef.DeadReason.codeOf(code)
-    }
+    fun toCdef(): CDef.DeadReason = CDef.DeadReason.codeOf(code)
 
     fun isMiserable(): Boolean = toCdef().isMiserableDeath
 }

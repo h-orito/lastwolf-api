@@ -4,6 +4,5 @@ data class Chara(
     val id: Int,
     val name: CharaName,
     val charachipId: Int,
-    val image: CharaImage
-) {
-}
+    val image: CharaImage,
+)

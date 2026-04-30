@@ -12,24 +12,24 @@ data class MessagesView(
     val isExistPrePage: Boolean?,
     @JsonProperty("exist_next_page")
     val isExistNextPage: Boolean?,
-    val currentPageNum: Int?
+    val currentPageNum: Int?,
 ) {
     constructor(
         messages: Messages,
-        village: Village
+        village: Village,
     ) : this(
-        list = messages.list.map {
-            MessageView(
-                message = it,
-                village = village,
-                shouldHidePlayer = !village.status.isSolved()
-            )
-        },
+        list =
+            messages.list.map {
+                MessageView(
+                    message = it,
+                    village = village,
+                    shouldHidePlayer = !village.status.isSolved(),
+                )
+            },
         allRecordCount = messages.allRecordCount,
         allPageCount = messages.allPageCount,
         isExistPrePage = messages.isExistPrePage,
         isExistNextPage = messages.isExistNextPage,
-        currentPageNum = messages.currentPageNum
+        currentPageNum = messages.currentPageNum,
     )
 }
-

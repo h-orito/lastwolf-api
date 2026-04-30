@@ -15,29 +15,49 @@ data class MyselfPlayerView(
     val participateProgressVillages: VillagesView,
     val participateFinishedVillages: VillagesView,
     val createProgressVillages: VillagesView,
-    val createFinishedVillages: VillagesView
+    val createFinishedVillages: VillagesView,
 ) {
     constructor(
         player: Player,
         participantVillages: Villages,
         createVillages: Villages,
-        user: LastwolfUser
+        user: LastwolfUser,
     ) : this(
         id = player.id,
         nickname = player.nickname,
         twitterUserName = player.twitterUserName,
         isAvailableCreateVillage = player.isAvailableCreateVillage(user),
-        participateProgressVillages = VillagesView(Villages(participantVillages.list.filter {
-            !it.status.isSolved()
-        })),
-        participateFinishedVillages = VillagesView(Villages(participantVillages.list.filter {
-            it.status.isSolved()
-        })),
-        createProgressVillages = VillagesView(Villages(createVillages.list.filter {
-            !it.status.isSolved()
-        })),
-        createFinishedVillages = VillagesView(Villages(createVillages.list.filter {
-            it.status.isSolved()
-        }))
+        participateProgressVillages =
+            VillagesView(
+                Villages(
+                    participantVillages.list.filter {
+                        !it.status.isSolved()
+                    },
+                ),
+            ),
+        participateFinishedVillages =
+            VillagesView(
+                Villages(
+                    participantVillages.list.filter {
+                        it.status.isSolved()
+                    },
+                ),
+            ),
+        createProgressVillages =
+            VillagesView(
+                Villages(
+                    createVillages.list.filter {
+                        !it.status.isSolved()
+                    },
+                ),
+            ),
+        createFinishedVillages =
+            VillagesView(
+                Villages(
+                    createVillages.list.filter {
+                        it.status.isSolved()
+                    },
+                ),
+            ),
     )
 }

@@ -6,5 +6,5 @@ data class VillageCommitSituation(
     @JsonProperty("available_commit")
     val isAvailableCommit: Boolean,
     @JsonProperty("committing")
-    val isCommitting: Boolean
+    val isCommitting: Boolean,
 )

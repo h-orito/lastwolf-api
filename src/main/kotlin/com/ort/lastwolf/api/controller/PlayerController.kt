@@ -18,48 +18,48 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
-
 @RestController
 class PlayerController(
     private val playerCoordinator: PlayerCoordinator,
     private val charachipService: CharachipService,
     private val playerService: PlayerService,
-    private val villageService: VillageService
+    private val villageService: VillageService,
 ) {
-
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
     @GetMapping("/my-player")
     fun myPlayer(
-        @AuthenticationPrincipal user: LastwolfUser
+        @AuthenticationPrincipal user: LastwolfUser,
     ): MyselfPlayerView {
         val player: Player = playerService.findPlayer(user)
-        val participantVillages: Villages = villageService.findVillages(
-            player.participateProgressVillageIdList + player.participateFinishedVillageIdList
-        )
-        val createVillages: Villages = villageService.findVillages(
-            player.createProgressVillageIdList + player.createFinishedVillageIdList
-        )
+        val participantVillages: Villages =
+            villageService.findVillages(
+                player.participateProgressVillageIdList + player.participateFinishedVillageIdList,
+            )
+        val createVillages: Villages =
+            villageService.findVillages(
+                player.createProgressVillageIdList + player.createFinishedVillageIdList,
+            )
         return MyselfPlayerView(
             player,
             participantVillages,
             createVillages,
-            user
+            user,
         )
     }
 
     @PostMapping("/player/nickname")
     fun updateNickname(
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: PlayerUpdateNicknameBody
+        @RequestBody @Validated body: PlayerUpdateNicknameBody,
     ) {
         playerService.updateNickname(user, body.nickname!!, body.twitterUserName!!)
     }
 
     @GetMapping("/player/{playerId}/record")
     fun stats(
-        @PathVariable("playerId") playerId: Int
+        @PathVariable("playerId") playerId: Int,
     ): PlayerRecordsView {
         val player: Player = playerService.findPlayer(playerId)
         val playerRecords = playerCoordinator.findPlayerRecords(player)

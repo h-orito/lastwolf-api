@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
-
 /**
  * デバッグ用なのでDDDに拘らない
  */
@@ -38,14 +37,11 @@ class DebugController(
     val playerBhv: PlayerBhv,
     val villageDayBhv: VillageDayBhv,
     val villageSettingBhv: VillageSettingBhv,
-
     val villageCoordinator: VillageCoordinator,
-
     val villageService: VillageService,
     val playerService: PlayerService,
-    val voteService: VoteService
+    val voteService: VoteService,
 ) {
-
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
@@ -55,6 +51,7 @@ class DebugController(
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
+
     /**
      * 人数指定で参加させる
      * @param villageId villageId
@@ -65,33 +62,42 @@ class DebugController(
     fun participateVillage(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: AdminParticipateBody
+        @RequestBody @Validated body: AdminParticipateBody,
     ) {
         if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
 
         val village = villageService.findVillage(villageId)
 
         // 参戦していないキャラを人数分探す
-        val charaList = charaBhv.selectList { cb ->
-            cb.query().setCharaGroupId_Equal(village.setting.charachip.charachipId)
-            cb.query().notExistsVillagePlayer { villagePlayerCB ->
-                villagePlayerCB.query().setVillageId_Equal(villageId)
-                villagePlayerCB.query().setIsGone_Equal(false)
+        val charaList =
+            charaBhv.selectList { cb ->
+                cb.query().setCharaGroupId_Equal(village.setting.charachip.charachipId)
+                cb.query().notExistsVillagePlayer { villagePlayerCB ->
+                    villagePlayerCB.query().setVillageId_Equal(villageId)
+                    villagePlayerCB.query().setIsGone_Equal(false)
+                }
+                cb.fetchFirst(body.participateCount!!)
             }
-            cb.fetchFirst(body.participateCount!!)
-        }
         var playerId = 2
         for (chara in charaList) {
             // 希望役職をランダムに取得
-            val randomSkill = village.setting.organizations.allRequestableSkillList().shuffled().first()
-            val randomSkill2 = village.setting.organizations.allRequestableSkillList().shuffled().first()
+            val randomSkill =
+                village.setting.organizations
+                    .allRequestableSkillList()
+                    .shuffled()
+                    .first()
+            val randomSkill2 =
+                village.setting.organizations
+                    .allRequestableSkillList()
+                    .shuffled()
+                    .first()
             // 入村
             villageCoordinator.participate(
                 villageId = villageId,
                 playerId = playerId,
                 charaId = chara.charaId,
                 firstRequestSkill = randomSkill.toCdef(),
-                secondRequestSkill = randomSkill2.toCdef()
+                secondRequestSkill = randomSkill2.toCdef(),
             )
             playerId++
         }
@@ -107,17 +113,19 @@ class DebugController(
     fun dummyLogin(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: LastwolfUser,
-        @RequestBody @Validated body: AdminDummyLoginBody
+        @RequestBody @Validated body: AdminDummyLoginBody,
     ) {
         if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
 
         // 現在接続しているユーザのuidと、指定されたプレイヤーのuidを入れ替える
-        val currentPlayer = playerBhv.selectEntityWithDeletedCheck {
-            it.query().setUid_Equal(user.uid)
-        }
-        val toPlayer = playerBhv.selectEntityWithDeletedCheck {
-            it.query().setPlayerId_Equal(body.targetId!!)
-        }
+        val currentPlayer =
+            playerBhv.selectEntityWithDeletedCheck {
+                it.query().setUid_Equal(user.uid)
+            }
+        val toPlayer =
+            playerBhv.selectEntityWithDeletedCheck {
+                it.query().setPlayerId_Equal(body.targetId!!)
+            }
         val current = currentPlayer.uid
         val to = toPlayer.uid
         updatePlayerUid(currentPlayer.playerId, "dummy_uid")
@@ -133,16 +141,17 @@ class DebugController(
     @PostMapping("/admin/village/{villageId}/change-day")
     fun changeDay(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: LastwolfUser
+        @AuthenticationPrincipal user: LastwolfUser,
     ) {
         if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
 
-        val latestDay = villageDayBhv.selectEntityWithDeletedCheck {
-            it.query().setVillageId_Equal(villageId)
-            it.query().addOrderBy_Day_Desc()
-            it.query().queryNoonnight().addOrderBy_DispOrder_Desc()
-            it.fetchFirst(1)
-        }
+        val latestDay =
+            villageDayBhv.selectEntityWithDeletedCheck {
+                it.query().setVillageId_Equal(villageId)
+                it.query().addOrderBy_Day_Desc()
+                it.query().queryNoonnight().addOrderBy_DispOrder_Desc()
+                it.fetchFirst(1)
+            }
         latestDay.endDatetime = LastwolfDateUtil.currentLocalDateTime().plusSeconds(10L)
         villageDayBhv.update(latestDay)
     }
@@ -152,14 +161,16 @@ class DebugController(
      * @param villageId villageId
      */
     @GetMapping("/admin/village/{villageId}")
-    fun village(@PathVariable("villageId") villageId: Int): DebugVillageView {
+    fun village(
+        @PathVariable("villageId") villageId: Int,
+    ): DebugVillageView {
         if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
 
         val village: Village = villageService.findVillage(villageId)
         val createPlayer: com.ort.lastwolf.domain.model.player.Player = playerService.findPlayer(village.creatorPlayer.id)
         return DebugVillageView(
             village = village,
-            createPlayer = createPlayer
+            createPlayer = createPlayer,
         )
     }
 
@@ -171,7 +182,7 @@ class DebugController(
     @PostMapping("/admin/village/{villageId}/no-suddenly-death")
     fun setNoSuddenlyDeath(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: LastwolfUser
+        @AuthenticationPrincipal user: LastwolfUser,
     ) {
         if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
 
@@ -185,7 +196,7 @@ class DebugController(
     @PostMapping("/admin/village/{villageId}/multiple-say")
     fun multiSay(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: LastwolfUser
+        @AuthenticationPrincipal user: LastwolfUser,
     ) {
         if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
 
@@ -197,15 +208,17 @@ class DebugController(
     @PostMapping("/admin/village/{villageId}/all-rollcall")
     fun allRollcall(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: LastwolfUser
+        @AuthenticationPrincipal user: LastwolfUser,
     ) {
         if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
         val village = villageService.findVillage(villageId)
-        val changedVillage = village.copy(
-            participants = village.participants.copy(
-                list = village.participants.list.map { it.rollCall(true) }
+        val changedVillage =
+            village.copy(
+                participants =
+                    village.participants.copy(
+                        list = village.participants.list.map { it.rollCall(true) },
+                    ),
             )
-        )
         villageService.updateVillageDifference(village, changedVillage)
     }
 
@@ -218,25 +231,27 @@ class DebugController(
     @PostMapping("/admin/village/{villageId}/all-draw-vote")
     fun allDrawVote(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: LastwolfUser
+        @AuthenticationPrincipal user: LastwolfUser,
     ) {
         if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
         val village = villageService.findVillage(villageId)
         val participants = village.participants.filterAlive()
         participants.list.forEachIndexed { index, participant ->
             if (participant.id == participants.list.last().id) {
-                val villageVote = VillageVote(
-                    village.days.latestDay(),
-                    participant.id,
-                    participants.list.first().id
-                )
+                val villageVote =
+                    VillageVote(
+                        village.days.latestDay(),
+                        participant.id,
+                        participants.list.first().id,
+                    )
                 voteService.updateVote(village, villageVote)
             } else {
-                val villageVote = VillageVote(
-                    village.days.latestDay(),
-                    participant.id,
-                    participants.list[index + 1].id
-                )
+                val villageVote =
+                    VillageVote(
+                        village.days.latestDay(),
+                        participant.id,
+                        participants.list[index + 1].id,
+                    )
                 voteService.updateVote(village, villageVote)
             }
         }
@@ -251,17 +266,21 @@ class DebugController(
     @PostMapping("/admin/village/{villageId}/all-random-vote")
     fun allRandomVote(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: LastwolfUser
+        @AuthenticationPrincipal user: LastwolfUser,
     ) {
         if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
         val village = villageService.findVillage(villageId)
         val participants = village.participants.filterAlive()
         participants.list.forEach { participant ->
-            val villageVote = VillageVote(
-                village.days.latestDay(),
-                participant.id,
-                participants.list.filterNot { p -> p.id == participant.id }.random().id
-            )
+            val villageVote =
+                VillageVote(
+                    village.days.latestDay(),
+                    participant.id,
+                    participants.list
+                        .filterNot { p -> p.id == participant.id }
+                        .random()
+                        .id,
+                )
             voteService.updateVote(village, villageVote)
         }
     }
@@ -276,20 +295,24 @@ class DebugController(
     fun allRandomVote(
         @PathVariable("villageId") villageId: Int,
         @PathVariable("participantId") participantId: Int,
-        @AuthenticationPrincipal user: LastwolfUser
+        @AuthenticationPrincipal user: LastwolfUser,
     ) {
         if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
         val village = villageService.findVillage(villageId)
         val participants = village.participants.filterAlive()
         participants.list.forEach { participant ->
-            val target: VillageParticipant = if (participant.id == participantId) {
-                participants.list.first { it.id != participantId }
-            } else participants.list.first { it.id == participantId }
-            val villageVote = VillageVote(
-                village.days.latestDay(),
-                participant.id,
-                target.id
-            )
+            val target: VillageParticipant =
+                if (participant.id == participantId) {
+                    participants.list.first { it.id != participantId }
+                } else {
+                    participants.list.first { it.id == participantId }
+                }
+            val villageVote =
+                VillageVote(
+                    village.days.latestDay(),
+                    participant.id,
+                    target.id,
+                )
             voteService.updateVote(village, villageVote)
         }
     }
@@ -297,7 +320,10 @@ class DebugController(
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun updatePlayerUid(playerId: Int?, uid: String?) {
+    private fun updatePlayerUid(
+        playerId: Int?,
+        uid: String?,
+    ) {
         val p = Player()
         p.playerId = playerId
         p.uid = uid

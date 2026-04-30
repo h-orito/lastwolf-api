@@ -11,21 +11,22 @@ data class VillageAbilitySituationView(
     val targetList: List<VillageParticipantView>,
     val usable: Boolean,
     @JsonProperty("available_no_target")
-    val isAvailableNoTarget: Boolean
+    val isAvailableNoTarget: Boolean,
 ) {
     constructor(
         situation: VillageAbilitySituation,
         village: Village,
-        shouldHidePlayer: Boolean
+        shouldHidePlayer: Boolean,
     ) : this(
         type = situation.type,
-        targetList = situation.targetList.map {
-            VillageParticipantView(
-                participant = village.participants.first(it.id),
-                shouldHidePlayer = shouldHidePlayer
-            )
-        },
+        targetList =
+            situation.targetList.map {
+                VillageParticipantView(
+                    participant = village.participants.first(it.id),
+                    shouldHidePlayer = shouldHidePlayer,
+                )
+            },
         usable = situation.usable,
-        isAvailableNoTarget = situation.isAvailableNoTarget
+        isAvailableNoTarget = situation.isAvailableNoTarget,
     )
 }

@@ -12,29 +12,36 @@ import org.springframework.stereotype.Repository
 @Repository
 class AbilityDataSource(
     val abilityBhv: AbilityBhv,
-    val firebaseDataSource: FirebaseDataSource
+    val firebaseDataSource: FirebaseDataSource,
 ) {
-
     // ===================================================================================
     //                                                                              Select
     //                                                                              ======
     fun findAbilities(villageId: Int): VillageAbilities {
-        val abilityList = abilityBhv.selectList {
-            it.query().queryVillageDay().setVillageId_Equal(villageId)
-        }
+        val abilityList =
+            abilityBhv.selectList {
+                it.query().queryVillageDay().setVillageId_Equal(villageId)
+            }
         return VillageAbilities(abilityList.map { convertToAbilityToVillageAbility(it) })
     }
 
     // ===================================================================================
     //                                                                              Update
     //                                                                              ======
-    fun updateAbility(village: Village, villageAbility: VillageAbility) {
+    fun updateAbility(
+        village: Village,
+        villageAbility: VillageAbility,
+    ) {
         deleteAbility(villageAbility)
         insertAbility(villageAbility)
         firebaseDataSource.registerSituationLatest(village, villageAbility)
     }
 
-    fun updateDifference(village: Village, before: VillageAbilities, after: VillageAbilities) {
+    fun updateDifference(
+        village: Village,
+        before: VillageAbilities,
+        after: VillageAbilities,
+    ) {
         after.list.drop(before.list.size).forEach {
             insertAbility(it)
             firebaseDataSource.registerSituationLatest(village, it)
@@ -66,12 +73,13 @@ class AbilityDataSource(
     // ===================================================================================
     //                                                                             Mapping
     //                                                                             =======
-    private fun convertToAbilityToVillageAbility(ability: Ability): VillageAbility {
-        return VillageAbility(
+    private fun convertToAbilityToVillageAbility(ability: Ability): VillageAbility =
+        VillageAbility(
             villageDayId = ability.villageDayId,
             myselfId = ability.villagePlayerId,
             targetId = ability.targetVillagePlayerId,
-            abilityType = com.ort.lastwolf.domain.model.ability.AbilityType(ability.abilityTypeCodeAsAbilityType)
+            abilityType =
+                com.ort.lastwolf.domain.model.ability
+                    .AbilityType(ability.abilityTypeCodeAsAbilityType),
         )
-    }
 }

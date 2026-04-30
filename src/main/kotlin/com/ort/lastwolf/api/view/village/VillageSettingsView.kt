@@ -12,16 +12,16 @@ data class VillageSettingsView(
     val charachip: VillageCharachip,
     val organizations: VillageOrganizations,
     val rules: VillageRules,
-    val password: VillagePasswordView
+    val password: VillagePasswordView,
 ) {
     constructor(
-        villageSettings: VillageSettings
+        villageSettings: VillageSettings,
     ) : this(
         capacity = villageSettings.capacity,
         time = VillageTimeView(villageSettings.time),
         charachip = villageSettings.charachip,
         organizations = villageSettings.organizations,
         rules = villageSettings.rules,
-        password = VillagePasswordView(villageSettings.password)
+        password = VillagePasswordView(villageSettings.password),
     )
 }

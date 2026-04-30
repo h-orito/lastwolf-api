@@ -12,9 +12,8 @@ import org.springframework.stereotype.Service
 
 @Service("howlingWolfUserDetailsService")
 class LastwolfUserDetailService(
-    val playerBhv: PlayerBhv
+    val playerBhv: PlayerBhv,
 ) : UserDetailsService {
-
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
@@ -23,14 +22,15 @@ class LastwolfUserDetailService(
 
         val optPlayer = playerBhv.selectEntity { cb -> cb.query().setUid_Equal(uid) }
 
-        return optPlayer.map {
-            LastwolfUser(
-                uid = it.uid,
-                authority = it.authorityCodeAsAuthority
-            )
-        }.orElseThrow {
-            UsernameNotFoundException("User not found for userId: $uid")
-        }
+        return optPlayer
+            .map {
+                LastwolfUser(
+                    uid = it.uid,
+                    authority = it.authorityCodeAsAuthority,
+                )
+            }.orElseThrow {
+                UsernameNotFoundException("User not found for userId: $uid")
+            }
     }
 
     fun insertUser(uid: String): UserDetails {
@@ -48,7 +48,7 @@ class LastwolfUserDetailService(
         playerBhv.insert(player)
         return LastwolfUser(
             uid = uid,
-            authority = CDef.Authority.プレイヤー
+            authority = CDef.Authority.プレイヤー,
         )
     }
 }

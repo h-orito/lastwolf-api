@@ -9,12 +9,19 @@ import org.springframework.stereotype.Service
 
 @Service
 class PsychicDomainService {
-
     fun processDayChangeAction(dayChange: DayChange): DayChange {
         // 霊能がいない、または処刑・突然死がいない場合は何もしない
-        val existsAlivePsychic = dayChange.village.participants.filterAlive().list.any { it.skill!!.toCdef().isHasPsychicAbility }
+        val existsAlivePsychic =
+            dayChange.village.participants
+                .filterAlive()
+                .list
+                .any { it.skill!!.toCdef().isHasPsychicAbility }
         if (!existsAlivePsychic) return dayChange
-        val todayDeadParticipants = dayChange.village.todayDeadParticipants().list.filter { it.dead!!.toCdef().isPsychicableDeath }
+        val todayDeadParticipants =
+            dayChange.village
+                .todayDeadParticipants()
+                .list
+                .filter { it.dead!!.toCdef().isPsychicableDeath }
         if (todayDeadParticipants.isEmpty()) return dayChange
 
         var messages = dayChange.messages.copy()
@@ -29,13 +36,20 @@ class PsychicDomainService {
     //                                                                        ============
     private fun createPsychicPrivateMessage(
         village: Village,
-        deadParticipant: VillageParticipant
+        deadParticipant: VillageParticipant,
     ): Message {
-        val isWolf = village.participants.first(deadParticipant.id).skill!!.toCdef().isPsychicResultWolf
+        val isWolf =
+            village.participants
+                .first(deadParticipant.id)
+                .skill!!
+                .toCdef()
+                .isPsychicResultWolf
         val text = createPsychicPrivateMessageString(deadParticipant.chara, isWolf)
         return Message.createPsychicPrivateMessage(text, village.days.latestDay().id, true)
     }
 
-    private fun createPsychicPrivateMessageString(chara: Chara, isWolf: Boolean): String =
-        "${chara.name.name}は人狼${if (isWolf) "の" else "ではない"}ようだ。"
+    private fun createPsychicPrivateMessageString(
+        chara: Chara,
+        isWolf: Boolean,
+    ): String = "${chara.name.name}は人狼${if (isWolf) "の" else "ではない"}ようだ。"
 }

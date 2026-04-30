@@ -9,7 +9,7 @@ class DayChangeDomainService(
     private val prologueDomainService: PrologueDomainService,
     private val rollCallingDomainService: RollCallingDomainService,
     private val progressDomainService: ProgressDomainService,
-    private val epilogueDomainService: EpilogueDomainService
+    private val epilogueDomainService: EpilogueDomainService,
 ) {
     fun extendVillageIfNeeded(dayChange: DayChange): DayChange {
         val status = dayChange.village.status
@@ -21,7 +21,10 @@ class DayChangeDomainService(
     }
 
     // コミットや時間経過で次の日に遷移させる場合は村日付を追加
-    fun addDayIfNeeded(dayChange: DayChange, commits: Commits): DayChange {
+    fun addDayIfNeeded(
+        dayChange: DayChange,
+        commits: Commits,
+    ): DayChange {
         val status = dayChange.village.status
         return when {
             // プロローグ

@@ -11,9 +11,8 @@ import org.springframework.stereotype.Service
 @Service
 class VillageService(
     private val villageDataSource: VillageDataSource,
-    private val firebaseDataSource: FirebaseDataSource
+    private val firebaseDataSource: FirebaseDataSource,
 ) {
-
     /**
      * 村一覧取得
      * @param user 入力した場合、参加している村一覧
@@ -22,7 +21,7 @@ class VillageService(
      */
     fun findVillages(
         user: LastwolfUser? = null,
-        villageStatusList: List<VillageStatus>? = listOf()
+        villageStatusList: List<VillageStatus>? = listOf(),
     ): Villages = villageDataSource.findVillages(user, villageStatusList)
 
     /**
@@ -44,8 +43,10 @@ class VillageService(
      * @param villageId villageId
      * @return Village
      */
-    fun findVillage(villageId: Int, excludeGonePlayer: Boolean = true): Village =
-        villageDataSource.findVillage(villageId, excludeGonePlayer)
+    fun findVillage(
+        villageId: Int,
+        excludeGonePlayer: Boolean = true,
+    ): Village = villageDataSource.findVillage(villageId, excludeGonePlayer)
 
     /**
      * 村登録
@@ -60,7 +61,10 @@ class VillageService(
      * @param before village
      * @param after village
      */
-    fun updateVillageDifference(before: Village, after: Village): Village {
+    fun updateVillageDifference(
+        before: Village,
+        after: Village,
+    ): Village {
         val village = villageDataSource.updateDifference(before, after)
         firebaseDataSource.registerVillageLatest(before.id)
         return village

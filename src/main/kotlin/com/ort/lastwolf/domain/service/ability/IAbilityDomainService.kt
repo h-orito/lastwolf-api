@@ -9,23 +9,20 @@ import com.ort.lastwolf.domain.model.village.ability.VillageAbility
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 
 interface IAbilityDomainService {
-
     fun getAbilityType(): AbilityType
 
     fun getSelectableTargetList(
         village: Village,
         participant: VillageParticipant?,
-        abilities: VillageAbilities
+        abilities: VillageAbilities,
     ): List<VillageParticipant>
 
-    fun processDummyAbility(
-        dayChange: DayChange
-    ): DayChange
+    fun processDummyAbility(dayChange: DayChange): DayChange
 
     fun createAbilityMessage(
         village: Village,
         participant: VillageParticipant,
-        ability: VillageAbility
+        ability: VillageAbility,
     ): Message
 
     fun isAvailableNoTarget(village: Village): Boolean
@@ -33,6 +30,6 @@ interface IAbilityDomainService {
     fun isUsable(
         village: Village,
         participant: VillageParticipant,
-        abilities: VillageAbilities
+        abilities: VillageAbilities,
     ): Boolean
 }

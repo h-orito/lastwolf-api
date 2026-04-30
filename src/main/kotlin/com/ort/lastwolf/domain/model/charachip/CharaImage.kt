@@ -6,5 +6,5 @@ data class CharaImage(
     val width: Int,
     val height: Int,
     @get:PropertyName("image_url") // firebase用
-    val imageUrl: String
+    val imageUrl: String,
 )

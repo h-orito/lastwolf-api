@@ -13,21 +13,19 @@ import org.springframework.stereotype.Service
 
 @Service
 class ParticipateDomainService {
-
     fun convertToSituation(
         village: Village,
         participant: VillageParticipant?,
         player: Player?,
-        charas: Charas
-    ): VillageParticipateSituation {
-        return VillageParticipateSituation(
+        charas: Charas,
+    ): VillageParticipateSituation =
+        VillageParticipateSituation(
             isParticipating = participant != null,
             isAvailableParticipate = isAvailableParticipate(player, village),
             selectableCharaList = getSelectableCharaList(village, charas),
             isAvailableLeave = isAvailableLeave(village, participant),
-            myself = participant
+            myself = participant,
         )
-    }
 
     /**
      * 参加チェック
@@ -44,7 +42,7 @@ class ParticipateDomainService {
         charaId: Int,
         firstRequestSkill: CDef.Skill,
         secondRequestSkill: CDef.Skill,
-        password: String?
+        password: String?,
     ) {
         // 参加できない状況ならNG
         if (!isAvailableParticipate(player, village)) throw LastwolfBusinessException("参加できません")
@@ -53,9 +51,11 @@ class ParticipateDomainService {
         // 役職希望無効の場合はおまかせのみ
         if (!village.setting.rules.isValidSkillRequest(
                 firstRequestSkill,
-                secondRequestSkill
+                secondRequestSkill,
             )
-        ) throw LastwolfBusinessException("希望役職が不正です")
+        ) {
+            throw LastwolfBusinessException("希望役職が不正です")
+        }
     }
 
     /**
@@ -64,7 +64,10 @@ class ParticipateDomainService {
      * @param chara chara
      * @return 参加時のメッセージ
      */
-    fun createParticipateMessage(village: Village, chara: Chara): Message {
+    fun createParticipateMessage(
+        village: Village,
+        chara: Chara,
+    ): Message {
         // 何人目か
         val text = "${chara.name.name}が参加しました。（${village.participants.count}人目）"
         return Message.createPublicSystemMessage(text, village.days.prologueDay().id)
@@ -75,11 +78,13 @@ class ParticipateDomainService {
      * @param charas charas
      * @return 参加/見学できるキャラ
      */
-    fun getSelectableCharaList(village: Village, charas: Charas): List<Chara> {
-        return charas.list.filterNot { chara ->
+    fun getSelectableCharaList(
+        village: Village,
+        charas: Charas,
+    ): List<Chara> =
+        charas.list.filterNot { chara ->
             village.participants.list.any { it.chara.id == chara.id }
         }
-    }
 
     /**
      * @param village village
@@ -88,7 +93,7 @@ class ParticipateDomainService {
      */
     fun isAvailableLeave(
         village: Village,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
     ): Boolean {
         // 村として退村可能か
         if (!village.isAvailableLeave()) return false
@@ -105,11 +110,10 @@ class ParticipateDomainService {
      */
     fun assertLeave(
         village: Village,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
     ) {
         if (!isAvailableLeave(village, participant)) throw LastwolfBusinessException("退村できません")
     }
-
 
     /**
      * 退村メッセージ
@@ -117,20 +121,22 @@ class ParticipateDomainService {
      * @param chara chara
      * @return 退村時のメッセージ e.g. {キャラ名}は村を去った。
      */
-    fun createLeaveMessage(village: Village, chara: Chara): Message =
-        Message.createPublicSystemMessage(createLeaveMessageString(chara), village.days.latestDay().id)
-
+    fun createLeaveMessage(
+        village: Village,
+        chara: Chara,
+    ): Message = Message.createPublicSystemMessage(createLeaveMessageString(chara), village.days.latestDay().id)
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
+
     /**
      * @param player player
      * @return 参加可能な状況か
      */
     private fun isAvailableParticipate(
         player: Player?,
-        village: Village
+        village: Village,
     ): Boolean {
         // プレイヤーとして参加可能か
         player ?: return false
@@ -139,6 +145,5 @@ class ParticipateDomainService {
         return village.isAvailableParticipate(player)
     }
 
-    private fun createLeaveMessageString(chara: Chara): String =
-        "${chara.name.name}は村を去った。"
+    private fun createLeaveMessageString(chara: Chara): String = "${chara.name.name}は村を去った。"
 }

@@ -9,9 +9,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class EpilogueDomainService(
-    private val campDomainService: CampDomainService
+    private val campDomainService: CampDomainService,
 ) {
-
     fun transitionToDrawEpilogue(dayChange: DayChange): DayChange {
         // 決着がついた
         return epilogueVillage(dayChange, true).setIsChange(dayChange)
@@ -40,7 +39,10 @@ class EpilogueDomainService(
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun epilogueVillage(beforeDayChange: DayChange, isDraw: Boolean): DayChange {
+    private fun epilogueVillage(
+        beforeDayChange: DayChange,
+        isDraw: Boolean,
+    ): DayChange {
         // ステータス変更、勝利陣営設定、勝敗設定
         var dayChange = toEpilogueVillage(beforeDayChange, isDraw)
         // エピローグ遷移メッセージ、参加者一覧メッセージ登録
@@ -49,16 +51,21 @@ class EpilogueDomainService(
         return dayChange.setIsChange(beforeDayChange)
     }
 
-    private fun toEpilogueVillage(dayChange: DayChange, isDraw: Boolean): DayChange {
-        return dayChange.copy(village = dayChange.village.toEpilogue(isDraw))
-    }
+    private fun toEpilogueVillage(
+        dayChange: DayChange,
+        isDraw: Boolean,
+    ): DayChange = dayChange.copy(village = dayChange.village.toEpilogue(isDraw))
 
     private fun addMessageToEpilogue(dayChange: DayChange): DayChange {
-        val latestDayId = dayChange.village.days.latestDay().id
+        val latestDayId =
+            dayChange.village.days
+                .latestDay()
+                .id
         return dayChange.copy(
-            messages = dayChange.messages
-                // エピローグ遷移メッセージ登録
-                .add(campDomainService.createWinCampMessage(dayChange.village.winCamp?.toCdef(), latestDayId))
+            messages =
+                dayChange.messages
+                    // エピローグ遷移メッセージ登録
+                    .add(campDomainService.createWinCampMessage(dayChange.village.winCamp?.toCdef(), latestDayId)),
         )
     }
 
@@ -69,9 +76,8 @@ class EpilogueDomainService(
     }
 
     // 日付追加
-    private fun addNewDay(dayChange: DayChange): DayChange {
-        return dayChange.copy(
-            village = dayChange.village.addNewDay()
+    private fun addNewDay(dayChange: DayChange): DayChange =
+        dayChange.copy(
+            village = dayChange.village.addNewDay(),
         )
-    }
 }

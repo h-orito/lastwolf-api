@@ -7,13 +7,13 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class PlayerDataSource(
-    private val playerBhv: PlayerBhv
+    private val playerBhv: PlayerBhv,
 ) {
-
     fun findPlayer(id: Int): com.ort.lastwolf.domain.model.player.Player {
-        val player = playerBhv.selectEntityWithDeletedCheck {
-            it.query().setPlayerId_Equal(id)
-        }
+        val player =
+            playerBhv.selectEntityWithDeletedCheck {
+                it.query().setPlayerId_Equal(id)
+            }
         playerBhv.load(player) {
             it.loadVillage { } // creator village
             it.loadVillagePlayer { vpCB ->
@@ -25,9 +25,10 @@ class PlayerDataSource(
     }
 
     fun findPlayer(uid: String): com.ort.lastwolf.domain.model.player.Player {
-        val player = playerBhv.selectEntityWithDeletedCheck {
-            it.query().setUid_Equal(uid)
-        }
+        val player =
+            playerBhv.selectEntityWithDeletedCheck {
+                it.query().setUid_Equal(uid)
+            }
         playerBhv.load(player) {
             it.loadVillage { } // creator village
             it.loadVillagePlayer { vpCB ->
@@ -39,25 +40,31 @@ class PlayerDataSource(
     }
 
     fun findPlayers(villageId: Int): Players {
-        val playerList = playerBhv.selectList {
-            it.query().existsVillagePlayer {
-                it.query().setVillageId_Equal(villageId)
+        val playerList =
+            playerBhv.selectList {
+                it.query().existsVillagePlayer {
+                    it.query().setVillageId_Equal(villageId)
+                }
             }
-        }
         return Players(list = playerList.map { convertPlayerToSimplePlayer(it) })
     }
 
     fun findPlayers(playerIdList: List<Int>): Players {
         if (playerIdList.isEmpty()) return Players(listOf())
-        val playerList = playerBhv.selectList {
-            it.query().existsVillagePlayer {
-                it.query().setPlayerId_InScope(playerIdList)
+        val playerList =
+            playerBhv.selectList {
+                it.query().existsVillagePlayer {
+                    it.query().setPlayerId_InScope(playerIdList)
+                }
             }
-        }
         return Players(list = playerList.map { convertPlayerToSimplePlayer(it) })
     }
 
-    fun update(uid: String, nickname: String, twitterUserName: String) {
+    fun update(
+        uid: String,
+        nickname: String,
+        twitterUserName: String,
+    ) {
         val player = Player()
         player.uniqueBy(uid)
         player.nickname = removeSurrogate(nickname)
@@ -65,7 +72,10 @@ class PlayerDataSource(
         playerBhv.update(player)
     }
 
-    fun updateDifference(before: Players, after: Players) {
+    fun updateDifference(
+        before: Players,
+        after: Players,
+    ) {
         // player
         after.list.forEach {
             val beforePlayer = before.list.first { bP -> bP.id == it.id }
@@ -81,49 +91,61 @@ class PlayerDataSource(
     // ===================================================================================
     //                                                                             Mapping
     //                                                                             =======
-    private fun convertPlayerToPlayer(player: Player): com.ort.lastwolf.domain.model.player.Player {
-        return com.ort.lastwolf.domain.model.player.Player(
+    private fun convertPlayerToPlayer(player: Player): com.ort.lastwolf.domain.model.player.Player =
+        com.ort.lastwolf.domain.model.player.Player(
             id = player.playerId,
             uid = player.uid,
             nickname = player.nickname,
             twitterUserName = player.twitterUserName,
             isRestrictedParticipation = player.isRestrictedParticipation,
-            participateProgressVillageIdList = player.villagePlayerList.filter {
-                !it.village.get().villageStatusCodeAsVillageStatus.isSolvedVillage
-            }.map { it.villageId },
-            participateFinishedVillageIdList = player.villagePlayerList.filter {
-                it.village.get().villageStatusCodeAsVillageStatus.isSolvedVillage
-            }.map { it.villageId },
-            createProgressVillageIdList = player.villageList.filter {
-                !it.villageStatusCodeAsVillageStatus.isSolvedVillage
-            }.map { it.villageId },
-            createFinishedVillageIdList = player.villageList.filter {
-                it.villageStatusCodeAsVillageStatus.isSolvedVillage
-            }.map { it.villageId }
+            participateProgressVillageIdList =
+                player.villagePlayerList
+                    .filter {
+                        !it.village
+                            .get()
+                            .villageStatusCodeAsVillageStatus.isSolvedVillage
+                    }.map { it.villageId },
+            participateFinishedVillageIdList =
+                player.villagePlayerList
+                    .filter {
+                        it.village
+                            .get()
+                            .villageStatusCodeAsVillageStatus.isSolvedVillage
+                    }.map { it.villageId },
+            createProgressVillageIdList =
+                player.villageList
+                    .filter {
+                        !it.villageStatusCodeAsVillageStatus.isSolvedVillage
+                    }.map { it.villageId },
+            createFinishedVillageIdList =
+                player.villageList
+                    .filter {
+                        it.villageStatusCodeAsVillageStatus.isSolvedVillage
+                    }.map { it.villageId },
         )
-    }
 
-    private fun convertPlayerToSimplePlayer(player: Player): com.ort.lastwolf.domain.model.player.Player {
-        return com.ort.lastwolf.domain.model.player.Player(
+    private fun convertPlayerToSimplePlayer(player: Player): com.ort.lastwolf.domain.model.player.Player =
+        com.ort.lastwolf.domain.model.player.Player(
             id = player.playerId,
             uid = player.uid,
             nickname = player.nickname,
             twitterUserName = player.twitterUserName,
-            isRestrictedParticipation = player.isRestrictedParticipation
+            isRestrictedParticipation = player.isRestrictedParticipation,
         )
-    }
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
+
     /**
      * 絵文字を除く文字列を返す
      * @param text
      * @return 4byte文字を除いた文字列
      */
-    private fun removeSurrogate(text: String): String {
-        return text.chunked(1).filter { c ->
-            !c.matches("[\\uD800-\\uDFFF]".toRegex())
-        }.joinToString(separator = "")
-    }
+    private fun removeSurrogate(text: String): String =
+        text
+            .chunked(1)
+            .filter { c ->
+                !c.matches("[\\uD800-\\uDFFF]".toRegex())
+            }.joinToString(separator = "")
 }

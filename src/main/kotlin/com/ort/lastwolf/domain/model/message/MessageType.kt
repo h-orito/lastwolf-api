@@ -4,14 +4,13 @@ import com.ort.dbflute.allcommon.CDef
 
 data class MessageType(
     val code: String,
-    val name: String
+    val name: String,
 ) {
-
     constructor(
-        cdefMessageType: CDef.MessageType
+        cdefMessageType: CDef.MessageType,
     ) : this(
         code = cdefMessageType.code(),
-        name = cdefMessageType.alias()
+        name = cdefMessageType.alias(),
     )
 
     fun toCdef(): CDef.MessageType = CDef.MessageType.codeOf(code)

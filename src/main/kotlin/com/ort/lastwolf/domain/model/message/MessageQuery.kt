@@ -12,10 +12,10 @@ data class MessageQuery(
     val messageTypeList: List<CDef.MessageType>,
     val participantIdList: List<Int>?,
     val includeMonologue: Boolean,
-    val includePrivateAbility: Boolean
+    val includePrivateAbility: Boolean,
 ) {
     constructor(
-        messageTypeList: List<CDef.MessageType>
+        messageTypeList: List<CDef.MessageType>,
     ) : this(
         from = null,
         pageSize = null,
@@ -25,7 +25,7 @@ data class MessageQuery(
         messageTypeList = messageTypeList,
         participantIdList = null,
         includeMonologue = false,
-        includePrivateAbility = false
+        includePrivateAbility = false,
     )
 
     companion object {

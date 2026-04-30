@@ -14,18 +14,22 @@ import org.springframework.stereotype.Service
 
 @Service
 class AttackDomainService : IAbilityDomainService {
-
     override fun getAbilityType(): AbilityType = AbilityType(CDef.AbilityType.襲撃)
 
     override fun getSelectableTargetList(
         village: Village,
         participant: VillageParticipant?,
-        abilities: VillageAbilities
+        abilities: VillageAbilities,
     ): List<VillageParticipant> {
         participant ?: return listOf()
 
         // すでに指定していたらもう使えない
-        if (abilities.filterByType(getAbilityType()).filterLatestday(village).list.isNotEmpty()) {
+        if (abilities
+                .filterByType(getAbilityType())
+                .filterLatestday(village)
+                .list
+                .isNotEmpty()
+        ) {
             return listOf()
         }
 
@@ -40,9 +44,7 @@ class AttackDomainService : IAbilityDomainService {
         }
     }
 
-    override fun processDummyAbility(
-        dayChange: DayChange
-    ): DayChange {
+    override fun processDummyAbility(dayChange: DayChange): DayChange {
         // ダミーは人狼を引くことがないので何もしない
         return dayChange
     }
@@ -50,17 +52,16 @@ class AttackDomainService : IAbilityDomainService {
     override fun createAbilityMessage(
         village: Village,
         participant: VillageParticipant,
-        ability: VillageAbility
+        ability: VillageAbility,
     ): Message = createAttackMessage(village, participant, ability)
 
-    fun attack(
-        dayChange: DayChange
-    ): DayChange {
+    fun attack(dayChange: DayChange): DayChange {
         var village = dayChange.village.copy()
         var messages = dayChange.messages.copy()
         dayChange.abilities
             .filterByType(getAbilityType())
-            .filterYesterday(village).list
+            .filterYesterday(village)
+            .list
             .find { it.targetId != null }
             ?.let { ability ->
                 // 襲撃成功したら死亡
@@ -76,10 +77,11 @@ class AttackDomainService : IAbilityDomainService {
                 }
             } ?: return dayChange
 
-        return dayChange.copy(
-            village = village,
-            messages = messages
-        ).setIsChange(dayChange)
+        return dayChange
+            .copy(
+                village = village,
+                messages = messages,
+            ).setIsChange(dayChange)
     }
 
     override fun isAvailableNoTarget(village: Village): Boolean = false
@@ -87,10 +89,15 @@ class AttackDomainService : IAbilityDomainService {
     override fun isUsable(
         village: Village,
         participant: VillageParticipant,
-        abilities: VillageAbilities
+        abilities: VillageAbilities,
     ): Boolean {
         // すでに指定していたらもう使えない
-        if (abilities.filterByType(getAbilityType()).filterLatestday(village).list.isNotEmpty()) {
+        if (abilities
+                .filterByType(getAbilityType())
+                .filterLatestday(village)
+                .list
+                .isNotEmpty()
+        ) {
             return false
         }
         // 生存していたら行使できる
@@ -100,38 +107,58 @@ class AttackDomainService : IAbilityDomainService {
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun isAttackSuccess(dayChange: DayChange, targetId: Int): Boolean {
+    private fun isAttackSuccess(
+        dayChange: DayChange,
+        targetId: Int,
+    ): Boolean {
         // 対象が既に死亡していたら失敗
-        if (dayChange.village.participants.first(targetId).isDead()) return false
+        if (dayChange.village.participants
+                .first(targetId)
+                .isDead()
+        ) {
+            return false
+        }
         // 対象が護衛されていたら失敗
         if (dayChange.abilities.list.any { villageAbility ->
-                villageAbility.abilityType.code == CDef.AbilityType.護衛.code()
-                        && villageAbility.targetId == targetId
-                        && villageAbility.villageDayId == dayChange.village.days.yesterday().id
-                        && dayChange.village.participants.first(villageAbility.myselfId).isAlive()
-            }) {
+                villageAbility.abilityType.code == CDef.AbilityType.護衛.code() &&
+                    villageAbility.targetId == targetId &&
+                    villageAbility.villageDayId ==
+                    dayChange.village.days
+                        .yesterday()
+                        .id &&
+                    dayChange.village.participants
+                        .first(villageAbility.myselfId)
+                        .isAlive()
+            }
+        ) {
             return false
         }
         // 対象が襲撃を耐える役職なら失敗
-        return !dayChange.village.participants.first(targetId).skill!!.toCdef().isNoDeadByAttack
+        return !dayChange.village.participants
+            .first(targetId)
+            .skill!!
+            .toCdef()
+            .isNoDeadByAttack
     }
 
     private fun createAttackMessage(
         village: Village,
         wolf: VillageParticipant,
-        ability: VillageAbility
+        ability: VillageAbility,
     ): Message {
         val target = village.participants.first(ability.targetId!!)
         val text = createAttackMessageString(wolf.chara, target.chara)
         return Message.createAttackPrivateMessage(text, village.days.latestDay().id, true)
     }
 
-    private fun createAttackMessageString(chara: Chara, targetChara: Chara): String =
-        "${chara.name.name}が${targetChara.name.name}を襲撃します。"
+    private fun createAttackMessageString(
+        chara: Chara,
+        targetChara: Chara,
+    ): String = "${chara.name.name}が${targetChara.name.name}を襲撃します。"
 
     private fun forceSuicidedParticipant(
         attackedParticipant: VillageParticipant,
-        attacker: VillageParticipant
+        attacker: VillageParticipant,
     ): VillageParticipant? {
         // 襲撃者が既に死亡していたら何もしない
         if (attacker.isDead()) return null
@@ -144,14 +171,14 @@ class AttackDomainService : IAbilityDomainService {
     private fun createForceSuicideMessage(
         attackedParticipant: VillageParticipant,
         forceSuicidedParticipant: VillageParticipant,
-        latestDay: VillageDay
+        latestDay: VillageDay,
     ): Message {
         val attackedCharaName = attackedParticipant.chara.name.fullName()
         val forceSuicidedCharaName = forceSuicidedParticipant.chara.name.fullName()
         val message = "${attackedCharaName}は、${forceSuicidedCharaName}を道連れにした。"
         return Message.createPrivateSystemMessage(
             message,
-            latestDay.id
+            latestDay.id,
         )
     }
 }

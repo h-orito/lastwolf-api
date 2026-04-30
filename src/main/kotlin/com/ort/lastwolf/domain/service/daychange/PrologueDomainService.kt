@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class PrologueDomainService(
     private val abilityDomainService: AbilityDomainService,
-    private val skillAssignDomainService: SkillAssignDomainService
+    private val skillAssignDomainService: SkillAssignDomainService,
 ) {
     fun extendIfNeeded(dayChange: DayChange): DayChange {
         // 開始時刻になっていない場合は何もしない
@@ -26,10 +26,9 @@ class PrologueDomainService(
     private fun shouldForward(village: Village): Boolean =
         !LastwolfDateUtil.currentLocalDateTime().isBefore(village.days.latestDay().endDatetime)
 
-    private fun extendPrologue(dayChange: DayChange): DayChange {
-        return dayChange.copy(
+    private fun extendPrologue(dayChange: DayChange): DayChange =
+        dayChange.copy(
             village = dayChange.village.extendPrologue(),
-            messages = dayChange.messages.add(dayChange.village.createExtendPrologueMessage())
+            messages = dayChange.messages.add(dayChange.village.createExtendPrologueMessage()),
         )
-    }
 }

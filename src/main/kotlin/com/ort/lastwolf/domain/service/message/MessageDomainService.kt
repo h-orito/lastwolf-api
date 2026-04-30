@@ -8,7 +8,11 @@ import com.ort.lastwolf.domain.model.player.Player
 import com.ort.lastwolf.domain.model.player.Players
 import com.ort.lastwolf.domain.model.village.Village
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
-import com.ort.lastwolf.domain.service.say.*
+import com.ort.lastwolf.domain.service.say.GraveSayDomainService
+import com.ort.lastwolf.domain.service.say.MasonSayDomainService
+import com.ort.lastwolf.domain.service.say.MonologueSayDomainService
+import com.ort.lastwolf.domain.service.say.NormalSayDomainService
+import com.ort.lastwolf.domain.service.say.WerewolfSayDomainService
 import org.springframework.stereotype.Service
 
 @Service
@@ -22,9 +26,8 @@ class MessageDomainService(
     private val attackMessageDomainService: AttackMessageDomainService,
     private val masonMessageDomainService: MasonMessageDomainService,
     private val fanaticMessageDomainService: FanaticMessageDomainService,
-    private val foxMessageDomainService: FoxMessageDomainService
+    private val foxMessageDomainService: FoxMessageDomainService,
 ) {
-
     private val everyoneAllowedMessageTypeList =
         listOf(CDef.MessageType.公開システムメッセージ, CDef.MessageType.通常発言, CDef.MessageType.村建て発言)
 
@@ -40,7 +43,7 @@ class MessageDomainService(
         village: Village,
         player: Player?,
         participant: VillageParticipant?,
-        authority: CDef.Authority?
+        authority: CDef.Authority?,
     ): List<CDef.MessageType> {
         // 管理者やGMは全て見られる
         if (authority == CDef.Authority.管理者 || village.isGameMaster(player)) return CDef.MessageType.listAll()
@@ -75,7 +78,7 @@ class MessageDomainService(
     fun isViewableMessage(
         village: Village,
         participant: VillageParticipant?,
-        messageType: String
+        messageType: String,
     ): Boolean {
         if (village.dummyParticipant()?.id == participant?.id) return true
         return when (CDef.MessageType.codeOf(messageType) ?: return false) {
@@ -104,7 +107,7 @@ class MessageDomainService(
         pageSize: Int?,
         pageNum: Int?,
         keyword: String?,
-        participantIdList: List<Int>?
+        participantIdList: List<Int>?,
     ): MessageQuery {
         val availableMessageTypeList = viewableMessageTypeList(village, player, participant, authority)
         val requestMessageTypeList =
@@ -118,19 +121,20 @@ class MessageDomainService(
             participant = participant,
             messageTypeList = queryMessageTypeList,
             participantIdList = participantIdList,
-            includeMonologue = isIncludeMonologue(
-                participant,
-                participantIdList,
-                requestMessageTypeList,
-                queryMessageTypeList
-            ),
-            includePrivateAbility = isIncludePrivateAbility(participant, requestMessageTypeList)
+            includeMonologue =
+                isIncludeMonologue(
+                    participant,
+                    participantIdList,
+                    requestMessageTypeList,
+                    queryMessageTypeList,
+                ),
+            includePrivateAbility = isIncludePrivateAbility(participant, requestMessageTypeList),
         )
     }
 
     fun getViewableUserAndMessageLatestTime(
         village: Village,
-        message: Message
+        message: Message,
     ): List<UserViewableMessageLatestTime> {
         val updateParticipantAndTimeList =
             village.participants.list.mapNotNull { participant ->
@@ -140,9 +144,11 @@ class MessageDomainService(
                 if (isViewable || isMessageForMe || isEveryoneViewable) {
                     UserViewableMessageLatestTime(
                         uid = participant.player.uid,
-                        time = message.time.unixTimeMilli
+                        time = message.time.unixTimeMilli,
                     )
-                } else null
+                } else {
+                    null
+                }
             }
         // 非ログインユーザ
         return if (isViewableMessage(village, null, message.content.type.code)) {
@@ -155,32 +161,40 @@ class MessageDomainService(
     fun getViewableUserAndMessageLatestTime(
         village: Village,
         players: Players,
-        messages: Messages
+        messages: Messages,
     ): List<UserViewableMessageLatestTime> {
         val updateParticipantAndTimeList =
             village.participants.list.mapNotNull { participant ->
-                messages.list.filter { message ->
-                    val isViewable = isViewableMessage(village, participant, message.content.type.code)
-                    val isMessageForMe = isMessageForMe(participant, message)
-                    val isEveryoneViewable = isEveryoneViewable(message)
-                    isViewable || isMessageForMe || isEveryoneViewable
-                }.maxBy { it.time.unixTimeMilli }?.let { message ->
-                    UserViewableMessageLatestTime(
-                        uid = participant.player.uid,
-                        time = message.time.unixTimeMilli
-                    )
-                }
+                messages.list
+                    .filter { message ->
+                        val isViewable = isViewableMessage(village, participant, message.content.type.code)
+                        val isMessageForMe = isMessageForMe(participant, message)
+                        val isEveryoneViewable = isEveryoneViewable(message)
+                        isViewable || isMessageForMe || isEveryoneViewable
+                    }.maxBy { it.time.unixTimeMilli }
+                    ?.let { message ->
+                        UserViewableMessageLatestTime(
+                            uid = participant.player.uid,
+                            time = message.time.unixTimeMilli,
+                        )
+                    }
             }
         // 非ログインユーザ
-        val notLoginUser = messages.list.filter { message ->
-            val day = village.days.list.first { it.id == message.time.villageDayId }.day
-            isViewableMessage(village, null, message.content.type.code)
-        }.maxBy { it.time.unixTimeMilli }?.let { message ->
-            UserViewableMessageLatestTime(
-                uid = null,
-                time = message.time.unixTimeMilli
-            )
-        }
+        val notLoginUser =
+            messages.list
+                .filter { message ->
+                    val day =
+                        village.days.list
+                            .first { it.id == message.time.villageDayId }
+                            .day
+                    isViewableMessage(village, null, message.content.type.code)
+                }.maxBy { it.time.unixTimeMilli }
+                ?.let { message ->
+                    UserViewableMessageLatestTime(
+                        uid = null,
+                        time = message.time.unixTimeMilli,
+                    )
+                }
         return if (notLoginUser == null) {
             updateParticipantAndTimeList
         } else {
@@ -188,24 +202,28 @@ class MessageDomainService(
         }
     }
 
-    data class UserViewableMessageLatestTime(val uid: String?, val time: Long)
+    data class UserViewableMessageLatestTime(
+        val uid: String?,
+        val time: Long,
+    )
 
-    private fun isEveryoneViewable(message: Message): Boolean =
-        everyoneAllowedMessageTypeList.any { it == message.content.type.toCdef() }
+    private fun isEveryoneViewable(message: Message): Boolean = everyoneAllowedMessageTypeList.any { it == message.content.type.toCdef() }
 
-    private fun isMessageForMe(participant: VillageParticipant, message: Message): Boolean {
-        return listOf(
+    private fun isMessageForMe(
+        participant: VillageParticipant,
+        message: Message,
+    ): Boolean =
+        listOf(
             CDef.MessageType.個別能力行使結果,
-            CDef.MessageType.独り言
-        ).any { it == message.content.type.toCdef() }
-                && message.fromParticipantId == participant.id
-    }
+            CDef.MessageType.独り言,
+        ).any { it == message.content.type.toCdef() } &&
+            message.fromParticipantId == participant.id
 
     private fun isIncludeMonologue(
         participant: VillageParticipant?,
         participantIdList: List<Int>?,
         requestMessageTypeList: List<CDef.MessageType>,
-        queryMessageTypeList: List<CDef.MessageType>
+        queryMessageTypeList: List<CDef.MessageType>,
     ): Boolean {
         // 既に取得対象になっていれば不要
         if (queryMessageTypeList.contains(CDef.MessageType.独り言)) return false
@@ -221,7 +239,7 @@ class MessageDomainService(
     // 霊視や襲撃でなく、占いなどの個別のが対象
     private fun isIncludePrivateAbility(
         participant: VillageParticipant?,
-        requestMessageTypeList: List<CDef.MessageType>
+        requestMessageTypeList: List<CDef.MessageType>,
     ): Boolean {
         participant ?: return false
         return requestMessageTypeList.contains(CDef.MessageType.公開システムメッセージ)

@@ -11,23 +11,26 @@ import org.springframework.stereotype.Repository
 @Repository
 class VoteDataSource(
     val voteBhv: VoteBhv,
-    val firebaseDataSource: FirebaseDataSource
+    val firebaseDataSource: FirebaseDataSource,
 ) {
-
     // ===================================================================================
     //                                                                              Select
     //                                                                              ======
     fun findVotes(villageId: Int): VillageVotes {
-        val voteList = voteBhv.selectList {
-            it.query().queryVillageDay().setVillageId_Equal(villageId)
-        }
+        val voteList =
+            voteBhv.selectList {
+                it.query().queryVillageDay().setVillageId_Equal(villageId)
+            }
         return VillageVotes(voteList.map { convertToVoteToVillageVote(it) })
     }
 
     // ===================================================================================
     //                                                                              Update
     //                                                                              ======
-    fun updateVote(village: Village, villageVote: VillageVote) {
+    fun updateVote(
+        village: Village,
+        villageVote: VillageVote,
+    ) {
         deleteVote(villageVote)
         insertVote(villageVote)
         firebaseDataSource.registerSituationLatest(village, villageVote)
@@ -48,38 +51,44 @@ class VoteDataSource(
         voteBhv.insert(vote)
     }
 
-    fun updateDifference(village: Village, before: VillageVotes, after: VillageVotes) {
+    fun updateDifference(
+        village: Village,
+        before: VillageVotes,
+        after: VillageVotes,
+    ) {
         // 削除
-        before.list.filterNot { beforeVote ->
-            after.list.any { afterVote ->
-                beforeVote.villageDayId == afterVote.villageDayId
-                    && beforeVote.myselfId == afterVote.myselfId
-            }
-        }.forEach { deleteVote(it) }
+        before.list
+            .filterNot { beforeVote ->
+                after.list.any { afterVote ->
+                    beforeVote.villageDayId == afterVote.villageDayId &&
+                        beforeVote.myselfId == afterVote.myselfId
+                }
+            }.forEach { deleteVote(it) }
         // 更新
-        after.list.filter { afterVote ->
-            before.list.any { beforeVote ->
-                beforeVote.villageDayId == afterVote.villageDayId
-                    && beforeVote.myselfId == afterVote.myselfId
-            }
-        }.forEach { updateVote(village, it) }
+        after.list
+            .filter { afterVote ->
+                before.list.any { beforeVote ->
+                    beforeVote.villageDayId == afterVote.villageDayId &&
+                        beforeVote.myselfId == afterVote.myselfId
+                }
+            }.forEach { updateVote(village, it) }
         // 追加
-        after.list.filterNot { afterVote ->
-            before.list.any { beforeVote ->
-                beforeVote.villageDayId == afterVote.villageDayId
-                    && beforeVote.myselfId == afterVote.myselfId
-            }
-        }.forEach { insertVote(it) }
+        after.list
+            .filterNot { afterVote ->
+                before.list.any { beforeVote ->
+                    beforeVote.villageDayId == afterVote.villageDayId &&
+                        beforeVote.myselfId == afterVote.myselfId
+                }
+            }.forEach { insertVote(it) }
     }
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun convertToVoteToVillageVote(vote: Vote): VillageVote {
-        return VillageVote(
+    private fun convertToVoteToVillageVote(vote: Vote): VillageVote =
+        VillageVote(
             villageDayId = vote.villageDayId,
             myselfId = vote.villagePlayerId,
-            targetId = vote.targetVillagePlayerId
+            targetId = vote.targetVillagePlayerId,
         )
-    }
 }

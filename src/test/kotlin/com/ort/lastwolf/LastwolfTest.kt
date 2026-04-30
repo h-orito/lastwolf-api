@@ -11,11 +11,10 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import org.springframework.boot.test.mock.mockito.MockBean
 
-
 open class LastwolfTest {
-
     @MockBean
     lateinit var firebaseConfig: FirebaseConfig
+
     @MockBean
     lateinit var firebaseDataSource: FirebaseDataSource
 

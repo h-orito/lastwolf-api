@@ -9,7 +9,7 @@ data class VillageTime(
     val startDatetime: LocalDateTime,
     val noonSeconds: Int,
     val voteSeconds: Int,
-    val nightSeconds: Int
+    val nightSeconds: Int,
 ) {
     companion object {
         private const val NOON_SECONDS_MAX = 60 * 60
@@ -24,7 +24,7 @@ data class VillageTime(
             startDatetime: LocalDateTime?,
             noonSeconds: Int?,
             voteSeconds: Int?,
-            nightSeconds: Int?
+            nightSeconds: Int?,
         ): VillageTime {
             requireNotNull(createDatetime)
             requireNotNull(startDatetime)
@@ -39,37 +39,33 @@ data class VillageTime(
                 startDatetime = startDatetime,
                 noonSeconds = noonSeconds,
                 voteSeconds = voteSeconds,
-                nightSeconds = nightSeconds
+                nightSeconds = nightSeconds,
             )
         }
     }
 
-    fun existsDifference(time: VillageTime): Boolean {
-        return startDatetime != time.startDatetime
-            || noonSeconds != time.noonSeconds
-            || voteSeconds != time.voteSeconds
-            || nightSeconds != time.nightSeconds
-    }
+    fun existsDifference(time: VillageTime): Boolean =
+        startDatetime != time.startDatetime ||
+            noonSeconds != time.noonSeconds ||
+            voteSeconds != time.voteSeconds ||
+            nightSeconds != time.nightSeconds
 
-    fun extendPrologue(): VillageTime {
-        return this.copy(
-            startDatetime = startDatetime.plusHours(1L)
+    fun extendPrologue(): VillageTime =
+        this.copy(
+            startDatetime = startDatetime.plusHours(1L),
         )
-    }
 
-    fun extendRollCall(): VillageTime {
-        return this.copy(
-            startDatetime = startDatetime.plusMinutes(10L)
+    fun extendRollCall(): VillageTime =
+        this.copy(
+            startDatetime = startDatetime.plusMinutes(10L),
         )
-    }
 
-    fun getIntervalSeconds(noonNight: NoonNight): Int {
-        return when (noonNight.toCdef()) {
+    fun getIntervalSeconds(noonNight: NoonNight): Int =
+        when (noonNight.toCdef()) {
             CDef.Noonnight.昼 -> noonSeconds
             CDef.Noonnight.投票1回目 -> voteSeconds
             CDef.Noonnight.投票2回目 -> voteSeconds
             CDef.Noonnight.投票3回目 -> voteSeconds
             CDef.Noonnight.夜 -> nightSeconds
         }
-    }
 }

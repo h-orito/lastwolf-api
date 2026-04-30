@@ -27,7 +27,7 @@ class MessageService(
     private val participateDomainService: ParticipateDomainService,
     private val commitDomainService: CommitDomainService,
     private val comingOutDomainService: ComingOutDomainService,
-    private val messageDomainService: MessageDomainService
+    private val messageDomainService: MessageDomainService,
 ) {
     /**
      * 発言取得
@@ -38,10 +38,8 @@ class MessageService(
      */
     fun findMessages(
         villageId: Int,
-        query: MessageQuery
-    ): Messages {
-        return messageDataSource.findMessages(villageId, query)
-    }
+        query: MessageQuery,
+    ): Messages = messageDataSource.findMessages(villageId, query)
 
     /**
      * 最新発言日時取得
@@ -54,10 +52,8 @@ class MessageService(
     fun findLatestMessagesUnixTimeMilli(
         villageId: Int,
         messageTypeList: List<CDef.MessageType>,
-        participant: VillageParticipant? = null
-    ): Long {
-        return messageDataSource.findLatestMessagesUnixTimeMilli(villageId, messageTypeList, participant)
-    }
+        participant: VillageParticipant? = null,
+    ): Long = messageDataSource.findLatestMessagesUnixTimeMilli(villageId, messageTypeList, participant)
 
     /**
      * 参加者のその日の発言を取得
@@ -70,7 +66,7 @@ class MessageService(
     fun findParticipateDayMessageList(
         villageId: Int,
         villageDay: com.ort.lastwolf.domain.model.village.VillageDay,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
     ): List<Message> {
         participant ?: return listOf()
         return messageDataSource.selectParticipateDayMessageList(villageId, villageDay.id, participant)
@@ -91,7 +87,7 @@ class MessageService(
      */
     fun registerMessage(
         village: Village,
-        message: Message
+        message: Message,
     ) {
         val registeredMessage = messageDataSource.registerMessage(village, message)
         messageDomainService.getViewableUserAndMessageLatestTime(village, registeredMessage).forEach {
@@ -105,23 +101,25 @@ class MessageService(
     fun registerParticipateMessage(
         village: Village,
         participant: VillageParticipant,
-        chara: Chara
+        chara: Chara,
     ) {
         // {N}人目、{キャラ名}。
         messageDataSource.registerMessage(
             village,
-            participateDomainService.createParticipateMessage(village, chara)
+            participateDomainService.createParticipateMessage(village, chara),
         )
     }
 
     /**
      * 退村する際のシステムメッセージを登録
      */
-    fun registerLeaveMessage(village: Village, chara: Chara) =
-        registerMessage(
-            village,
-            participateDomainService.createLeaveMessage(village, chara)
-        )
+    fun registerLeaveMessage(
+        village: Village,
+        chara: Chara,
+    ) = registerMessage(
+        village,
+        participateDomainService.createLeaveMessage(village, chara),
+    )
 
     /**
      * 能力セットする際のシステムメッセージを登録
@@ -129,7 +127,7 @@ class MessageService(
     fun registerAbilitySetMessage(
         village: Village,
         participant: VillageParticipant,
-        ability: VillageAbility
+        ability: VillageAbility,
     ) {
         val message: Message = abilityDomainService.createAbilityMessage(village, participant, ability)
         registerMessage(village, message)
@@ -142,30 +140,40 @@ class MessageService(
      * @param chara キャラ
      * @param doCommit コミット/取り消し
      */
-    fun registerCommitMessage(village: Village, chara: Chara, doCommit: Boolean) =
-        registerMessage(
-            village,
-            commitDomainService.createCommitMessage(chara, doCommit, village.days.latestDay().id)
-        )
+    fun registerCommitMessage(
+        village: Village,
+        chara: Chara,
+        doCommit: Boolean,
+    ) = registerMessage(
+        village,
+        commitDomainService.createCommitMessage(chara, doCommit, village.days.latestDay().id),
+    )
 
-    fun registerComingOutMessage(village: Village, chara: Chara, skill: Skill?) =
-        registerMessage(
-            village,
-            comingOutDomainService.createComingOutMessage(chara, skill, village.days.latestDay().id)
-        )
+    fun registerComingOutMessage(
+        village: Village,
+        chara: Chara,
+        skill: Skill?,
+    ) = registerMessage(
+        village,
+        comingOutDomainService.createComingOutMessage(chara, skill, village.days.latestDay().id),
+    )
 
     /**
      * 差分更新
      */
-    fun updateDifference(before: DayChange, after: DayChange) {
+    fun updateDifference(
+        before: DayChange,
+        after: DayChange,
+    ) {
         val villageId = after.village.id
         val messages = messageDataSource.updateDifference(after.village, before.messages, after.messages)
-        messageDomainService.getViewableUserAndMessageLatestTime(
-            after.village,
-            after.players,
-            messages
-        ).forEach {
-            firebaseDataSource.registerMessageLatest(villageId, it.uid, it.time)
-        }
+        messageDomainService
+            .getViewableUserAndMessageLatestTime(
+                after.village,
+                after.players,
+                messages,
+            ).forEach {
+                firebaseDataSource.registerMessageLatest(villageId, it.uid, it.time)
+            }
     }
 }

@@ -7,15 +7,14 @@ data class CharaView(
     val id: Int,
     val name: CharaNameView,
     val charachipId: Int,
-    val image: CharaImage
+    val image: CharaImage,
 ) {
-
     constructor(
-        chara: Chara
+        chara: Chara,
     ) : this(
         id = chara.id,
         name = CharaNameView(chara.name),
         charachipId = chara.charachipId,
-        image = chara.image
+        image = chara.image,
     )
 }

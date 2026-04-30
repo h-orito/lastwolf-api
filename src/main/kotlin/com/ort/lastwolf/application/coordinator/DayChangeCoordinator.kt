@@ -25,9 +25,8 @@ class DayChangeCoordinator(
     val messageService: MessageService,
     val playerService: PlayerService,
     // domain service
-    val dayChangeDomainService: DayChangeDomainService
+    val dayChangeDomainService: DayChangeDomainService,
 ) {
-
     // 手動開始
     @Transactional(rollbackFor = [Exception::class, LastwolfBusinessException::class])
     fun startVillage(villageId: Int) {
@@ -36,16 +35,19 @@ class DayChangeCoordinator(
         val abilities: VillageAbilities = abilityService.findVillageAbilities(village.id)
         val players: Players = playerService.findPlayers(village.id)
 
-        val beforeDayChange = DayChange(
-            village = village,
-            votes = votes,
-            abilities = abilities,
-            players = players
-        )
+        val beforeDayChange =
+            DayChange(
+                village = village,
+                votes = votes,
+                abilities = abilities,
+                players = players,
+            )
 
-        var dayChange = beforeDayChange.copy(
-            village = village.addNewDay()
-        ).setIsChange(beforeDayChange)
+        var dayChange =
+            beforeDayChange
+                .copy(
+                    village = village.addNewDay(),
+                ).setIsChange(beforeDayChange)
 
         update(beforeDayChange, dayChange)
 
@@ -71,24 +73,27 @@ class DayChangeCoordinator(
         val commits: Commits = commitService.findCommits(village.id)
         val players: Players = playerService.findPlayers(village.id)
 
-        val beforeDayChange = DayChange(
-            village = village,
-            votes = votes,
-            abilities = abilities,
-            players = players
-        )
+        val beforeDayChange =
+            DayChange(
+                village = village,
+                votes = votes,
+                abilities = abilities,
+                players = players,
+            )
 
         // プロローグ/点呼延長処理
-        var dayChange = updateIfNeeded(
-            beforeDayChange,
-            dayChangeDomainService.extendVillageIfNeeded(beforeDayChange)
-        )
+        var dayChange =
+            updateIfNeeded(
+                beforeDayChange,
+                dayChangeDomainService.extendVillageIfNeeded(beforeDayChange),
+            )
 
         // 必要あれば次の日へ
-        dayChange = dayChangeDomainService.addDayIfNeeded(dayChange, commits).let {
-            if (!it.isChange) return
-            updateIfNeeded(dayChange, it)
-        }
+        dayChange =
+            dayChangeDomainService.addDayIfNeeded(dayChange, commits).let {
+                if (!it.isChange) return
+                updateIfNeeded(dayChange, it)
+            }
 
         // 登録後の村日付idが必要になるので取得し直す
         dayChange = dayChange.copy(village = villageService.findVillage(village.id))
@@ -102,13 +107,19 @@ class DayChangeCoordinator(
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun updateIfNeeded(before: DayChange, after: DayChange): DayChange {
+    private fun updateIfNeeded(
+        before: DayChange,
+        after: DayChange,
+    ): DayChange {
         if (!after.isChange) return after
         update(before, after)
         return after.copy(isChange = false)
     }
 
-    private fun update(before: DayChange, after: DayChange) {
+    private fun update(
+        before: DayChange,
+        after: DayChange,
+    ) {
         // player
         if (before.players.existsDifference(after.players)) {
             playerService.updateDifference(before.players, after.players)

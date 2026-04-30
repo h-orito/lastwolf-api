@@ -7,102 +7,133 @@ import com.ort.lastwolf.fw.LastwolfDateUtil
 data class Message(
     val fromParticipantId: Int?,
     val time: MessageTime,
-    val content: MessageContent
+    val content: MessageContent,
 ) {
-
     companion object {
-
         fun createSayMessage(
             from: VillageParticipant,
             villageDayId: Int,
-            messageContent: MessageContent
-        ): Message = Message(
-            fromParticipantId = from.id,
-            time = MessageTime(
-                villageDayId = villageDayId,
-                datetime = LastwolfDateUtil.currentLocalDateTime(), // dummy
-                unixTimeMilli = 0L // dummy
-            ),
-            content = messageContent
-        )
+            messageContent: MessageContent,
+        ): Message =
+            Message(
+                fromParticipantId = from.id,
+                time =
+                    MessageTime(
+                        villageDayId = villageDayId,
+                        datetime = LastwolfDateUtil.currentLocalDateTime(), // dummy
+                        unixTimeMilli = 0L, // dummy
+                    ),
+                content = messageContent,
+            )
 
-        fun createPublicSystemMessage(text: String, villageDayId: Int, isStrong: Boolean = false): Message =
+        fun createPublicSystemMessage(
+            text: String,
+            villageDayId: Int,
+            isStrong: Boolean = false,
+        ): Message =
             createSystemMessage(
                 messageType = MessageType(CDef.MessageType.公開システムメッセージ),
                 text = text,
                 villageDayId = villageDayId,
-                isStrong = isStrong
+                isStrong = isStrong,
             )
 
-        fun createPrivateSystemMessage(text: String, villageDayId: Int, isStrong: Boolean = false): Message =
+        fun createPrivateSystemMessage(
+            text: String,
+            villageDayId: Int,
+            isStrong: Boolean = false,
+        ): Message =
             createSystemMessage(
                 messageType = MessageType(CDef.MessageType.非公開システムメッセージ),
                 text = text,
                 villageDayId = villageDayId,
-                isStrong = isStrong
+                isStrong = isStrong,
             )
 
         fun createPrivateAbilityMessage(
             text: String,
             villageDayId: Int,
             participant: VillageParticipant,
-            isStrong: Boolean = false
+            isStrong: Boolean = false,
         ): Message =
             createSystemMessage(
                 messageType = MessageType(CDef.MessageType.個別能力行使結果),
                 text = text,
                 villageDayId = villageDayId,
                 from = participant,
-                isStrong = isStrong
+                isStrong = isStrong,
             )
 
-        fun createPsychicPrivateMessage(text: String, villageDayId: Int, isStrong: Boolean = false): Message =
+        fun createPsychicPrivateMessage(
+            text: String,
+            villageDayId: Int,
+            isStrong: Boolean = false,
+        ): Message =
             createSystemMessage(
                 messageType = MessageType(CDef.MessageType.白黒霊視結果),
                 text = text,
                 villageDayId = villageDayId,
-                isStrong = isStrong
+                isStrong = isStrong,
             )
 
-        fun createAttackPrivateMessage(text: String, villageDayId: Int, isStrong: Boolean = false): Message =
+        fun createAttackPrivateMessage(
+            text: String,
+            villageDayId: Int,
+            isStrong: Boolean = false,
+        ): Message =
             createSystemMessage(
                 messageType = MessageType(CDef.MessageType.襲撃結果),
                 text = text,
                 villageDayId = villageDayId,
-                isStrong = isStrong
+                isStrong = isStrong,
             )
 
-
-        fun createFanaticPrivateMessage(text: String, villageDayId: Int, isStrong: Boolean = false): Message =
+        fun createFanaticPrivateMessage(
+            text: String,
+            villageDayId: Int,
+            isStrong: Boolean = false,
+        ): Message =
             createSystemMessage(
                 messageType = MessageType(CDef.MessageType.狂信者人狼確認メッセージ),
                 text = text,
                 villageDayId = villageDayId,
-                isStrong = isStrong
+                isStrong = isStrong,
             )
 
-        fun createMasonPrivateMessage(text: String, villageDayId: Int, isStrong: Boolean = false): Message =
+        fun createMasonPrivateMessage(
+            text: String,
+            villageDayId: Int,
+            isStrong: Boolean = false,
+        ): Message =
             createSystemMessage(
                 messageType = MessageType(CDef.MessageType.共有相互確認メッセージ),
                 text = text,
                 villageDayId = villageDayId,
-                isStrong = isStrong
+                isStrong = isStrong,
             )
 
-        fun createFoxPrivateMessage(text: String, villageDayId: Int, isStrong: Boolean = false): Message =
+        fun createFoxPrivateMessage(
+            text: String,
+            villageDayId: Int,
+            isStrong: Boolean = false,
+        ): Message =
             createSystemMessage(
                 messageType = MessageType(CDef.MessageType.妖狐メッセージ),
                 text = text,
                 villageDayId = villageDayId,
-                isStrong = isStrong
+                isStrong = isStrong,
             )
 
-        fun createCreatorSayMessage(text: String, villageDayId: Int, isStrong: Boolean = false): Message =
+        fun createCreatorSayMessage(
+            text: String,
+            villageDayId: Int,
+            isStrong: Boolean = false,
+        ): Message =
             createSystemMessage(
                 messageType = MessageType(CDef.MessageType.村建て発言),
                 text = text,
                 villageDayId = villageDayId,
-                isStrong = isStrong
+                isStrong = isStrong,
             )
 
         // ===================================================================================
@@ -113,19 +144,22 @@ data class Message(
             text: String,
             villageDayId: Int,
             from: VillageParticipant? = null,
-            isStrong: Boolean
-        ): Message = Message(
-            fromParticipantId = from?.id,
-            time = MessageTime(
-                villageDayId = villageDayId,
-                datetime = LastwolfDateUtil.currentLocalDateTime(), // dummy
-                unixTimeMilli = 0L // dummy
-            ),
-            content = MessageContent(
-                type = messageType,
-                text = text,
-                isStrong = isStrong
+            isStrong: Boolean,
+        ): Message =
+            Message(
+                fromParticipantId = from?.id,
+                time =
+                    MessageTime(
+                        villageDayId = villageDayId,
+                        datetime = LastwolfDateUtil.currentLocalDateTime(), // dummy
+                        unixTimeMilli = 0L, // dummy
+                    ),
+                content =
+                    MessageContent(
+                        type = messageType,
+                        text = text,
+                        isStrong = isStrong,
+                    ),
             )
-        )
     }
 }

@@ -8,5 +8,5 @@ data class VillageComingOutSituation(
     @JsonProperty("available_coming_out")
     val isAvailableComingOut: Boolean,
     val currentComingOut: ComingOut?,
-    val selectableSkillList: List<Skill>
+    val selectableSkillList: List<Skill>,
 )

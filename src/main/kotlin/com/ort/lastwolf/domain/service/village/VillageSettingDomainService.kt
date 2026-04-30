@@ -2,7 +2,12 @@ package com.ort.lastwolf.domain.service.village
 
 import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.player.Player
-import com.ort.lastwolf.domain.model.village.*
+import com.ort.lastwolf.domain.model.village.Village
+import com.ort.lastwolf.domain.model.village.VillageCharachipCreateResource
+import com.ort.lastwolf.domain.model.village.VillageCreateResource
+import com.ort.lastwolf.domain.model.village.VillageOrganizationCreateResource
+import com.ort.lastwolf.domain.model.village.VillageRuleCreateResource
+import com.ort.lastwolf.domain.model.village.VillageTimeCreateResource
 import com.ort.lastwolf.domain.model.village.setting.VillageCharachip
 import com.ort.lastwolf.domain.model.village.setting.VillageOrganizations
 import com.ort.lastwolf.domain.model.village.setting.VillageRules
@@ -12,18 +17,20 @@ import org.springframework.stereotype.Service
 
 @Service
 class VillageSettingDomainService {
-
     fun assertModify(
         village: Village,
         player: Player,
-        resource: VillageCreateResource
+        resource: VillageCreateResource,
     ) {
         assertOrganization(village.participants.count, resource.setting.organization)
         assertCharachip(village.setting.charachip, resource.setting.charachip)
         assertGameMaster(village, player, resource)
     }
 
-    fun createModifyMessage(village: Village, resource: VillageCreateResource): Message? {
+    fun createModifyMessage(
+        village: Village,
+        resource: VillageCreateResource,
+    ): Message? {
         val list = mutableListOf<String>()
         if (village.name != resource.villageName) list.add("村の名前")
         village.setting.let { setting ->
@@ -32,21 +39,22 @@ class VillageSettingDomainService {
             addRuleModifyMessage(list, setting.rules, resource.setting.rule)
             addPasswordModifyMessage(list, setting.password.joinPassword, resource.setting.rule.joinPassword)
         }
-        val message = list.map { "・${it}" }.joinToString(
-            separator = "\n",
-            prefix = "村の設定が変更されました。\n変更項目\n"
-        )
+        val message =
+            list.map { "・$it" }.joinToString(
+                separator = "\n",
+                prefix = "村の設定が変更されました。\n変更項目\n",
+            )
         if (list.isEmpty()) return null
         return Message.createPublicSystemMessage(
             text = message,
-            villageDayId = village.days.latestDay().id
+            villageDayId = village.days.latestDay().id,
         )
     }
 
     private fun addTimeModifyMessage(
         list: MutableList<String>,
         time: VillageTime,
-        resourceTime: VillageTimeCreateResource
+        resourceTime: VillageTimeCreateResource,
     ) {
         if (time.startDatetime != resourceTime.startDatetime) list.add("開始日時")
         if (time.noonSeconds != resourceTime.noonSeconds) list.add("昼時間")
@@ -57,7 +65,7 @@ class VillageSettingDomainService {
     private fun addOrganizationModifyMessage(
         list: MutableList<String>,
         organizations: VillageOrganizations,
-        resourceOrganization: VillageOrganizationCreateResource
+        resourceOrganization: VillageOrganizationCreateResource,
     ) {
         val org = organizations.toString()
         val resourceOrg = VillageOrganizations(resourceOrganization.organization).toString()
@@ -67,7 +75,7 @@ class VillageSettingDomainService {
     private fun addRuleModifyMessage(
         list: MutableList<String>,
         rules: VillageRules,
-        resourceRules: VillageRuleCreateResource
+        resourceRules: VillageRuleCreateResource,
     ) {
         if (!rules.availableSkillRequest && resourceRules.isAvailableSkillRequest) list.add("役職希望有無")
         if (rules.availableSkillRequest && !resourceRules.isAvailableSkillRequest) list.add("役職希望有無（全員おまかせに変更されます）")
@@ -84,7 +92,7 @@ class VillageSettingDomainService {
     private fun addPasswordModifyMessage(
         list: MutableList<String>,
         password: String?,
-        resourcePassword: String?
+        resourcePassword: String?,
     ) {
         if (password.isNullOrEmpty() && resourcePassword.isNullOrEmpty()) return
         if (password != resourcePassword) list.add("参加パスワード")
@@ -93,7 +101,10 @@ class VillageSettingDomainService {
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun assertOrganization(participantCount: Int, organization: VillageOrganizationCreateResource) {
+    private fun assertOrganization(
+        participantCount: Int,
+        organization: VillageOrganizationCreateResource,
+    ) {
         // 現在の人数が編成の上限人数を超えていたらNG
         val resourceOrg = VillageOrganizations.invoke(organization.organization)
         val capacity = resourceOrg.organization.keys.max()!!
@@ -102,15 +113,22 @@ class VillageSettingDomainService {
         }
     }
 
-    private fun assertCharachip(charachip: VillageCharachip, resourceCharachip: VillageCharachipCreateResource) {
-        if (charachip.charachipId != resourceCharachip.charachipId
-            || charachip.dummyCharaId != resourceCharachip.dummyCharaId
+    private fun assertCharachip(
+        charachip: VillageCharachip,
+        resourceCharachip: VillageCharachipCreateResource,
+    ) {
+        if (charachip.charachipId != resourceCharachip.charachipId ||
+            charachip.dummyCharaId != resourceCharachip.dummyCharaId
         ) {
             throw LastwolfBusinessException("キャラチップとダミーキャラは変更できません")
         }
     }
 
-    private fun assertGameMaster(village: Village, player: Player, resource: VillageCreateResource) {
+    private fun assertGameMaster(
+        village: Village,
+        player: Player,
+        resource: VillageCreateResource,
+    ) {
         // GM制かつ村建てが参加してたらNG
         if (resource.setting.rule.isCreatorGameMaster && village.participants.list.any { it.player.id == player.id }) {
             throw LastwolfBusinessException("村建てはGM制村に参加できません")

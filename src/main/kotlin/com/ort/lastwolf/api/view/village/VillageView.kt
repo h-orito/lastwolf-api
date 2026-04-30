@@ -14,12 +14,11 @@ data class VillageView(
     val winCamp: Camp?,
     val setting: VillageSettingsView,
     val participants: VillageParticipantsView,
-    val days: VillageDays
+    val days: VillageDays,
 ) {
-
     constructor(
         village: Village,
-        isGameMaster: Boolean = false
+        isGameMaster: Boolean = false,
     ) : this(
         id = village.id,
         name = village.name,
@@ -27,11 +26,12 @@ data class VillageView(
         status = village.status,
         winCamp = village.winCamp,
         setting = VillageSettingsView(village.setting),
-        participants = VillageParticipantsView(
-            village = village,
-            participants = village.participants,
-            shouldHidePlayer = !isGameMaster && !village.status.isSolved()
-        ),
-        days = village.days
+        participants =
+            VillageParticipantsView(
+                village = village,
+                participants = village.participants,
+                shouldHidePlayer = !isGameMaster && !village.status.isSolved(),
+            ),
+        days = village.days,
     )
 }

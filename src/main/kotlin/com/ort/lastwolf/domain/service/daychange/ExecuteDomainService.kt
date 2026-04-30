@@ -12,18 +12,17 @@ import org.springframework.stereotype.Service
 
 @Service
 class ExecuteDomainService(
-    private val voteDomainService: VoteDomainService
+    private val voteDomainService: VoteDomainService,
 ) {
-
     fun existsMultiMaxVotedPlayer(dayChange: DayChange): Boolean {
         val village = dayChange.village
         // 得票 key: target participant id, value: vote list
-        val votedMap = dayChange.votes.list
-            .filter {
-                it.villageDayId == village.days.latestDay().id &&
+        val votedMap =
+            dayChange.votes.list
+                .filter {
+                    it.villageDayId == village.days.latestDay().id &&
                         village.participants.first(it.myselfId).isAlive()
-            }
-            .groupBy { it.targetId }
+                }.groupBy { it.targetId }
 
         if (votedMap.isEmpty()) return false
 
@@ -62,10 +61,11 @@ class ExecuteDomainService(
                 messages = messages.add(createForceSuicideMessage(executedParticipant, it, village.days.latestDay()))
             }
         }
-        return dayChange.copy(
-            village = village,
-            messages = messages
-        ).setIsChange(dayChange)
+        return dayChange
+            .copy(
+                village = village,
+                messages = messages,
+            ).setIsChange(dayChange)
     }
 
     // ===================================================================================
@@ -87,42 +87,45 @@ class ExecuteDomainService(
      */
     private fun createExecuteMessage(
         village: Village,
-        participant: VillageParticipant
+        participant: VillageParticipant,
     ): Message {
         val executedCharaName = participant.chara.name.name
         val message = "${executedCharaName}は村人達の手により処刑された。"
         return Message.createPublicSystemMessage(
             message,
             village.days.latestDay().id,
-            isStrong = true
+            isStrong = true,
         )
     }
-
 
     private fun forceSuicidedParticipant(
         village: Village,
         votes: VillageVotes,
-        executedParticipant: VillageParticipant
+        executedParticipant: VillageParticipant,
     ): VillageParticipant? {
         // 処刑されたのが道連れ役職でなければ何もしない
         if (!executedParticipant.skill!!.toCdef().isForceDoubleSuicide) return null
         // 生存している投票者からランダムで1名を道連れにする
-        return votes.filterYesterday(village).list.shuffled().firstOrNull {
-            it.targetId == executedParticipant.id && village.participants.first(it.myselfId).isAlive()
-        }?.let { village.participants.first(it.myselfId) }
+        return votes
+            .filterYesterday(village)
+            .list
+            .shuffled()
+            .firstOrNull {
+                it.targetId == executedParticipant.id && village.participants.first(it.myselfId).isAlive()
+            }?.let { village.participants.first(it.myselfId) }
     }
 
     private fun createForceSuicideMessage(
         executedParticipant: VillageParticipant,
         forceSuicidedParticipant: VillageParticipant,
-        latestDay: VillageDay
+        latestDay: VillageDay,
     ): Message {
         val executedCharaName = executedParticipant.chara.name.fullName()
         val forceSuicidedCharaName = forceSuicidedParticipant.chara.name.fullName()
         val message = "${executedCharaName}は、${forceSuicidedCharaName}を道連れにした。"
         return Message.createPublicSystemMessage(
             message,
-            latestDay.id
+            latestDay.id,
         )
     }
 }

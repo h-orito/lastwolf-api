@@ -23,7 +23,7 @@ data class VillageRules(
             availableSameTargetGuard: Boolean?,
             firstDivineNowolf: Boolean?,
             silentSeconds: Int?,
-            creatorGameMaster: Boolean?
+            creatorGameMaster: Boolean?,
         ): VillageRules {
             val defaultRules = VillageRules()
             return VillageRules(
@@ -35,25 +35,27 @@ data class VillageRules(
                 availableSameTargetGuard = availableSameTargetGuard ?: defaultRules.availableSameTargetGuard,
                 firstDivineNowolf = firstDivineNowolf ?: defaultRules.firstDivineNowolf,
                 silentSeconds = silentSeconds,
-                creatorGameMaster = creatorGameMaster ?: defaultRules.creatorGameMaster
+                creatorGameMaster = creatorGameMaster ?: defaultRules.creatorGameMaster,
             )
         }
     }
 
-    fun isValidSkillRequest(firstRequest: CDef.Skill, secondRequest: CDef.Skill): Boolean {
+    fun isValidSkillRequest(
+        firstRequest: CDef.Skill,
+        secondRequest: CDef.Skill,
+    ): Boolean {
         if (availableSkillRequest) return true
         return firstRequest == CDef.Skill.おまかせ && secondRequest == CDef.Skill.おまかせ
     }
 
-    fun existsDifference(rules: VillageRules): Boolean {
-        return availableSkillRequest != rules.availableSkillRequest
-                || openSkillInGrave != rules.openSkillInGrave
-                || availableSuddenlyDeath != rules.availableSuddenlyDeath
-                || availableCommit != rules.availableCommit
-                || availableDummySkill != rules.availableDummySkill
-                || availableSameTargetGuard != rules.availableSameTargetGuard
-                || firstDivineNowolf != rules.firstDivineNowolf
-                || silentSeconds != rules.silentSeconds
-                || creatorGameMaster != rules.creatorGameMaster
-    }
+    fun existsDifference(rules: VillageRules): Boolean =
+        availableSkillRequest != rules.availableSkillRequest ||
+            openSkillInGrave != rules.openSkillInGrave ||
+            availableSuddenlyDeath != rules.availableSuddenlyDeath ||
+            availableCommit != rules.availableCommit ||
+            availableDummySkill != rules.availableDummySkill ||
+            availableSameTargetGuard != rules.availableSameTargetGuard ||
+            firstDivineNowolf != rules.firstDivineNowolf ||
+            silentSeconds != rules.silentSeconds ||
+            creatorGameMaster != rules.creatorGameMaster
 }

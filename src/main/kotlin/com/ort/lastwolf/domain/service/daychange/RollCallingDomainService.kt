@@ -15,18 +15,26 @@ import org.springframework.stereotype.Service
 class RollCallingDomainService(
     private val skillAssignDomainService: SkillAssignDomainService,
     private val abilityDomainService: AbilityDomainService,
-    private val divineDomainService: DivineDomainService
+    private val divineDomainService: DivineDomainService,
 ) {
-
-    fun assertStartRollCall(village: Village, player: Player) {
+    fun assertStartRollCall(
+        village: Village,
+        player: Player,
+    ) {
         if (!canStartRollCall(village, player)) throw LastwolfBusinessException("点呼を開始できません")
     }
 
-    fun assertCancelRollCall(village: Village, player: Player) {
+    fun assertCancelRollCall(
+        village: Village,
+        player: Player,
+    ) {
         if (!canCancelRollCall(village, player)) throw LastwolfBusinessException("点呼を中止できません")
     }
 
-    fun canStartRollCall(village: Village, player: Player?): Boolean {
+    fun canStartRollCall(
+        village: Village,
+        player: Player?,
+    ): Boolean {
         // 村建てか管理者でなければNG
         player ?: return false
         if (player.id != 1 && village.creatorPlayer.id != player.id) return false
@@ -36,7 +44,10 @@ class RollCallingDomainService(
         return village.setting.capacity.min <= village.participants.count
     }
 
-    fun canCancelRollCall(village: Village, player: Player?): Boolean {
+    fun canCancelRollCall(
+        village: Village,
+        player: Player?,
+    ): Boolean {
         // 村建てか管理者でなければNG
         player ?: return false
         if (player.id != 1 && village.creatorPlayer.id != player.id) return false
@@ -95,64 +106,60 @@ class RollCallingDomainService(
     private fun shouldForward(village: Village): Boolean =
         !LastwolfDateUtil.currentLocalDateTime().isBefore(village.days.latestDay().endDatetime)
 
-    private fun doneAllRollCalling(dayChange: DayChange): Boolean {
-        return dayChange.village.notDummyParticipants().list.all { it.doneRollCall }
-    }
+    private fun doneAllRollCalling(dayChange: DayChange): Boolean =
+        dayChange.village
+            .notDummyParticipants()
+            .list
+            .all { it.doneRollCall }
 
-    private fun extendRollCall(dayChange: DayChange): DayChange {
-        return dayChange.copy(
+    private fun extendRollCall(dayChange: DayChange): DayChange =
+        dayChange.copy(
             village = dayChange.village.extendRollCall(),
-            messages = dayChange.messages.add(dayChange.village.createExtendRollCallMessage())
+            messages = dayChange.messages.add(dayChange.village.createExtendRollCallMessage()),
         )
-    }
 
-    private fun addStartMessage(dayChange: DayChange): DayChange {
-        return dayChange.copy(
-            messages = dayChange.messages.add(dayChange.village.createVillageDay1Message())
+    private fun addStartMessage(dayChange: DayChange): DayChange =
+        dayChange.copy(
+            messages = dayChange.messages.add(dayChange.village.createVillageDay1Message()),
         )
-    }
 
-    private fun addOrganizationMessage(dayChange: DayChange): DayChange {
-        return dayChange.copy(
-            messages = dayChange.messages.add(dayChange.village.createOrganizationMessage())
+    private fun addOrganizationMessage(dayChange: DayChange): DayChange =
+        dayChange.copy(
+            messages = dayChange.messages.add(dayChange.village.createOrganizationMessage()),
         )
-    }
 
-    private fun addWolfsConfirmMessage(dayChange: DayChange): DayChange {
-        return dayChange.copy(
-            messages = dayChange.messages.add(dayChange.village.createWolfsConfirmMessage())
+    private fun addWolfsConfirmMessage(dayChange: DayChange): DayChange =
+        dayChange.copy(
+            messages = dayChange.messages.add(dayChange.village.createWolfsConfirmMessage()),
         )
-    }
 
-    private fun addFanaticsMessageIfNeeded(dayChange: DayChange): DayChange {
-        return dayChange.village.createFanaticConfirmMessage()?.let {
+    private fun addFanaticsMessageIfNeeded(dayChange: DayChange): DayChange =
+        dayChange.village.createFanaticConfirmMessage()?.let {
             dayChange.copy(messages = dayChange.messages.add(it))
         } ?: dayChange
-    }
 
-    private fun addMasonsConfirmMessageIfNeeded(dayChange: DayChange): DayChange {
-        return dayChange.village.createMasonsConfirmMessage()?.let {
+    private fun addMasonsConfirmMessageIfNeeded(dayChange: DayChange): DayChange =
+        dayChange.village.createMasonsConfirmMessage()?.let {
             dayChange.copy(
-                messages = dayChange.messages.add(it)
+                messages = dayChange.messages.add(it),
             )
         } ?: dayChange
-    }
 
-    private fun addFoxsConfirmMessageIfNeeded(dayChange: DayChange): DayChange {
-        return dayChange.village.createFoxsConfirmMessage()?.let {
+    private fun addFoxsConfirmMessageIfNeeded(dayChange: DayChange): DayChange =
+        dayChange.village.createFoxsConfirmMessage()?.let {
             dayChange.copy(
-                messages = dayChange.messages.add(it)
+                messages = dayChange.messages.add(it),
             )
         } ?: dayChange
-    }
 
     // ダミーが役職を引いた場合のみデフォルト能力あり
     private fun addDummyAbilityIfNeeded(beforeDayChange: DayChange): DayChange {
         var dayChange = beforeDayChange.copy()
         dayChange.village.dummyParticipant()!!.skill!!.abilityList.forEach {
-            dayChange = abilityDomainService
-                .detectDomainService(it)!!
-                .processDummyAbility(dayChange)
+            dayChange =
+                abilityDomainService
+                    .detectDomainService(it)!!
+                    .processDummyAbility(dayChange)
         }
 
         return dayChange

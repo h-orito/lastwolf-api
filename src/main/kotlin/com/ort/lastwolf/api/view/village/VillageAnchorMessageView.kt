@@ -5,18 +5,19 @@ import com.ort.lastwolf.domain.model.message.Message
 import com.ort.lastwolf.domain.model.village.Village
 
 data class VillageAnchorMessageView(
-    val message: MessageView?
+    val message: MessageView?,
 ) {
     constructor(
         message: Message?,
-        village: Village
+        village: Village,
     ) : this(
-        message = message?.let {
-            MessageView(
-                message = it,
-                village = village,
-                shouldHidePlayer = !village.status.isSolved()
-            )
-        }
+        message =
+            message?.let {
+                MessageView(
+                    message = it,
+                    village = village,
+                    shouldHidePlayer = !village.status.isSolved(),
+                )
+            },
     )
 }

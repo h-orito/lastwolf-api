@@ -12,20 +12,22 @@ import org.springframework.stereotype.Service
 
 @Service
 class VoteDomainService {
-
     fun convertToSituation(
         village: Village,
         participant: VillageParticipant?,
-        votes: VillageVotes
-    ): VillageVoteSituation {
-        return VillageVoteSituation(
+        votes: VillageVotes,
+    ): VillageVoteSituation =
+        VillageVoteSituation(
             isAvailableVote = isAvailableVote(village, participant),
             targetList = getSelectableTargetList(village, participant),
-            target = getSelectingTarget(village, participant, votes)
+            target = getSelectingTarget(village, participant, votes),
         )
-    }
 
-    fun assertVote(village: Village, participant: VillageParticipant?, targetId: Int) {
+    fun assertVote(
+        village: Village,
+        participant: VillageParticipant?,
+        targetId: Int,
+    ) {
         if (!isAvailableVote(village, participant)) throw LastwolfBusinessException("投票できません")
         if (getSelectableTargetList(village, participant).none { it.id == targetId }) throw LastwolfBusinessException("投票できません")
     }
@@ -38,38 +40,54 @@ class VoteDomainService {
      */
     fun createEachVoteMessage(
         village: Village,
-        votedMap: Map<Int, List<VillageVote>>
+        votedMap: Map<Int, List<VillageVote>>,
     ): Message {
-        val maxFromCharaNameLength = votedMap.values.flatten().map { vote ->
-            village.participants.first(vote.myselfId).chara.name.name.length
-        }.max()!!
-        val maxToCharaNameLength = votedMap.values.flatten().map { vote ->
-            village.participants.first(vote.targetId).chara.name.name.length
-        }.max()!!
+        val maxFromCharaNameLength =
+            votedMap.values
+                .flatten()
+                .map { vote ->
+                    village.participants
+                        .first(vote.myselfId)
+                        .chara.name.name.length
+                }.max()!!
+        val maxToCharaNameLength =
+            votedMap.values
+                .flatten()
+                .map { vote ->
+                    village.participants
+                        .first(vote.targetId)
+                        .chara.name.name.length
+                }.max()!!
 
-        val text = votedMap.entries.sortedBy { it.value.size }.reversed().map { entry ->
-            // 得票数が多い順
-            entry.value.map { vote ->
-                val fromChara = village.participants.first(vote.myselfId).chara
-                val toChara = village.participants.first(vote.targetId).chara
-                createEachVoteResultString(
-                    fromChara,
-                    toChara,
-                    maxFromCharaNameLength,
-                    maxToCharaNameLength,
-                    entry.value.size
+        val text =
+            votedMap.entries
+                .sortedBy { it.value.size }
+                .reversed()
+                .map { entry ->
+                    // 得票数が多い順
+                    entry.value.map { vote ->
+                        val fromChara = village.participants.first(vote.myselfId).chara
+                        val toChara = village.participants.first(vote.targetId).chara
+                        createEachVoteResultString(
+                            fromChara,
+                            toChara,
+                            maxFromCharaNameLength,
+                            maxToCharaNameLength,
+                            entry.value.size,
+                        )
+                    }
+                }.flatten()
+                .joinToString(
+                    prefix = "投票結果は以下の通り。\n",
+                    separator = "\n",
                 )
-            }
-        }.flatten().joinToString(
-            prefix = "投票結果は以下の通り。\n",
-            separator = "\n"
-        )
         return Message.createPublicSystemMessage(text, village.days.latestNoonDay().id)
     }
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
+
     /**
      * @param fromChara 投票したキャラ
      * @param toChara 投票されたキャラ
@@ -83,24 +101,26 @@ class VoteDomainService {
         toChara: Chara,
         maxFromCharaNameLength: Int,
         maxToCharaNameLength: Int,
-        count: Int
-    ): String {
-        return fromChara.name.name.padEnd(
+        count: Int,
+    ): String =
+        fromChara.name.name.padEnd(
             length = maxFromCharaNameLength,
-            padChar = '　'
+            padChar = '　',
         ) +
             " → " +
             toChara.name.name.padEnd(
                 length = maxToCharaNameLength,
-                padChar = '　'
+                padChar = '　',
             ) +
             "(${count}票)"
-    }
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun isAvailableVote(village: Village, participant: VillageParticipant?): Boolean {
+    private fun isAvailableVote(
+        village: Village,
+        participant: VillageParticipant?,
+    ): Boolean {
         // 参加者として可能か
         participant ?: return false
         if (!participant.isAvailableVote()) return false
@@ -108,17 +128,26 @@ class VoteDomainService {
         return village.isAvailableVote()
     }
 
-    fun getSelectableTargetList(village: Village, participant: VillageParticipant?): List<VillageParticipant> {
+    fun getSelectableTargetList(
+        village: Village,
+        participant: VillageParticipant?,
+    ): List<VillageParticipant> {
         if (!isAvailableVote(village, participant)) return listOf()
         return village.participants.list.filter { it.isAlive() && it.id != participant!!.id }
     }
 
-    fun getSelectingTarget(village: Village, participant: VillageParticipant?, votes: VillageVotes): VillageParticipant? {
+    fun getSelectingTarget(
+        village: Village,
+        participant: VillageParticipant?,
+        votes: VillageVotes,
+    ): VillageParticipant? {
         if (!isAvailableVote(village, participant)) return null
-        val voteTargetParticipantId = votes.list.find {
-            it.villageDayId == village.days.latestDay().id
-                && it.myselfId == participant!!.id
-        }?.targetId ?: return null
+        val voteTargetParticipantId =
+            votes.list
+                .find {
+                    it.villageDayId == village.days.latestDay().id &&
+                        it.myselfId == participant!!.id
+                }?.targetId ?: return null
         return village.participants.first(voteTargetParticipantId)
     }
 }

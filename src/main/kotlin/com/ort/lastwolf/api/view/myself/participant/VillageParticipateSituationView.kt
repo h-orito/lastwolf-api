@@ -14,21 +14,22 @@ data class VillageParticipateSituationView(
     val selectableCharaList: List<Chara>,
     @JsonProperty("available_leave")
     val isAvailableLeave: Boolean,
-    val myself: VillageParticipantView?
+    val myself: VillageParticipantView?,
 ) {
     constructor(
         situation: VillageParticipateSituation,
-        village: Village
+        village: Village,
     ) : this(
         isParticipating = situation.isParticipating,
         isAvailableParticipate = situation.isAvailableParticipate,
         selectableCharaList = situation.selectableCharaList,
         isAvailableLeave = situation.isAvailableLeave,
-        myself = situation.myself?.let {
-            VillageParticipantView(
-                participant = village.participants.first(it.id),
-                shouldHidePlayer = false // 自分自身なので見えても問題なし
-            )
-        }
+        myself =
+            situation.myself?.let {
+                VillageParticipantView(
+                    participant = village.participants.first(it.id),
+                    shouldHidePlayer = false, // 自分自身なので見えても問題なし
+                )
+            },
     )
 }

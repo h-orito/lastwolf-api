@@ -9,43 +9,44 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class CharachipDataSource(
-    val charaGroupBhv: CharaGroupBhv
+    val charaGroupBhv: CharaGroupBhv,
 ) {
     fun findCharachips(): Charachips {
-        val charaGroupList = charaGroupBhv.selectList {
-            it.setupSelect_Designer()
-            it.query().addOrderBy_CharaGroupId_Asc()
-        }
+        val charaGroupList =
+            charaGroupBhv.selectList {
+                it.setupSelect_Designer()
+                it.query().addOrderBy_CharaGroupId_Asc()
+            }
         return convertCharaGroupListToCharaChips(charaGroupList)
     }
 
     fun findCharachip(charaChipId: Int): Charachip {
-        val charaGroup = charaGroupBhv.selectEntityWithDeletedCheck {
-            it.setupSelect_Designer()
-            it.query().setCharaGroupId_Equal(charaChipId)
-        }
+        val charaGroup =
+            charaGroupBhv.selectEntityWithDeletedCheck {
+                it.setupSelect_Designer()
+                it.query().setCharaGroupId_Equal(charaChipId)
+            }
         return convertCharaGroupToCharaChip(charaGroup)
     }
 
     // ===================================================================================
     //                                                                             Mapping
     //                                                                             =======
-    private fun convertCharaGroupListToCharaChips(charaGroupList: List<CharaGroup>): Charachips {
-        return Charachips(
-            list = charaGroupList.map { convertCharaGroupToCharaChip(it) }
+    private fun convertCharaGroupListToCharaChips(charaGroupList: List<CharaGroup>): Charachips =
+        Charachips(
+            list = charaGroupList.map { convertCharaGroupToCharaChip(it) },
         )
-    }
 
-    private fun convertCharaGroupToCharaChip(charaGroup: CharaGroup): Charachip {
-        return Charachip(
+    private fun convertCharaGroupToCharaChip(charaGroup: CharaGroup): Charachip =
+        Charachip(
             id = charaGroup.charaGroupId,
             name = charaGroup.charaGroupName,
-            designer = Designer(
-                id = charaGroup.designer.get().designerId,
-                name = charaGroup.designer.get().designerName
-            ),
+            designer =
+                Designer(
+                    id = charaGroup.designer.get().designerId,
+                    name = charaGroup.designer.get().designerName,
+                ),
             descriptionUrl = charaGroup.descriptionUrl,
-            charaIdList = listOf() // dummy
+            charaIdList = listOf(), // dummy
         )
-    }
 }

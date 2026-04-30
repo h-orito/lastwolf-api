@@ -23,19 +23,19 @@ class ProgressDomainService(
     private val suddenlyDeathDomainService: SuddenlyDeathDomainService,
     private val epilogueDomainService: EpilogueDomainService,
     private val voteDomainService: VoteDomainService,
-    private val suicideDomainService: SuicideDomainService
+    private val suicideDomainService: SuicideDomainService,
 ) {
-
-    fun addDayIfNeeded(dayChange: DayChange, commits: Commits): DayChange {
+    fun addDayIfNeeded(
+        dayChange: DayChange,
+        commits: Commits,
+    ): DayChange {
         // 日付更新の必要がなかったら終了
         if (!shouldForward(dayChange.village, commits, dayChange.votes)) return dayChange
         // 日付追加
         return addNewDay(dayChange).setIsChange(dayChange)
     }
 
-    fun dayChange(
-        beforeDayChange: DayChange
-    ): DayChange {
+    fun dayChange(beforeDayChange: DayChange): DayChange {
         val latestDay = beforeDayChange.village.days.latestDay()
         return when {
             latestDay.isNoonTime() -> toNoonTime(beforeDayChange)
@@ -49,7 +49,11 @@ class ProgressDomainService(
     //                                                                        Assist Logic
     //                                                                        ============
     // 日付を進める必要があるか
-    private fun shouldForward(village: Village, commits: Commits, votes: VillageVotes): Boolean {
+    private fun shouldForward(
+        village: Village,
+        commits: Commits,
+        votes: VillageVotes,
+    ): Boolean {
         val latestDay = village.days.latestDay()
         if (isAfterDaychangeDatetime(village)) return true
         return when {
@@ -63,7 +67,10 @@ class ProgressDomainService(
     private fun isAfterDaychangeDatetime(village: Village): Boolean =
         !LastwolfDateUtil.currentLocalDateTime().isBefore(village.days.latestDay().endDatetime)
 
-    private fun allCommitted(village: Village, commits: Commits): Boolean {
+    private fun allCommitted(
+        village: Village,
+        commits: Commits,
+    ): Boolean {
         if (!village.setting.rules.availableCommit) return false
         // ダミーを除く最新日の生存者数
         val livingPersonCount = village.notDummyParticipants().filterAlive().count
@@ -73,7 +80,10 @@ class ProgressDomainService(
         return livingPersonCount == commitCount
     }
 
-    private fun allVoted(village: Village, votes: VillageVotes): Boolean {
+    private fun allVoted(
+        village: Village,
+        votes: VillageVotes,
+    ): Boolean {
         // ダミーを除く最新日の生存者数
         val livingPersonCount = village.notDummyParticipants().filterAlive().count
         // 投票数
@@ -91,17 +101,19 @@ class ProgressDomainService(
             // 最多票が複数いるか
             val existsMultiMaxVotedPlayer = executeDomainService.existsMultiMaxVotedPlayer(dayChange)
 
-            dayChange.copy(
-                village = dayChange.village.addNewDay(
-                    toNextVote = existsMultiMaxVotedPlayer,
-                    isEpilogue = isThirdVote && existsMultiMaxVotedPlayer
-                )
-            ).setIsChange(dayChange)
-
+            dayChange
+                .copy(
+                    village =
+                        dayChange.village.addNewDay(
+                            toNextVote = existsMultiMaxVotedPlayer,
+                            isEpilogue = isThirdVote && existsMultiMaxVotedPlayer,
+                        ),
+                ).setIsChange(dayChange)
         } else {
-            dayChange.copy(
-                village = dayChange.village.addNewDay()
-            ).setIsChange(dayChange)
+            dayChange
+                .copy(
+                    village = dayChange.village.addNewDay(),
+                ).setIsChange(dayChange)
         }
     }
 
@@ -145,7 +157,10 @@ class ProgressDomainService(
         // 突然死
         var dayChange = suddenlyDeathDomainService.voteSuddenlyDeath(beforeDayChange)
         // 最新日がエピローグだったら引き分け処理
-        if (dayChange.village.days.latestDay().isEpilogue) {
+        if (dayChange.village.days
+                .latestDay()
+                .isEpilogue
+        ) {
             // 前回の投票結果メッセージ追加
             dayChange = addVoteResultMessageIfNeeded(dayChange)
             return epilogueDomainService.transitionToDrawEpilogue(dayChange).setIsChange(beforeDayChange)
@@ -168,7 +183,11 @@ class ProgressDomainService(
 
     private fun addVoteResultMessageIfNeeded(dayChange: DayChange): DayChange {
         val village = dayChange.village
-        if (village.days.latestDay().noonNight.toCdef() == CDef.Noonnight.投票1回目) {
+        if (village.days
+                .latestDay()
+                .noonNight
+                .toCdef() == CDef.Noonnight.投票1回目
+        ) {
             return dayChange
         }
 
@@ -178,38 +197,47 @@ class ProgressDomainService(
         val message = voteDomainService.createEachVoteMessage(village, votedMap)
 
         return dayChange.copy(
-            messages = dayChange.messages.add(message)
+            messages = dayChange.messages.add(message),
         )
     }
 
-    private fun addVoteMessage(dayChange: DayChange): DayChange {
-        return dayChange.copy(
-            messages = dayChange.messages.add(createVoteMessage(dayChange.village))
+    private fun addVoteMessage(dayChange: DayChange): DayChange =
+        dayChange.copy(
+            messages = dayChange.messages.add(createVoteMessage(dayChange.village)),
         )
-    }
 
-    private fun createVoteMessage(village: Village): Message {
-        return when (village.days.latestDay().noonNight.toCdef()) {
-            CDef.Noonnight.投票1回目 -> Message.createPublicSystemMessage(
-                text = "処刑したい人に投票してください。\n" +
-                    "最多票が同数となった場合は再投票が行われます。\n" +
-                    "3回目の投票で決着がつかなかった場合は引き分けとなります。\n" +
-                    "現在1回目の投票です。",
-                villageDayId = village.days.latestNoonDay().id
-            )
-            CDef.Noonnight.投票2回目 -> Message.createPublicSystemMessage(
-                text = "最多票が同数となったため再投票となります。処刑したい人に投票してください。\n" +
-                    "次も最多票が同数となった場合は3回目の投票が行われます。\n" +
-                    "3回目の投票で決着がつかなかった場合は引き分けとなります。\n" +
-                    "現在2回目の投票です。",
-                villageDayId = village.days.latestNoonDay().id
-            )
-            CDef.Noonnight.投票3回目 -> Message.createPublicSystemMessage(
-                text = "最多票が同数となったため再投票となります。処刑したい人に投票してください。\n" +
-                    "この投票で最多票が同数となった場合は引き分けとなります。",
-                villageDayId = village.days.latestNoonDay().id
-            )
+    private fun createVoteMessage(village: Village): Message =
+        when (
+            village.days
+                .latestDay()
+                .noonNight
+                .toCdef()
+        ) {
+            CDef.Noonnight.投票1回目 ->
+                Message.createPublicSystemMessage(
+                    text =
+                        "処刑したい人に投票してください。\n" +
+                            "最多票が同数となった場合は再投票が行われます。\n" +
+                            "3回目の投票で決着がつかなかった場合は引き分けとなります。\n" +
+                            "現在1回目の投票です。",
+                    villageDayId = village.days.latestNoonDay().id,
+                )
+            CDef.Noonnight.投票2回目 ->
+                Message.createPublicSystemMessage(
+                    text =
+                        "最多票が同数となったため再投票となります。処刑したい人に投票してください。\n" +
+                            "次も最多票が同数となった場合は3回目の投票が行われます。\n" +
+                            "3回目の投票で決着がつかなかった場合は引き分けとなります。\n" +
+                            "現在2回目の投票です。",
+                    villageDayId = village.days.latestNoonDay().id,
+                )
+            CDef.Noonnight.投票3回目 ->
+                Message.createPublicSystemMessage(
+                    text =
+                        "最多票が同数となったため再投票となります。処刑したい人に投票してください。\n" +
+                            "この投票で最多票が同数となった場合は引き分けとなります。",
+                    villageDayId = village.days.latestNoonDay().id,
+                )
             else -> throw IllegalStateException("invalid noontime.")
         }
-    }
 }

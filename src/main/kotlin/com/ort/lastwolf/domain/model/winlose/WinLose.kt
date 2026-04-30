@@ -4,13 +4,13 @@ import com.ort.dbflute.allcommon.CDef
 
 data class WinLose(
     val code: String,
-    val name: String
+    val name: String,
 ) {
     constructor(
-        cdef: CDef.WinLose
+        cdef: CDef.WinLose,
     ) : this(
         code = cdef.code(),
-        name = cdef.alias()
+        name = cdef.alias(),
     )
 
     fun toCdef(): CDef.WinLose = CDef.WinLose.codeOf(code)

@@ -21,11 +21,10 @@ data class Skill(
     val sayableSkillMessageTypeList: List<MessageType>,
     val viewableSkillMessageTypeList: List<MessageType>,
     val countCamp: Camp?,
-    val description: String
+    val description: String,
 ) {
-
     constructor(
-        cdefSkill: CDef.Skill
+        cdefSkill: CDef.Skill,
     ) : this(
         code = cdefSkill.code(),
         name = cdefSkill.alias(),
@@ -38,31 +37,33 @@ data class Skill(
         sayableSkillMessageTypeList = getSayableMessageTypeList(cdefSkill),
         viewableSkillMessageTypeList = getViewableMessageTypeList(cdefSkill),
         countCamp = getCountCamp(cdefSkill),
-        description = cdefSkill.description()
+        description = cdefSkill.description(),
     )
 
     companion object {
-
-        private val skillAbilityTypeListMap = mapOf(
-            CDef.Skill.人狼 to listOf(CDef.AbilityType.襲撃),
-            CDef.Skill.占い師 to listOf(CDef.AbilityType.占い),
-            CDef.Skill.狩人 to listOf(CDef.AbilityType.護衛)
-        )
+        private val skillAbilityTypeListMap =
+            mapOf(
+                CDef.Skill.人狼 to listOf(CDef.AbilityType.襲撃),
+                CDef.Skill.占い師 to listOf(CDef.AbilityType.占い),
+                CDef.Skill.狩人 to listOf(CDef.AbilityType.護衛),
+            )
 
         // 説明書専用
-        private val skillAbilityListMapForManual = mapOf(
-            CDef.Skill.占い師 to listOf(AbilityType(CDef.AbilityType.占い)),
-            CDef.Skill.狩人 to listOf(AbilityType(CDef.AbilityType.護衛)),
-            CDef.Skill.霊能者 to listOf(AbilityType("PSYCHIC", "霊視")),
-            CDef.Skill.猫又 to listOf(AbilityType("FORCESUICIDE", "道連れ")),
-            CDef.Skill.人狼 to listOf(AbilityType(CDef.AbilityType.襲撃)),
-            CDef.Skill.背徳者 to listOf(AbilityType("FOXSUICIDE", "後追い（背徳者）"))
-        )
+        private val skillAbilityListMapForManual =
+            mapOf(
+                CDef.Skill.占い師 to listOf(AbilityType(CDef.AbilityType.占い)),
+                CDef.Skill.狩人 to listOf(AbilityType(CDef.AbilityType.護衛)),
+                CDef.Skill.霊能者 to listOf(AbilityType("PSYCHIC", "霊視")),
+                CDef.Skill.猫又 to listOf(AbilityType("FORCESUICIDE", "道連れ")),
+                CDef.Skill.人狼 to listOf(AbilityType(CDef.AbilityType.襲撃)),
+                CDef.Skill.背徳者 to listOf(AbilityType("FOXSUICIDE", "後追い（背徳者）")),
+            )
 
         fun skillByShortName(shortName: String): Skill? {
-            val cdefSkill: CDef.Skill = CDef.Skill.listAll().firstOrNull {
-                it.shortName() == shortName
-            } ?: return null
+            val cdefSkill: CDef.Skill =
+                CDef.Skill.listAll().firstOrNull {
+                    it.shortName() == shortName
+                } ?: return null
             return Skill(cdefSkill)
         }
 
@@ -71,9 +72,7 @@ data class Skill(
             return AbilityTypes(cdefAbilityList.map { AbilityType(it) })
         }
 
-        fun getManualAbilities(cdefSkill: CDef.Skill): AbilityTypes {
-            return AbilityTypes(skillAbilityListMapForManual[cdefSkill] ?: listOf())
-        }
+        fun getManualAbilities(cdefSkill: CDef.Skill): AbilityTypes = AbilityTypes(skillAbilityListMapForManual[cdefSkill] ?: listOf())
 
         fun getSayableMessageTypeList(cdefSkill: CDef.Skill): List<MessageType> {
             val list = mutableListOf<MessageType>()
@@ -108,8 +107,11 @@ data class Skill(
     }
 
     fun toCdef(): CDef.Skill = CDef.Skill.codeOf(code)
+
     fun hasAttackAbility(): Boolean = toCdef().isHasAttackAbility
+
     fun canRecognizeWolf(): Boolean = toCdef().isRecognizableWolf
+
     fun isFoxCount(): Boolean = Skills.foxs.list.any { it.code == code }
 }
 

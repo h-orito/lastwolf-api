@@ -9,9 +9,12 @@ import org.dbflute.hook.AccessContext
 import org.springframework.web.servlet.HandlerInterceptor
 
 class LastwolfAccessContextInterceptor : HandlerInterceptor {
-
     @Throws(Exception::class)
-    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+    override fun preHandle(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any,
+    ): Boolean {
         val accessLocalDateTime = LastwolfDateUtil.currentLocalDateTime()
         val userInfo: LastwolfUser? = LastwolfUserInfoUtil.getUserInfo()
         val accessUser = userInfo?.username ?: "not_login_user"

@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service
  */
 @Service
 class FoxMessageDomainService {
-
-    fun isViewable(village: Village, participant: VillageParticipant?): Boolean {
+    fun isViewable(
+        village: Village,
+        participant: VillageParticipant?,
+    ): Boolean {
         // いずれかを満たせばok
         // 村として可能か
         if (village.isViewableFoxMessage()) return true

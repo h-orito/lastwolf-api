@@ -6,13 +6,13 @@ import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 
 data class ParticipateVillage(
     val village: Village,
-    val participant: VillageParticipant
+    val participant: VillageParticipant,
 ) {
     constructor(
         player: Player,
-        village: Village
+        village: Village,
     ) : this(
         village = village,
-        participant = village.participants.findByPlayerId(player.id)!!
+        participant = village.participants.findByPlayerId(player.id)!!,
     )
 }

@@ -9,14 +9,13 @@ import org.springframework.stereotype.Service
 
 @Service
 class CreatorDomainService(
-    private val rollCallingDomainService: RollCallingDomainService
+    private val rollCallingDomainService: RollCallingDomainService,
 ) {
-
     fun convertToSituation(
         village: Village,
-        player: Player?
-    ): VillageCreatorSituation {
-        return VillageCreatorSituation(
+        player: Player?,
+    ): VillageCreatorSituation =
+        VillageCreatorSituation(
             isAvailableCreatorSetting = isAvailableCreatorSetting(village, player),
             isAvailableCreatorSay = isAvailableCreatorSay(village, player),
             isAvailableStartVillage = isAvailableStartVillage(village, player),
@@ -25,21 +24,22 @@ class CreatorDomainService(
             isAvailableModifySetting = isAvailableModifySetting(village, player),
             isAvailableStartRollCall = rollCallingDomainService.canStartRollCall(village, player),
             isAvailableCancelRollCall = rollCallingDomainService.canCancelRollCall(village, player),
-            isViewableSpoiler = isViewableSpoiler(village, player)
+            isViewableSpoiler = isViewableSpoiler(village, player),
         )
-    }
 
-    fun assertStartVillage(village: Village, player: Player) {
+    fun assertStartVillage(
+        village: Village,
+        player: Player,
+    ) {
         if (!isAvailableStartVillage(village, player)) throw LastwolfBusinessException("村を開始できません")
     }
-
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
     private fun isAvailableCreatorSetting(
         village: Village,
-        player: Player?
+        player: Player?,
     ): Boolean {
         player ?: return false
         if (village.status.isFinished()) return false
@@ -49,7 +49,10 @@ class CreatorDomainService(
         return false
     }
 
-    private fun isViewableSpoiler(village: Village, player: Player?): Boolean {
+    private fun isViewableSpoiler(
+        village: Village,
+        player: Player?,
+    ): Boolean {
         player ?: return false
         // GMか村建てならok
         if (village.isGameMaster(player)) return true
@@ -59,7 +62,7 @@ class CreatorDomainService(
 
     private fun isAvailableCreatorSay(
         village: Village,
-        player: Player?
+        player: Player?,
     ): Boolean {
         if (!this.isAvailableCreatorSetting(village, player)) return false
         return true
@@ -67,7 +70,7 @@ class CreatorDomainService(
 
     private fun isAvailableStartVillage(
         village: Village,
-        player: Player?
+        player: Player?,
     ): Boolean {
         if (!this.isAvailableCreatorSetting(village, player)) return false
         return village.isAvailableStart()
@@ -75,7 +78,7 @@ class CreatorDomainService(
 
     private fun isAvailableCancelVillage(
         village: Village,
-        player: Player?
+        player: Player?,
     ): Boolean {
         if (!this.isAvailableCreatorSetting(village, player)) return false
         return village.status.isRecruiting() // プロローグ中のみ可能
@@ -83,7 +86,7 @@ class CreatorDomainService(
 
     private fun isAvailableKick(
         village: Village,
-        player: Player?
+        player: Player?,
     ): Boolean {
         if (!this.isAvailableCreatorSetting(village, player)) return false
         return village.status.isRecruiting() // プロローグ中のみ可能
@@ -91,7 +94,7 @@ class CreatorDomainService(
 
     private fun isAvailableModifySetting(
         village: Village,
-        player: Player?
+        player: Player?,
     ): Boolean {
         if (!this.isAvailableCreatorSetting(village, player)) return false
         return village.status.isRecruiting() // プロローグ中のみ可能

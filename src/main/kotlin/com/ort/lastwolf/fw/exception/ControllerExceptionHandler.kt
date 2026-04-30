@@ -12,13 +12,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice
 class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
-
     override fun handleExceptionInternal(
         ex: Exception,
         body: Any?,
         headers: HttpHeaders,
         statusCode: HttpStatusCode,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<Any>? {
         var b = body
         if (b !is LastwolfErrorResponse) {
@@ -32,15 +31,21 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
         ex: MethodArgumentNotValidException,
         headers: HttpHeaders,
         status: HttpStatusCode,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<Any>? {
-        val message = ex.bindingResult.allErrors.mapNotNull { it.defaultMessage }.joinToString("\n")
+        val message =
+            ex.bindingResult.allErrors
+                .mapNotNull { it.defaultMessage }
+                .joinToString("\n")
         val body = LastwolfErrorResponse(499, message)
         return handleExceptionInternal(ex, body, headers, HttpStatus.NOT_FOUND, request)
     }
 
     @ExceptionHandler(LastwolfBusinessException::class)
-    fun handleBusinessException(ex: LastwolfBusinessException, request: WebRequest?): ResponseEntity<Any> {
+    fun handleBusinessException(
+        ex: LastwolfBusinessException,
+        request: WebRequest?,
+    ): ResponseEntity<Any> {
         val headers = HttpHeaders()
         val body = LastwolfErrorResponse(499, ex.message)
         val status = HttpStatus.NOT_FOUND
@@ -48,7 +53,10 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(LastwolfBadRequestException::class)
-    fun handle400(ex: LastwolfBadRequestException, request: WebRequest?): ResponseEntity<Any> {
+    fun handle400(
+        ex: LastwolfBadRequestException,
+        request: WebRequest?,
+    ): ResponseEntity<Any> {
         val headers = HttpHeaders()
         val body = LastwolfErrorResponse(400, ex.message)
         val status = HttpStatus.BAD_REQUEST
@@ -56,7 +64,10 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(Exception::class)
-    fun handle500(ex: Exception, request: WebRequest?): ResponseEntity<Any> {
+    fun handle500(
+        ex: Exception,
+        request: WebRequest?,
+    ): ResponseEntity<Any> {
         val headers = HttpHeaders()
         val status = HttpStatus.INTERNAL_SERVER_ERROR
         return handleExceptionInternal(ex, null, headers, status, request!!) ?: ResponseEntity(status)

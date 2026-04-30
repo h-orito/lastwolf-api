@@ -1,35 +1,27 @@
 package com.ort.lastwolf.fw.config
 
-
-import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
 
 @Configuration
 class LastwolfAppConfig {
-
-    /**
-     * レスポンスのプロパティのスネークケース変換、日時のフォーマットを行う
-     * see http://www.ne.jp/asahi/hishidama/home/tech/java/spring/boot/rest/jackson.html
-     */
     @Bean
-    fun objectMapperBuilder(): Jackson2ObjectMapperBuilder {
-        val builder = Jackson2ObjectMapperBuilder()
-        builder.simpleDateFormat(dateTimeFormat)
-        builder.serializers(LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormat)))
-        builder.serializers(LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateTimeFormat)))
-        builder.propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-        return builder
-    }
-
-    companion object {
-
-        const val dateFormat = "yyyy/MM/dd"
-        const val dateTimeFormat = "yyyy/MM/dd HH:mm:ss"
-    }
+    fun jacksonCustomizer(): Jackson2ObjectMapperBuilderCustomizer =
+        Jackson2ObjectMapperBuilderCustomizer { builder ->
+            builder.serializerByType(
+                LocalDateTime::class.java,
+                LocalDateTimeSerializer(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+            )
+            builder.deserializerByType(
+                LocalDateTime::class.java,
+                LocalDateTimeDeserializer(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+            )
+            builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        }
 }

@@ -7,14 +7,13 @@ import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 
 data class ParticipateVillageView(
     val village: VillageView,
-    val participant: VillageParticipantView
+    val participant: VillageParticipantView,
 ) {
-
     constructor(
         village: Village,
-        participant: VillageParticipant
+        participant: VillageParticipant,
     ) : this(
         village = VillageView(village),
-        participant = VillageParticipantView(participant, false)
+        participant = VillageParticipantView(participant, false),
     )
 }

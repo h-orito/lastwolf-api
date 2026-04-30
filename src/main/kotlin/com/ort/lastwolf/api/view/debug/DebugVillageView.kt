@@ -15,23 +15,23 @@ data class DebugVillageView(
     val status: VillageStatus,
     val setting: VillageSettingsView,
     val participants: VillageParticipantsView,
-    val days: VillageDays
+    val days: VillageDays,
 ) {
-
     constructor(
         village: Village,
-        createPlayer: Player
+        createPlayer: Player,
     ) : this(
         id = village.id,
         name = village.name,
         creatorPlayer = PlayerView(createPlayer),
         status = village.status,
         setting = VillageSettingsView(village.setting),
-        participants = VillageParticipantsView(
-            village = village,
-            participants = village.participants,
-            shouldHidePlayer = false
-        ),
-        days = village.days
+        participants =
+            VillageParticipantsView(
+                village = village,
+                participants = village.participants,
+                shouldHidePlayer = false,
+            ),
+        days = village.days,
     )
 }
