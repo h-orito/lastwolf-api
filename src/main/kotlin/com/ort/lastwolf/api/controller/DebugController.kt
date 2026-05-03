@@ -10,12 +10,16 @@ import com.ort.lastwolf.api.body.AdminDummyLoginBody
 import com.ort.lastwolf.api.body.AdminParticipateBody
 import com.ort.lastwolf.api.view.debug.DebugVillageView
 import com.ort.lastwolf.application.coordinator.VillageCoordinator
+import com.ort.lastwolf.application.service.AbilityService
+import com.ort.lastwolf.application.service.MessageService
 import com.ort.lastwolf.application.service.PlayerService
 import com.ort.lastwolf.application.service.VillageService
 import com.ort.lastwolf.application.service.VoteService
 import com.ort.lastwolf.domain.model.village.Village
+import com.ort.lastwolf.domain.model.village.ability.VillageAbility
 import com.ort.lastwolf.domain.model.village.participant.VillageParticipant
 import com.ort.lastwolf.domain.model.village.vote.VillageVote
+import com.ort.lastwolf.domain.service.ability.AbilityDomainService
 import com.ort.lastwolf.fw.LastwolfDateUtil
 import com.ort.lastwolf.fw.exception.LastwolfBusinessException
 import com.ort.lastwolf.fw.security.LastwolfUser
@@ -41,6 +45,9 @@ class DebugController(
     val villageService: VillageService,
     val playerService: PlayerService,
     val voteService: VoteService,
+    val abilityDomainService: AbilityDomainService,
+    val abilityService: AbilityService,
+    val messageService: MessageService,
 ) {
     // ===================================================================================
     //                                                                           Attribute
@@ -314,6 +321,38 @@ class DebugController(
                     target.id,
                 )
             voteService.updateVote(village, villageVote)
+        }
+    }
+
+    /**
+     * 全員能力行使
+     *
+     * @param villageId villageId
+     * @param user user
+     */
+    @PostMapping("/admin/village/{villageId}/all-ability")
+    fun allRandomAbility(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: LastwolfUser,
+    ) {
+        if ("local" != env) throw LastwolfBusinessException("この環境では使用できません")
+        val village = villageService.findVillage(villageId)
+        val participants = village.participants.filterAlive()
+        val villageAbilities = abilityService.findVillageAbilities(villageId)
+        participants.list.forEach { participant ->
+            participant.skill?.abilityList?.let { list ->
+                list.forEach { abilityType ->
+                    abilityDomainService
+                        .getSelectableTargetList(village, participant, abilityType, villageAbilities)
+                        .randomOrNull()
+                        ?.let { target ->
+                            // 能力セット
+                            val villageAbility = VillageAbility(village.days.latestDay().id, participant.id, target.id, abilityType)
+                            abilityService.updateAbility(village, villageAbility)
+                            messageService.registerAbilitySetMessage(village, participant, villageAbility)
+                        }
+                }
+            }
         }
     }
 

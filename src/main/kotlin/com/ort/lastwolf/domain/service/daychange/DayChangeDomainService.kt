@@ -28,13 +28,18 @@ class DayChangeDomainService(
         val status = dayChange.village.status
         return when {
             // プロローグ
-            status.isRecruiting() -> dayChange // 手動でしか進まない
+            status.isRecruiting() -> dayChange
+
+            // 手動でしか進まない
             // 点呼中
             status.isRollCalling() -> rollCallingDomainService.addDayIfNeeded(dayChange)
+
             // 進行中
             status.isProgress() -> progressDomainService.addDayIfNeeded(dayChange, commits)
+
             // エピローグ
             status.isSettled() -> epilogueDomainService.addDayIfNeeded(dayChange)
+
             // 終了後
             else -> dayChange
         }
@@ -46,12 +51,16 @@ class DayChangeDomainService(
         return when {
             // プロローグ
             status.isRecruiting() -> dayChange
+
             // 点呼中
             status.isRollCalling() -> rollCallingDomainService.dayChange(dayChange)
+
             // 進行中
             status.isProgress() -> progressDomainService.dayChange(dayChange)
+
             // エピローグ
             status.isSettled() -> epilogueDomainService.toFinished(dayChange)
+
             // 終了後
             else -> dayChange
         }

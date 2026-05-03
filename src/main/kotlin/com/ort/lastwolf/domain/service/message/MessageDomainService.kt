@@ -136,26 +136,37 @@ class MessageDomainService(
         village: Village,
         message: Message,
     ): List<UserViewableMessageLatestTime> {
-        val updateParticipantAndTimeList =
-            village.participants.list.mapNotNull { participant ->
-                val isViewable = isViewableMessage(village, participant, message.content.type.code)
-                val isMessageForMe = isMessageForMe(participant, message)
-                val isEveryoneViewable = isEveryoneViewable(message)
-                if (isViewable || isMessageForMe || isEveryoneViewable) {
+        val list = mutableListOf<UserViewableMessageLatestTime>()
+        village.participants.list.forEach { participant ->
+            val isViewable = isViewableMessage(village, participant, message.content.type.code)
+            val isMessageForMe = isMessageForMe(participant, message)
+            val isEveryoneViewable = isEveryoneViewable(message)
+            if (isViewable || isMessageForMe || isEveryoneViewable) {
+                list.add(
                     UserViewableMessageLatestTime(
                         uid = participant.player.uid,
                         time = message.time.unixTimeMilli,
-                    )
-                } else {
-                    null
-                }
+                    ),
+                )
             }
-        // 非ログインユーザ
-        return if (isViewableMessage(village, null, message.content.type.code)) {
-            updateParticipantAndTimeList + UserViewableMessageLatestTime(null, message.time.unixTimeMilli)
-        } else {
-            updateParticipantAndTimeList
         }
+        // GM
+        if (village.setting.rules.creatorGameMaster) {
+            list.add(
+                UserViewableMessageLatestTime(
+                    uid = village.creatorPlayer.uid,
+                    time = message.time.unixTimeMilli,
+                ),
+            )
+        }
+
+        // 非ログインユーザ
+        if (isViewableMessage(village, null, message.content.type.code)) {
+            list.add(
+                UserViewableMessageLatestTime(null, message.time.unixTimeMilli),
+            )
+        }
+        return list
     }
 
     fun getViewableUserAndMessageLatestTime(
@@ -163,43 +174,53 @@ class MessageDomainService(
         players: Players,
         messages: Messages,
     ): List<UserViewableMessageLatestTime> {
-        val updateParticipantAndTimeList =
-            village.participants.list.mapNotNull { participant ->
-                messages.list
-                    .filter { message ->
-                        val isViewable = isViewableMessage(village, participant, message.content.type.code)
-                        val isMessageForMe = isMessageForMe(participant, message)
-                        val isEveryoneViewable = isEveryoneViewable(message)
-                        isViewable || isMessageForMe || isEveryoneViewable
-                    }.maxBy { it.time.unixTimeMilli }
-                    ?.let { message ->
+        val list = mutableListOf<UserViewableMessageLatestTime>()
+        village.participants.list.forEach { participant ->
+            messages.list
+                .filter { message ->
+                    val isViewable = isViewableMessage(village, participant, message.content.type.code)
+                    val isMessageForMe = isMessageForMe(participant, message)
+                    val isEveryoneViewable = isEveryoneViewable(message)
+                    isViewable || isMessageForMe || isEveryoneViewable
+                }.maxByOrNull { it.time.unixTimeMilli }
+                ?.let { message ->
+                    list.add(
                         UserViewableMessageLatestTime(
                             uid = participant.player.uid,
                             time = message.time.unixTimeMilli,
-                        )
-                    }
-            }
-        // 非ログインユーザ
-        val notLoginUser =
+                        ),
+                    )
+                }
+        }
+        // GM
+        if (village.setting.rules.creatorGameMaster) {
             messages.list
                 .filter { message ->
-                    val day =
-                        village.days.list
-                            .first { it.id == message.time.villageDayId }
-                            .day
                     isViewableMessage(village, null, message.content.type.code)
-                }.maxBy { it.time.unixTimeMilli }
+                }.maxByOrNull { it.time.unixTimeMilli }
                 ?.let { message ->
+                    list.add(
+                        UserViewableMessageLatestTime(
+                            uid = village.creatorPlayer.uid,
+                            time = message.time.unixTimeMilli,
+                        ),
+                    )
+                }
+        }
+        // 非ログインユーザ
+        messages.list
+            .filter { message ->
+                isViewableMessage(village, null, message.content.type.code)
+            }.maxByOrNull { it.time.unixTimeMilli }
+            ?.let { message ->
+                list.add(
                     UserViewableMessageLatestTime(
                         uid = null,
                         time = message.time.unixTimeMilli,
-                    )
-                }
-        return if (notLoginUser == null) {
-            updateParticipantAndTimeList
-        } else {
-            updateParticipantAndTimeList + notLoginUser
-        }
+                    ),
+                )
+            }
+        return list
     }
 
     data class UserViewableMessageLatestTime(
